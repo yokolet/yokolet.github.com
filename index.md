@@ -1,7 +1,7 @@
 ---
 layout: page
-title: Hello World!
-tagline: Supporting tagline
+title: Yokolet's Notelets
+tagline: Recent Posts
 ---
 {% include JB/setup %}
 
