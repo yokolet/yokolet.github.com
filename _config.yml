@@ -3,6 +3,7 @@
 permalink: /:categories/:year/:month/:day/:title 
 
 exclude: [".ruby-version", ".ruby-gemset", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
+markdown: kramdown
 pygments: true
 excerpt_separator: <!--more-->
 
