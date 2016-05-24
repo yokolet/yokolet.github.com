@@ -5,8 +5,6 @@ description: ""
 category: 
 tags: [ruby, english]
 ---
-{% include JB/setup %}
-
 
 Dear Sapporo RubyKaigi Attendees!!
 

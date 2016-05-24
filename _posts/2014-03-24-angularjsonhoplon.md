@@ -5,7 +5,6 @@ description: ""
 category: 
 tags: [AngularJS, Hoplon, ClojureScript]
 ---
-{% include JB/setup %}
 
 #### Hoplon presentation at Triangle Clojure Users Meetup
 

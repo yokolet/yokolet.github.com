@@ -1,40 +1,53 @@
-# Jekyll-Bootstrap
+# accent
 
-The quickest way to start and publish your Jekyll powered blog. 100% compatible with GitHub pages
+#### [Demo & Documentation](http://ankitsultana.me/accent)
 
-## Usage
+### Installation
 
-For all usage and documentation please see: <http://jekyllbootstrap.com>
+I'd strongly recommend you to fork [accent](http://github.com/bk2dcradle/accent) and use the "upstream" strategy described on [this page](https://help.github.com/articles/fork-a-repo/) to
+keep accent up to date.
 
-## Version
+If you don't want to do that, just clone [accent](http://github.com/bk2dcradle/accent) and use
 
-0.3.0 - stable and versioned using [semantic versioning](http://semver.org/).
+```bash
+bundle exec jekyll serve
+```
+in the root of the accent directory, or, simply [download](https://github.com/bk2dcradle/accent/archive/gh-pages.zip) accent.
 
-**NOTE:** 0.3.0 introduces a new theme which is not backwards compatible in the sense it won't _look_ like the old version.
-However, the actual API has not changed at all.
-You might want to run 0.3.0 in a branch to make sure you are ok with the theme design changes.
+### Customization
 
-## Contributing
+You can edit the variables in `_config.yml` as per your needs. Edit only the variables under the section marked *User Settings*.
 
+Most of the variables are self explanatory. Notes about few of the non obvious ones:
 
-To contribute to the framework please make sure to checkout your branch based on `jb-development`!!
-This is very important as it allows me to accept your pull request without having to publish a public version release.
+1. You can change the **hex value** of the variable `$accent-color` in `_sass/_style.scss` to any color value that you want. This will change the accent of the theme.
 
-Small, atomic Features, bugs, etc.
-Use the `jb-development` branch but note it will likely change fast as pull requests are accepted.
-Please rebase as often as possible when working.
-Work on small, atomic features/bugs to avoid upstream commits affecting/breaking your development work.
+2. Set `intro` to `true` to reveal a short bio section on the index page.
 
-For Big Features or major API extensions/edits:
-This is the one case where I'll accept pull-requests based off the master branch.
-This allows you to work in isolation but it means I'll have to manually merge your work into the next public release.
-Translation : it might take a bit longer so please be patient! (but sincerely thank you).
+3. Setting `about_footer` to *true* or *false* will turn the `about` section at the bottom of every post to *on* or *off* respectively.
 
-**Jekyll-Bootstrap Documentation Website.**
-
-The documentation website at <http://jekyllbootstrap.com> is maintained at https://github.com/plusjade/jekyllbootstrap.com
+4. `description` is the summary that will show up in places like facebook thumbnails,
+twitter cards and google search results.
 
 
-## License
+*Note:* Don't change any variable under *Build Settings*.
 
-[MIT](http://opensource.org/licenses/MIT)
+---
+
+### Usage
+
+* To create a new post, simply save the `.markdown` file in the `_posts` directory in the format.
+
+```
+year-month-day-name-of-the-file.markdown
+```
+
+* For Syntax highlighting, accent uses *Rouge* which is the default highlighter in Jekyll 3 and above. If you don't know how to highlight a code block, [refer](http://jekyllrb.com/docs/templates/).
+
+* To set up Google Analytics tracking id, just set the `tracking_id` variable in `_config.yml`.
+
+---
+
+### License
+
+[MIT](https://github.com/bk2dcradle/accent/blob/gh-pages/LICENSE). Copyright &copy; [Ankit Sultana](http://twitter.com/AnkitSultana)

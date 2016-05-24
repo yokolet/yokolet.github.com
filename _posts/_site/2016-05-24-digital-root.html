@@ -1,0 +1,33 @@
+<h4 id="what-is-digital-root">What is Digital Root</h4>
+
+<p>Suppose you are given some digits, say 123456, the digital root will
+be calculated like this:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">6</span> <span class="o">=</span> <span class="mi">21</span>
+<span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">=</span> <span class="mi">3</span></code></pre></figure>
+
+<p>Summing each digit repeatedly to get a single digit is how we 
+get the digital root.</p>
+
+<h4 id="how-to-effectively-find-the-digital-root">How to effectively find the digital root</h4>
+
+<p>An intuitive solution would be to recurse steps: 1. get singles digits
+from the given number. 2. sum up all.
+However, if the given number is really big, this is not an effective
+solution.</p>
+
+<p>Luckily, there’s a formula to calculate the digital root. This
+wikipedia page explains what the formula and how it works:
+<a href="https://en.wikipedia.org/wiki/Digital_root">Digital root</a>.</p>
+
+<p>The formula is:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// n is a given number</span>
+<span class="kt">int</span> <span class="n">digital_root</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">9</span><span class="o">*(</span><span class="kt">int</span><span class="o">)</span><span class="n">Math</span><span class="o">.</span><span class="na">floor</span><span class="o">((</span><span class="kt">double</span><span class="o">)(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="o">)/</span><span class="mi">9</span><span class="o">);</span></code></pre></figure>
+
+<p>Why this is the answer? The digital root sees how many numbers are
+there after the closest of multiple of 9 which is less than the given
+number.
+If the given number is 123456, its closest, multiple of 9 is 123453.
+So, the digital root of 123456 is 3.</p>
+
