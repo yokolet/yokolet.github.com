@@ -1,15 +1,14 @@
 ---
 layout: about
-title: accent
-author: Ankit Sultana
+title: about yokolet's notelets
+author: Yoko Harada
 permalink: /about
 ---
 
-Hi! My name is yourname!
+Hi! I'm Yoko who is writing this memos.
 
-> One shalt not speak shakespearean, or brocolli McDonalds
+Posts are nothing special. Guess every post is something people already know.
+But, to write or rephrase by my own word helps me to understand well.
+Also, it helps me to cut down the time searching bookmarks.
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Update will be random. When I'm impressed by something, I wrote a new post.
