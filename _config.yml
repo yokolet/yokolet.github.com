@@ -49,7 +49,7 @@ favicon_location: "/images/favicon.ico"
 profile_picture: /images/rose-400-circle.png
 paginate: 5
 paginate_path: "/page/:num"
-tracking_id: UA-761764-5  # google analytics
+tracking_id: UA-761764-8  # google analytics
 
 # Social Stuff | open graph and twitter cards
 og_image: "images/accent.png" # This will show in facebook thumbnails
