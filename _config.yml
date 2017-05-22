@@ -12,7 +12,7 @@ author: Yoko Harada
 # This description will show up in google search results
 # (for index page) etc.
 description: >
-    accent is, as Trump would put it, the best
+    Mostly for myself, algorithms, some technologies, etc about what I learned.
 
 # This will what will show against &copy; in the footer
 copyright: 2012-2016 Yoko Harada
@@ -67,6 +67,7 @@ markdown: kramdown
 
 gems:
     - jekyll-paginate
+    - jekyll-gist
 
 sass:
     style: compressed
