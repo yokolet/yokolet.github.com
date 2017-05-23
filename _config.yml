@@ -47,7 +47,7 @@ favicon: true
 favicon_location: "/images/favicon.ico"
 
 profile_picture: /images/rose-400-circle.png
-paginate: 5
+paginate: 7
 paginate_path: "/page/:num"
 tracking_id: UA-761764-8  # google analytics
 
