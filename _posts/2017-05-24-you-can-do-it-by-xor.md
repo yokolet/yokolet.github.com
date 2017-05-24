@@ -197,3 +197,4 @@ Second
 - [Why XOR operator works](https://math.stackexchange.com/questions/416042/why-xor-operator-works)
 - [Nim](https://en.wikipedia.org/wiki/Nim)
 - [Theory of Imparial Games](http://web.mit.edu/sp.268/www/nim.pdf)
+- [Solving Nim](http://www.ams.org/samplings/feature-column/fcarc-games4)
