@@ -195,6 +195,7 @@ Second
 - [Exclusive or](https://en.wikipedia.org/wiki/Exclusive_or)
 - [The Magic of XOR](https://www.cs.umd.edu/class/sum2003/cmsc311/Notes/BitOp/xor.html)
 - [Why XOR operator works](https://math.stackexchange.com/questions/416042/why-xor-operator-works)
+- [Add two numbers without using arithmetic operators](http://www.geeksforgeeks.org/add-two-numbers-without-using-arithmetic-operators/)
 - [Nim](https://en.wikipedia.org/wiki/Nim)
 - [Theory of Imparial Games](http://web.mit.edu/sp.268/www/nim.pdf)
 - [Solving Nim](http://www.ams.org/samplings/feature-column/fcarc-games4)
