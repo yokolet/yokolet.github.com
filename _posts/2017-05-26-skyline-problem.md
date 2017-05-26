@@ -123,7 +123,7 @@ Not like typical heap sort solutions, my solution uses one PriorityQueue only.
 Although there's not a big difference in terms of big-O notation,
 it is slightly space effective.
 Downside is time complexity depends on how buildings are shaped.
-This solution was accepted by LeetCode testing, it won't so bad even though
+This solution was accepted by LeetCode testing (14 ms), it won't so bad even though
 building locations are complicated.
 
 
