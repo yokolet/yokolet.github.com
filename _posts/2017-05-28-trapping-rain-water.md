@@ -98,7 +98,7 @@ For this reason, the code does a pre-processing to find highests.
 
 #### Java code ####
 
-Below is the Java code explaied above.
+Below is the Java code explained above.
 
 {% gist  yokolet/6b554ac0a53e8e1398f1b130e0482e52 %}
 
