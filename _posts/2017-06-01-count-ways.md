@@ -189,8 +189,13 @@ are like this:
 
 Like other two problems, I chose the dynamic programming to find the answer,
 I used auxiliary table to save states.
-
-
+The auxiliary table (`memo`) has a size [m] x [n].
+In this case, plus one doesn't need since the first row and column can be
+initialized without any previous state.
+Movments are only right and down.
+Given that, the first row are all 1 since from left is the only one way.
+The first columns are all 1 as well since from above is the only one way.
+Then, fill the rest of the table by expanding the path one by one, right or down.
 
 
 
@@ -212,7 +217,10 @@ The result is:
 
 #### Resources ####
 
-- [Longest Palindromic Substring](http://www.programcreek.com/2013/12/leetcode-solution-of-longest-palindromic-substring-java/)
-- [Palindrome Partitioning](http://www.geeksforgeeks.org/dynamic-programming-set-17-palindrome-partitioning/)
-- [Given a string, print all possible palindromic partitions](http://www.geeksforgeeks.org/given-a-string-print-all-possible-palindromic-partition/)
+- [Count ways to reach the n'th stair](http://www.geeksforgeeks.org/count-ways-reach-nth-stair/)
+- [Stairs Climbing Puzzle](http://algorithms.tutorialhorizon.com/dynamic-programming-stairs-climbing-puzzle/)
+- [Coin Change](http://www.geeksforgeeks.org/dynamic-programming-set-7-coin-change/)
+- [Coin Change Problem](http://algorithms.tutorialhorizon.com/dynamic-programming-coin-change-problem/)
+- [Count all possible paths from top left to bottom right of a mXn matrix](http://www.geeksforgeeks.org/count-possible-paths-top-left-bottom-right-nxm-matrix/)
+- [Count all paths from top left to bottom right of a mXn matrix](http://algorithms.tutorialhorizon.com/dynamic-programming-count-all-paths-from-top-left-to-bottom-right-of-a-mxn-matrix/)
 
