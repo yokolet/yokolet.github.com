@@ -197,6 +197,9 @@ Given that, the first row are all 1 since from left is the only one way.
 The first columns are all 1 as well since from above is the only one way.
 Then, fill the rest of the table by expanding the path one by one, right or down.
 
+At each table[i][j], the values on above table[i - 1][j] and left table[i][j - 1] will be added up.
+This way, ways to come index i, j will be calculated.
+When traversal reaches to the bottom right index, table[m - 1][n - 1], the answer is there.
 
 
 #### Java code  for unique paths ####
@@ -223,4 +226,4 @@ The result is:
 - [Coin Change Problem](http://algorithms.tutorialhorizon.com/dynamic-programming-coin-change-problem/)
 - [Count all possible paths from top left to bottom right of a mXn matrix](http://www.geeksforgeeks.org/count-possible-paths-top-left-bottom-right-nxm-matrix/)
 - [Count all paths from top left to bottom right of a mXn matrix](http://algorithms.tutorialhorizon.com/dynamic-programming-count-all-paths-from-top-left-to-bottom-right-of-a-mxn-matrix/)
-
+- [Unique Paths](http://www.programcreek.com/2014/05/leetcode-unique-paths-java/)
