@@ -156,18 +156,32 @@ For example, `()())()` or `(a)())()` is given,
 
 #### The idea for removing invalid parnetheses ####
 
+This problem is not easy. There may be more than one solutions.
+For example, a given string is `(a)())()`, the answer will be
+`(a)()()` and `(a())()`.
 
+The problem asks *minimum* number of parens.
+So, it's a good idea to start checking from a whole string.
+If the string is valid, I'm done.
 
+If the string is not valid, eliminate one paren either opening or closing
+and check its validity. If the string is valid, I'm done.
+Otherwise, add it to the queue for further processing.
+To eliminate a paren, I need check all parens one by one.
+
+The way to go over substrings, both DFS and BFS works.
+I chose BSF, no recurison solution.
 
 
 #### Java code  for removing invalid parentheses ####
 
+{% gist yokolet/440060611aee3cc816e36b6fb1ff4196 %}
+
 The result is:
 
 <pre>
+[(a())(), (a)()()]
 </pre>
-
-
 
 
 #### Resources ####
@@ -178,3 +192,6 @@ The result is:
 - [Print all combinations of balanced parentheses](http://www.geeksforgeeks.org/print-all-combinations-of-balanced-parentheses/)
 - [Generate Parentheses](http://www.programcreek.com/2014/01/leetcode-generate-parentheses-java/)
 - [Print All Possible Valid Combinations Of Parentheses of Given 'N'](http://algorithms.tutorialhorizon.com/generate-all-valid-parenthesis-strings-of-length-2n-of-given-n/)
+- [Remove Invalid Parentheses (GeeksforGeeks)](http://www.geeksforgeeks.org/remove-invalid-parentheses/)
+- [Remove Invalid Parentheses (Program Creek)](http://www.programcreek.com/2014/05/leetcode-remove-invalid-parentheses-java/)
+- [Remove Invalid Parentheses (Algorithms Collection)](https://kennyzhuang.gitbooks.io/algorithms-collection/content/remove_invalid_parentheses1.html)
