@@ -160,17 +160,23 @@ This problem is not easy. There may be more than one solutions.
 For example, a given string is `(a)())()`, the answer will be
 `(a)()()` and `(a())()`.
 
-The problem asks *minimum* number of parens.
+The problem asks *minimum* number of parens to remove.
 So, it's a good idea to start checking from a whole string.
 If the string is valid, I'm done.
 
-If the string is not valid, eliminate one paren either opening or closing
-and check its validity. If the string is valid, I'm done.
-Otherwise, add it to the queue for further processing.
-To eliminate a paren, I need check all parens one by one.
+If the string is not valid, eliminate only one paren either opening or closing
+at every position.
+When the number of parens either opening or closing is n in total,
+I will get n substrings. These will be checked next.
+All valid substrings are the answer.
 
-The way to go over substrings, both DFS and BFS works.
-I chose BSF, no recurison solution.
+If there's no valid substring, eliminate only one paren either opening or closing
+at every position of every substring.
+I will get n * (n - 1) substrings. These will be checked next.
+
+To go over all substrings, I used Queue and BSF style iteration.
+Not like generating parentheses problem, substrings are being cut short one by one.
+In extreme case, it will become an empty string.
 
 
 #### Java code  for removing invalid parentheses ####
