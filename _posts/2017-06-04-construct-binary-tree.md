@@ -18,10 +18,12 @@ A string would be the answer.
 Sometime, creating a string from binary tree is called *serialize*.
 On the contrary, constructing binary tree is sometime called *deserialize*.
 
-A way to serialize the binary tree is not unique.
-A question may allow me to choose my favorit style.
-Such sort of questions test a result using a pair of serialization and deserialization.
+Next to the string, another language independent form would be an array of intergers.
+There are some differences to treat integers among programming languages.
+However, still, integers are common to all.
 
+A way to serialize the binary tree is not unique.
+Occasionally, a question allows me to choose my favorit style.
 As far as I learned, there are a few typical styles:
 string with parens, string with markers,
 combination of preorder/inorder or inorder/postorder.
@@ -130,7 +132,7 @@ While a node is there, add a value and delimiter.
 When it comes to children of leaf node, a marker will be added.
 
 
-#### Java code for constructing a binary tree from inorder and postorder traversal ####
+#### Java code for constructing a binary tree from a string with markers ####
 
 {% gist yokolet/f332e785f645e8b06c2914ff033b211c %}
 
@@ -143,41 +145,154 @@ The result is:
 
 
 
-#### Problem Description - From Preorder and Inorder Traversal ####
+#### Problem Description - A Combination of Preorder and Inorder Traversal ####
+
+Given two arrays of integers, preoder and inorder, construct a binary tree.
+For example, preorder `[4, 2, -3, 1, 6, 5]`, inorder `[-3, 2, 1, 4, 5, 6]`
+are given, the constrcuted tree should be:
+
+<pre>
+
+         4
+       /   \
+     /      \
+    2        6
+  /   \     /
+-3     1   5
+
+</pre>
 
 
+#### The idea to construct from/to preorder and inorder  ####
 
-#### The idea to construct from preorder and inorder traversal  ####
+If I look at difference of ways to traverse trees, there's interesting fact.
+The first element in preorder is a root.
+The same value in inorder divides left and right subtrees.
 
+<pre>
+preorder [|4|, 2, -3, 1, 6, 5], inorder [-3, 2, 1, |4|, 5, 6]
+
+           4
+           |
+           |
+    2      |      6
+  /   \    |     /
+-3     1   |    5
+
+</pre>
+
+Now, I will look at the left substree only.
+The arrays are preorder `[2, -3, 1]`, inorder `[-3, 2, 1]`.
+Again, the first element in preorder divides inorder into left and right subtrees.
+
+<pre>
+preorder [|2|, -3, 1], inorder [-3, |2|, 1]
+
+     2
+     |
+-3   |   1
+
+</pre>
+
+The same division happens in the right subtree, preoder `[6, 5]` and inorder `[5, 6]`.
+
+<pre>
+preorder [|6|, 5], inorder [5, |6|]
+
+     6
+     |
+5    |
+
+</pre>
+
+This way, I can figure out what integers should go left or right.
 
 
 #### Java code for constructing a binary tree from preorder and inorder traversal  ###
 
-{% gist yokolet/6ec539a2db6a07068f68b9bc217a26c9 %}
+{% gist yokolet/6eef5a0806b3a5a7cba0f442fef395fe %}
 
 The result is:
 
 <pre>
+[[4, 2, -3, 1, 6, 5], [-3, 2, 1, 4, 5, 6]]
+[[1, 2, 4, -3], [2, 4, 1, -3]]
 </pre>
 
 
-#### Problem Description - From  Inorder and Postorder Traversal ####
+#### Problem Description - A Combination of Inorder and Postorder Traversal ####
+
+Given two arrays of integers, inorder and postorder, construct a binary tree.
+For example, inorder `[-3, 2, 1, 4, 5, 6]`, postorder `[-3, 1, 2, 5, 6, 4]`
+are given, the constrcuted tree should be:
+
+<pre>
+
+         4
+       /   \
+     /      \
+    2        6
+  /   \     /
+-3     1   5
+
+</pre>
 
 
-#### The idea to construct a binary tree from inorder and postorder traversal ####
+#### The idea to construct from/to inorder and postorder ####
 
+Just glancing at this problem, everybody finds this is very similar to the previous one.
+In the preorder, a root is the first element while the last in the postorder.
+
+The same logic to divide left and right subtree is able to apply
+looking at the last element in the subtree area.
+
+<pre>
+inorder [-3, 2, 1, |4|, 5, 6], postorder [-3, 1, 2, 5, 6, |4|]
+
+           4
+           |
+           |
+    2      |      6
+  /   \    |     /
+-3     1   |    5
+
+
+inorder [-3, |2|, 1], postorder [-3, 1, |2|]
+
+     2
+     |
+-3   |   1
+
+
+inorder [5, |6|], postorder [5, |6|]
+
+     6
+     |
+5    |
+
+
+</pre>
+
+As in the previsou section, recursively applying this idea constructs the binary tree.
 
 #### Java code for constructing a binary tree from inorder and postorder traversal ####
 
-{% gist yokolet/440060611aee3cc816e36b6fb1ff4196 %}
+{% gist yokolet/e2b2713f68c2e59d467a4929a26178d8 %}
 
 The result is:
 
 <pre>
+[[-3, 2, 1, 4, 5, 6], [-3, 1, 2, 5, 6, 4]]
+[[2, 4, 1, -3], [4, 2, -3, 1]]
 </pre>
 
 
 #### Resources ####
 
-- []()
-
+- [Serialize and Deserialize a Binary Tree](http://www.geeksforgeeks.org/serialize-deserialize-binary-tree/)
+- [Serialize and Deserialize Binary Tree](http://www.programcreek.com/2014/05/leetcode-serialize-and-deserialize-binary-tree-java/)
+- [Serialize and deserialize binary tree](https://kennyzhuang.gitbooks.io/algorithms-collection/content/serialize_and_deserialize_binary_tree.html)
+- [Construct Tree from given Inorder and Preorder traversals](http://www.geeksforgeeks.org/construct-tree-from-given-inorder-and-preorder-traversal/)
+- [Construct Binary Tree from Preorder and Inorder Traversal](http://www.programcreek.com/2014/06/leetcode-construct-binary-tree-from-preorder-and-inorder-traversal-java/)
+- [Construct a Binary Tree from Postorder and Inorder](http://www.geeksforgeeks.org/construct-a-binary-tree-from-postorder-and-inorder/)
+- [Constrcut Binary Tree from Inorder and Postorder Traversal](http://www.programcreek.com/2013/01/construct-binary-tree-from-inorder-and-postorder-traversal/)
