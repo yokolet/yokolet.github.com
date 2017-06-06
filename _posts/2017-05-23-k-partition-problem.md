@@ -14,43 +14,51 @@ Keep the order of the given array.
 
 For example, 
 
-```
+<pre>
+
 given: [1, 2, 3, 4, 5, 6, 7, 8]
 
 k = 3: [[1, 2, 3, 4, 5], [6, 7], [8, 9]]
 k = 4: [[1, 2, 3, 4], [5, 6], [7, 8], [9]]
-```
+
+</pre>
 
 This is called the linear parition, k-partition problem or, simply, partition problem.
 Despite the simple problem description, it is quite hard to solve.
 Spent some amount of time, finally, I could figure out how to solve this problem.
-Since this would be a good entry to this blog from its hardness,
-I'm going to write down a memo here.
+Thinking its difficulty, this should be a good entry.
+For that reason, I'm going to write down a memo here.
 
 
 #### The idea ####
 
 The problem is well described in the document, [The Partition Problem](http://www8.cs.umu.se/kurser/TDBA77/VT06/algorithms/BOOK/BOOK2/NODE45.HTM) .
-Also, the first answer of this [Quora question](https://www.quora.com/A-group-of-N-integer-numbers-need-to-be-divided-fairly-into-K-subgroups-A-fair-division-is-that-the-max-of-the-sums-of-K-subgroups-is-minimal) is a good one to understand the solution. After reading those, what I can explain by words is below.
+Also, the first answer of this [Quora question](https://www.quora.com/A-group-of-N-integer-numbers-need-to-be-divided-fairly-into-K-subgroups-A-fair-division-is-that-the-max-of-the-sums-of-K-subgroups-is-minimal) is a good one to understand how to solve. After reading those, what I can explain by my own words is below.
 
-This is a dynamic programming problem. The state to keep track is an optimum way of partitioning, which will be saved in an auxiliary table.
-Suppose the auxiliary table is `M[n][k]` (n: size of given array, k: number of partitions), each element of `M[i][j]` will be computed by minimizing the maximum sum of partition when the given array is divided into j starting from index i.
+This is a dynamic programming problem. The states to keep track are optimum ways of partitioning, which will be saved in an auxiliary table.
+Suppose the auxiliary table is `M[n][k]` (n: size of given array, k: number of partitions), each element of `M[i][j]`(i'th element, j paritions) will be computed by minimizing the maximum sum of partition when the given array is divided into j starting from index i.
 
-```
+
+
+<pre>
+
 given: {s[0], s[1], ... , s[n-1]}
 
-M[i][j] = min (max (M[m + 1][j - 1], s[i] + s[i+1] + ... + s[m]));
+M[i][j] = min (max (M[x][j - 1], s[i] + s[i+1] + ... + s[x]));
 
-m: between 0 to n (array size)
-```
+x: from 0 to i-1
+
+</pre>
 
 
 To avoid calculate partial sums repeatedly, the algorithm calculates a prefix sum.
 The prefix sum of index i is caclulate from the sum to the index i - 1.
 
-```
+<pre>
+
 sum[i] = sum[i - 1] + s[i]
-```
+
+</pre>
 
 To compute sum from i to m is same as `sum[m] - sum[i - 1]`.
 So, repeatedly calculating same sums will be eliminated.
