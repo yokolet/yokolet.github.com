@@ -17,23 +17,23 @@ Intuitive implementations would be simply repeat subtraction or multiplication.
 Those calculates correctly, however, time complexity tends to be O(n).
 Better ways are out there.
 
-I'm going to write a memo how to calculate then, how to improve such
-Math-y calculations without exact operators to divide/power.
+I'm going to write a memo how to calculate effectively such
+Math-y stuff without exact operators to divide/power.
 
 
 #### Problem Description - Divide without division and mod ####
 
-Given two integers, dividend and divisor, calculate division
-without divide and modulo operators.
+"Given two integers, dividend and divisor, calculate division
+without divide and modulo operators."
 
 The division itself is nothing special.
 An answer will be integer when diviend is devidend by divisor.
 
-For example, given -10 (dividend) and 3 (divisor),
+For example, given 10 (dividend) and -3 (divisor),
 the answer will be -3.
 
 
-#### The idea to divide without dividion/modulo operators ####
+#### The idea to divide without division/modulo operators ####
 
 Simple solution is count up one by one starting from zero,
 while subtracting the divisor from dividend.
@@ -53,11 +53,11 @@ return sign * count;
 
 
 This solution's performance is considered O(n), where n is the quotient.
-The simple and correct, but surely this can be improved.
+This is simple and correct, but surely can be improved.
 
 
 To improve above, I should see the number a bit different way.
-All numbers, any number can be expressed as:
+All numbers can be expressed as:
 
 <pre>
 
@@ -84,7 +84,7 @@ If I write how to manually calculate the division:
 
 </pre>
 
-The first step is where is the highest bit.
+The first step is to find where is the highest bit.
 While shifting divisor to the left and counting how many time to repeat,
 I will get the answer.
 
@@ -104,14 +104,15 @@ count:    10 << 1 => 100
 </pre>
 
 The second step is to find what is the quotient.
-I've already know how many times to repeat.
-I want to know the bit there is zero or one.
+I've already learned how many times to repeat.
+So, I want to know each bit is zero or one.
 
-This step does like in the manual calculation.
+This step goes like in the manual calculation.
 
 <pre>
-1010 - 110 = 100
-100 - 11 = 1
+1010 - 110 = 100    --> the second bit is one
+100 - 11 = 1        --> the first bit is one
+1 - ... (no more)
 </pre>
 
 This divison's time complexity turns to O(log(n)) .
@@ -163,7 +164,7 @@ y is odd:    y = 2n + 1
 
 x ^ y = x ^ (2n + 1) = x * x ^ (2n) = x * (x ^ n) * (x ^ n)
 
-<pre>
+</pre>
 
 This way, the time complexity goes down to O(log(n)).
 
