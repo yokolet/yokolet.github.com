@@ -15,7 +15,7 @@ description: >
     Mostly for myself, algorithms, some technologies, etc about what I learned.
 
 # This will what will show against &copy; in the footer
-copyright: 2012-2016 Yoko Harada
+copyright: Yoko Harada
 # Toggle your short bio, which will displayed on your index page
 # Just toggle it and run jekyll again to see
 intro: false         # Tip: Remove the span from site_heading if intro is set to true
