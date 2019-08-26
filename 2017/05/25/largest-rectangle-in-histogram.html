@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang=" en-US">
+<head>
+
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+
+      gtag('js', new Date());
+      gtag('config', 'UA-761764-8');
+    </script>
+    
+    <meta charset="UTF-8">
+
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Largest Rectangle in a Histogram | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="Largest Rectangle in a Histogram" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notes about programming" />
+<meta property="og:description" content="Notes about programming" />
+<link rel="canonical" href="/2017/05/25/largest-rectangle-in-histogram.html" />
+<meta property="og:url" content="/2017/05/25/largest-rectangle-in-histogram.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-05-25T00:00:00-07:00" />
+<script type="application/ld+json">
+{"url":"/2017/05/25/largest-rectangle-in-histogram.html","headline":"Largest Rectangle in a Histogram","dateModified":"2017-05-25T00:00:00-07:00","datePublished":"2017-05-25T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"/2017/05/25/largest-rectangle-in-histogram.html"},"description":"Notes about programming","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/assets/css/all.css?v=">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    
+        <link rel="icon" type="image/ico" href="/assets/image/favicon.ico">
+    
+</head>
+<body>
+<header class="page-header" role="banner">
+    <div class="nav">
+        
+            <a href="/" class="btn back"><i class="fas fa-chevron-circle-left"></i> Back</a>
+        
+        
+            <a href="/about/" class="btn">About <i class="fas fa-info-circle"></i></a>
+        
+    </div>
+    <h1 class="project-name">yokolet's notelets</h1>
+    <h2 class="project-tagline">Notes about programming</h2>
+
+    
+</header>
+
+<main id="content" class="main-content" role="main">
+    <div class="content container">
+    <div class="post-date">
+        <time>May 25, 2017 </time>
+    </div>
+    <h1 class="post-title">Largest Rectangle in a Histogram</h1>
+    <h4 id="one-of-famous-bar-problems">One of famous bar problems</h4>
+
+<p>“Find the largest rectangular area in a histogram” is a famous algorithm
+problem using bars.
+There are some types of problems expressed by bars such as trapping water or skyline.
+Those look like similar since all are plotted on 2D plain multiple bars on.
+However, how to think and solve the problems are not the same.
+What data structure and algorithm can be applied to solve problems effectively is,
+sometime, confusing. For this reason, I’m going to add this topic to my memo.</p>
+
+<h4 id="problem-description">Problem Description</h4>
+
+<p>Given an array of integers which denotes heights of each bar with a width 1,
+find the largest rectangluar area.</p>
+
+<p>For example, the given array is [6, 2, 5, 4, 5, 1, 6], the largest will be
+12 created from index 2 to 4.</p>
+
+<pre>
+  .
+6 . █           █ 
+  . █   █   █   █ 
+  . █   █ █ █   █ 
+  . █   █ █ █   █ 
+  . █ █ █ █ █   █ 
+  . █ █ █ █ █ █ █ 
+0 . . . . . . . .
+    0           6
+
+The largest area is from index 2 to 4.
+  .
+6 . █           █ 
+  . █   █   █   █ 
+       +-----+
+4 . █  |█ █ █|  █ 
+  . █  |█ █ █|  █ 
+  . █ █|█ █ █|  █ 
+  . █ █|█ █ █|█ █ 
+0 . . . . . . . .
+    0   2   4   6
+</pre>
+
+<p>If the given array is [6, 2, 5, 4, 5, 2, 6] (only one different in the sixth element),
+the largest will be 14 from index 0 to 6.</p>
+
+<pre>
+  .
+6 . █           █ 
+  . █   █   █   █ 
+  . █   █ █ █   █ 
+  . █   █ █ █   █ 
+  . █ █ █ █ █ █ █ 
+  . █ █ █ █ █ █ █ 
+0 . . . . . . . .
+    0           6
+
+The largest area is from index 0 to 6.
+
+  .
+6 . █           █ 
+  . █   █   █   █ 
+  . █   █ █ █   █ 
+  . █   █ █ █   █ 
+   +-------------+
+  .|█ █ █ █ █ █ █|
+  .|█ █ █ █ █ █ █|
+0 . . . . . . . .
+    0           6
+</pre>
+
+<p>Easily we can think of exhaustive search O(n^2) solution by iterating all combinations.
+However, this often gets time out results at exhaustive testing.</p>
+
+<h4 id="the-idea">The idea</h4>
+
+<p>This problem can be solved in a linear time using a stack.
+The stack saves indices which gives the highest so far.
+If histogram heights are 1, 2, and 3, the stack saves all three indices of 0, 1, 2.</p>
+
+<p>Once it hits a lower height, a rectagular area will be calculated at that index.
+For the calculation, it needs the first no greater height seen so far compared to the current height.
+The information is saved in the stack.
+Since the stack saves indices of highest so far,
+popping out indices unitl the corresponding height is higher gives the target index.</p>
+
+<p>The target index is the starting index of a subhistogram.
+With starting and current indices, the area will be calculated by multiplying width (difference of indices) and height.
+The ares is the result of the sub problem.</p>
+
+<p>For example, after 3, if 1 comes in, the indices in the stack will be poped out.
+In the end, the stack will have the index 0 only whose height is 1.</p>
+
+<p>Width (4) * Height (1) = 4</p>
+
+<p>Repeating this process to the end of the given array, the maximum area can be found.</p>
+
+<h4 id="java-code">Java code</h4>
+
+<p>Below is the Java code based on the idea explained in the previous section.</p>
+
+<noscript><pre>import java.util.Stack;
+
+public class LargestRectangleInHistogram {
+    static int largestRectangleArea(int[] heights) {
+        if (heights == null || heights.length == 0) {
+            return 0;
+        }
+        int n = heights.length;
+        Stack&lt;Integer&gt; stack = new Stack&lt;Integer&gt;();
+        int max_area = 0;
+        for (int i = 0; i &lt; n; i++) {
+            while (!stack.isEmpty() &amp;&amp; heights[stack.peek()] &gt; heights[i]) {
+                int top_height = heights[stack.pop()];
+                int w = stack.isEmpty() ? i : i - stack.peek() - 1;
+                max_area = Math.max(max_area, w * top_height);
+            }
+            stack.push(i);
+        }
+        while (!stack.isEmpty()) {
+            int top_height = heights[stack.pop()];
+            int w = stack.isEmpty() ? n : n - stack.peek() - 1;
+            max_area = Math.max(max_area, w * top_height);
+        }
+        return max_area;
+    }
+
+    public static void main(String[] args) {
+        int[] nums0 = {6, 2, 5, 4, 5, 1, 6};
+        System.out.println(largestRectangleArea(nums0));
+        int[] nums1 = {6, 2, 5, 4, 5, 2, 6};
+        System.out.println(largestRectangleArea(nums1));
+    }
+}</pre></noscript>
+<script src="https://gist.github.com/yokolet/9913edf20b07f56eadd44ecc574d3c78.js"> </script>
+
+<p>The performance is: time O(n), space O(n).</p>
+
+<p>The result is:</p>
+
+<pre>
+12
+14
+</pre>
+
+<h4 id="resources">Resources</h4>
+
+<ul>
+  <li><a href="http://www.geeksforgeeks.org/largest-rectangle-under-histogram/">Largest Rectangular Area in a Histogram - Set 2</a></li>
+  <li><a href="https://kartikkukreja.wordpress.com/2016/10/22/problem-of-the-day-largest-rectangle-in-a-histogram/">Problem of the day: Largest rectangle in a histogram</a></li>
+  <li><a href="https://youtu.be/ZmnqCZp9bBs">Maximum Rectangular Area in Histogram (YouTube)</a></li>
+</ul>
+
+</div>
+
+    <footer class="site-footer">
+        
+        <span class="site-footer-owner"><a href="https://github.com/yokolet/yokolet.github.com">yokolet.com</a> is maintained by <a
+                href="https://github.com/yokolet">Yoko Harada</a>.</span>
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+    </footer>
+</main>
+</body>
+</html>

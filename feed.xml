@@ -1,0 +1,2745 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.6">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2019-08-26T11:08:09-07:00</updated><id>/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Notes about programming</subtitle><entry><title type="html">Welcome to Jekyll!</title><link href="/jekyll/update/2019/08/25/welcome-to-jekyll.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2019-08-25T12:26:46-07:00</published><updated>2019-08-25T12:26:46-07:00</updated><id>/jekyll/update/2019/08/25/welcome-to-jekyll</id><content type="html" xml:base="/jekyll/update/2019/08/25/welcome-to-jekyll.html">&lt;p&gt;You’ll find this post in your &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+
+&lt;p&gt;To add new posts, simply add a file in the &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory that follows the convention &lt;code class=&quot;highlighter-rouge&quot;&gt;YYYY-MM-DD-name-of-post.ext&lt;/code&gt; and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
+
+&lt;p&gt;Jekyll also offers powerful support for code snippets:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Hi, &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Tom'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; prints 'Hi, Tom' to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Check out the &lt;a href=&quot;https://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.</summary></entry><entry><title type="html">Maximal Square and Rectangle</title><link href="/2017/06/16/maximal-area.html" rel="alternate" type="text/html" title="Maximal Square and Rectangle" /><published>2017-06-16T00:00:00-07:00</published><updated>2017-06-16T00:00:00-07:00</updated><id>/2017/06/16/maximal-area</id><content type="html" xml:base="/2017/06/16/maximal-area.html">&lt;h4 id=&quot;maximal-siblings&quot;&gt;Maximal Siblings&lt;/h4&gt;
+
+&lt;p&gt;A bunch of algorithm questions take a style of “maximum is a good thing.”
+Maximal sum, maximal length or maximal size are examples.
+This memo is about maximal size, precisely, square and rectangle.&lt;/p&gt;
+
+&lt;p&gt;These two have quite similar descriptions. So, I call those siblings.
+The problems are “given 2D matrix filled with 0’s and 1’s, find maximal square/rectangle.”
+Approaches how to solve are also similar.
+However, a difficulty level is not the same.
+The maximal square question is much easier.
+The maximal rectangle question needs an additional step to find the maximum.&lt;/p&gt;
+
+&lt;p&gt;I’m going to start off with the maximal square.&lt;/p&gt;
+
+&lt;h4 id=&quot;problem-description---maximal-square&quot;&gt;Problem Description - Maximal Square&lt;/h4&gt;
+
+&lt;p&gt;Given a 2D binary matrix filled with 0’s and 1’s, find the maximal square with all 1’s.&lt;/p&gt;
+
+&lt;p&gt;For example, following 2D matrix is given:&lt;/p&gt;
+
+&lt;pre&gt;
+
+1   0   1   0   0
+
+1   0   1   1   1
+
+1   1   1   1   1
+
+1   0   0   1   0
+
+&lt;/pre&gt;
+
+&lt;p&gt;The answer will be 4.&lt;/p&gt;
+
+&lt;pre&gt;
+
+1   0   1   0   0
+      +-------+
+1   0 | 1   1 | 1
+      |       |
+1   1 | 1   1 | 1
+      +-------+
+1   0   0   1   0
+
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;the-idea-to-find-maximal-square&quot;&gt;The idea to find maximal square&lt;/h4&gt;
+
+&lt;p&gt;This is a dynamic programming quesition, so optimal substructure exists:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;include the current cell to form a square&lt;/li&gt;
+  &lt;li&gt;exclude the current call&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The state to maintain in the auxiliary table is the size of the square so far.
+Following the DP manner, the table will be created by bottom up.&lt;/p&gt;
+
+&lt;p&gt;The first column and row remain as those are.
+When the value of matrix at i’th row and j’th column is 1,
+look above, above-left, and left.
+Among three, find minimum then plus one.
+This is the value in the auxiliary table.&lt;/p&gt;
+
+&lt;h4 id=&quot;java-code-for-finding-maximal-square&quot;&gt;Java code for finding maximal square&lt;/h4&gt;
+
+&lt;noscript&gt;&lt;pre&gt;public class MaximalSquare {
+    static int min(int a, int b, int c) {
+        return Math.min(a, Math.min(b, c));
+    }
+
+    static int findMaxSquare(int[][] matrix) {
+        int n = matrix.length;
+        int m = matrix[0].length;
+        int[][] memo = new int[n][m];
+        int max = 0;
+        // initialize
+        // copy first column
+        for (int i = 0; i &amp;lt; n; i++) {
+            memo[i][0] = matrix[i][0];
+            max = Math.max(max, memo[i][0]);
+        }
+        // copy first row
+        for (int i = 1; i &amp;lt; m; i++) {
+            memo[0][i] = matrix[0][i];
+            max = Math.max(max, memo[0][i]);
+        }
+        // fill the rest
+        for (int i = 1; i &amp;lt; n; i++) {
+            for (int j = 1; j &amp;lt; m; j++) {
+                if (matrix[i][j] == 1) {
+                    memo[i][j] = min(memo[i - 1][j], memo[i - 1][j - 1], memo[i][j - 1]) + 1;
+                } else {
+                    memo[i][j] = 0;
+                }
+                max = Math.max(max, memo[i][j]);
+            }
+        }
+        return max * max;
+    }
+
+    public static void main(String[] args) {
+        int[][] matrix = {
+                {1, 0, 1, 0, 0},
+                {1, 0, 1, 1, 1},
+                {1, 1, 1, 1, 1},
+                {1, 0, 0, 1, 0}
+        };
+        System.out.println(findMaxSquare(matrix));
+    }
+}&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/yokolet/6855bc82a187fa8cd2316973bdbe03dd.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;The performance is: time O(nm), space O(nm), where n: rows, m: columns&lt;/p&gt;
+
+&lt;p&gt;The result is:&lt;/p&gt;
+
+&lt;pre&gt;
+
+4
+
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;problem-description---maximal-rectangle&quot;&gt;Problem Description - Maximal Rectangle&lt;/h4&gt;
+
+&lt;p&gt;Given a 2D binary matrix filled with 0’s and 1’s, find the maximal rectangle with all 1’s.&lt;/p&gt;
+
+&lt;p&gt;For example, following 2D matrix is given:&lt;/p&gt;
+
+&lt;pre&gt;
+
+1   0   1   0   0
+
+1   0   1   1   1
+
+1   1   1   1   1
+
+1   0   0   1   0
+
+&lt;/pre&gt;
+
+&lt;p&gt;The answer will be 6.&lt;/p&gt;
+
+&lt;pre&gt;
+
+1   0   1   0   0
+      +-----------+
+1   0 | 1   1   1 |
+      |           |
+1   1 | 1   1   1 |
+      +-----------+
+1   0   0   1   0
+
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;the-idea-to-find-maximal-rectangle&quot;&gt;The idea to find maximal rectangle&lt;/h4&gt;
+
+&lt;p&gt;Also, this is a dynamic programming problem, but has an extra process.
+The first step of DP sees vertically.
+The second step sees horizontally.&lt;/p&gt;
+
+&lt;p&gt;For the DP step, the optimal substructure exists, like the square problem.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;include the current cell to form a rectangle&lt;/li&gt;
+  &lt;li&gt;exclude the current cell&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The state to maintain in the auxiliary table is the size of 1’s of vertical stretch.
+Following the DP manner, the table will be created by bottom up.
+When the value of matrix at i’th row and j’th column is 1, look above then plus one.
+This is the value in the auxiliary table.&lt;/p&gt;
+
+&lt;p&gt;After creating the auxiliary table, I need to find the maximal area looking at horizontally.
+How to find it?
+This is exactly the same as &lt;a href=&quot;http://yokolet.github.io/2017/05/25/largest-rectangle-in-histogram.html&quot;&gt;Largest Rectangle in Histogram&lt;/a&gt; problem.&lt;/p&gt;
+
+&lt;p&gt;The second step looks each row to find its max.
+By comparison of each max, I can get the maximal area.&lt;/p&gt;
+
+&lt;h4 id=&quot;java-code-for-finding-maximal-rectangle&quot;&gt;Java code for finding maximal rectangle&lt;/h4&gt;
+
+&lt;noscript&gt;&lt;pre&gt;import java.util.Stack;
+
+public class MaximalRectangle {
+    static int findMaxArea(int l, int[] heights) {
+        Stack&amp;lt;Integer&amp;gt; stack = new Stack&amp;lt;Integer&amp;gt;();
+        int max_area = 0;
+        for (int i = 0; i &amp;lt; l; i++) {
+            while (!stack.isEmpty() &amp;amp;&amp;amp; heights[stack.peek()] &amp;gt; heights[i]) {
+                int top_height = heights[stack.pop()];
+                int w = stack.isEmpty() ? i : i - stack.peek() - 1;
+                max_area = Math.max(max_area, w * top_height);
+            }
+            stack.push(i);
+        }
+        return max_area;
+    }
+
+    static int maximalRectangle(int[][] matrix) {
+        int n = matrix.length;
+        int m = n == 0 ? 0 : matrix[0].length;
+        int[][] memo = new int[n][m + 1];
+
+        // initialize
+        // first row
+        for (int i = 0; i &amp;lt; m; i++) {
+            memo[0][i] = matrix[0][i] == 1 ? 1 : 0;
+        }
+
+        for (int i = 1; i &amp;lt; n; i++) {
+            for (int j = 0; j &amp;lt; m; j++) {
+                if (matrix[i][j] == 1) {
+                    memo[i][j] = memo[i - 1][j] + 1;
+                } else {
+                    memo[i][j] = 0;
+                }
+            }
+        }
+
+        // find max
+        int max = 0;
+        for (int i = 0; i &amp;lt; n; i++) {
+            max = Math.max(max, findMaxArea(m + 1, memo[i]));
+        }
+        return max;
+    }
+
+    public static void main(String[] args) {
+        int[][] matrix = {
+                {1, 0, 1, 0, 0},
+                {1, 0, 1, 1, 1},
+                {1, 1, 1, 1, 1},
+                {1, 0, 0, 1, 0}
+        };
+        System.out.println(maximalRectangle(matrix));
+    }
+}&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/yokolet/0e865893f44e5329c138a4cb24be4d45.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;The performance is: time O(nm), space O(nm), where n: rows, m: columns&lt;/p&gt;
+
+&lt;p&gt;The result is:&lt;/p&gt;
+
+&lt;pre&gt;
+
+6
+
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;resources&quot;&gt;Resources&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/maximum-size-sub-matrix-with-all-1s-in-a-binary-matrix/&quot;&gt;Maximum size square sub-matrix with all 1s&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2014/06/leetcode-maximal-square-java/&quot;&gt;Maximal Square&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://algorithms.tutorialhorizon.com/dynamic-programming-maximum-size-square-sub-matrix-with-all-1s/&quot;&gt;Maximum size square sub-matrix with all 1s&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/maximum-size-rectangle-binary-sub-matrix-1s/&quot;&gt;Maximum size rectangle binary sub-matrix with all 1s&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2014/05/leetcode-maximal-rectangle-java/&quot;&gt;Maximal Rectangle&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Maximal Siblings</summary></entry><entry><title type="html">Iterator To Flatten It</title><link href="/2017/06/15/iterator-to-flatten.html" rel="alternate" type="text/html" title="Iterator To Flatten It" /><published>2017-06-15T00:00:00-07:00</published><updated>2017-06-15T00:00:00-07:00</updated><id>/2017/06/15/iterator-to-flatten</id><content type="html" xml:base="/2017/06/15/iterator-to-flatten.html">&lt;h4 id=&quot;iterator-revisited&quot;&gt;Iterator Revisited&lt;/h4&gt;
+
+&lt;p&gt;“Iterator” is one of design patterns in object-oriented programming (OOP).
+Needless to say, extremely famous Gang of Four (Erich Gamma, Richard Helm, Ralph Johnson and John Vlissides) are creators.
+As in the Wikipedia’s &lt;a href=&quot;https://en.wikipedia.org/wiki/Iterator_pattern&quot;&gt;Iterator pattern&lt;/a&gt;,
+the iterator pattern is used when traversing &lt;em&gt;container&lt;/em&gt; without knowing how the container works. It is OOP’s favorite pattern to “decouple” the iterator from container.&lt;/p&gt;
+
+&lt;p&gt;What does that actually mean? The iterator defines two methods, &lt;code class=&quot;highlighter-rouge&quot;&gt;hasNext()&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;next()&lt;/code&gt;.
+Repeating these two method, I can traverse all elements in the container.
+For example, Java’s ArrayList are LinkedList examples of the containers.
+These two have different data structures, but I can traverse all elements exactly the same way: &lt;code class=&quot;highlighter-rouge&quot;&gt;hasNext()&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;nex()&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Since the iterator is a handy feature, many including custom classes provide a way to access their elements by the iterator.
+Probably, this is a reason I see various iterator implementation problems.
+The iterator looks a good topic to leave a memo, so I’m going to write about two iterators here.
+These two will flatten nested structure: 2D vector and nested list.&lt;/p&gt;
+
+&lt;h4 id=&quot;problem-description---flatten-2d-vector&quot;&gt;Problem Description - Flatten 2D Vector&lt;/h4&gt;
+
+&lt;p&gt;“Implement an iterator to flatten 2D vector” is the problem.
+It is the iterator, so the implementation should have &lt;code class=&quot;highlighter-rouge&quot;&gt;hasNext()&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;next()&lt;/code&gt; methods.
+Repeating these two methods, all elements in 2D vector should be traversed.
+For example, &lt;code class=&quot;highlighter-rouge&quot;&gt;[[1, 2], [3], [4, 5, 6]]&lt;/code&gt; is given, the code:&lt;/p&gt;
+
+&lt;pre&gt;
+
+    while (v2DIter.hasNext()) {
+        result.add(v2DIter.next());
+    }
+
+&lt;/pre&gt;
+
+&lt;p&gt;should add all elements to the result list.
+When it finishes, the result should be &lt;code class=&quot;highlighter-rouge&quot;&gt;[1, 2, 3, 4, 5, 6]&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h4 id=&quot;the-idea-to-implement-iterator-to-flatten-2d-vector&quot;&gt;The idea to implement iterator to flatten 2D vector&lt;/h4&gt;
+
+&lt;p&gt;This sort of nested something is often solved by iterator of iterators approach.
+A parent iterator traverses vectors, say &lt;code class=&quot;highlighter-rouge&quot;&gt;[1, 2]&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;[3]&lt;/code&gt;.
+Child iterators traverse individual elements, say &lt;code class=&quot;highlighter-rouge&quot;&gt;1&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;2&lt;/code&gt;, or &lt;code class=&quot;highlighter-rouge&quot;&gt;3&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The most challenging part is when and how to update the child iterator.
+Choices are only two: either &lt;code class=&quot;highlighter-rouge&quot;&gt;hasNext()&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;next()&lt;/code&gt; method must be responsible to update.
+In general, it is reasonable to do in &lt;code class=&quot;highlighter-rouge&quot;&gt;next()&lt;/code&gt; method.
+This is because, updating the itereator changes a current element where the iterator points.
+This behavior is something unexptected for &lt;code class=&quot;highlighter-rouge&quot;&gt;hasNext()&lt;/code&gt;, but reasonable to &lt;code class=&quot;highlighter-rouge&quot;&gt;next()&lt;/code&gt; method.&lt;/p&gt;
+
+&lt;h4 id=&quot;java-code-for-iterating-2d-vector&quot;&gt;Java code for iterating 2D Vector&lt;/h4&gt;
+
+&lt;noscript&gt;&lt;pre&gt;import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+
+public class Vector2DIterator implements Iterator&amp;lt;Integer&amp;gt; {
+    Iterator&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; parent = null;
+    Iterator&amp;lt;Integer&amp;gt; child = null;
+
+    void updateChild() {
+        while (!child.hasNext() &amp;amp;&amp;amp; parent.hasNext()) {
+            child = parent.next().iterator();
+        }
+    }
+
+    public Vector2DIterator(List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; vec2d) {
+        if (vec2d == null || vec2d.size() == 0 ) { return; }
+        parent = vec2d.iterator();
+        if (parent.hasNext()) {
+            child = parent.next().iterator();
+            updateChild();
+        }
+    }
+
+    @Override
+    public boolean hasNext() {
+        return child != null &amp;amp;&amp;amp; child.hasNext();
+    }
+
+    @Override
+    public Integer next() {
+        Integer temp = child.next();
+        updateChild();
+        return temp;
+    }
+
+    static void iterate(Vector2DIterator v2DIter) {
+        while (v2DIter.hasNext()) {
+            System.out.print(v2DIter.next() + &amp;quot;, &amp;quot;);
+        }
+        System.out.println();
+    }
+    
+    public static void main(String[] args) {
+        List&amp;lt;Integer&amp;gt; inner0 = Arrays.asList(1, 2);
+        List&amp;lt;Integer&amp;gt; inner1 = Arrays.asList(3);
+        List&amp;lt;Integer&amp;gt; inner2 = Arrays.asList(4, 5, 6);
+        List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; input = Arrays.asList(inner0, inner1, inner2);
+        Vector2DIterator v2DIter = new Vector2DIterator(input);
+        iterate(v2DIter);
+    }
+}&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/yokolet/21551034731033910bc6ebe216bfee14.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;Above prints:&lt;/p&gt;
+
+&lt;pre&gt;
+
+1, 2, 3, 4, 5, 6, 
+
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;problem-description---flatten-nested-list&quot;&gt;Problem Description - Flatten Nested List&lt;/h4&gt;
+
+&lt;p&gt;“Implement an iterator to flatten nested list” is the problem.
+Like previous problem, the iterator implementation should have &lt;code class=&quot;highlighter-rouge&quot;&gt;hasNext()&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;next()&lt;/code&gt; methods.
+Repeating these two methods, all elements in the nested list should be traversed.
+For example, &lt;code class=&quot;highlighter-rouge&quot;&gt;[[1, 2], 3, [4, [5, 6]]]&lt;/code&gt; is given, the code:&lt;/p&gt;
+
+&lt;pre&gt;
+
+    while (nestedLIter.hasNext()) {
+        result.add(nestedLIter.next());
+    }
+
+&lt;/pre&gt;
+
+&lt;p&gt;should add all elements to the result list.
+When it finishes, the result should be &lt;code class=&quot;highlighter-rouge&quot;&gt;[1, 2, 3, 4, 5, 6]&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;This is similar to flatten 2D vector.
+Big difference is inside of an outermost list is not always a list.
+Inner elements may be an integer, list, or nested list.
+This problem is more complicated compared to the previous one.&lt;/p&gt;
+
+&lt;p&gt;To express each element in the nested list,
+the interface &lt;code class=&quot;highlighter-rouge&quot;&gt;NestedInteger&lt;/code&gt; is provided.&lt;/p&gt;
+
+&lt;pre&gt;
+
+    interface NestedInteger {
+        boolean isInteger();
+        Integer getInteger();
+        List&amp;lt;NestedInteger&amp;gt; getList();
+    }
+
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;the-idea-to-implement-iterator-to-flatten-nested-list&quot;&gt;The idea to implement iterator to flatten nested list&lt;/h4&gt;
+
+&lt;p&gt;Here again, this sort of nested something can be solved by iterator of iterators approach.
+In this case, iterator of iterafor of iterator of … may be there.
+To keep track the data something like … of … of … of …., a stack would be a good data structure.&lt;/p&gt;
+
+&lt;p&gt;If I find the itereator points a list, I will stack it.
+Then, I will pull out an inner iterator.
+If the inner iteartor points another list, I will stack it.
+Then, I will pull out the inner of inner iterator (repeat this as long as needed).
+At some level, pulled out iterator should point an integer.
+This is the value to add to the result.&lt;/p&gt;
+
+&lt;p&gt;Likewise, the challenging part is when and how to update the iterators.
+Following the policy, “reasonable to do in &lt;code class=&quot;highlighter-rouge&quot;&gt;next()&lt;/code&gt; method,
+the iterators will be updated in &lt;code class=&quot;highlighter-rouge&quot;&gt;next()&lt;/code&gt;.
+However, in this case, I saved a current integer value to an instance variable.
+This is because current interator may or may not points a value. It may another itereator.
+Saving a &lt;em&gt;next&lt;/em&gt; value makes easy to update the iterators.&lt;/p&gt;
+
+&lt;h4 id=&quot;java-code-for-iterating-nested-list&quot;&gt;Java code for iterating nested list&lt;/h4&gt;
+
+&lt;noscript&gt;&lt;pre&gt;import java.util.*;
+
+public class NestedListIterator implements Iterator&amp;lt;Integer&amp;gt; {
+    interface NestedInteger {
+        boolean isInteger();
+        Integer getInteger();
+        List&amp;lt;NestedInteger&amp;gt; getList();
+    }
+
+    Stack&amp;lt;Iterator&amp;lt;NestedInteger&amp;gt;&amp;gt; stack;
+    Integer current = null;
+
+    void updateIterator() {
+        while (!stack.isEmpty() &amp;amp;&amp;amp; current == null) {
+            Iterator&amp;lt;NestedInteger&amp;gt; top = stack.peek();
+            if (!top.hasNext()) {
+                stack.pop();
+                continue;
+            }
+            NestedInteger ni = top.next();
+            if (ni.isInteger()) {
+                current = ni.getInteger();
+            } else {
+                stack.push(ni.getList().iterator());
+            }
+        }
+    }
+
+    NestedListIterator(List&amp;lt;NestedInteger&amp;gt; nestedList) {
+        stack = new Stack();
+        stack.push(nestedList.iterator());
+        updateIterator();
+    }
+
+    @Override
+    public boolean hasNext() {
+        return current != null ? true : false;
+    }
+
+    @Override
+    public Integer next() {
+        Integer temp = current;
+        current = null;
+        updateIterator();
+        return temp;
+    }
+}&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/yokolet/e9f1387f213e872d15697d5d13eaedcd.js&quot;&gt; &lt;/script&gt;
+
+&lt;h4 id=&quot;resources&quot;&gt;Resources&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2014/05/leetcode-flatten-nested-list-iterator-java/&quot;&gt;Flatten Nested List Iterator&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Iterator Revisited</summary></entry><entry><title type="html">Valid Combinations of Numbers</title><link href="/2017/06/14/valid-number-combinations.html" rel="alternate" type="text/html" title="Valid Combinations of Numbers" /><published>2017-06-14T00:00:00-07:00</published><updated>2017-06-14T00:00:00-07:00</updated><id>/2017/06/14/valid-number-combinations</id><content type="html" xml:base="/2017/06/14/valid-number-combinations.html">&lt;h4 id=&quot;splitting-a-string-in-valid-ways&quot;&gt;Splitting a String in Valid Ways&lt;/h4&gt;
+
+&lt;p&gt;Various types of String related problems exist.
+Among them, splitting it to make something valid would be a typical one.
+For example, a string of numbers is givne, “make valid IP addresses” is the example.
+Very similar problem is “make valid lottery numbers.”&lt;/p&gt;
+
+&lt;p&gt;When the given string is made by alphabetical characters,
+the problem may ask word breaks with a dictionary.&lt;/p&gt;
+
+&lt;p&gt;“Vallid IP addresses” and “valid lottery numbers” are quite similar problems.
+I’m going to write a memo about these two here.&lt;/p&gt;
+
+&lt;h4 id=&quot;problem-description---restore-ip-addresses&quot;&gt;Problem Description - Restore IP Addresses&lt;/h4&gt;
+
+&lt;p&gt;Given a string, restore valid IP addresses.
+For example, “25525511135” is given, the answer will be [“255.255.11.135”, “255.255.111.35”].&lt;/p&gt;
+
+&lt;p&gt;There are some constraints to make it the valid IP address.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;valid IP addresses should have four parts separated by “.”(dot).&lt;/li&gt;
+  &lt;li&gt;each digits must be between 0 to 255&lt;/li&gt;
+  &lt;li&gt;if the character is ‘0’, it should not be followed by any number. ex) 255.0.0.1&lt;/li&gt;
+  &lt;li&gt;must use all characters in the same order&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;When all of the constraints are met, the string becomes the valid IP address.&lt;/p&gt;
+
+&lt;h4 id=&quot;the-idea-to-split-a-string-to-make-ip-addresses&quot;&gt;The idea to split a string to make IP addresses&lt;/h4&gt;
+
+&lt;p&gt;If I think of the first part, it will be three patterns in maximum.
+For example, “25525511135” is given, “2”, “25”, and “255 are all valid numbers to start.
+When the first part is “2”, the valid second part will be “5” and “55.”
+Possible combinations create tree structure as in below.&lt;/p&gt;
+
+&lt;pre&gt;
+
+            /           |          \
+          /             |            \
+         2             25            255
+      /  |         /    |         /   |   \
+    /    |      /       |       /     |      \
+   5     55     5      52      2      25     255
+  | \  / | \  / | \   /   \  / | \  /   \   / | \
+
+&lt;/pre&gt;
+
+&lt;p&gt;When four parts of an IP address are created using valid numbers, another check runs:
+whether all given characters are used or not.
+If yes, I will add the IP address to the result list.&lt;/p&gt;
+
+&lt;p&gt;To solve this problem, I see a Depth First Search (DFS) works well.
+People have solved by various approaches, however, DFS is straightforward.
+This is because finding the answer is traversing a tree.&lt;/p&gt;
+
+&lt;p&gt;In each step, take one to three characters.
+When the number is valid, make it a part of IP address.
+Going deeper and take one to three characters, …(repeat)…
+In the end, check whether all characters are used to create valid four parts of IP address.&lt;/p&gt;
+
+&lt;h4 id=&quot;java-code-for-restoring-valid-ip-addresses&quot;&gt;Java code for restoring valid IP addresses&lt;/h4&gt;
+
+&lt;noscript&gt;&lt;pre&gt;import java.util.ArrayList;
+import java.util.List;
+
+public class RestoreIpAddresses {
+    static void restoreIpAddresses(String s, List&amp;lt;String&amp;gt; result, String ip, int count, int index) {
+        if (count &amp;gt; 4) { return; }
+        if (count == 4 &amp;amp;&amp;amp; ip.length() == (s.length() + 3)) {
+            result.add(ip);
+        }
+
+        for (int i = 1; i &amp;lt;= 3; i++) {
+            if (index + i &amp;gt; s.length()) { break; }
+            String sub = s.substring(index, index + i);
+            if ((sub.charAt(0) == &amp;#39;0&amp;#39; &amp;amp;&amp;amp; i &amp;gt; 1) || (Integer.parseInt(sub) &amp;gt; 255 &amp;amp;&amp;amp; i == 3)) {
+                continue;
+            }
+            String next = ip + sub + (count == 3 ? &amp;quot;&amp;quot; : &amp;quot;.&amp;quot;);
+            restoreIpAddresses(s, result, next, count + 1, index + i);
+        }
+    }
+
+    static List&amp;lt;String&amp;gt; restoreIpAddresses(String s) {
+        List&amp;lt;String&amp;gt; result = new ArrayList();
+        if (s.isEmpty()) { return result; }
+        restoreIpAddresses(s, result, &amp;quot;&amp;quot;, 0, 0);
+        return result;
+    }
+
+    public static void main(String[] args) {
+        String s;
+        s = &amp;quot;25525511135&amp;quot;;
+        System.out.println(restoreIpAddresses(s));
+        s = &amp;quot;0000&amp;quot;;
+        System.out.println(restoreIpAddresses(s));
+    }
+}&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/yokolet/3fdcfbc84049a1a94deaae80dced35fb.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;Above prints:&lt;/p&gt;
+
+&lt;pre&gt;
+
+[255.255.11.135, 255.255.111.35]
+[0.0.0.0]
+
+&lt;/pre&gt;
+
+&lt;p&gt;Time complexity: O(3^4).&lt;/p&gt;
+
+&lt;h4 id=&quot;problem-description---restore-lottery-numbers&quot;&gt;Problem Description - Restore Lottery Numbers&lt;/h4&gt;
+
+&lt;p&gt;Given a string, restore valid lottery numbers.
+For example, “4938532894754” is given, the answer will be [“49 38 53 28 9 47 54”].&lt;/p&gt;
+
+&lt;p&gt;The problem description sometimes starts from “uncle, Morty.”&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Your facorite uncle, Morty, is crazy about the lottery and
+even crazier about how he picks his “lucky” numbers…&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Like the IP address problem, there are some constraints to make it valid.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;valid lottery numbeers should have 7 parts separated by “ “(space).&lt;/li&gt;
+  &lt;li&gt;each digits must be between 1 and 59&lt;/li&gt;
+  &lt;li&gt;all digits are unique&lt;/li&gt;
+  &lt;li&gt;must use all characters in the same order&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;the-idea-to-split-a-string-to-make-lottery-numbers&quot;&gt;The idea to split a string to make lottery numbers&lt;/h4&gt;
+
+&lt;p&gt;This is almost identical to valid IP address problem.
+The small differences are from four parts to seven, from dot to space,
+and from 0-255 to 1-59.
+Relaitvely big difference is, in lottery problem, each digit is unique.&lt;/p&gt;
+
+&lt;p&gt;To check uniqueness, I added a set in the DFS interation:
+add the number to set when going deeper, remove the number when coming back.&lt;/p&gt;
+
+&lt;p&gt;Except the differences above, the code is the same as valid IP addresses.&lt;/p&gt;
+
+&lt;h4 id=&quot;java-code-for-restoring-valid-lottery-numbers&quot;&gt;Java code for restoring valid lottery numbers&lt;/h4&gt;
+
+&lt;noscript&gt;&lt;pre&gt;import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class RestoreLotteryNumber {
+    static void restoreLotteryNumbers(String s, List&amp;lt;String&amp;gt; result, Set&amp;lt;String&amp;gt; seen,
+                                      String number, int count, int index) {
+        if (count &amp;gt; 7) { return; }
+        if (count == 7 &amp;amp;&amp;amp; number.length() == (s.length() + 6)) {
+            result.add(number);
+        }
+        for (int i = 1; i &amp;lt;= 2; i++) {
+            if (index + i &amp;gt; s.length()) { break; }
+            String sub = s.substring(index, index + i);
+            if (seen.contains(sub) || (Integer.parseInt(sub) &amp;gt; 59)) {
+                continue;
+            } else {
+                seen.add(sub);
+                String next = number + sub + (count == 6 ? &amp;quot;&amp;quot; : &amp;quot; &amp;quot;);
+                restoreLotteryNumbers(s, result, seen, next, count + 1, index + i);
+                seen.remove(sub);
+            }
+        }
+    }
+
+    static List&amp;lt;String&amp;gt; restoreLotteryNumbers(String s) {
+        List&amp;lt;String&amp;gt; result = new ArrayList();
+        if (s.isEmpty()) { return result; }
+        restoreLotteryNumbers(s, result, new HashSet&amp;lt;String&amp;gt;(), &amp;quot;&amp;quot;, 0, 0);
+        return result;
+    }
+
+    public static void main(String[] args) {
+        String s;
+        s = &amp;quot;4938532894754&amp;quot;;
+        System.out.println(restoreLotteryNumbers(s));
+        s = &amp;quot;1634616512&amp;quot;;
+        System.out.println(restoreLotteryNumbers(s));
+        s = &amp;quot;11223344&amp;quot;;  // invalid, no result
+        System.out.println(restoreLotteryNumbers(s));
+    }
+}&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/yokolet/0b565ac9e3340dba6b91a3e15cf104d1.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;The result is:&lt;/p&gt;
+
+&lt;pre&gt;
+
+[49 38 53 28 9 47 54]
+
+[1 6 3 46 16 5 12, 1 6 3 46 16 51 2, 16 3 46 1 6 5 12, 16 3 46 1 6 51 2]
+
+[]
+
+&lt;/pre&gt;
+
+&lt;p&gt;Time complexity: O(2^7)&lt;/p&gt;
+
+&lt;h4 id=&quot;resources&quot;&gt;Resources&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://qa.geeksforgeeks.org/3336/print-all-valid-combinations-of-ip-address&quot;&gt;Print all valid combinations of IP address&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2014/06/leetcode-restore-ip-addresses-java/&quot;&gt;Restore IP Addresses&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/raviswan/ProgrammingProblems&quot;&gt;Lottery Ticket Problem&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://blog.sdeskills.com/qotd-2016-oct-28-winning-ticket/&quot;&gt;Winning Ticket&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Splitting a String in Valid Ways</summary></entry><entry><title type="html">Weird Puzzle Questions - Egg and Celebrity</title><link href="/2017/06/13/weird-puzzles.html" rel="alternate" type="text/html" title="Weird Puzzle Questions - Egg and Celebrity" /><published>2017-06-13T00:00:00-07:00</published><updated>2017-06-13T00:00:00-07:00</updated><id>/2017/06/13/weird-puzzles</id><content type="html" xml:base="/2017/06/13/weird-puzzles.html">&lt;h4 id=&quot;weird-questions-at-least-to-me&quot;&gt;Weird Questions (At Least to Me)&lt;/h4&gt;
+
+&lt;p&gt;I’m going to write about two weird algorithm problems.
+One is so-called egg dropping, another is finding a celebrity.
+I see these two problems here and there.
+From that, I guess those two are famous algorithm questions.
+But, at least, those two are quite weird.
+Some call them &lt;em&gt;puzzle&lt;/em&gt;. (Yeah, maybe… I was totally puzzled.)&lt;/p&gt;
+
+&lt;p&gt;The egg dropping and finding a celebrity problems are unrelated.
+The approaches and solutions are very different.
+However, in terms of their weirdness,
+I’m going to write a memo put those two together here.&lt;/p&gt;
+
+&lt;h4 id=&quot;problem-description---egg-dropping&quot;&gt;Problem Description - Egg Dropping&lt;/h4&gt;
+
+&lt;p&gt;Many algorithm questions have succinct descriptions.
+Not like those, this problem needs lengthy explanation.
+I re-read a few times to understand such long description correctly.
+Also, it was to figure out how to solve the problem.&lt;/p&gt;
+
+&lt;p&gt;The problem is sometime called “Two Egg Problem” since often &lt;em&gt;two&lt;/em&gt; eggs are used.
+These two eggs play a role to find the highest, safe floor to drop the egg without breaking it.
+The problem description is:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;K floors are there in total.&lt;/li&gt;
+  &lt;li&gt;There exists the highest floor an egg safely lands.&lt;/li&gt;
+  &lt;li&gt;Two (or more) eggs are given.&lt;/li&gt;
+  &lt;li&gt;If the egg doesn’t break after the dropping, it can be reused.&lt;/li&gt;
+  &lt;li&gt;If the egg breaks, the broken egg won’t be used again.&lt;/li&gt;
+  &lt;li&gt;If the egg safely lands after dropping from the floor K_j, lower floors of K_j are considered safe.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Given above conditions, “find the highest, safe floor to drop the egg” is the problem.&lt;/p&gt;
+
+&lt;h4 id=&quot;the-idea-to-find-the-highest-safe-floor&quot;&gt;The idea to find the highest safe floor&lt;/h4&gt;
+
+&lt;p&gt;A bruto force solution is always there which starts dropping the egg from the lowest floor.
+Then, try one by one going upward to the top floor.
+At some floor, the egg will break for the first time.
+One floor below (the last safe floor) is the answer.
+If only one egg is available, this is only way to solve the problem.&lt;/p&gt;
+
+&lt;p&gt;However, there’s an effective solution when multiple eggs are available.&lt;/p&gt;
+
+&lt;p&gt;This problem is often categorized to dynamic programming.
+So, an optimal substructure exists:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;the egg breaks&lt;/li&gt;
+  &lt;li&gt;the egg doesn’t break (safely lands)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The state to maintain in memorization table is a minimum number of attemps.
+For example, table[i][j] expresses the minimum attemps at i eggs and j-th floor.&lt;/p&gt;
+
+&lt;p&gt;table[i][j] will be calcuated by:&lt;/p&gt;
+
+&lt;pre&gt;
+
+min(1 + max(table[i - 1][k - 1], table[i][j - k])) where k = 1 to j
+            ^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^
+                  breaks          doesn't break
+
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;java-code-for-finding-the-highest-safe-floor&quot;&gt;Java code for finding the highest safe floor&lt;/h4&gt;
+
+&lt;noscript&gt;&lt;pre&gt;public class EggDropping {
+    static int findFloor(int n, int k) {
+        // n: number of eggs
+        // k: number of floors
+        int[][] memo = new int[n + 1][k + 1];
+        // initialize
+        // 0 trial for 0th floor
+        // 1 trial for 1st floor
+        for (int i = 1; i &amp;lt;= n; i++) {
+            memo[i][0] = 0;
+            memo[i][1] = 1;
+        }
+        // in case of only one egg is given
+        for (int i = 1; i &amp;lt;= k; i++) {
+            memo[1][i] = i;
+        }
+
+        // fill the rest
+        for (int i = 2; i &amp;lt;= n; i++) {
+            for (int j = 2; j &amp;lt;= k; j++) {
+                int minimum = Integer.MAX_VALUE;
+                for (int x = 1; x &amp;lt;= j; x++) {
+                    int temp = 1 + Math.max(memo[i - 1][x - 1], memo[i][j - x]);
+                    minimum = Math.min(minimum, temp);
+                }
+                memo[i][j] = minimum;
+            }
+        }
+        return memo[n][k];
+    }
+
+    public static void main(String[] args) {
+        int n, k;
+        n = 2;
+        k = 36;
+        System.out.println(findFloor(n, k));
+    }
+}&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/yokolet/a6843a4336e46e13fa7a3ef44ef2d0b9.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;Above prints:&lt;/p&gt;
+
+&lt;pre&gt;
+
+8
+
+&lt;/pre&gt;
+
+&lt;p&gt;Time complexity: O(nk^2), n: eggs, k: floors&lt;/p&gt;
+
+&lt;h4 id=&quot;problem-description---finding-a-celebrity&quot;&gt;Problem Description - Finding a Celebrity&lt;/h4&gt;
+
+&lt;p&gt;This problem also has a lot of descriptions like egg dropping problem.
+The details are:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;n people come to a party&lt;/li&gt;
+  &lt;li&gt;one of them is a celebrity either he or she&lt;/li&gt;
+  &lt;li&gt;this only one celebrity does not know anyone in the party&lt;/li&gt;
+  &lt;li&gt;all n - 1 people know who is the celebrity&lt;/li&gt;
+  &lt;li&gt;only one available question is “does A know B?”&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;boolean know(int A, int B)&lt;/code&gt; method is proveded which returns true if A knows B&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Given above conditions, “find the celebrity in the minimum
+number of questions” is the problem.&lt;/p&gt;
+
+&lt;h4 id=&quot;the-idea-to-find-the-celebrity&quot;&gt;The idea to find the celebrity&lt;/h4&gt;
+
+&lt;p&gt;The problem describes relations between people.
+If I draw the relations, it will be a directed graph of n people (n nodes).
+The celebrity node has an out-degree zero and in-degree n - 1.&lt;/p&gt;
+
+&lt;pre&gt;
+
+              +----------------------+
+              |                      |
+              v                      |
+ (p0) -----&amp;gt; (C) &amp;lt;----- (p2) &amp;lt;----- (p3)
+            ^   ^^
+            |   | \
+            |   |   \
+            |   |     \
+         (p4) (p5) &amp;lt;--- (p6)
+
+&lt;/pre&gt;
+
+&lt;p&gt;Given the graph above, the method, &lt;code class=&quot;highlighter-rouge&quot;&gt;know(A, B)&lt;/code&gt;, is the same as &lt;code class=&quot;highlighter-rouge&quot;&gt;has an edge from A to B&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;To solve this problem, a typical approach consists of two steps.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Elimination step&lt;/li&gt;
+  &lt;li&gt;Verification step&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The elimination step eliminates people who are not a celeb apprently.
+Here, stack is a good data structure.
+After pushing all poeple to the stack, run &lt;code class=&quot;highlighter-rouge&quot;&gt;know&lt;/code&gt; method.
+If A has an edge to B, eliminates A since A is not a celeb.
+Also, check the edge from B to A.&lt;/p&gt;
+
+&lt;p&gt;The verification step verifies the last person is a celeb.
+This is because the elimination process may leave no celeb person in the stack.
+For example, a top rightmost node p3 in the graph has two outbound edges.
+Suppose the first question is made against the celeb (C), p3 will be removed.
+Later, p2 appears, and nobody says “I know p2.”&lt;/p&gt;
+
+&lt;p&gt;For this reason, the verification step is there to
+ensure the person in the stack is the celeb.&lt;/p&gt;
+
+&lt;h4 id=&quot;java-code-for-square-root-implementation&quot;&gt;Java code for square root implementation&lt;/h4&gt;
+
+&lt;noscript&gt;&lt;pre&gt;import java.util.*;
+
+public class FindTheCelebrity {
+    static int N = 7;
+    static Map&amp;lt;Integer, List&amp;lt;Integer&amp;gt;&amp;gt; relation = new HashMap();
+    static {
+        relation.put(0, Arrays.asList(1));
+        relation.put(1, new ArrayList());  // celebrity
+        relation.put(2, Arrays.asList(1));
+        relation.put(3, Arrays.asList(1, 2));
+        relation.put(4, Arrays.asList(1));
+        relation.put(5, Arrays.asList(1));
+        relation.put(6, Arrays.asList(1, 5));
+    }
+
+    static boolean knows(int a, int b) {
+        return relation.get(a).contains(b);
+    }
+
+    static int findCelebrity() {
+        Stack&amp;lt;Integer&amp;gt; stack = new Stack();
+        for (int i = 0; i &amp;lt; N; i++) {
+            stack.push(i);
+        }
+
+        // elimination
+        while (stack.size() &amp;gt; 1) {
+            int a = stack.pop();
+            int b = stack.pop();
+            if (knows(a, b)) {
+                // a knows b
+                // b is a potential celeb
+                // make b back to stack
+                stack.push(b);
+            } else {
+                // a doesn&amp;#39;t knows b
+                // a is a potential celeb
+                // make a back to stack
+                stack.push(a);
+            }
+        }
+        int c = stack.pop();
+
+        // verification
+        for (int i = 0; i &amp;lt; N; i++) {
+            if ((i != c) &amp;amp;&amp;amp; (knows(c, i) || !knows(i, c))) {
+                return -1;
+            }
+        }
+        return c;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(findCelebrity());
+    }
+}&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/yokolet/8b9e766261890b78e849d162efcf82a1.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;Time complexity: O(n), space complexity O(n)&lt;/p&gt;
+
+&lt;p&gt;The result is:&lt;/p&gt;
+
+&lt;pre&gt;
+1
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;resources&quot;&gt;Resources&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/dynamic-programming-set-11-egg-dropping-puzzle/&quot;&gt;Dynamic Programming Set 11 (Egg Dropping Puzzle)&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=3hcaVyX00_4&quot;&gt;Egg Dropping Dynamic Programming (YouTube)&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/the-celebrity-problem/&quot;&gt;The Celebrity Problem&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.cs.princeton.edu/courses/archive/spring13/cos423/problem0-1.pdf&quot;&gt;Celebrity Identification Problem&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Weird Questions (At Least to Me)</summary></entry><entry><title type="html">Sqrt - Math Without Operator To Do It</title><link href="/2017/06/12/sqrt.html" rel="alternate" type="text/html" title="Sqrt - Math Without Operator To Do It" /><published>2017-06-12T00:00:00-07:00</published><updated>2017-06-12T00:00:00-07:00</updated><id>/2017/06/12/sqrt</id><content type="html" xml:base="/2017/06/12/sqrt.html">&lt;h4 id=&quot;square-root-without-exact-operators&quot;&gt;Square Root Without Exact Operators&lt;/h4&gt;
+
+&lt;p&gt;In my last post, &lt;a href=&quot;http://yokolet.github.io/2017/06/09/math-without-it.html&quot;&gt;Math Without Operator To Do It&lt;/a&gt;, I wrote about division an power implementations.
+There’s one more of this sort worth adding a memo here.
+It is calculating a square root.&lt;/p&gt;
+
+&lt;p&gt;There’s always an intuitive solution, while always effective solutions are.
+I’m going to write mulltiple solutions.&lt;/p&gt;
+
+&lt;h4 id=&quot;problem-description---integer-square-root-implementation&quot;&gt;Problem Description - Integer Square Root Implementation&lt;/h4&gt;
+
+&lt;p&gt;“Given an integer, find its square root in integer.
+If the square root is not an integer, the answer will be a floor of it”&lt;/p&gt;
+
+&lt;p&gt;For example, given 11, the answer will be 3.
+It is a fairly easy to understand problem.&lt;/p&gt;
+
+&lt;h4 id=&quot;the-idea-to-find-a-square-root---naive-iteration&quot;&gt;The idea to find a square root - naive iteration&lt;/h4&gt;
+
+&lt;p&gt;Since the answer will be only integer,
+I counld instantly think of a naive solution.
+Iterating integer from one to the given number,
+I will hit the integer whose multiple of itself exceeds the given number.
+Then, the answer will be that integer minus one.&lt;/p&gt;
+
+&lt;pre&gt;
+x: given number
+
+for (int i = 2; i &amp;lt; x; i++) {
+    if (i * i &amp;gt; x) {
+        return i - 1;
+    }
+}
+&lt;/pre&gt;
+
+&lt;p&gt;This will return a correct answer, but the problem is its slowness.
+Time complexity is O(n).&lt;/p&gt;
+
+&lt;h4 id=&quot;the-idea-to-find-a-square-root---binary-search&quot;&gt;The idea to find a square root - binary search&lt;/h4&gt;
+
+&lt;p&gt;Again, the answer is the integer.
+Also, the answer is between 2 to the given number.
+All numbers are there in a sorted order.
+This is a perfect condition for a binary search.&lt;/p&gt;
+
+&lt;pre&gt;
+x: given number
+
+while (low &amp;lt;= high) {
+    long mid = (low + high) / 2;
+    long temp = mid * mid;
+	if (temp &amp;lt;= x) {
+        low = mid + 1;
+        result = mid;
+    } else {
+        high = mid - 1;		
+    }
+}
+
+&lt;/pre&gt;
+
+&lt;p&gt;The binary search improves the performance to O(log(n)).
+This should be fast enough.
+However, when the given number is big,
+I got time out error on the code competition website.&lt;/p&gt;
+
+&lt;h4 id=&quot;the-idea-to-find-a-square-root---newton-raphson-method&quot;&gt;The idea to find a square root - Newton-Raphson method&lt;/h4&gt;
+
+&lt;p&gt;This is a really fast, sophisticated solution.
+However, despite of very simple code,
+it took a while for me to understand why such calculation gives the answer.&lt;/p&gt;
+
+&lt;p&gt;The Newton-Raphson methed (NR method) has a mathematical, especially,
+diffential equation backgound.
+Also, NR method is an iterative solution to approximate root.
+The important point here is to find a function which satisfies:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;diffentiable (continuous)&lt;/li&gt;
+  &lt;li&gt;f(x) = 0 for some good value x&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Given such a nice function, if I think of a slope of that,
+it would be:&lt;/p&gt;
+
+&lt;pre&gt;
+
+the slope at point: (x_n, f(x_n)), where y = f(x)
+
+f'(x) = d f(x) / dx
+
+f'(x_n) = (y - f(x_n)) / (x - x_n)
+
+by the definition, y = f(x) = 0,
+
+f'(x_n) = (- f(x_n)) / (x_n+1 - x_n)
+
+x_n+1 = x_n - f(x_n) / f'(x_n)
+
+&lt;/pre&gt;
+
+&lt;p&gt;Now, I got the formula to iterate.
+The question is what is f(x).
+Since I want to find a number &lt;code class=&quot;highlighter-rouge&quot;&gt;x&lt;/code&gt; to the given number &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;
+
+x = sqrt(a)
+
+x^2 = a
+
+x^2 - a = 0
+
+x^2 - a = 0 = f(x)
+
+f'(x) = 2x
+
+&lt;/pre&gt;
+
+&lt;p&gt;Ok, I got the function, so let’s plugin to the previous formula.&lt;/p&gt;
+
+&lt;pre&gt;
+
+x_n+1 = x_n - (x_n^2 - a) / 2 * x_n
+
+x_n+1 = 1/2 * (2 * x_n - x_n^2 / x_n + a / x_n)
+
+x_n+1 = 1/2 * (2 * x_n - x_n + a / x_n)
+
+x_n+1 = 1/2 * (x_n + a / x_n)
+
+&lt;/pre&gt;
+
+&lt;p&gt;If I iterate above calculation not to exceed the given number,
+I’ll get the integer square root.&lt;/p&gt;
+
+&lt;p&gt;The time complexity of NR method is the same as binary search, O(log(n)).
+However, it quickly converges to the answer.
+This is because the binary search increments the value one by one, while
+NR method effectively cuts down to half.&lt;/p&gt;
+
+&lt;h4 id=&quot;java-code-for-square-root-implementation&quot;&gt;Java code for square root implementation&lt;/h4&gt;
+
+&lt;noscript&gt;&lt;pre&gt;public class SquareRoot {
+    static int naive(int x) {
+        if (x == 0 || x == 1) { return x; }
+        for (int i = 2; i &amp;lt; x; i++) {
+            long temp = i * i;
+            if (temp &amp;gt; x) {
+                return i - 1;
+            }
+        }
+        return -1;
+    }
+
+    static int binarySearch(int x) {
+        if (x == 0 || x == 1) { return x; }
+        long low = 1; long high = x;
+        long result = 0;
+        while (low &amp;lt;= high) {
+            long mid = (low + high) / 2;
+            long temp = mid * mid;
+            if (temp == x) {
+                return (int)mid;
+            } else if (temp &amp;lt;= x) {
+                low = mid + 1;
+                result = mid;
+            } else {
+                high = mid - 1;
+            }
+        }
+        return (int)result;
+    }
+
+    static int newtonRaphson(int x) {
+        long i = x;
+        long temp = i * i;
+        while (temp &amp;gt; x) {
+            i = (i + x / i) / 2;
+            temp = i * i;
+        }
+        return (int)i;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(naive(11));
+        System.out.println(binarySearch(11));
+        System.out.println(newtonRaphson(11));
+        System.out.println(newtonRaphson(2147395599));
+        System.out.println(binarySearch(2147395599));
+        System.out.println(naive(2147395599));
+    }
+}&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/yokolet/0a973ce5ef02ae1354fc74c9f92a32c1.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;The result is:&lt;/p&gt;
+
+&lt;pre&gt;
+3
+3
+46339
+46339
+46339
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;resources&quot;&gt;Resources&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/square-root-of-an-integer/&quot;&gt;Square root of an integer&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/program-for-newton-raphson-method/&quot;&gt;Program for Newton Raphson Method&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://mathworld.wolfram.com/NewtonsIteration.html&quot;&gt;Newton’s Iteration&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://mathworld.wolfram.com/NewtonsMethod.html&quot;&gt;Newton’s Methos&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.quora.com/What-is-the-Newton-Rapson-method-for-finding-a-square-root-of-an-integer-number-How-does-one-use-it&quot;&gt;What is the Newton-Raphson method for finding a square root of in integer number? How does one use it?&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Square Root Without Exact Operators</summary></entry><entry><title type="html">Math Without Operator To Do It</title><link href="/2017/06/09/math-without-it.html" rel="alternate" type="text/html" title="Math Without Operator To Do It" /><published>2017-06-09T00:00:00-07:00</published><updated>2017-06-09T00:00:00-07:00</updated><id>/2017/06/09/math-without-it</id><content type="html" xml:base="/2017/06/09/math-without-it.html">&lt;h4 id=&quot;divisionpower-without-exact-operators&quot;&gt;Division/Power Without Exact Operators&lt;/h4&gt;
+
+&lt;p&gt;I see this sort of questions among algorithm problems.
+I wrote &lt;a href=&quot;http://yokolet.github.io/2017/05/24/you-can-do-it-by-xor.html#addition-without-----operators&quot;&gt;Addtion without +/- operators&lt;/a&gt; in the post about XOR related questions.
+“Divide without divison” and “power without its operator or function” are examples as well.&lt;/p&gt;
+
+&lt;p&gt;Not like the addition, a divison and power need to repeat.
+Intuitive implementations would be simply repeat subtraction or multiplication.
+Those calculates correctly, however, time complexity tends to be O(n).
+Better ways are out there.&lt;/p&gt;
+
+&lt;p&gt;I’m going to write a memo how to calculate effectively such
+Math-y stuff without exact operators to divide/power.&lt;/p&gt;
+
+&lt;h4 id=&quot;problem-description---divide-without-division-and-mod&quot;&gt;Problem Description - Divide without division and mod&lt;/h4&gt;
+
+&lt;p&gt;“Given two integers, dividend and divisor, calculate division
+without divide and modulo operators.”&lt;/p&gt;
+
+&lt;p&gt;The division itself is nothing special.
+An answer will be integer when diviend is devidend by divisor.&lt;/p&gt;
+
+&lt;p&gt;For example, given 10 (dividend) and -3 (divisor),
+the answer will be -3.&lt;/p&gt;
+
+&lt;h4 id=&quot;the-idea-to-divide-without-divisionmodulo-operators&quot;&gt;The idea to divide without division/modulo operators&lt;/h4&gt;
+
+&lt;p&gt;Simple solution is count up one by one starting from zero,
+while subtracting the divisor from dividend.
+A counter is the quotient, which is the answer.&lt;/p&gt;
+
+&lt;pre&gt;
+int sign = ...
+int a = Math.abs(dividend);
+int b = Math.abs(divisor);
+int count = 0;
+while (a &amp;gt;= b) {
+    a -= b;
+    count++;
+}
+return sign * count;
+&lt;/pre&gt;
+
+&lt;p&gt;This solution’s performance is considered O(n), where n is the quotient.
+This is simple and correct, but surely can be improved.&lt;/p&gt;
+
+&lt;p&gt;To improve above, I should see the number a bit different way.
+All numbers can be expressed as:&lt;/p&gt;
+
+&lt;pre&gt;
+
+X = x_0 * (2 ^ 0) + x_1 * (2 ^ 1) + x_2 * (2 ^ 2) + ..... + x_n * (2 ^ n)
+
+&lt;/pre&gt;
+
+&lt;p&gt;For example, 10 is &lt;code class=&quot;highlighter-rouge&quot;&gt;10 * (2 ^ 0) + 1 * (2 ^ 1) + 0 * (2 ^ 2) + 1 * (2 ^ 3)&lt;/code&gt;, and
+3 is &lt;code class=&quot;highlighter-rouge&quot;&gt;1 * (2 ^ 0) + 1 * (2 ^ 1)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;If I write how to manually calculate the division:&lt;/p&gt;
+
+&lt;pre&gt;
+
+         1 1      &amp;lt;- quotient
+    ---------
+1 1) 1 0 1 0
+       1 1
+    ---------
+       1 0 0
+         1 1
+    ---------
+           1      &amp;lt;-- modulo
+
+&lt;/pre&gt;
+
+&lt;p&gt;The first step is to find where is the highest bit.
+While shifting divisor to the left and counting how many time to repeat,
+I will get the answer.&lt;/p&gt;
+
+&lt;pre&gt;
+
+devidend: 10 = 1010
+divisor: 3 = 11
+count: 1
+
+the first iteration:
+divisor: 11 &amp;lt;&amp;lt; 1 =&amp;gt; 110
+count:   1 &amp;lt;&amp;lt; 1  =&amp;gt; 10
+
+the second iteration
+divisor: 110 &amp;lt;&amp;lt; 1 =&amp;gt; 1100 (exceeds 1010)
+count:    10 &amp;lt;&amp;lt; 1 =&amp;gt; 100
+&lt;/pre&gt;
+
+&lt;p&gt;The second step is to find what is the quotient.
+I’ve already learned how many times to repeat.
+So, I want to know each bit is zero or one.&lt;/p&gt;
+
+&lt;p&gt;This step goes like in the manual calculation.&lt;/p&gt;
+
+&lt;pre&gt;
+1010 - 110 = 100    --&amp;gt; the second bit is one
+100 - 11 = 1        --&amp;gt; the first bit is one
+1 - ... (no more)
+&lt;/pre&gt;
+
+&lt;p&gt;This divison’s time complexity turns to O(log(n)) .&lt;/p&gt;
+
+&lt;h4 id=&quot;java-code-for-dividing-number-without-division&quot;&gt;Java code for dividing number without division&lt;/h4&gt;
+
+&lt;noscript&gt;&lt;pre&gt;public class DivideWithoutDivisionNorMod {
+    static int divide(int dividend, int divisor) {
+        if (divisor == 0) { return Integer.MAX_VALUE; }
+        if (dividend == divisor) { return 1; }
+        if (divisor == -1 &amp;amp;&amp;amp; dividend == Integer.MIN_VALUE) { return Integer.MAX_VALUE; }
+
+
+        long m = (long)dividend;
+        long n = (long)divisor;
+
+        int sign = 0;
+        if ((m &amp;gt; 0 &amp;amp;&amp;amp; n &amp;gt; 0) || (m &amp;lt; 0 &amp;amp;&amp;amp; n &amp;lt; 0)) {
+            sign = 1;
+        } else {
+            sign = -1;
+        }
+
+        m = Math.abs(m);
+        n = Math.abs(n);
+
+        int count = 1;
+        while (n &amp;lt;= m) {
+            n &amp;lt;&amp;lt;= 1;
+            count &amp;lt;&amp;lt;= 1;
+        }
+
+        n &amp;gt;&amp;gt;= 1;
+        count &amp;gt;&amp;gt;= 1;
+
+        long result = 0;
+        while (count != 0) {
+            if (m &amp;gt;= n) {
+                m -= n;
+                result |= count;
+            }
+            count &amp;gt;&amp;gt;= 1;
+            n &amp;gt;&amp;gt;= 1;
+
+        }
+        return (int)result * sign;
+    }
+    public static void main(String[] args) {
+        System.out.println(divide(10, -3));
+        System.out.println(divide(98765, 432));
+    }
+}&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/yokolet/a5b99980f553e67d5280767b46c559d1.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;The result is:&lt;/p&gt;
+
+&lt;pre&gt;
+-3
+228
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;problem-description---impelemnt-power&quot;&gt;Problem Description - Impelemnt Power&lt;/h4&gt;
+
+&lt;p&gt;Given two integers, x and y, implmenet a function (method) to
+calculate &lt;code class=&quot;highlighter-rouge&quot;&gt;x ^ y&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;I believe every computer language provides a way to
+calculate a power out of the box.
+However, the problem asks the implementation without using such
+existing feature.&lt;/p&gt;
+
+&lt;h4 id=&quot;the-idea-to-construct-fromto-a-string-with-markers&quot;&gt;The idea to construct from/to a string with markers&lt;/h4&gt;
+
+&lt;p&gt;Also, there’s a simple solution.
+Repeating multiplication y times gives me the answer.
+The perfomrance of this simple solution will be O(n) (n = y).&lt;/p&gt;
+
+&lt;p&gt;There’s a way to improve this.&lt;/p&gt;
+
+&lt;p&gt;The improvied version calculates &lt;code class=&quot;highlighter-rouge&quot;&gt;x ^ (y / 2)&lt;/code&gt; recursively.
+While returning, calcuate &lt;code class=&quot;highlighter-rouge&quot;&gt;(x ^ (y / 2)) * (x ^ (y / 2))&lt;/code&gt;.
+If y is odd, multiply x.&lt;/p&gt;
+
+&lt;pre&gt;
+
+y is even:   y = 2n
+
+x ^ y = x ^ (2n) = (x ^ n) * (x ^ n)
+
+y is odd:    y = 2n + 1
+
+x ^ y = x ^ (2n + 1) = x * x ^ (2n) = x * (x ^ n) * (x ^ n)
+
+&lt;/pre&gt;
+
+&lt;p&gt;This way, the time complexity goes down to O(log(n)).&lt;/p&gt;
+
+&lt;h4 id=&quot;java-code-for-constructing-a-binary-tree-from-a-string-with-markers&quot;&gt;Java code for constructing a binary tree from a string with markers&lt;/h4&gt;
+
+&lt;noscript&gt;&lt;pre&gt;public class PowerImpl {
+    static int power(int x, int y) {
+        // base case
+        if (y == 0) {
+            return 1;
+        }
+        int temp = power(x, y / 2);
+        if (y % 2 == 0) {
+            return temp * temp;
+        } else {
+            return x * temp * temp;
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(power(2, 10));
+        System.out.println(power(-2, 9));
+    }
+}&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/yokolet/1a6f1312a9172cebdac33f5edaa6f50f.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;The result is:&lt;/p&gt;
+
+&lt;pre&gt;
+1024
+-512
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;resources&quot;&gt;Resources&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://qa.geeksforgeeks.org/3794/divide-integers-without-multiplication-division-operator&quot;&gt;Divide two integers without using multiplication, division and mod operator&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://stackoverflow.com/questions/5386377/division-without-using&quot;&gt;Division without using ‘/’&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2014/05/leetcode-divide-two-integers-java/&quot;&gt;Divide Two Integers&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/write-a-c-program-to-calculate-powxn/&quot;&gt;Write a program to cslculate pow(x, n)&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2012/12/leetcode-powx-n/&quot;&gt;Pow(x, n)&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Division/Power Without Exact Operators</summary></entry><entry><title type="html">Construct Binary Tree</title><link href="/2017/06/04/construct-binary-tree.html" rel="alternate" type="text/html" title="Construct Binary Tree" /><published>2017-06-04T00:00:00-07:00</published><updated>2017-06-04T00:00:00-07:00</updated><id>/2017/06/04/construct-binary-tree</id><content type="html" xml:base="/2017/06/04/construct-binary-tree.html">&lt;h4 id=&quot;serializedeserialize&quot;&gt;Serialize/Deserialize&lt;/h4&gt;
+
+&lt;p&gt;It depends on a programming language, but in most cases,
+a binary tree is expressed by an object tree.
+Each node can have at most two children: left node and right node.
+Once the binary tree is constructed, it is not language neutral anymore.&lt;/p&gt;
+
+&lt;p&gt;What is programming language independent form?
+A string would be the answer.
+Sometime, creating a string from binary tree is called &lt;em&gt;serialize&lt;/em&gt;.
+On the contrary, constructing binary tree is sometime called &lt;em&gt;deserialize&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Next to the string, another language independent form would be an array of intergers.
+There are some differences to treat integers among programming languages.
+However, still, integers are common to all.&lt;/p&gt;
+
+&lt;p&gt;A way to serialize the binary tree is not unique.
+Occasionally, a question allows me to choose my favorit style.
+As far as I learned, there are a few typical styles:
+string with parens, string with markers,
+combination of preorder/inorder or inorder/postorder.&lt;/p&gt;
+
+&lt;p&gt;Although the goals are the same, “construct a binary tree” and “construct a string,”
+I need to apply different ideas.
+So, I’m going to write a memo here to clarify the difference.&lt;/p&gt;
+
+&lt;h4 id=&quot;problem-description---string-with-parens&quot;&gt;Problem Description - String with Parens&lt;/h4&gt;
+
+&lt;p&gt;Given a string with parens, construct a binary tree.
+When creating a node, always left child should come first.
+If node is empty, it is an empty string.&lt;/p&gt;
+
+&lt;p&gt;For example, &lt;code class=&quot;highlighter-rouge&quot;&gt;4(2(-3)(1))(6(5))&lt;/code&gt; is a given string, the tree should be:&lt;/p&gt;
+&lt;pre&gt;
+
+         4
+       /   \
+     /      \
+    2        6
+  /   \     /
+-3     1   5
+
+&lt;/pre&gt;
+
+&lt;p&gt;In this problem, the first digit(s) is the root node, and
+all subtrees under root are surrouded by a pair of parens.
+Each node can take both positive and negative values.&lt;/p&gt;
+
+&lt;p&gt;As for serialization, when the tree above is given,
+the string &lt;code class=&quot;highlighter-rouge&quot;&gt;4(2(-3)(1))(6(5))&lt;/code&gt; should be returned.&lt;/p&gt;
+
+&lt;h4 id=&quot;the-idea-to-construct-fromto-a-string-with-parens&quot;&gt;The idea to construct from/to a string with parens&lt;/h4&gt;
+
+&lt;p&gt;Construcing the tree comes first.
+Here, what I need to care about are:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;an index to point a specific character in a given string&lt;/li&gt;
+  &lt;li&gt;left or right to add a new node.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Since this is a binary tree, recursive approach would work like traversing the binary tree.
+The point is when go right while increamenting the index.
+At first, it should go left as far as encountering opening parens.
+Then, coming back from deeper process, check opening parens again.
+This time, the opening paren indicates the tree should go right.
+Other than this main logic, I added index range check not to end up an exception.&lt;/p&gt;
+
+&lt;p&gt;This serialization is a preorder traversal.
+What I need to care about are:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;when returns from the subtree traversal, add closing paren&lt;/li&gt;
+  &lt;li&gt;only left child may have &lt;code class=&quot;highlighter-rouge&quot;&gt;()&lt;/code&gt; (empty) expression, but right child is not&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Because of this, extra null checks are mixed in basic preorder traversal.&lt;/p&gt;
+
+&lt;h4 id=&quot;java-code-for-constructing-a-binary-tree-from-a-string-with-parens&quot;&gt;Java code for constructing a binary tree from a string with parens&lt;/h4&gt;
+
+&lt;noscript&gt;&lt;pre&gt;public class ConstructBinaryTreeFromStringWithParens {
+    static int INF = Integer.MIN_VALUE;
+
+    static class TreeNode {
+        int val;
+        TreeNode left, right;
+        TreeNode(int x) { val = x; }
+    }
+
+    static int deserialize(String s, int index, TreeNode root) {
+        if (index &amp;gt;= s.length()) {
+            return index;
+        }
+        int start = index;
+        // it may be a negative value
+        if (s.charAt(index) == &amp;#39;-&amp;#39;) {
+            index++;
+        }
+        // find a length of digits
+        while (index &amp;lt; s.length() &amp;amp;&amp;amp; Character.isDigit(s.charAt(index))) {
+            index++;
+        }
+        // in case of leaf node, digits is empty
+        String digits = s.substring(start, index);
+        if (digits.isEmpty()) {
+            return index;
+        }
+        // set a real value to root
+        int val = Integer.parseInt(digits);
+        root.val = val;
+        // go left
+        if (index &amp;lt; s.length() &amp;amp;&amp;amp; s.charAt(index) == &amp;#39;(&amp;#39;) {
+            index++;
+            root.left = new TreeNode(INF);
+            index = deserialize(s, index, root.left);
+            // if this node doesn&amp;#39;t have left child,
+            // the value still has -1, so delete the node
+            if (root.left.val == INF) {
+                root.left = null;
+            }
+            index++;
+        }
+        // go right
+        if (index &amp;lt; s.length() &amp;amp;&amp;amp; s.charAt(index) == &amp;#39;(&amp;#39;) {
+            index++;
+            root.right = new TreeNode(INF);
+            index = deserialize(s, index, root.right);
+            // if this node doesn&amp;#39;t have right child,
+            // the value still has -1, so delete the node
+            if (root.right.val == INF) {
+                root.right = null;
+            }
+            index++;
+        }
+        return index;
+    }
+
+    static TreeNode str2tree(String s) {
+        if (s == null || s.isEmpty()) {
+            return null;
+        }
+        TreeNode root = new TreeNode(INF);
+        deserialize(s, 0, root);
+        return root;
+    }
+
+    static StringBuilder serialize(TreeNode root, StringBuilder result) {
+        if (root == null) {
+            return result;
+        }
+        // add this node&amp;#39;s value
+        result.append(root.val);
+        // unless both child is null
+        // need to go down to the left
+        // to add empty ()
+        if (root.left != null || root.right != null) {
+            result = serialize(root.left, result.append(&amp;quot;(&amp;quot;)).append(&amp;quot;)&amp;quot;);
+            // only when right child is not null
+            // go down to right
+            if (root.right != null) {
+                result = serialize(root.right, result.append(&amp;quot;(&amp;quot;)).append(&amp;quot;)&amp;quot;);
+            }
+        }
+        return result;
+    }
+
+    static String tree2str(TreeNode root) {
+        StringBuilder result = serialize(root, new StringBuilder());
+        return result.toString();
+    }
+
+    public static void main(String[] args) {
+        String s;
+        TreeNode root;
+        String result;
+        s = &amp;quot;4(2(-3)(1))(6(5))&amp;quot;;
+        root = str2tree(s);
+        result = tree2str(root);
+        System.out.println(result);
+
+        s = &amp;quot;1(2()(4))(-3)&amp;quot;;
+        root = str2tree(s);
+        result = tree2str(root);
+        System.out.println(result);
+    }
+}&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/yokolet/363f409ffddc72521ab540cde3f6f13d.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;The result is:&lt;/p&gt;
+
+&lt;pre&gt;
+4(2(-3)(1))(6(5))
+1(2()(4))(-3)
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;problem-description---string-with-markers&quot;&gt;Problem Description - String with Markers&lt;/h4&gt;
+
+&lt;p&gt;Given a string with markers ($s), construct a binary tree.
+For example, &lt;code class=&quot;highlighter-rouge&quot;&gt;4,2,-3,$,$,1,$,$,6,5,$,$,$&lt;/code&gt; is given,
+the constrcuted tree should be:&lt;/p&gt;
+
+&lt;pre&gt;
+
+         4
+       /   \
+     /      \
+    2        6
+  /   \     /
+-3     1   5
+
+&lt;/pre&gt;
+
+&lt;p&gt;In this problem, digits are separated by a comma (delimiter).
+When left and/or right child is null, it is expressed by a marker, &lt;code class=&quot;highlighter-rouge&quot;&gt;$&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;A serialization creates a string exactly the same as input to deserialization.&lt;/p&gt;
+
+&lt;h4 id=&quot;the-idea-to-construct-fromto-a-string-with-markers&quot;&gt;The idea to construct from/to a string with markers&lt;/h4&gt;
+
+&lt;p&gt;Again, constructing the binary tree comes first.
+This is quite similar but easier than the previous, the string with parens style.
+Simply traversing in a preorder is all to construct a tree.
+When the Marker (&lt;code class=&quot;highlighter-rouge&quot;&gt;$&lt;/code&gt;) is found, it goes back.
+Sicne each values are separated by a comma, finding a value portion from the string
+is easy as well.&lt;/p&gt;
+
+&lt;p&gt;Constructing a string from tree is also easier then previous style.
+Here again, simply traversing in the preorder creats a string.
+While a node is there, add a value and delimiter.
+When it comes to children of leaf node, a marker will be added.&lt;/p&gt;
+
+&lt;h4 id=&quot;java-code-for-constructing-a-binary-tree-from-a-string-with-markers&quot;&gt;Java code for constructing a binary tree from a string with markers&lt;/h4&gt;
+
+&lt;noscript&gt;&lt;pre&gt;public class ConstructBinaryTreeFromStringWithMarkers {
+    static int INF = Integer.MIN_VALUE;
+    static char DELIMITER = &amp;#39;,&amp;#39;;
+    static String MARKER = &amp;quot;$&amp;quot;;
+
+    static class TreeNode {
+        int val;
+        TreeNode left, right;
+        TreeNode(int x) { val = x; }
+    }
+
+    static int deserialize(String s, int index, TreeNode root) {
+        if (index &amp;gt;= s.length()) {
+            return index;
+        }
+        int start = index;
+        // it may be a negative value
+        if (s.charAt(index) == &amp;#39;-&amp;#39;) {
+            index++;
+        }
+        // find a length of digits or MARKER
+        while (index &amp;lt; s.length() &amp;amp;&amp;amp; s.charAt(index) != &amp;#39;,&amp;#39;) {
+            index++;
+        }
+        String digits = s.substring(start, index);
+        // digits may be a MARKER
+        if (MARKER.equals(digits)) {
+            // no child
+            return index;
+        }
+        // set a real value to root
+        int val = Integer.parseInt(digits);
+        root.val = val;
+
+        // go left
+        root.left = new TreeNode(INF);
+        index++;
+        index = deserialize(s, index, root.left);
+        if (root.left.val == INF) {
+            root.left = null;
+        }
+        // go right
+        root.right = new TreeNode(INF);
+        index++;
+        index = deserialize(s, index, root.right);
+        if (root.right.val == INF) {
+            root.right = null;
+        }
+
+        return index;
+    }
+
+    static TreeNode str2tree(String s) {
+        if (s == null || s.isEmpty()) {
+            return null;
+        }
+        TreeNode root = new TreeNode(INF);
+        deserialize(s, 0, root);
+        return root;
+    }
+
+    static StringBuilder serialize(TreeNode root, StringBuilder sb) {
+        if (root == null) {
+            return sb.append(MARKER).append(DELIMITER);
+        }
+        // add this node&amp;#39;s value
+        sb.append(root.val).append(DELIMITER);
+        // go down to left
+        sb = serialize(root.left, sb);
+        // go down to right
+        sb = serialize(root.right, sb);
+        return sb;
+    }
+
+    static String tree2str(TreeNode root) {
+        StringBuilder sb = serialize(root, new StringBuilder());
+        String result = sb.toString();
+        result = result.substring(0, result.length() - 1);
+        return result;
+    }
+
+    public static void main(String[] args) {
+        String s;
+        TreeNode root;
+        String result;
+        s = &amp;quot;4,2,-3,$,$,1,$,$,6,5,$,$,$&amp;quot;;
+        root = str2tree(s);
+        result = tree2str(root);
+        System.out.println(result);
+        s = &amp;quot;1,2,$,4,$,$,-3,$,$&amp;quot;;
+        root = str2tree(s);
+        result = tree2str(root);
+        System.out.println(result);
+    }
+}
+&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/yokolet/f332e785f645e8b06c2914ff033b211c.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;The result is:&lt;/p&gt;
+
+&lt;pre&gt;
+4,2,-3,$,$,1,$,$,6,5,$,$,$
+1,2,$,4,$,$,-3,$,$
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;problem-description---a-combination-of-preorder-and-inorder-traversal&quot;&gt;Problem Description - A Combination of Preorder and Inorder Traversal&lt;/h4&gt;
+
+&lt;p&gt;Given two arrays of integers, preoder and inorder, construct a binary tree.
+For example, preorder &lt;code class=&quot;highlighter-rouge&quot;&gt;[4, 2, -3, 1, 6, 5]&lt;/code&gt;, inorder &lt;code class=&quot;highlighter-rouge&quot;&gt;[-3, 2, 1, 4, 5, 6]&lt;/code&gt;
+are given, the constrcuted tree should be:&lt;/p&gt;
+
+&lt;pre&gt;
+
+         4
+       /   \
+     /      \
+    2        6
+  /   \     /
+-3     1   5
+
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;the-idea-to-construct-fromto-preorder-and-inorder&quot;&gt;The idea to construct from/to preorder and inorder&lt;/h4&gt;
+
+&lt;p&gt;If I look at difference of ways to traverse trees, there’s interesting fact.
+The first element in preorder is a root.
+The same value in inorder divides left and right subtrees.&lt;/p&gt;
+
+&lt;pre&gt;
+preorder [|4|, 2, -3, 1, 6, 5], inorder [-3, 2, 1, |4|, 5, 6]
+
+           4
+           |
+           |
+    2      |      6
+  /   \    |     /
+-3     1   |    5
+
+&lt;/pre&gt;
+
+&lt;p&gt;Now, I will look at the left substree only.
+The arrays are preorder &lt;code class=&quot;highlighter-rouge&quot;&gt;[2, -3, 1]&lt;/code&gt;, inorder &lt;code class=&quot;highlighter-rouge&quot;&gt;[-3, 2, 1]&lt;/code&gt;.
+Again, the first element in preorder divides inorder into left and right subtrees.&lt;/p&gt;
+
+&lt;pre&gt;
+preorder [|2|, -3, 1], inorder [-3, |2|, 1]
+
+     2
+     |
+-3   |   1
+
+&lt;/pre&gt;
+
+&lt;p&gt;The same division happens in the right subtree, preoder &lt;code class=&quot;highlighter-rouge&quot;&gt;[6, 5]&lt;/code&gt; and inorder &lt;code class=&quot;highlighter-rouge&quot;&gt;[5, 6]&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;
+preorder [|6|, 5], inorder [5, |6|]
+
+     6
+     |
+5    |
+
+&lt;/pre&gt;
+
+&lt;p&gt;This way, I can figure out what integers should go left or right.&lt;/p&gt;
+
+&lt;h4 id=&quot;java-code-for-constructing-a-binary-tree-from-preorder-and-inorder-traversal&quot;&gt;Java code for constructing a binary tree from preorder and inorder traversal&lt;/h4&gt;
+
+&lt;noscript&gt;&lt;pre&gt;import java.util.ArrayList;
+import java.util.List;
+
+public class ConstructBinaryTreeFromPreorderAndInorder {
+    static class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+        TreeNode(int x) { val = x; }
+    }
+
+    static TreeNode arrays2tree(int[] preorder, int[] inorder,
+                                int preStart, int preEnd,
+                                int inStart, int inEnd) {
+        if (preStart &amp;gt; preEnd) {
+            return null;
+        }
+        TreeNode node = new TreeNode(preorder[preStart]);
+        int leftEnd = 0;
+        for (int i = inStart; i&amp;lt;= inEnd; i++) {
+            if (node.val == inorder[i]) {
+                leftEnd  = i;
+                break;
+            }
+        }
+        // go left
+        node.left = arrays2tree(preorder, inorder,
+                preStart + 1, preStart + leftEnd - inStart,
+                inStart, leftEnd - 1);
+        // go right
+        node.right = arrays2tree(preorder, inorder,
+                preEnd - inEnd + leftEnd + 1, preEnd,
+                leftEnd + 1, inEnd);
+        return node;
+    }
+
+    static TreeNode arrays2tree(int[] preorder, int[] inorder) {
+        return arrays2tree(preorder, inorder,
+                0, preorder.length - 1, 0, inorder.length - 1);
+    }
+
+    static void preorder(TreeNode root, List&amp;lt;Integer&amp;gt; inner) {
+        if (root == null) {
+            return;
+        }
+        inner.add(root.val);
+        preorder(root.left, inner);
+        preorder(root.right, inner);
+    }
+
+    static void inorder(TreeNode root, List&amp;lt;Integer&amp;gt; inner) {
+        if (root == null) {
+            return;
+        }
+        inorder(root.left, inner);
+        inner.add(root.val);
+        inorder(root.right, inner);
+    }
+
+    static List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; tree2arrays(TreeNode root) {
+        List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; result = new ArrayList();
+        result.add(new ArrayList());
+        result.add(new ArrayList());
+        preorder(root, result.get(0));
+        inorder(root, result.get(1));
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] pre0 = {4, 2, -3, 1, 6, 5};
+        int[] in0 = {-3, 2, 1, 4, 5, 6};
+        TreeNode root;
+        List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; result;
+        root = arrays2tree(pre0, in0);
+        result = tree2arrays(root);
+        System.out.println(result);
+
+        int[] pre1 = {1, 2, 4, -3};
+        int[] in1 = {2, 4, 1, -3};
+        root = arrays2tree(pre1, in1);
+        result = tree2arrays(root);
+        System.out.println(result);
+    }
+}&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/yokolet/6eef5a0806b3a5a7cba0f442fef395fe.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;The result is:&lt;/p&gt;
+
+&lt;pre&gt;
+[[4, 2, -3, 1, 6, 5], [-3, 2, 1, 4, 5, 6]]
+[[1, 2, 4, -3], [2, 4, 1, -3]]
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;problem-description---a-combination-of-inorder-and-postorder-traversal&quot;&gt;Problem Description - A Combination of Inorder and Postorder Traversal&lt;/h4&gt;
+
+&lt;p&gt;Given two arrays of integers, inorder and postorder, construct a binary tree.
+For example, inorder &lt;code class=&quot;highlighter-rouge&quot;&gt;[-3, 2, 1, 4, 5, 6]&lt;/code&gt;, postorder &lt;code class=&quot;highlighter-rouge&quot;&gt;[-3, 1, 2, 5, 6, 4]&lt;/code&gt;
+are given, the constrcuted tree should be:&lt;/p&gt;
+
+&lt;pre&gt;
+
+         4
+       /   \
+     /      \
+    2        6
+  /   \     /
+-3     1   5
+
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;the-idea-to-construct-fromto-inorder-and-postorder&quot;&gt;The idea to construct from/to inorder and postorder&lt;/h4&gt;
+
+&lt;p&gt;Just glancing at this problem, everybody finds this is very similar to the previous one.
+In the preorder, a root is the first element while the last in the postorder.&lt;/p&gt;
+
+&lt;p&gt;The same logic to divide left and right subtree is able to apply
+looking at the last element in the subtree area.&lt;/p&gt;
+
+&lt;pre&gt;
+inorder [-3, 2, 1, |4|, 5, 6], postorder [-3, 1, 2, 5, 6, |4|]
+
+           4
+           |
+           |
+    2      |      6
+  /   \    |     /
+-3     1   |    5
+
+
+inorder [-3, |2|, 1], postorder [-3, 1, |2|]
+
+     2
+     |
+-3   |   1
+
+
+inorder [5, |6|], postorder [5, |6|]
+
+     6
+     |
+5    |
+
+
+&lt;/pre&gt;
+
+&lt;p&gt;As in the previsou section, recursively applying this idea constructs the binary tree.&lt;/p&gt;
+
+&lt;h4 id=&quot;java-code-for-constructing-a-binary-tree-from-inorder-and-postorder-traversal&quot;&gt;Java code for constructing a binary tree from inorder and postorder traversal&lt;/h4&gt;
+
+&lt;noscript&gt;&lt;pre&gt;import java.util.ArrayList;
+import java.util.List;
+
+public class ConstructBinaryTreeFromInorderAndPostorder {
+    static class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+        TreeNode(int x) { val = x; }
+    }
+
+    static TreeNode arrays2tree(int[] inorder, int[] postorder,
+                                int inStart, int inEnd,
+                                int postStart, int postEnd) {
+        if (postStart &amp;gt; postEnd) {
+            return null;
+        }
+        TreeNode node = new TreeNode(postorder[postEnd]);
+        int leftEnd = 0;
+        for (int i = inStart; i&amp;lt;= inEnd; i++) {
+            if (node.val == inorder[i]) {
+                leftEnd  = i;
+                break;
+            }
+        }
+        node.left = arrays2tree(inorder, postorder,
+                inStart, leftEnd - 1,
+                postStart, postStart + leftEnd - inStart -1);
+        node.right = arrays2tree(inorder, postorder,
+                leftEnd + 1, inEnd,
+                postStart + leftEnd - inStart, postEnd - 1);
+        return node;
+    }
+
+    static TreeNode arrays2tree(int[] inorder, int[] postorder) {
+        return arrays2tree(inorder, postorder,
+                0, inorder.length - 1, 0, postorder.length - 1);
+    }
+
+    static void inorder(TreeNode root, List&amp;lt;Integer&amp;gt; inner) {
+        if (root == null) {
+            return;
+        }
+        inorder(root.left, inner);
+        inner.add(root.val);
+        inorder(root.right, inner);
+    }
+
+    static void postorder(TreeNode root, List&amp;lt;Integer&amp;gt; inner) {
+        if (root == null) {
+            return;
+        }
+        postorder(root.left, inner);
+        postorder(root.right, inner);
+        inner.add(root.val);
+    }
+
+    static List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; tree2arrays(TreeNode root) {
+        List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; result = new ArrayList();
+        result.add(new ArrayList());
+        result.add(new ArrayList());
+        inorder(root, result.get(0));
+        postorder(root, result.get(1));
+        return result;
+    }
+
+    public static void main(String[] args) {
+        TreeNode root;
+        List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; result;
+        int[] in0 = {-3, 2, 1, 4, 5, 6};
+        int[] post0 = {-3, 1, 2, 5, 6, 4};
+        root = arrays2tree(in0, post0);
+        result = tree2arrays(root);
+        System.out.println(result);
+
+        int[] in1 = {2, 4, 1, -3};
+        int[] post1 = {4, 2, -3, 1};
+        root = arrays2tree(in1, post1);
+        result = tree2arrays(root);
+        System.out.println(result);
+    }
+}&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/yokolet/e2b2713f68c2e59d467a4929a26178d8.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;The result is:&lt;/p&gt;
+
+&lt;pre&gt;
+[[-3, 2, 1, 4, 5, 6], [-3, 1, 2, 5, 6, 4]]
+[[2, 4, 1, -3], [4, 2, -3, 1]]
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;resources&quot;&gt;Resources&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/serialize-deserialize-binary-tree/&quot;&gt;Serialize and Deserialize a Binary Tree&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2014/05/leetcode-serialize-and-deserialize-binary-tree-java/&quot;&gt;Serialize and Deserialize Binary Tree&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://kennyzhuang.gitbooks.io/algorithms-collection/content/serialize_and_deserialize_binary_tree.html&quot;&gt;Serialize and deserialize binary tree&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/construct-tree-from-given-inorder-and-preorder-traversal/&quot;&gt;Construct Tree from given Inorder and Preorder traversals&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2014/06/leetcode-construct-binary-tree-from-preorder-and-inorder-traversal-java/&quot;&gt;Construct Binary Tree from Preorder and Inorder Traversal&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/construct-a-binary-tree-from-postorder-and-inorder/&quot;&gt;Construct a Binary Tree from Postorder and Inorder&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2013/01/construct-binary-tree-from-inorder-and-postorder-traversal/&quot;&gt;Constrcut Binary Tree from Inorder and Postorder Traversal&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Serialize/Deserialize</summary></entry><entry><title type="html">Parentheses Love</title><link href="/2017/06/02/parens-love.html" rel="alternate" type="text/html" title="Parentheses Love" /><published>2017-06-02T00:00:00-07:00</published><updated>2017-06-02T00:00:00-07:00</updated><id>/2017/06/02/parens-love</id><content type="html" xml:base="/2017/06/02/parens-love.html">&lt;h4 id=&quot;simple-problem-yet-complicated-solution&quot;&gt;Simple Problem Yet Complicated Solution&lt;/h4&gt;
+
+&lt;p&gt;As a lisp family language programmer, I used to write a lot of paretheses.
+Specifically, &lt;code class=&quot;highlighter-rouge&quot;&gt;(&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;)&lt;/code&gt;.
+However, in an algorithm world, in a problem description, &lt;em&gt;parentheses&lt;/em&gt; often includes
+other brackets as well, such as &lt;code class=&quot;highlighter-rouge&quot;&gt;{}&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;[]&lt;/code&gt;.
+Out of my curiosity, I googled names of so-called parentheses.
+According Wikipedia’s &lt;a href=&quot;https://en.wikipedia.org/wiki/Bracket&quot;&gt;Bracket&lt;/a&gt;, it looks those
+have their own names with a lot of variants. Probably, famous ones are these.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;()&lt;/code&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;[]&lt;/code&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;{}&lt;/code&gt;&lt;/th&gt;
+      &lt;th&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;&amp;gt;&lt;/code&gt;&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;parentheses&lt;/td&gt;
+      &lt;td&gt;brackets&lt;/td&gt;
+      &lt;td&gt;braces&lt;/td&gt;
+      &lt;td&gt;chevrons&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;round brackets&lt;/td&gt;
+      &lt;td&gt;square brackets&lt;/td&gt;
+      &lt;td&gt;curly brackets&lt;/td&gt;
+      &lt;td&gt;angle brackets&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;In terms of algoritm problems, differences in names don’t matter so much.
+Even the shape doesn’t matter so much.
+For example, “&lt;code class=&quot;highlighter-rouge&quot;&gt;(()), ()()&lt;/code&gt;” has the same meaning as “&lt;code class=&quot;highlighter-rouge&quot;&gt;\\//, \/\/&lt;/code&gt;”, “&lt;code class=&quot;highlighter-rouge&quot;&gt;##!!, #!#!&lt;/code&gt;”, etc.
+Among such symbols, parens are look nice and familiar to programmer’s eyes.
+When solving parens related problems, an open/close pair helps visually.&lt;/p&gt;
+
+&lt;p&gt;To express parens love, I’m going to write about three parens-y problems:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;valid parentheses&lt;/li&gt;
+  &lt;li&gt;generate parentheses&lt;/li&gt;
+  &lt;li&gt;remove invalid parenthese&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;problem-description---valid-parentheses&quot;&gt;Problem Description - Valid Parentheses&lt;/h4&gt;
+
+&lt;p&gt;Given an expression string containing &lt;code class=&quot;highlighter-rouge&quot;&gt;{&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;}&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;[&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;]&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;(&lt;/code&gt;, and &lt;code class=&quot;highlighter-rouge&quot;&gt;)&lt;/code&gt;, check
+paris and orders of parens are valid.
+For example, &lt;code class=&quot;highlighter-rouge&quot;&gt;[()]{}&lt;/code&gt; should return true, and &lt;code class=&quot;highlighter-rouge&quot;&gt;[(])&lt;/code&gt; should return false.&lt;/p&gt;
+
+&lt;h4 id=&quot;the-idea-to-solve-valid-parentheses-problem&quot;&gt;The idea to solve valid parentheses problem&lt;/h4&gt;
+
+&lt;p&gt;This is an easy stack problem.
+If the character is one of opening parens, stack it up.
+If the character is one of closing parens and top of the stack is a matching pair, pop it.
+Otherwise, return false.
+Lastly, if the stack is empty, the given string is valid.&lt;/p&gt;
+
+&lt;h4 id=&quot;java-code-for-valid-parentheses-problem&quot;&gt;Java code for valid parentheses problem&lt;/h4&gt;
+
+&lt;noscript&gt;&lt;pre&gt;import java.util.*;
+
+public class ValidParentheses {
+    static boolean isValid(String s) {
+        Map&amp;lt;Character, Character&amp;gt; m = new HashMap();
+        m.put(&amp;#39;{&amp;#39;, &amp;#39;}&amp;#39;);
+        m.put(&amp;#39;[&amp;#39;, &amp;#39;]&amp;#39;);
+        m.put(&amp;#39;(&amp;#39;, &amp;#39;)&amp;#39;);
+        Stack&amp;lt;Character&amp;gt; stack = new Stack();
+        Set&amp;lt;Character&amp;gt; openers = m.keySet();
+        Collection&amp;lt;Character&amp;gt; closers = m.values();
+        for (int i=0; i&amp;lt;s.length(); i++) {
+            char c = s.charAt(i);
+            if (openers.contains(c)) {
+                stack.push(c);
+            } else if (closers.contains(c)) {
+                if (!stack.isEmpty()
+                        &amp;amp;&amp;amp; m.get(stack.peek()) == c) {
+                    stack.pop();
+                } else {
+                    return false;
+                }
+            }
+        }
+        return stack.size() == 0 ? true : false;
+    }
+
+    public static void main(String[] args) {
+        String s = &amp;quot;[()]{}{[()()]()}&amp;quot;;
+        System.out.println(s + &amp;quot;: &amp;quot; + isValid(s));
+        s = &amp;quot;[(])&amp;quot;;
+        System.out.println(s + &amp;quot;: &amp;quot; + isValid(s));
+        s = &amp;quot;(a())()&amp;quot;;
+        System.out.println(s + &amp;quot;: &amp;quot; + isValid(s));
+    }
+}
+&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/yokolet/13cf1644dbc7f5ffc268d6bbb8f6d33f.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;The result is:&lt;/p&gt;
+
+&lt;pre&gt;
+[()]{}{[()()]()}: true
+[(]): false
+(a())(): true
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;problem-description---generate-parentheses&quot;&gt;Problem Description - Generate Parentheses&lt;/h4&gt;
+
+&lt;p&gt;Given integer n, which denotes a number of paris of parentheses,
+generate all valid combinations of parentheses.
+For example, n = 3, the answer will be:
+&lt;code class=&quot;highlighter-rouge&quot;&gt;((())), (()()), (())(), ()(()), ()()()&lt;/code&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;the-idea-to-generate-valid-parentheses&quot;&gt;The idea to generate valid parentheses&lt;/h4&gt;
+
+&lt;p&gt;Despite the simple problem descriptoin and simple input (only one integer),
+This problem needs some considerations.
+If I draw pictures of n = 2 and n = 3, parens trees look like this:&lt;/p&gt;
+
+&lt;pre&gt;
+
+n = 2
+   (
+ /   \
+(     )
+|     |
+)     (
+|     |
+)     )  2 patterns
+
+
+&lt;/pre&gt;
+
+&lt;pre&gt;
+
+n = 3
+             (
+        /        \
+      /            \
+    (               )
+ /     \            |
+(       )           (
+|     /   \       /   \
+)   (      )     (     )
+|   |      |     |     |
+)   )      (     )     (
+|   |      |     |     |
+)   )      )     )     )  5 patterns
+
+&lt;/pre&gt;
+
+&lt;p&gt;While I was drawing, I cared three conditions:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;how many opening parans are left&lt;/li&gt;
+  &lt;li&gt;how many closing parens are left&lt;/li&gt;
+  &lt;li&gt;available opening parens &amp;lt; available closing parens&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;As in the pcitures above, the parens can be expressed as a tree.
+To track down to all leaf nodes, Depth First Search (DFS) style algorithm would work.
+Going deeper in the tree while caring three conditions will find all combinations.&lt;/p&gt;
+
+&lt;p&gt;DFS has two styles, recursive and iterative.
+I chose the iterative since recursion tends to raise stack overflow exception.&lt;/p&gt;
+
+&lt;h4 id=&quot;java-code-for-generating-valid-parentheses&quot;&gt;Java code for generating valid parentheses&lt;/h4&gt;
+
+&lt;noscript&gt;&lt;pre&gt;import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
+public class GenerateParentheses {
+    static class SItem {
+        // how many opening parens are left
+        int openLeft;
+        // how many closing parens are left
+        int closeLeft;
+        // generated parens so far
+        String parens;
+        SItem(int l, int r, String p) {
+            openLeft = l;
+            closeLeft = r;
+            parens = p;
+        }
+    }
+
+    static List&amp;lt;String&amp;gt; generate(int n) {
+        List&amp;lt;String&amp;gt; result = new ArrayList();
+        Stack&amp;lt;SItem&amp;gt; stack = new Stack();
+        stack.push(new SItem(n - 1, n, &amp;quot;(&amp;quot;));
+        SItem item;
+        while (!stack.isEmpty()) {
+            item = stack.pop();
+            if (item.openLeft &amp;gt; 0) {
+                stack.push(new SItem(item.openLeft - 1, item.closeLeft, item.parens + &amp;quot;(&amp;quot;));
+            }
+            if (item.openLeft &amp;lt; item.closeLeft) {
+                stack.push(new SItem(item.openLeft, item.closeLeft - 1, item.parens + &amp;quot;)&amp;quot;));
+            }
+            if (item.openLeft == 0 &amp;amp;&amp;amp; item.closeLeft == 0) {
+                result.add(item.parens);
+            }
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(generate(2));
+        System.out.println(generate(3));
+        System.out.println(generate(4));
+    }
+}
+&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/yokolet/6ec539a2db6a07068f68b9bc217a26c9.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;The result is:&lt;/p&gt;
+
+&lt;pre&gt;
+[()(), (())]
+[()()(), ()(()), (())(), (()()), ((()))]
+[()()()(), ()()(()), ()(())(), ()(()()), ()((())), (())()(), (())(()), (()())(), (()()()), (()(())), ((()))(), ((())()), ((()())), (((())))]
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;problem-description---remove-invalid-parentheses&quot;&gt;Problem Description - Remove Invalid Parentheses&lt;/h4&gt;
+
+&lt;p&gt;Given a string which contains parentheses, remove minimum number of invalid parentheses
+to make it valid. Return all possible patterns.
+For example, &lt;code class=&quot;highlighter-rouge&quot;&gt;()())()&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;(a)())()&lt;/code&gt; is given,&lt;/p&gt;
+
+&lt;pre&gt;
+()())()   -&amp;gt;  ()()()    ()())()  -&amp;gt; (())()
+    ^                    ^ 
+    remove               remove
+
+(a)())()   -&amp;gt;  (a)()()    (a)())()  -&amp;gt; (a())()
+     ^                      ^ 
+     remove                 remove
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;the-idea-for-removing-invalid-parnetheses&quot;&gt;The idea for removing invalid parnetheses&lt;/h4&gt;
+
+&lt;p&gt;This problem is not easy. There may be more than one solutions.
+For example, a given string is &lt;code class=&quot;highlighter-rouge&quot;&gt;(a)())()&lt;/code&gt;, the answer will be
+&lt;code class=&quot;highlighter-rouge&quot;&gt;(a)()()&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;(a())()&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The problem asks &lt;em&gt;minimum&lt;/em&gt; number of parens to remove.
+So, it’s a good idea to start checking from a whole string.
+If the string is valid, I’m done.&lt;/p&gt;
+
+&lt;p&gt;If the string is not valid, eliminate only one paren either opening or closing
+at every position.
+When the number of parens either opening or closing is n in total,
+I will get n substrings. These will be checked next.
+All valid substrings are the answer.&lt;/p&gt;
+
+&lt;p&gt;If there’s no valid substring, eliminate only one paren either opening or closing
+at every position of every substring.
+I will get n * (n - 1) substrings. These will be checked next.&lt;/p&gt;
+
+&lt;p&gt;To go over all substrings, I used Queue and BSF style iteration.
+Not like generating parentheses problem, substrings are being cut short one by one.
+In extreme case, it will become an empty string.&lt;/p&gt;
+
+&lt;h4 id=&quot;java-code--for-removing-invalid-parentheses&quot;&gt;Java code  for removing invalid parentheses&lt;/h4&gt;
+
+&lt;noscript&gt;&lt;pre&gt;import java.util.*;
+
+public class RemoveInvalidParentheses {
+    // check char is a opening/closing paren
+    // since only parens will be taken care of
+    static boolean isParen(char c) {
+        return c == &amp;#39;(&amp;#39; || c == &amp;#39;)&amp;#39;;
+    }
+
+    // check substring&amp;#39;s parens are valid
+    static boolean isValid(String s) {
+        int count = 0;
+        for (int i=0; i&amp;lt;s.length(); i++) {
+            if (s.charAt(i) == &amp;#39;(&amp;#39;) {
+                count++;
+            } else if (s.charAt(i) == &amp;#39;)&amp;#39;) {
+                count--;
+                if (count &amp;lt; 0) {
+                    return false;
+                }
+            }
+        }
+        return count == 0;
+    }
+
+    static List&amp;lt;String&amp;gt; removeInvalid(String s) {
+        List&amp;lt;String&amp;gt; result = new ArrayList();
+        if (s == null) {
+            return result;
+        }
+
+        // saves already tested valid substrings
+        Set&amp;lt;String&amp;gt; visited = new HashSet();
+        // Queue for BSF
+        Queue&amp;lt;String&amp;gt; queue = new LinkedList();
+        queue.offer(s);
+        visited.add(s);
+        String cur;
+        boolean found = false;
+        while (!queue.isEmpty()) {
+            cur = queue.poll();
+            if (isValid(cur)) {
+                result.add(cur);
+                visited.add(cur);
+                found = true;
+            }
+            if (found) {
+                continue;
+            }
+
+            // to check all parens in this substring
+            // looping over the substring
+            for (int i=0; i&amp;lt;cur.length(); i++) {
+                if (isParen(cur.charAt(i))) {
+                    // create a substring excluding the current char
+                    String temp = cur.substring(0, i) + cur.substring(i + 1);
+                    if (!visited.contains(temp)) {
+                        queue.offer(temp);
+                        visited.add(temp);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    
+    public static void main(String[] args) {
+        String s = &amp;quot;(a)())()&amp;quot;;
+        System.out.println(removeInvalid(s));
+    }
+}&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/yokolet/440060611aee3cc816e36b6fb1ff4196.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;The result is:&lt;/p&gt;
+
+&lt;pre&gt;
+[(a())(), (a)()()]
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;resources&quot;&gt;Resources&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/check-for-balanced-parentheses-in-an-expression/&quot;&gt;Check for balanced parentheses in an expression&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2012/12/leetcode-valid-parentheses-java/&quot;&gt;Valid Parentheses&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://algorithms.tutorialhorizon.com/algorithms-find-whether-given-the-sequence-of-parentheses-are-well-formed/&quot;&gt;Find Whether Given Sequence of parentheses are well formed&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/print-all-combinations-of-balanced-parentheses/&quot;&gt;Print all combinations of balanced parentheses&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2014/01/leetcode-generate-parentheses-java/&quot;&gt;Generate Parentheses&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://algorithms.tutorialhorizon.com/generate-all-valid-parenthesis-strings-of-length-2n-of-given-n/&quot;&gt;Print All Possible Valid Combinations Of Parentheses of Given ‘N’&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/remove-invalid-parentheses/&quot;&gt;Remove Invalid Parentheses (GeeksforGeeks)&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2014/05/leetcode-remove-invalid-parentheses-java/&quot;&gt;Remove Invalid Parentheses (Program Creek)&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://kennyzhuang.gitbooks.io/algorithms-collection/content/remove_invalid_parentheses1.html&quot;&gt;Remove Invalid Parentheses (Algorithms Collection)&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Simple Problem Yet Complicated Solution</summary></entry><entry><title type="html">Count Ways to Do [something]</title><link href="/2017/06/01/count-ways.html" rel="alternate" type="text/html" title="Count Ways to Do [something]" /><published>2017-06-01T00:00:00-07:00</published><updated>2017-06-01T00:00:00-07:00</updated><id>/2017/06/01/count-ways</id><content type="html" xml:base="/2017/06/01/count-ways.html">&lt;h4 id=&quot;count-ways-problems&quot;&gt;Count Ways Problems&lt;/h4&gt;
+
+&lt;p&gt;“Count how may ways to do …” is one type of alogrithm questions.
+For example, count ways to climb up stairs, count ways to make sum by given coins, 
+or count ways to reach from top left to bottom right corner.&lt;/p&gt;
+
+&lt;p&gt;For this type of problem, recursion and dynamic programming are often used.
+The recursion is an instintictive solution and understandable.
+However, sometime, its performance goes really worse, say, exponential.
+While the dynamic programming solution stays on O(n^2) time complexity.&lt;/p&gt;
+
+&lt;p&gt;The count ways problems have a similar idea with bits of variations.
+Not to confuse those, I’m going to write a memo about three problems:
+climbimg stairs, coin change, and unique paths.&lt;/p&gt;
+
+&lt;h4 id=&quot;problem-description---climbing-stairs&quot;&gt;Problem Description - Climbing Stairs&lt;/h4&gt;
+
+&lt;p&gt;“Given two integers, m (number of steps) and n (number of stairs),
+find how many ways to climbing up the stair”
+is a typical problem of this sort.
+The steps can be any number between 1 to m.&lt;/p&gt;
+
+&lt;p&gt;For example, m = 3 and n = 5 are given,
+possible ways are 13 in total.&lt;/p&gt;
+
+&lt;pre&gt;
+
+                                         0
+
+                       /                 |        \
+                     /                   |          \
+                   /                     |            \
+                  1                      2             3
+            /     |     \          /     |   \         |  \
+          /       |       \      /       |     \       |   \
+         1        2        3    1        2     [3]     1   [2]
+      /  | \      | \      |    | \      |             |
+    /    |   \    |   \    |    |   \    |             |
+   1     2   [3]  1   [2] [1]   1   [2] [1]           [1]
+  / \    |        |             |
+ 1  [2] [1]      [1]           [1]
+ |
+[1]
+
+[1, 1, 1, 1, 1], [1, 1, 1, 2], [1, 1, 2, 1], [1, 1, 3], [1, 2, 1, 1], [1, 2, 2], [1, 3, 1]
+[2, 1, 1, 1], [2, 1, 2], [2, 2, 1], [2, 3],
+[3, 1, 1], [3, 2]
+&lt;/pre&gt;
+
+&lt;p&gt;As in the above, 2 -&amp;gt; 3 and 3 -&amp;gt; 2 are different.
+The order of steps taken matters for this problem.&lt;/p&gt;
+
+&lt;h4 id=&quot;the-idea-to-solve-climbing-stairs&quot;&gt;The idea to solve climbing stairs&lt;/h4&gt;
+
+&lt;p&gt;Since I took a dynamic programming approach, I used an auxiliary array to save states.
+The auxiliary array has a length of n + 1 to have an initialization parameter.
+The index 0 and 1 of the array (&lt;code class=&quot;highlighter-rouge&quot;&gt;memo&lt;/code&gt;) is initialized with the value 1.
+Then, the array will be filled out one by one while increasing number of stairs one by one.
+Below describes how the auxiliary array (&lt;code class=&quot;highlighter-rouge&quot;&gt;memo[i]&lt;/code&gt;) will be changed in case of  m = 3 and n = 4.&lt;/p&gt;
+
+&lt;pre&gt;
+
+
+stairs 0   1            2                   3                          4
+
+       0   0            0                   0                          0
+           |          /   \            /    |   \                /     |     \
+           1         1     2          1     2    3              1      2      3
+                     |              /   \   |                 / | \    | \    |
+                     1             1     2  1               /   |  \   |  \   |
+                                   |                       1    2   3  1   2  1
+                                   1                     /   \  |      |
+                                                        1     2 1      1
+                                                        |
+                                                        1
+
+memo(state)
+[1, 1, 0, 0, 0]   [1, 1, 2, 0, 0]   [1, 1, 2, 4, 0]          [1, 1, 2, 4, 7]
+
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;java-code-for-climbing-stairs&quot;&gt;Java code for climbing stairs&lt;/h4&gt;
+
+&lt;p&gt;Here’s the code to count ways to climbing stairs.&lt;/p&gt;
+
+&lt;noscript&gt;&lt;pre&gt;public class CountWaysToClimbStairs {
+    // M: steps, 1, 2, 3, ..., M
+    // N: stairs, nth
+    static int countWays(int m, int n) {
+        if (n &amp;lt; 2) {
+            return 1;
+        }
+        int[] memo = new int[n + 1];
+        // initialize
+        memo[0] = 1;
+        memo[1] = 1;
+        // fill the rest
+        for (int i = 2; i &amp;lt;= n; i++) {
+            for (int j = 1; j &amp;lt;= m &amp;amp;&amp;amp; j &amp;lt;= i; j++) {
+                memo[i] += memo[i - j];
+            }
+        }
+        return memo[n];
+    }
+
+    public static void main(String[] args) {
+        int M = 3;
+        int N = 5;
+        System.out.println(countWays(M, N));
+        M = 3;
+        N = 4;
+        System.out.println(countWays(M, N));
+        M = 3;
+        N = 3;
+        System.out.println(countWays(M, N));
+    }
+}
+&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/yokolet/1cf65d7dc89c17f43123363f581985af.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;The result is:&lt;/p&gt;
+
+&lt;pre&gt;
+13
+7
+4
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;problem-description---coin-change&quot;&gt;Problem Description - Coin Change&lt;/h4&gt;
+
+&lt;p&gt;“Given coins (or denominators) and sum, find how many ways to make the sum”
+is a common problem description.
+Mostly, infinite number of each coins are available to make the sum.
+Sometime, there’s a limitation of available coins.
+However, basic idea is the same.&lt;/p&gt;
+
+&lt;p&gt;For example, coins = &lt;code class=&quot;highlighter-rouge&quot;&gt;[1, 2, 3]&lt;/code&gt; and sum = 5 are given,
+possible ways of making sum of 5 will be:
+&lt;code class=&quot;highlighter-rouge&quot;&gt;[1, 1, 1, 1, 1], [1, 1, 1, 2], [1, 2, 2], [1, 1, 3], [2, 3]&lt;/code&gt;
+So, the answer is 5.&lt;/p&gt;
+
+&lt;p&gt;There’s a very similar, but different coin change problem.
+Another coin change problem asks minimum number of coins to make a given sum.
+This is not what I’m going to write here.
+This memo is about how many combinations are there.&lt;/p&gt;
+
+&lt;h4 id=&quot;the-idea-for-coin-change&quot;&gt;The idea for coin change&lt;/h4&gt;
+
+&lt;p&gt;Like climbing stairs, I took a dynamic programming approach, I used an auxiliary table
+to save states.
+The auxiliary table (&lt;code class=&quot;highlighter-rouge&quot;&gt;memo&lt;/code&gt;) has a size [number of coins + 1] x [sum + 1].
+Plus one is to have initialization parameters.
+Table’s first column means sum = 0 and initialized with 1.
+This is because sum = 0 can be created by an empty set.
+Table’s first row (except 0) means no coins.
+The first row form 1 to sum + 1 will be initialized with 0.
+Then fill the rest of the table.
+The value, &lt;code class=&quot;highlighter-rouge&quot;&gt;memo[i][j]&lt;/code&gt; shows a number of patters to make sum j using coins[0] to coiins[i - 1].&lt;/p&gt;
+
+&lt;p&gt;If coins = &lt;code class=&quot;highlighter-rouge&quot;&gt;[1, 2, 3]&lt;/code&gt; and sum = 5 are given, the final auxiliary table, &lt;code class=&quot;highlighter-rouge&quot;&gt;memo&lt;/code&gt; will be:&lt;/p&gt;
+
+&lt;pre&gt;
+               sum
+         0  1  2  3  4  5
+        ------------------
+coins 0| 1  0  0  0  0  0
+      1| 1  1  1  1  1  1
+      2| 1  1  2  2  3  3
+      3| 1  1  2  3  4  5
+
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;java-code-for-coin-change&quot;&gt;Java code for coin change&lt;/h4&gt;
+
+&lt;p&gt;Below is the code to count ways to making a sum.&lt;/p&gt;
+
+&lt;noscript&gt;&lt;pre&gt;public class CountWaysToMakeSum {
+    static int countWays(int[] coins, int S) {
+        int n = coins.length;
+        int[][] memo = new int[n + 1][S + 1];
+        // initialize
+        // sum is zero, so empty set is the answer
+        for (int i = 0; i &amp;lt;= n; i++) {
+            memo[i][0] = 1;
+        }
+        // no coin given, unable to make sum
+        for (int i = 1; i &amp;lt;= S; i++) {
+            memo[0][i] = 0;
+        }
+        // fill the rest
+        for (int i = 1; i &amp;lt;= n; i++) {
+            for (int j = 1; j &amp;lt;= S; j++) {
+                // excludes coins[i]
+                memo[i][j] = memo[i - 1][j];
+                if (coins[i - 1] &amp;lt;= j) {
+                    // includes coins[i]
+                    memo[i][j] += memo[i][j - coins[i - 1]];
+                }
+            }
+        }
+        return memo[n][S];
+    }
+
+    public static void main(String[] args) {
+        int S = 5;
+        int[] coins = {1, 2, 3};
+        System.out.println(countWays(coins, S));
+        S = 4;
+        System.out.println(countWays(coins, S));
+        int[] coins1 = {2, 5, 3, 6};
+        S = 10;
+        System.out.println(countWays(coins1, S));
+    }
+}
+&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/yokolet/33c80d1fbd73075fca0648d4d23164c1.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;The result is:&lt;/p&gt;
+
+&lt;pre&gt;
+5
+4
+5
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;problem-description---unique-paths&quot;&gt;Problem Description - Unique Paths&lt;/h4&gt;
+
+&lt;p&gt;Given two integers, m and n, which expresses m rows and n columns,
+find how many unique paths are there from top left to bottom right.
+Available directions are right and down only.&lt;/p&gt;
+
+&lt;p&gt;For example, m = 3 and n = 4 are given, three of all possible paths
+are like this:&lt;/p&gt;
+
+&lt;pre&gt;
+
++---+---+---+---+     +---+---+---+---+     +---+---+---+---+
+| x-----------┐ |     | x-------┐ |   |     | x |   |   |   |
++---+---+---+-|-+     +---+---+-|-+---+     +-|-+---+---+---+
+|   |   |   | | |     |   |   | | |   |     | └-----------┐ |
++---+---+---+-|-+     +---+---+-|-+---+     +---+---+---+-|-+
+|   |   |   | x |     |   |   | └---x |     |   |   |   | x |
++---+---+---+- -+     +---+---+---+---+     +---+---+---+---+
+
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;the-idea-for-unique-paths&quot;&gt;The idea for unique paths&lt;/h4&gt;
+
+&lt;p&gt;Like other two problems, I chose the dynamic programming to find the answer,
+I used auxiliary table to save states.
+The auxiliary table (&lt;code class=&quot;highlighter-rouge&quot;&gt;memo&lt;/code&gt;) has a size [m] x [n].
+In this case, plus one doesn’t need since the first row and column can be
+initialized without any previous state.
+Movments are only right and down.
+Given that, the first row are all 1 since from left is the only one way.
+The first columns are all 1 as well since from above is the only one way.
+Then, fill the rest of the table by expanding the path one by one, right or down.&lt;/p&gt;
+
+&lt;p&gt;At each table[i][j], the values on above table[i - 1][j] and left table[i][j - 1] will be added up.
+This way, ways to come index i, j will be calculated.
+When traversal reaches to the bottom right index, table[m - 1][n - 1], the answer is there.&lt;/p&gt;
+
+&lt;h4 id=&quot;java-code--for-unique-paths&quot;&gt;Java code  for unique paths&lt;/h4&gt;
+
+&lt;p&gt;Below is the code to count ways to reach from top left to bottom right.&lt;/p&gt;
+
+&lt;noscript&gt;&lt;pre&gt;public class CountWaysToReachBottomRight {
+    // m: rows
+    // n: columns
+    static int countWays(int m, int n) {
+        int[][] memo = new int[m][n];
+        // initialize
+        // first row - only one way from left
+        for (int i = 0; i &amp;lt; n; i++) {
+            memo[0][i]  = 1;
+        }
+        // first column - only one way from above
+        for (int i = 0; i &amp;lt; m; i++) {
+            memo[i][0] = 1;
+        }
+        // fill the rest
+        for (int i = 1; i &amp;lt; m; i++) {
+            for (int j = 1; j &amp;lt; n; j++) {
+                // from above + from left
+                memo[i][j] = memo[i - 1][j] + memo[i][j - 1];
+            }
+        }
+        return memo[m - 1][n - 1];
+    }
+
+    public static void main(String[] args) {
+        int m = 3;
+        int n = 3;
+        System.out.println(countWays(m, n));
+        m = 3;
+        n = 4;
+        System.out.println(countWays(m, n));
+    }
+}
+&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/yokolet/586b6a4a08c7ef3b6f4be2085a6a6b93.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;The result is:&lt;/p&gt;
+
+&lt;pre&gt;
+6
+10
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;resources&quot;&gt;Resources&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/count-ways-reach-nth-stair/&quot;&gt;Count ways to reach the n’th stair&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://algorithms.tutorialhorizon.com/dynamic-programming-stairs-climbing-puzzle/&quot;&gt;Stairs Climbing Puzzle&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/dynamic-programming-set-7-coin-change/&quot;&gt;Coin Change&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://algorithms.tutorialhorizon.com/dynamic-programming-coin-change-problem/&quot;&gt;Coin Change Problem&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/count-possible-paths-top-left-bottom-right-nxm-matrix/&quot;&gt;Count all possible paths from top left to bottom right of a mXn matrix&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://algorithms.tutorialhorizon.com/dynamic-programming-count-all-paths-from-top-left-to-bottom-right-of-a-mxn-matrix/&quot;&gt;Count all paths from top left to bottom right of a mXn matrix&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2014/05/leetcode-unique-paths-java/&quot;&gt;Unique Paths&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Count Ways Problems</summary></entry></feed>

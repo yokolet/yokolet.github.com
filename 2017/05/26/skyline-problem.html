@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang=" en-US">
+<head>
+
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+
+      gtag('js', new Date());
+      gtag('config', 'UA-761764-8');
+    </script>
+    
+    <meta charset="UTF-8">
+
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Skyline Problem | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="Skyline Problem" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notes about programming" />
+<meta property="og:description" content="Notes about programming" />
+<link rel="canonical" href="/2017/05/26/skyline-problem.html" />
+<meta property="og:url" content="/2017/05/26/skyline-problem.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-05-26T00:00:00-07:00" />
+<script type="application/ld+json">
+{"url":"/2017/05/26/skyline-problem.html","headline":"Skyline Problem","dateModified":"2017-05-26T00:00:00-07:00","datePublished":"2017-05-26T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"/2017/05/26/skyline-problem.html"},"description":"Notes about programming","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/assets/css/all.css?v=">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    
+        <link rel="icon" type="image/ico" href="/assets/image/favicon.ico">
+    
+</head>
+<body>
+<header class="page-header" role="banner">
+    <div class="nav">
+        
+            <a href="/" class="btn back"><i class="fas fa-chevron-circle-left"></i> Back</a>
+        
+        
+            <a href="/about/" class="btn">About <i class="fas fa-info-circle"></i></a>
+        
+    </div>
+    <h1 class="project-name">yokolet's notelets</h1>
+    <h2 class="project-tagline">Notes about programming</h2>
+
+    
+</header>
+
+<main id="content" class="main-content" role="main">
+    <div class="content container">
+    <div class="post-date">
+        <time>May 26, 2017 </time>
+    </div>
+    <h1 class="post-title">Skyline Problem</h1>
+    <h4 id="one-of-famous-bar-problems-also">One of famous bar problems, also</h4>
+
+<p>The skyline problem is another famous algorithm problem using bars, like
+<a href="http://yokolet.github.io/2017/05/25/largest-rectangle-in-histogram.html">Lagest Rectangle in a Histogram</a>.
+Although the problem is described using bars, it is totally another problem
+compared to the largest rectangle. The skyline problem asks range maximum values.</p>
+
+<p>While the largest rectangle has almost only one effective algorithm (using stack),
+this problem has a few effective ways to solve it.</p>
+
+<p>For example:</p>
+
+<ul>
+  <li><a href="https://youtu.be/GSBLe8cKu0s">heap sort (YouTube)</a> / <a href="https://github.com/mission-peace/interview/blob/master/src/com/interview/geometry/SkylineDrawing.java">heap sort (Code)</a></li>
+  <li><a href="http://www.geeksforgeeks.org/divide-and-conquer-set-7-the-skyline-problem/">devide and conquer</a></li>
+  <li><a href="https://discuss.leetcode.com/topic/20091/a-segment-tree-solution">segment tree</a></li>
+</ul>
+
+<p>The first solution by heap sort is the most popular, simplest way.
+So, the solutions are here and there with a slight variation.
+The second, divide and conquer (merge sort) is interesting solution.
+Not so popular, but still a few are using this technique.
+The third by the segement tree is not so popular, but shows very unique two-step solution.
+In case of the segment tree, the tree should be created first.
+Then making queries of intervals gives the result.</p>
+
+<h4 id="problem-description">Problem Description</h4>
+
+<p>The coordinates of each building will be given by <code class="highlighter-rouge">[left, right, height]</code>.
+The input is an array of three element arrays. For example,</p>
+
+<pre>
+[[1, 5, 11], [2, 7, 6], [3, 9, 13], [12, 16, 7], [14, 25, 3],
+ [19, 22, 18], [23, 29, 13], [24, 28, 4]]
+</pre>
+
+<p>This input creates buildings below:</p>
+
+<pre>
+
+   .
+18 .                                     +-----+
+   .                                     |     |
+   .                                     |     |
+15 .                                     |     |
+   .                                     |     |
+   .     +-----------+                   |     | +-----------+
+   .     |           |                   |     | |           |
+   . +---|----+      |                   |     | |           |
+10 . |   |    |      |                   |     | |           |
+   . |   |    |      |                   |     | |           |
+   . |   |    |      |                   |     | |           |
+   . |   |    |      |     +-------+     |     | |           |
+   . | +-|-------+   |     |       |     |     | |           |
+ 5 . | | |    |  |   |     |       |     |     | |           |
+   . | | |    |  |   |     |       |     |     | | +-------+ |
+   . | | |    |  |   |     |   +---------|-----|-|-|-+     | |
+   . | | |    |  |   |     |   |   |     |     | | | |     | |
+   . | | |    |  |   |     |   |   |     |     | | | |     | |
+ 0 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+   0         5         10        15        20        25        30
+</pre>
+
+<p>From this input, the problem requires to find <code class="highlighter-rouge">[position, height]</code> pairs
+to draw outer shape.
+In the picture below, positions of <code class="highlighter-rouge">@</code> should be returned.
+Since, lines only go left, up or down, <code class="highlighter-rouge">@</code>s are enough to draw the outer shape (skyline).</p>
+
+<pre>
+[[1, 11], [3, 13], [9, 0], [12, 7], [16, 3], [19, 18], [22, 3], [23, 13], [29, 0]]
+</pre>
+
+<pre>
+
+   .
+18 .                                     @-----+
+   .                                     |     |
+   .                                     |     |
+15 .                                     |     |
+   .                                     |     |
+   .     @-----------+                   |     | @-----------+
+   .     |           |                   |     | |           |
+   . @---|           |                   |     | |           |
+10 . |               |                   |     | |           |
+   . |               |                   |     | |           |
+   . |               |                   |     | |           |
+   . |               |     @-------+     |     | |           |
+   . |               |     |       |     |     | |           |
+ 5 . |               |     |       |     |     | |           |
+   . |               |     |       |     |     | |           |
+   . |               |     |       @-----|     @-|           |
+   . |               |     |       |     |     | |           |
+   . |               |     |       |     |     | |           |
+ 0 . . . . . . . . . @ . . . . . . . . . . . . . . . . . . . @ . .
+   0         5         10        15        20        25        30
+</pre>
+
+<h4 id="the-idea">The idea</h4>
+
+<p>As far as I compared three well-cited solutions, I decided to choose the first, heap sort
+solution. It is simple and easy to understand.
+However, I ended up in a slight variation of the typical way.</p>
+
+<p>The key ideas is re-queuing the lower height buildings as possible surviors.
+All buildings are sorted by the left position (starting position).
+If multiple buildings have the same left value, those will be sorted by their height.
+Before the re-queuing lower height buildings, those left position will be
+adjusted to the end of a current maximum height building.
+This way, when the higher building ends, the lower previously started buildings show up
+again as possible candidates.</p>
+
+<p>Not like typical heap sort solutions, my solution uses one PriorityQueue only.
+Although there’s not a big difference in terms of big-O notation,
+it is slightly space effective.
+Downside is time complexity depends on how buildings are shaped.
+This solution was accepted by LeetCode testing (14 ms), it won’t so bad even though
+building locations are complicated.</p>
+
+<h4 id="java-code">Java code</h4>
+
+<p>Below is the Java code explaied above.</p>
+
+<noscript><pre>import java.util.*;
+
+public class SkylineProblem {
+    static class Item implements Comparable&lt;Item&gt; {
+        int left;
+        int right;
+        int height;
+
+        Item(int s, int e, int h) {
+            left = s;
+            right = e;
+            height = h;
+        }
+
+        @Override
+        public int compareTo(Item o) {
+            if (this.left == o.left) {
+                return Integer.compare(o.height, this.height);
+            } else {
+                return Integer.compare(this.left, o.left);
+            }
+        }
+    }
+
+    static List&lt;int[]&gt; getSkyline(int[][] buildings) {
+        int n = buildings.length;
+        List&lt;int[]&gt; result = new ArrayList&lt;int[]&gt;();
+        if (n == 0) { return result; }
+        PriorityQueue&lt;Item&gt; queue = new PriorityQueue();
+        int rightMost = buildings[0][1];
+        for (int[] b : buildings) {
+            if (rightMost &lt; b[0]) {
+                queue.offer(new Item(rightMost, b[0], 0));
+            }
+            queue.offer(new Item(b[0], b[1], b[2]));
+            rightMost = Math.max(rightMost, b[1]);
+        }
+
+        Item cur = queue.poll();
+        result.add(new int[]{cur.left, cur.height});
+        while (!queue.isEmpty()) {
+            Item next = queue.poll();
+            if (next.height == cur.height &amp;&amp; next.left == cur.right) {
+                // the same height, no space
+                cur = next;
+            } else if (next.height &gt; cur.height) {
+                // next is higher than current
+                if (next.right &lt; cur.right) {
+                    // give the second chance to a lower height
+                    cur.left = next.right;
+                    queue.offer(cur);
+                }
+                cur = next;
+                result.add(new int[]{cur.left, cur.height});
+            } else {
+                // next is lower than current
+                if (next.left == cur.right) {
+                    // no space
+                    // this is mostly a survivor of the second chance
+                    cur = next;
+                    result.add(new int[]{cur.left, cur.height});
+                } else if (next.right &gt; cur.right) {
+                    // give the second chance to a lower height
+                    next.left = cur.right;
+                    queue.offer(next);
+                }
+            }
+        }
+        result.add(new int[]{cur.right, 0});
+        return result;
+    }
+
+    static void printList(List&lt;int[]&gt; list) {
+        System.out.print(&quot;[&quot;);
+        for (int i = 0; i &lt; list.size(); i++) {
+            if (i != 0) {
+                System.out.print(&quot;, &quot;);
+            }
+            int[] ary = list.get(i);
+            System.out.print(&quot;[&quot; + ary[0] + &quot;, &quot; + ary[1] + &quot;]&quot;);
+        }
+        System.out.println(&quot;]&quot;);
+    }
+
+    public static void main(String[] args) {
+        // {left, right, height}
+        int[][] bs0 = {
+                {1, 5, 11},
+                {2, 7, 6},
+                {3, 9, 13},
+                {12, 16, 7},
+                {14, 25, 3},
+                {19, 22, 18},
+                {23, 29, 13},
+                {24, 28, 4}
+        };
+        List&lt;int[]&gt; result = getSkyline(bs0);
+        printList(result);
+
+        int[][] bs1 = {
+                {2, 9, 10},
+                {3, 7, 15},
+                {5, 12, 12},
+                {15, 20, 10},
+                {19, 24, 8}
+        };
+        result = getSkyline(bs1);
+        printList(result);
+    }
+}</pre></noscript>
+<script src="https://gist.github.com/yokolet/5cc5af72ddcc1b53af6784123a78bb23.js"> </script>
+
+<p>The result is:</p>
+
+<pre>
+[[1, 11], [3, 13], [9, 0], [12, 7], [16, 3], [19, 18], [22, 3], [23, 13], [29, 0]]
+[[2, 10], [3, 15], [7, 12], [12, 0], [15, 10], [20, 8], [24, 0]]
+</pre>
+
+<h4 id="thoughts">Thoughts</h4>
+
+<p>If I neglect real height differences of the skyline and delete vertical bars,
+it turns to below:</p>
+
+<pre>
+
+   .                                     @-----
+   .     @-----------                            @-----------
+   . @---                                                     
+   .                       @-------                          
+   .                               @-----      @-             
+   . . . . . . . . . @-----. . . . . . . . . . . . . . . . . @ . .
+   0         5         10        15        20        25        30
+
+</pre>
+
+<p>This has been seen somewhere else.
+It is quite similar to a weighted scheduling problem.
+Most weighted scheduling doesn’t require lower priority jobs to come back.
+However, if it does, the solution will be almost equivalant to the skyline problem.</p>
+
+<h4 id="resources">Resources</h4>
+
+<ul>
+  <li><a href="https://youtu.be/GSBLe8cKu0s">Skyline Problem (YouTube)</a> / <a href="https://github.com/mission-peace/interview/blob/master/src/com/interview/geometry/SkylineDrawing.java">SkylineDrawing.java (Code)</a></li>
+  <li><a href="http://www.geeksforgeeks.org/divide-and-conquer-set-7-the-skyline-problem/">Devide and Conquer - Set 7 (The Skyline Problem)</a></li>
+  <li>
+    <p><a href="https://discuss.leetcode.com/topic/20091/a-segment-tree-solution">segment tree</a></p>
+  </li>
+  <li><a href="http://www.zrzahid.com/the-skyline-problem/">The Skyline Problem</a></li>
+</ul>
+
+</div>
+
+    <footer class="site-footer">
+        
+        <span class="site-footer-owner"><a href="https://github.com/yokolet/yokolet.github.com">yokolet.com</a> is maintained by <a
+                href="https://github.com/yokolet">Yoko Harada</a>.</span>
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+    </footer>
+</main>
+</body>
+</html>

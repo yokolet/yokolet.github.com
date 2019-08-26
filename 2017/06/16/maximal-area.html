@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang=" en-US">
+<head>
+
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+
+      gtag('js', new Date());
+      gtag('config', 'UA-761764-8');
+    </script>
+    
+    <meta charset="UTF-8">
+
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Maximal Square and Rectangle | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="Maximal Square and Rectangle" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notes about programming" />
+<meta property="og:description" content="Notes about programming" />
+<link rel="canonical" href="/2017/06/16/maximal-area.html" />
+<meta property="og:url" content="/2017/06/16/maximal-area.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-06-16T00:00:00-07:00" />
+<script type="application/ld+json">
+{"url":"/2017/06/16/maximal-area.html","headline":"Maximal Square and Rectangle","dateModified":"2017-06-16T00:00:00-07:00","datePublished":"2017-06-16T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"/2017/06/16/maximal-area.html"},"description":"Notes about programming","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/assets/css/all.css?v=">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    
+        <link rel="icon" type="image/ico" href="/assets/image/favicon.ico">
+    
+</head>
+<body>
+<header class="page-header" role="banner">
+    <div class="nav">
+        
+            <a href="/" class="btn back"><i class="fas fa-chevron-circle-left"></i> Back</a>
+        
+        
+            <a href="/about/" class="btn">About <i class="fas fa-info-circle"></i></a>
+        
+    </div>
+    <h1 class="project-name">yokolet's notelets</h1>
+    <h2 class="project-tagline">Notes about programming</h2>
+
+    
+</header>
+
+<main id="content" class="main-content" role="main">
+    <div class="content container">
+    <div class="post-date">
+        <time>June 16, 2017 </time>
+    </div>
+    <h1 class="post-title">Maximal Square and Rectangle</h1>
+    <h4 id="maximal-siblings">Maximal Siblings</h4>
+
+<p>A bunch of algorithm questions take a style of “maximum is a good thing.”
+Maximal sum, maximal length or maximal size are examples.
+This memo is about maximal size, precisely, square and rectangle.</p>
+
+<p>These two have quite similar descriptions. So, I call those siblings.
+The problems are “given 2D matrix filled with 0’s and 1’s, find maximal square/rectangle.”
+Approaches how to solve are also similar.
+However, a difficulty level is not the same.
+The maximal square question is much easier.
+The maximal rectangle question needs an additional step to find the maximum.</p>
+
+<p>I’m going to start off with the maximal square.</p>
+
+<h4 id="problem-description---maximal-square">Problem Description - Maximal Square</h4>
+
+<p>Given a 2D binary matrix filled with 0’s and 1’s, find the maximal square with all 1’s.</p>
+
+<p>For example, following 2D matrix is given:</p>
+
+<pre>
+
+1   0   1   0   0
+
+1   0   1   1   1
+
+1   1   1   1   1
+
+1   0   0   1   0
+
+</pre>
+
+<p>The answer will be 4.</p>
+
+<pre>
+
+1   0   1   0   0
+      +-------+
+1   0 | 1   1 | 1
+      |       |
+1   1 | 1   1 | 1
+      +-------+
+1   0   0   1   0
+
+</pre>
+
+<h4 id="the-idea-to-find-maximal-square">The idea to find maximal square</h4>
+
+<p>This is a dynamic programming quesition, so optimal substructure exists:</p>
+
+<ol>
+  <li>include the current cell to form a square</li>
+  <li>exclude the current call</li>
+</ol>
+
+<p>The state to maintain in the auxiliary table is the size of the square so far.
+Following the DP manner, the table will be created by bottom up.</p>
+
+<p>The first column and row remain as those are.
+When the value of matrix at i’th row and j’th column is 1,
+look above, above-left, and left.
+Among three, find minimum then plus one.
+This is the value in the auxiliary table.</p>
+
+<h4 id="java-code-for-finding-maximal-square">Java code for finding maximal square</h4>
+
+<noscript><pre>public class MaximalSquare {
+    static int min(int a, int b, int c) {
+        return Math.min(a, Math.min(b, c));
+    }
+
+    static int findMaxSquare(int[][] matrix) {
+        int n = matrix.length;
+        int m = matrix[0].length;
+        int[][] memo = new int[n][m];
+        int max = 0;
+        // initialize
+        // copy first column
+        for (int i = 0; i &lt; n; i++) {
+            memo[i][0] = matrix[i][0];
+            max = Math.max(max, memo[i][0]);
+        }
+        // copy first row
+        for (int i = 1; i &lt; m; i++) {
+            memo[0][i] = matrix[0][i];
+            max = Math.max(max, memo[0][i]);
+        }
+        // fill the rest
+        for (int i = 1; i &lt; n; i++) {
+            for (int j = 1; j &lt; m; j++) {
+                if (matrix[i][j] == 1) {
+                    memo[i][j] = min(memo[i - 1][j], memo[i - 1][j - 1], memo[i][j - 1]) + 1;
+                } else {
+                    memo[i][j] = 0;
+                }
+                max = Math.max(max, memo[i][j]);
+            }
+        }
+        return max * max;
+    }
+
+    public static void main(String[] args) {
+        int[][] matrix = {
+                {1, 0, 1, 0, 0},
+                {1, 0, 1, 1, 1},
+                {1, 1, 1, 1, 1},
+                {1, 0, 0, 1, 0}
+        };
+        System.out.println(findMaxSquare(matrix));
+    }
+}</pre></noscript>
+<script src="https://gist.github.com/yokolet/6855bc82a187fa8cd2316973bdbe03dd.js"> </script>
+
+<p>The performance is: time O(nm), space O(nm), where n: rows, m: columns</p>
+
+<p>The result is:</p>
+
+<pre>
+
+4
+
+</pre>
+
+<h4 id="problem-description---maximal-rectangle">Problem Description - Maximal Rectangle</h4>
+
+<p>Given a 2D binary matrix filled with 0’s and 1’s, find the maximal rectangle with all 1’s.</p>
+
+<p>For example, following 2D matrix is given:</p>
+
+<pre>
+
+1   0   1   0   0
+
+1   0   1   1   1
+
+1   1   1   1   1
+
+1   0   0   1   0
+
+</pre>
+
+<p>The answer will be 6.</p>
+
+<pre>
+
+1   0   1   0   0
+      +-----------+
+1   0 | 1   1   1 |
+      |           |
+1   1 | 1   1   1 |
+      +-----------+
+1   0   0   1   0
+
+</pre>
+
+<h4 id="the-idea-to-find-maximal-rectangle">The idea to find maximal rectangle</h4>
+
+<p>Also, this is a dynamic programming problem, but has an extra process.
+The first step of DP sees vertically.
+The second step sees horizontally.</p>
+
+<p>For the DP step, the optimal substructure exists, like the square problem.</p>
+
+<ol>
+  <li>include the current cell to form a rectangle</li>
+  <li>exclude the current cell</li>
+</ol>
+
+<p>The state to maintain in the auxiliary table is the size of 1’s of vertical stretch.
+Following the DP manner, the table will be created by bottom up.
+When the value of matrix at i’th row and j’th column is 1, look above then plus one.
+This is the value in the auxiliary table.</p>
+
+<p>After creating the auxiliary table, I need to find the maximal area looking at horizontally.
+How to find it?
+This is exactly the same as <a href="http://yokolet.github.io/2017/05/25/largest-rectangle-in-histogram.html">Largest Rectangle in Histogram</a> problem.</p>
+
+<p>The second step looks each row to find its max.
+By comparison of each max, I can get the maximal area.</p>
+
+<h4 id="java-code-for-finding-maximal-rectangle">Java code for finding maximal rectangle</h4>
+
+<noscript><pre>import java.util.Stack;
+
+public class MaximalRectangle {
+    static int findMaxArea(int l, int[] heights) {
+        Stack&lt;Integer&gt; stack = new Stack&lt;Integer&gt;();
+        int max_area = 0;
+        for (int i = 0; i &lt; l; i++) {
+            while (!stack.isEmpty() &amp;&amp; heights[stack.peek()] &gt; heights[i]) {
+                int top_height = heights[stack.pop()];
+                int w = stack.isEmpty() ? i : i - stack.peek() - 1;
+                max_area = Math.max(max_area, w * top_height);
+            }
+            stack.push(i);
+        }
+        return max_area;
+    }
+
+    static int maximalRectangle(int[][] matrix) {
+        int n = matrix.length;
+        int m = n == 0 ? 0 : matrix[0].length;
+        int[][] memo = new int[n][m + 1];
+
+        // initialize
+        // first row
+        for (int i = 0; i &lt; m; i++) {
+            memo[0][i] = matrix[0][i] == 1 ? 1 : 0;
+        }
+
+        for (int i = 1; i &lt; n; i++) {
+            for (int j = 0; j &lt; m; j++) {
+                if (matrix[i][j] == 1) {
+                    memo[i][j] = memo[i - 1][j] + 1;
+                } else {
+                    memo[i][j] = 0;
+                }
+            }
+        }
+
+        // find max
+        int max = 0;
+        for (int i = 0; i &lt; n; i++) {
+            max = Math.max(max, findMaxArea(m + 1, memo[i]));
+        }
+        return max;
+    }
+
+    public static void main(String[] args) {
+        int[][] matrix = {
+                {1, 0, 1, 0, 0},
+                {1, 0, 1, 1, 1},
+                {1, 1, 1, 1, 1},
+                {1, 0, 0, 1, 0}
+        };
+        System.out.println(maximalRectangle(matrix));
+    }
+}</pre></noscript>
+<script src="https://gist.github.com/yokolet/0e865893f44e5329c138a4cb24be4d45.js"> </script>
+
+<p>The performance is: time O(nm), space O(nm), where n: rows, m: columns</p>
+
+<p>The result is:</p>
+
+<pre>
+
+6
+
+</pre>
+
+<h4 id="resources">Resources</h4>
+
+<ul>
+  <li><a href="http://www.geeksforgeeks.org/maximum-size-sub-matrix-with-all-1s-in-a-binary-matrix/">Maximum size square sub-matrix with all 1s</a></li>
+  <li><a href="http://www.programcreek.com/2014/06/leetcode-maximal-square-java/">Maximal Square</a></li>
+  <li><a href="http://algorithms.tutorialhorizon.com/dynamic-programming-maximum-size-square-sub-matrix-with-all-1s/">Maximum size square sub-matrix with all 1s</a></li>
+  <li><a href="http://www.geeksforgeeks.org/maximum-size-rectangle-binary-sub-matrix-1s/">Maximum size rectangle binary sub-matrix with all 1s</a></li>
+  <li><a href="http://www.programcreek.com/2014/05/leetcode-maximal-rectangle-java/">Maximal Rectangle</a></li>
+</ul>
+
+</div>
+
+    <footer class="site-footer">
+        
+        <span class="site-footer-owner"><a href="https://github.com/yokolet/yokolet.github.com">yokolet.com</a> is maintained by <a
+                href="https://github.com/yokolet">Yoko Harada</a>.</span>
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+    </footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang=" en-US">
+<head>
+
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+
+      gtag('js', new Date());
+      gtag('config', 'UA-761764-8');
+    </script>
+    
+    <meta charset="UTF-8">
+
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Online Algorithm - mean and median | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="Online Algorithm - mean and median" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notes about programming" />
+<meta property="og:description" content="Notes about programming" />
+<link rel="canonical" href="/2017/05/29/online-algorithm.html" />
+<meta property="og:url" content="/2017/05/29/online-algorithm.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-05-29T00:00:00-07:00" />
+<script type="application/ld+json">
+{"url":"/2017/05/29/online-algorithm.html","headline":"Online Algorithm - mean and median","dateModified":"2017-05-29T00:00:00-07:00","datePublished":"2017-05-29T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"/2017/05/29/online-algorithm.html"},"description":"Notes about programming","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/assets/css/all.css?v=">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    
+        <link rel="icon" type="image/ico" href="/assets/image/favicon.ico">
+    
+</head>
+<body>
+<header class="page-header" role="banner">
+    <div class="nav">
+        
+            <a href="/" class="btn back"><i class="fas fa-chevron-circle-left"></i> Back</a>
+        
+        
+            <a href="/about/" class="btn">About <i class="fas fa-info-circle"></i></a>
+        
+    </div>
+    <h1 class="project-name">yokolet's notelets</h1>
+    <h2 class="project-tagline">Notes about programming</h2>
+
+    
+</header>
+
+<main id="content" class="main-content" role="main">
+    <div class="content container">
+    <div class="post-date">
+        <time>May 29, 2017 </time>
+    </div>
+    <h1 class="post-title">Online Algorithm - mean and median</h1>
+    <h4 id="what-is-online-algorithm">What is Online Algorithm</h4>
+
+<p>If fixed number of integers (or real numbers) are given, it’s easy to find
+a mean or median.
+Summing up all, then deviding by a number of given values gives me the mean.
+For a median, sorting the given values then finding center index (indices)
+would be the almost all.</p>
+
+<p>What if input is not limited? say, a stream of data?</p>
+
+<p>As for mean, still summing up and saving it to a value may work.
+But, what if the stream sends billions of 10?
+“Saving it to a value” will turn to a hard job.
+Nevertheless, the hard job would be hardly paid since still the answer is 10, just 10.</p>
+
+<p>What about median?
+Still sorting may work if it uses a heap sort.
+The problem of heap is: I need to take out all values by the center position, say, half billion.
+Then, those values must get back to the heap, again half billion.
+Simple sorting would be very hard to say, <em>“it works”</em>.</p>
+
+<p>As for the stream of data, it looks something called <em>online algorithm</em> works.
+The online algorithm finds an answer from previous state.
+Wikipedia uses the term, <a href="https://en.wikipedia.org/wiki/Recurrence_relation"><em>recurrence relation</em></a> to describe the way to find the answer.</p>
+
+<p>This unique way of solving a problem is definitely worth writing down a memo.</p>
+
+<h4 id="problem-description">Problem Description</h4>
+
+<p>The problem is simple: Given a stream of data, answer the mean or median anytime.
+It may be everytime data is added, may be after some or many data are added.</p>
+
+<h4 id="the-idea-to-find-the-mean">The idea to find the mean</h4>
+
+<p>There are some math-y proofs in the Wikipedia, section 4: Online algorithm - <a href="https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance">Algorithms for calculating variance</a>.
+The idea is to focus on the difference between a current value and mean up to a prevous value.
+If the difference divided by total number of values is added to the mean so far,
+a new mean will be calculate including a current value.</p>
+
+<p>Aside of the mathematical proof, this is a pretty simple and working solution.</p>
+
+<h4 id="java-code-for-mean">Java code for mean</h4>
+
+<p>Below is the Java code to find means anytime.</p>
+
+<noscript><pre>public class MeanFinder {
+    long n;
+    double mean;
+
+    MeanFinder() {
+        n = 0L;
+        mean = 0.0;
+    }
+
+    void addNum(int num) {
+        n++;
+        double delta = num - mean;
+        mean += (delta / n);
+    }
+
+    double findMean() {
+        return mean;
+    }
+
+    public static void main(String[] args) {
+        MeanFinder finder = new MeanFinder();
+        finder.addNum(12);
+        finder.addNum(4);
+        System.out.println(finder.findMean());
+        finder.addNum(5);
+        finder.addNum(3);
+        finder.addNum(8);
+        System.out.println(finder.findMean());
+        finder.addNum(7);
+        System.out.println(finder.findMean());
+    }
+}</pre></noscript>
+<script src="https://gist.github.com/yokolet/bb4034f40d8602f4d1d6dcf30c1d6070.js"> </script>
+
+<p>The result is:</p>
+
+<pre>
+8.0
+6.4
+6.5
+</pre>
+
+<h4 id="the-idea-to-find-the-median">The idea to find the median</h4>
+
+<p>I found a couple of websites which describe how to find the median from a stream of data.
+Among them, <a href="http://www.geeksforgeeks.org/median-of-stream-of-integers-running-integers/">GeeksforGeeks: Median in a stream of integers (running integers)</a> was the best to understand how to.
+As the entry says, there are a couple of options to solve the problem.
+Using two heaps is indeed a simple yet <em>it works</em> solution.</p>
+
+<p>The idea is to maintain smaller half and greater half in two heaps.
+The smaller half will be sorted in descending order, while greater half will be in ascending order.
+If I peek the smaller half, I’ll get the biggest value in the smaller half.
+If I peek the greater half, I’ll get the smallest value in the greater half.
+These values, two or one depending on the sizes, are the median.</p>
+
+<pre>
+                                  
+                                         the smallest value in the greater half
+  the biggest value in the smaller half   /
+                                     \   /
+        . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+       |&lt;-----------------------------&gt;|&lt;-----------------------------&gt;|
+              smaller half                      greater half
+
+</pre>
+
+<p>I should keep the size difference of two heaps in 0 or 1.
+So, when I add a new value, there’s an extra work to maintain the size.
+However, other than that, solution is pretty simple.</p>
+
+<h4 id="java-code-for-median">Java code for median</h4>
+
+<p>Below is the Java code to find median anytime.</p>
+
+<noscript><pre>import java.util.Collections;
+import java.util.PriorityQueue;
+
+public class MedianFinder {
+    PriorityQueue&lt;Integer&gt; greaterHalf;
+    PriorityQueue&lt;Integer&gt; smallerHalf;
+
+    public MedianFinder() {
+        greaterHalf = new PriorityQueue();
+        smallerHalf = new PriorityQueue(Collections.reverseOrder());
+    }
+
+    public void addNum(int num) {
+        int g_sz = greaterHalf.size();
+        int s_sz = smallerHalf.size();
+        if (g_sz == 0) {
+            greaterHalf.offer(num);
+            return;
+        }
+        if (g_sz == s_sz) {
+            if (num &gt; greaterHalf.peek()) {
+                greaterHalf.offer(num);
+            } else {
+                smallerHalf.offer(num);
+            }
+            return;
+        } else if (g_sz &gt; s_sz) {
+            smallerHalf.offer(num);
+        } else {
+            greaterHalf.offer(num);
+        }
+        if (smallerHalf.peek() &gt; greaterHalf.peek()) {
+            int temp = greaterHalf.poll();
+            smallerHalf.offer(temp);
+            temp = smallerHalf.poll();
+            greaterHalf.offer(temp);
+        }
+    }
+
+    public double findMedian() {
+        int g_sz = greaterHalf.size();
+        int s_sz = smallerHalf.size();
+        if (g_sz == s_sz) {
+            return ((double)greaterHalf.peek() + (double)smallerHalf.peek()) / 2.0;
+        } else if (g_sz &gt; s_sz) {
+            return (double)greaterHalf.peek();
+        } else {
+            return (double)smallerHalf.peek();
+        }
+    }
+
+    public static void main(String[] args) {
+        MedianFinder finder = new MedianFinder();
+        finder.addNum(12);
+        finder.addNum(4);
+        System.out.println(finder.findMedian());
+        finder.addNum(5);
+        finder.addNum(3);
+        finder.addNum(8);
+        System.out.println(finder.findMedian());
+        finder.addNum(7);
+        System.out.println(finder.findMedian());
+    }
+}
+</pre></noscript>
+<script src="https://gist.github.com/yokolet/4c37b422d44caa121399658a4e5f521f.js"> </script>
+
+<p>The result is:</p>
+
+<pre>
+8.0
+5.0
+6.0
+</pre>
+
+<h4 id="resources">Resources</h4>
+
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance">Algorithms for calculating variance (Wikipedia)</a></li>
+  <li><a href="http://www.geeksforgeeks.org/median-of-stream-of-integers-running-integers/">Median in a stream of integers (Geeksforgeeks)</a></li>
+  <li><a href="http://www.programcreek.com/2015/01/leetcode-find-median-from-data-stream-java/">Find Median from Data Stream (Progam Creek)</a></li>
+</ul>
+
+</div>
+
+    <footer class="site-footer">
+        
+        <span class="site-footer-owner"><a href="https://github.com/yokolet/yokolet.github.com">yokolet.com</a> is maintained by <a
+                href="https://github.com/yokolet">Yoko Harada</a>.</span>
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+    </footer>
+</main>
+</body>
+</html>

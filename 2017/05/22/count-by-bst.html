@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang=" en-US">
+<head>
+
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+
+      gtag('js', new Date());
+      gtag('config', 'UA-761764-8');
+    </script>
+    
+    <meta charset="UTF-8">
+
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Count Smaller By BST | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="Count Smaller By BST" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notes about programming" />
+<meta property="og:description" content="Notes about programming" />
+<link rel="canonical" href="/2017/05/22/count-by-bst.html" />
+<meta property="og:url" content="/2017/05/22/count-by-bst.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-05-22T00:00:00-07:00" />
+<script type="application/ld+json">
+{"url":"/2017/05/22/count-by-bst.html","headline":"Count Smaller By BST","dateModified":"2017-05-22T00:00:00-07:00","datePublished":"2017-05-22T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"/2017/05/22/count-by-bst.html"},"description":"Notes about programming","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/assets/css/all.css?v=">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    
+        <link rel="icon" type="image/ico" href="/assets/image/favicon.ico">
+    
+</head>
+<body>
+<header class="page-header" role="banner">
+    <div class="nav">
+        
+            <a href="/" class="btn back"><i class="fas fa-chevron-circle-left"></i> Back</a>
+        
+        
+            <a href="/about/" class="btn">About <i class="fas fa-info-circle"></i></a>
+        
+    </div>
+    <h1 class="project-name">yokolet's notelets</h1>
+    <h2 class="project-tagline">Notes about programming</h2>
+
+    
+</header>
+
+<main id="content" class="main-content" role="main">
+    <div class="content container">
+    <div class="post-date">
+        <time>May 22, 2017 </time>
+    </div>
+    <h1 class="post-title">Count Smaller By BST</h1>
+    <h4 id="count-smaller-on-the-right-in-an-array">Count Smaller on the Right in an Array</h4>
+
+<p>The problem is: given an array of integers, count integers smaller than the index i,
+also, located on the right of index i. So, the answer will be also an array of the integers.
+Apparently, the answer to the last element is 0.</p>
+
+<p>While trying to solve this algorithm question, I saw a quite neat solution.
+As far as I googled, most solutions used a merge sort with an additional post processing.
+However, one of them used a binary search tree (BST) with no extra post processing.
+Also, the solution was easy to follow and undertandable.
+It was a so nice idea of using BST. It’s definitely worth adding memo here.</p>
+
+<h4 id="problem-description">Problem description</h4>
+
+<p>Let’s start describing the problem in detail.
+For example, a given array of integers is [5, 2, 6, 1], the answer will be
+[2, 1, 1, 0].</p>
+
+<ul>
+  <li>5: 2 and 1 are smaller, right side of elements</li>
+  <li>2: 1 is a smaller, right side of element</li>
+  <li>6: 1 is a smaller, right side of element</li>
+</ul>
+
+<p>As always, there’s a bruto-force search whose performance is O(n^2).
+Starting from each index and counting smaller elements to the end
+will give the solution. The problem of the bruto-force is time out
+while the solution is testing by massive test cases.</p>
+
+<h4 id="how-bst-works">How BST works</h4>
+
+<p>The binary search tree (BST) has a property, elements in left subtree are always
+smaller than the root. While building the BST, in another words, inserting a new
+node to the BST, it’s easy to count up how many elements are smaller than the new node.</p>
+
+<p>One more neat idea of this solution is building BST from the end of the element.
+Since the answer to the last element is always zero, it is the good starting point.</p>
+
+<p>The BSTs created from the array [5, 2, 6, 1] and [5, 2, 6, 4, 1, 3] will be formed one by one
+described below. Values of each node expresses: number (answer to this element, internal count state).</p>
+
+<p><br /></p>
+<pre>
+val (answer, count)
+
+1 (0, 1)  1 (0, 1)      1 (0, 1)      1 (0, 1)
+           \             \             \
+            6 (1, 1)      6 (1, 2)      6 (1, 3)
+                         /             /
+                        2 (1, 1)      2 (1, 1)
+                                       \
+                                        5 (2, 1)
+
+
+
+3 (0, 1)       3 (0, 2)        3 (0, 2)             3 (0, 2)                3 (0, 3)                3 (0, 3)
+              /               / \                  / \                     / \                     / \
+      (0, 1) 1        (0, 1) 1   4 (2, 1)   (0, 1) 1  4 (2, 1)     (0, 1) 1   4 (2, 1)     (0, 1) 1   4 (2, 1)
+                                                       \                   \    \                  \   \
+                                                        6 (3, 1)     (1, 1) 2    6 (3, 1)    (1, 1) 2   6 (3, 2)
+                                                                                                       /
+                                                                                               (4, 1) 5
+
+</pre>
+
+<p>As in the above, the root node keeps how many nodes are in the left subtree (including root)
+when a new node is added to the right subtree.</p>
+
+<h4 id="java-code">Java code</h4>
+
+<p>Below is the code to count while creating the BST.</p>
+
+<noscript><pre>import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class CountOfSmallerNumbersAfterSelf {
+    static class TreeNode {
+        int val;
+        int count = 1;
+        TreeNode left;
+        TreeNode right;
+        TreeNode(int x) { val = x; }
+    }
+
+    static int insertNode(TreeNode root, int val) {
+        int thisCount = 0;
+        while (true) {
+            if (val &lt;= root.val) {
+                root.count++;
+                if (root.left == null) {
+                    root.left = new TreeNode(val);
+                    break;
+                } else {
+                    root = root.left;
+                }
+            } else {
+                thisCount += root.count;
+                if (root.right == null) {
+                    root.right = new TreeNode(val);
+                    break;
+                } else {
+                    root = root.right;
+                }
+            }
+        }
+        return thisCount;
+    }
+
+    static List&lt;Integer&gt; countSmaller(int[] nums) {
+        List&lt;Integer&gt; result = new ArrayList();
+        if (nums == null || nums.length == 0) { return result; }
+        int n = nums.length;
+        TreeNode root = new TreeNode(nums[n - 1]);
+        result.add(0);
+        for (int i = n - 2; i &gt;= 0; i--) {
+            int count = insertNode(root, nums[i]);
+            result.add(count);
+        }
+        Collections.reverse(result);
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {5, 2, 6, 1};
+        System.out.println(countSmaller(nums));
+        int[] nums2 = {5, 2, 6, 4, 1, 3};
+        System.out.println(countSmaller(nums2));
+    }
+}</pre></noscript>
+<script src="https://gist.github.com/yokolet/30e80818436c3d707012fde581e1509f.js"> </script>
+
+<p>The code returns the result:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="o">[</span><span class="mi">2</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">]</span>
+<span class="o">[</span><span class="mi">4</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">]</span></code></pre></figure>
+
+<h4 id="resources">Resources</h4>
+
+<ul>
+  <li><a href="https://kennyzhuang.gitbooks.io/algorithms-collection/content/count_of_smaller_numbers_after_self.html">Algorithm Collection, 1.18 Count of Samller Numbers After Self</a></li>
+</ul>
+
+</div>
+
+    <footer class="site-footer">
+        
+        <span class="site-footer-owner"><a href="https://github.com/yokolet/yokolet.github.com">yokolet.com</a> is maintained by <a
+                href="https://github.com/yokolet">Yoko Harada</a>.</span>
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+    </footer>
+</main>
+</body>
+</html>

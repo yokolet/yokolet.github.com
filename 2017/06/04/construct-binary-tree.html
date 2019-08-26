@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang=" en-US">
+<head>
+
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+
+      gtag('js', new Date());
+      gtag('config', 'UA-761764-8');
+    </script>
+    
+    <meta charset="UTF-8">
+
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Construct Binary Tree | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="Construct Binary Tree" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notes about programming" />
+<meta property="og:description" content="Notes about programming" />
+<link rel="canonical" href="/2017/06/04/construct-binary-tree.html" />
+<meta property="og:url" content="/2017/06/04/construct-binary-tree.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-06-04T00:00:00-07:00" />
+<script type="application/ld+json">
+{"url":"/2017/06/04/construct-binary-tree.html","headline":"Construct Binary Tree","dateModified":"2017-06-04T00:00:00-07:00","datePublished":"2017-06-04T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"/2017/06/04/construct-binary-tree.html"},"description":"Notes about programming","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/assets/css/all.css?v=">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    
+        <link rel="icon" type="image/ico" href="/assets/image/favicon.ico">
+    
+</head>
+<body>
+<header class="page-header" role="banner">
+    <div class="nav">
+        
+            <a href="/" class="btn back"><i class="fas fa-chevron-circle-left"></i> Back</a>
+        
+        
+            <a href="/about/" class="btn">About <i class="fas fa-info-circle"></i></a>
+        
+    </div>
+    <h1 class="project-name">yokolet's notelets</h1>
+    <h2 class="project-tagline">Notes about programming</h2>
+
+    
+</header>
+
+<main id="content" class="main-content" role="main">
+    <div class="content container">
+    <div class="post-date">
+        <time>June 04, 2017 </time>
+    </div>
+    <h1 class="post-title">Construct Binary Tree</h1>
+    <h4 id="serializedeserialize">Serialize/Deserialize</h4>
+
+<p>It depends on a programming language, but in most cases,
+a binary tree is expressed by an object tree.
+Each node can have at most two children: left node and right node.
+Once the binary tree is constructed, it is not language neutral anymore.</p>
+
+<p>What is programming language independent form?
+A string would be the answer.
+Sometime, creating a string from binary tree is called <em>serialize</em>.
+On the contrary, constructing binary tree is sometime called <em>deserialize</em>.</p>
+
+<p>Next to the string, another language independent form would be an array of intergers.
+There are some differences to treat integers among programming languages.
+However, still, integers are common to all.</p>
+
+<p>A way to serialize the binary tree is not unique.
+Occasionally, a question allows me to choose my favorit style.
+As far as I learned, there are a few typical styles:
+string with parens, string with markers,
+combination of preorder/inorder or inorder/postorder.</p>
+
+<p>Although the goals are the same, “construct a binary tree” and “construct a string,”
+I need to apply different ideas.
+So, I’m going to write a memo here to clarify the difference.</p>
+
+<h4 id="problem-description---string-with-parens">Problem Description - String with Parens</h4>
+
+<p>Given a string with parens, construct a binary tree.
+When creating a node, always left child should come first.
+If node is empty, it is an empty string.</p>
+
+<p>For example, <code class="highlighter-rouge">4(2(-3)(1))(6(5))</code> is a given string, the tree should be:</p>
+<pre>
+
+         4
+       /   \
+     /      \
+    2        6
+  /   \     /
+-3     1   5
+
+</pre>
+
+<p>In this problem, the first digit(s) is the root node, and
+all subtrees under root are surrouded by a pair of parens.
+Each node can take both positive and negative values.</p>
+
+<p>As for serialization, when the tree above is given,
+the string <code class="highlighter-rouge">4(2(-3)(1))(6(5))</code> should be returned.</p>
+
+<h4 id="the-idea-to-construct-fromto-a-string-with-parens">The idea to construct from/to a string with parens</h4>
+
+<p>Construcing the tree comes first.
+Here, what I need to care about are:</p>
+
+<ul>
+  <li>an index to point a specific character in a given string</li>
+  <li>left or right to add a new node.</li>
+</ul>
+
+<p>Since this is a binary tree, recursive approach would work like traversing the binary tree.
+The point is when go right while increamenting the index.
+At first, it should go left as far as encountering opening parens.
+Then, coming back from deeper process, check opening parens again.
+This time, the opening paren indicates the tree should go right.
+Other than this main logic, I added index range check not to end up an exception.</p>
+
+<p>This serialization is a preorder traversal.
+What I need to care about are:</p>
+
+<ul>
+  <li>when returns from the subtree traversal, add closing paren</li>
+  <li>only left child may have <code class="highlighter-rouge">()</code> (empty) expression, but right child is not</li>
+</ul>
+
+<p>Because of this, extra null checks are mixed in basic preorder traversal.</p>
+
+<h4 id="java-code-for-constructing-a-binary-tree-from-a-string-with-parens">Java code for constructing a binary tree from a string with parens</h4>
+
+<noscript><pre>public class ConstructBinaryTreeFromStringWithParens {
+    static int INF = Integer.MIN_VALUE;
+
+    static class TreeNode {
+        int val;
+        TreeNode left, right;
+        TreeNode(int x) { val = x; }
+    }
+
+    static int deserialize(String s, int index, TreeNode root) {
+        if (index &gt;= s.length()) {
+            return index;
+        }
+        int start = index;
+        // it may be a negative value
+        if (s.charAt(index) == &#39;-&#39;) {
+            index++;
+        }
+        // find a length of digits
+        while (index &lt; s.length() &amp;&amp; Character.isDigit(s.charAt(index))) {
+            index++;
+        }
+        // in case of leaf node, digits is empty
+        String digits = s.substring(start, index);
+        if (digits.isEmpty()) {
+            return index;
+        }
+        // set a real value to root
+        int val = Integer.parseInt(digits);
+        root.val = val;
+        // go left
+        if (index &lt; s.length() &amp;&amp; s.charAt(index) == &#39;(&#39;) {
+            index++;
+            root.left = new TreeNode(INF);
+            index = deserialize(s, index, root.left);
+            // if this node doesn&#39;t have left child,
+            // the value still has -1, so delete the node
+            if (root.left.val == INF) {
+                root.left = null;
+            }
+            index++;
+        }
+        // go right
+        if (index &lt; s.length() &amp;&amp; s.charAt(index) == &#39;(&#39;) {
+            index++;
+            root.right = new TreeNode(INF);
+            index = deserialize(s, index, root.right);
+            // if this node doesn&#39;t have right child,
+            // the value still has -1, so delete the node
+            if (root.right.val == INF) {
+                root.right = null;
+            }
+            index++;
+        }
+        return index;
+    }
+
+    static TreeNode str2tree(String s) {
+        if (s == null || s.isEmpty()) {
+            return null;
+        }
+        TreeNode root = new TreeNode(INF);
+        deserialize(s, 0, root);
+        return root;
+    }
+
+    static StringBuilder serialize(TreeNode root, StringBuilder result) {
+        if (root == null) {
+            return result;
+        }
+        // add this node&#39;s value
+        result.append(root.val);
+        // unless both child is null
+        // need to go down to the left
+        // to add empty ()
+        if (root.left != null || root.right != null) {
+            result = serialize(root.left, result.append(&quot;(&quot;)).append(&quot;)&quot;);
+            // only when right child is not null
+            // go down to right
+            if (root.right != null) {
+                result = serialize(root.right, result.append(&quot;(&quot;)).append(&quot;)&quot;);
+            }
+        }
+        return result;
+    }
+
+    static String tree2str(TreeNode root) {
+        StringBuilder result = serialize(root, new StringBuilder());
+        return result.toString();
+    }
+
+    public static void main(String[] args) {
+        String s;
+        TreeNode root;
+        String result;
+        s = &quot;4(2(-3)(1))(6(5))&quot;;
+        root = str2tree(s);
+        result = tree2str(root);
+        System.out.println(result);
+
+        s = &quot;1(2()(4))(-3)&quot;;
+        root = str2tree(s);
+        result = tree2str(root);
+        System.out.println(result);
+    }
+}</pre></noscript>
+<script src="https://gist.github.com/yokolet/363f409ffddc72521ab540cde3f6f13d.js"> </script>
+
+<p>The result is:</p>
+
+<pre>
+4(2(-3)(1))(6(5))
+1(2()(4))(-3)
+</pre>
+
+<h4 id="problem-description---string-with-markers">Problem Description - String with Markers</h4>
+
+<p>Given a string with markers ($s), construct a binary tree.
+For example, <code class="highlighter-rouge">4,2,-3,$,$,1,$,$,6,5,$,$,$</code> is given,
+the constrcuted tree should be:</p>
+
+<pre>
+
+         4
+       /   \
+     /      \
+    2        6
+  /   \     /
+-3     1   5
+
+</pre>
+
+<p>In this problem, digits are separated by a comma (delimiter).
+When left and/or right child is null, it is expressed by a marker, <code class="highlighter-rouge">$</code>.</p>
+
+<p>A serialization creates a string exactly the same as input to deserialization.</p>
+
+<h4 id="the-idea-to-construct-fromto-a-string-with-markers">The idea to construct from/to a string with markers</h4>
+
+<p>Again, constructing the binary tree comes first.
+This is quite similar but easier than the previous, the string with parens style.
+Simply traversing in a preorder is all to construct a tree.
+When the Marker (<code class="highlighter-rouge">$</code>) is found, it goes back.
+Sicne each values are separated by a comma, finding a value portion from the string
+is easy as well.</p>
+
+<p>Constructing a string from tree is also easier then previous style.
+Here again, simply traversing in the preorder creats a string.
+While a node is there, add a value and delimiter.
+When it comes to children of leaf node, a marker will be added.</p>
+
+<h4 id="java-code-for-constructing-a-binary-tree-from-a-string-with-markers">Java code for constructing a binary tree from a string with markers</h4>
+
+<noscript><pre>public class ConstructBinaryTreeFromStringWithMarkers {
+    static int INF = Integer.MIN_VALUE;
+    static char DELIMITER = &#39;,&#39;;
+    static String MARKER = &quot;$&quot;;
+
+    static class TreeNode {
+        int val;
+        TreeNode left, right;
+        TreeNode(int x) { val = x; }
+    }
+
+    static int deserialize(String s, int index, TreeNode root) {
+        if (index &gt;= s.length()) {
+            return index;
+        }
+        int start = index;
+        // it may be a negative value
+        if (s.charAt(index) == &#39;-&#39;) {
+            index++;
+        }
+        // find a length of digits or MARKER
+        while (index &lt; s.length() &amp;&amp; s.charAt(index) != &#39;,&#39;) {
+            index++;
+        }
+        String digits = s.substring(start, index);
+        // digits may be a MARKER
+        if (MARKER.equals(digits)) {
+            // no child
+            return index;
+        }
+        // set a real value to root
+        int val = Integer.parseInt(digits);
+        root.val = val;
+
+        // go left
+        root.left = new TreeNode(INF);
+        index++;
+        index = deserialize(s, index, root.left);
+        if (root.left.val == INF) {
+            root.left = null;
+        }
+        // go right
+        root.right = new TreeNode(INF);
+        index++;
+        index = deserialize(s, index, root.right);
+        if (root.right.val == INF) {
+            root.right = null;
+        }
+
+        return index;
+    }
+
+    static TreeNode str2tree(String s) {
+        if (s == null || s.isEmpty()) {
+            return null;
+        }
+        TreeNode root = new TreeNode(INF);
+        deserialize(s, 0, root);
+        return root;
+    }
+
+    static StringBuilder serialize(TreeNode root, StringBuilder sb) {
+        if (root == null) {
+            return sb.append(MARKER).append(DELIMITER);
+        }
+        // add this node&#39;s value
+        sb.append(root.val).append(DELIMITER);
+        // go down to left
+        sb = serialize(root.left, sb);
+        // go down to right
+        sb = serialize(root.right, sb);
+        return sb;
+    }
+
+    static String tree2str(TreeNode root) {
+        StringBuilder sb = serialize(root, new StringBuilder());
+        String result = sb.toString();
+        result = result.substring(0, result.length() - 1);
+        return result;
+    }
+
+    public static void main(String[] args) {
+        String s;
+        TreeNode root;
+        String result;
+        s = &quot;4,2,-3,$,$,1,$,$,6,5,$,$,$&quot;;
+        root = str2tree(s);
+        result = tree2str(root);
+        System.out.println(result);
+        s = &quot;1,2,$,4,$,$,-3,$,$&quot;;
+        root = str2tree(s);
+        result = tree2str(root);
+        System.out.println(result);
+    }
+}
+</pre></noscript>
+<script src="https://gist.github.com/yokolet/f332e785f645e8b06c2914ff033b211c.js"> </script>
+
+<p>The result is:</p>
+
+<pre>
+4,2,-3,$,$,1,$,$,6,5,$,$,$
+1,2,$,4,$,$,-3,$,$
+</pre>
+
+<h4 id="problem-description---a-combination-of-preorder-and-inorder-traversal">Problem Description - A Combination of Preorder and Inorder Traversal</h4>
+
+<p>Given two arrays of integers, preoder and inorder, construct a binary tree.
+For example, preorder <code class="highlighter-rouge">[4, 2, -3, 1, 6, 5]</code>, inorder <code class="highlighter-rouge">[-3, 2, 1, 4, 5, 6]</code>
+are given, the constrcuted tree should be:</p>
+
+<pre>
+
+         4
+       /   \
+     /      \
+    2        6
+  /   \     /
+-3     1   5
+
+</pre>
+
+<h4 id="the-idea-to-construct-fromto-preorder-and-inorder">The idea to construct from/to preorder and inorder</h4>
+
+<p>If I look at difference of ways to traverse trees, there’s interesting fact.
+The first element in preorder is a root.
+The same value in inorder divides left and right subtrees.</p>
+
+<pre>
+preorder [|4|, 2, -3, 1, 6, 5], inorder [-3, 2, 1, |4|, 5, 6]
+
+           4
+           |
+           |
+    2      |      6
+  /   \    |     /
+-3     1   |    5
+
+</pre>
+
+<p>Now, I will look at the left substree only.
+The arrays are preorder <code class="highlighter-rouge">[2, -3, 1]</code>, inorder <code class="highlighter-rouge">[-3, 2, 1]</code>.
+Again, the first element in preorder divides inorder into left and right subtrees.</p>
+
+<pre>
+preorder [|2|, -3, 1], inorder [-3, |2|, 1]
+
+     2
+     |
+-3   |   1
+
+</pre>
+
+<p>The same division happens in the right subtree, preoder <code class="highlighter-rouge">[6, 5]</code> and inorder <code class="highlighter-rouge">[5, 6]</code>.</p>
+
+<pre>
+preorder [|6|, 5], inorder [5, |6|]
+
+     6
+     |
+5    |
+
+</pre>
+
+<p>This way, I can figure out what integers should go left or right.</p>
+
+<h4 id="java-code-for-constructing-a-binary-tree-from-preorder-and-inorder-traversal">Java code for constructing a binary tree from preorder and inorder traversal</h4>
+
+<noscript><pre>import java.util.ArrayList;
+import java.util.List;
+
+public class ConstructBinaryTreeFromPreorderAndInorder {
+    static class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+        TreeNode(int x) { val = x; }
+    }
+
+    static TreeNode arrays2tree(int[] preorder, int[] inorder,
+                                int preStart, int preEnd,
+                                int inStart, int inEnd) {
+        if (preStart &gt; preEnd) {
+            return null;
+        }
+        TreeNode node = new TreeNode(preorder[preStart]);
+        int leftEnd = 0;
+        for (int i = inStart; i&lt;= inEnd; i++) {
+            if (node.val == inorder[i]) {
+                leftEnd  = i;
+                break;
+            }
+        }
+        // go left
+        node.left = arrays2tree(preorder, inorder,
+                preStart + 1, preStart + leftEnd - inStart,
+                inStart, leftEnd - 1);
+        // go right
+        node.right = arrays2tree(preorder, inorder,
+                preEnd - inEnd + leftEnd + 1, preEnd,
+                leftEnd + 1, inEnd);
+        return node;
+    }
+
+    static TreeNode arrays2tree(int[] preorder, int[] inorder) {
+        return arrays2tree(preorder, inorder,
+                0, preorder.length - 1, 0, inorder.length - 1);
+    }
+
+    static void preorder(TreeNode root, List&lt;Integer&gt; inner) {
+        if (root == null) {
+            return;
+        }
+        inner.add(root.val);
+        preorder(root.left, inner);
+        preorder(root.right, inner);
+    }
+
+    static void inorder(TreeNode root, List&lt;Integer&gt; inner) {
+        if (root == null) {
+            return;
+        }
+        inorder(root.left, inner);
+        inner.add(root.val);
+        inorder(root.right, inner);
+    }
+
+    static List&lt;List&lt;Integer&gt;&gt; tree2arrays(TreeNode root) {
+        List&lt;List&lt;Integer&gt;&gt; result = new ArrayList();
+        result.add(new ArrayList());
+        result.add(new ArrayList());
+        preorder(root, result.get(0));
+        inorder(root, result.get(1));
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] pre0 = {4, 2, -3, 1, 6, 5};
+        int[] in0 = {-3, 2, 1, 4, 5, 6};
+        TreeNode root;
+        List&lt;List&lt;Integer&gt;&gt; result;
+        root = arrays2tree(pre0, in0);
+        result = tree2arrays(root);
+        System.out.println(result);
+
+        int[] pre1 = {1, 2, 4, -3};
+        int[] in1 = {2, 4, 1, -3};
+        root = arrays2tree(pre1, in1);
+        result = tree2arrays(root);
+        System.out.println(result);
+    }
+}</pre></noscript>
+<script src="https://gist.github.com/yokolet/6eef5a0806b3a5a7cba0f442fef395fe.js"> </script>
+
+<p>The result is:</p>
+
+<pre>
+[[4, 2, -3, 1, 6, 5], [-3, 2, 1, 4, 5, 6]]
+[[1, 2, 4, -3], [2, 4, 1, -3]]
+</pre>
+
+<h4 id="problem-description---a-combination-of-inorder-and-postorder-traversal">Problem Description - A Combination of Inorder and Postorder Traversal</h4>
+
+<p>Given two arrays of integers, inorder and postorder, construct a binary tree.
+For example, inorder <code class="highlighter-rouge">[-3, 2, 1, 4, 5, 6]</code>, postorder <code class="highlighter-rouge">[-3, 1, 2, 5, 6, 4]</code>
+are given, the constrcuted tree should be:</p>
+
+<pre>
+
+         4
+       /   \
+     /      \
+    2        6
+  /   \     /
+-3     1   5
+
+</pre>
+
+<h4 id="the-idea-to-construct-fromto-inorder-and-postorder">The idea to construct from/to inorder and postorder</h4>
+
+<p>Just glancing at this problem, everybody finds this is very similar to the previous one.
+In the preorder, a root is the first element while the last in the postorder.</p>
+
+<p>The same logic to divide left and right subtree is able to apply
+looking at the last element in the subtree area.</p>
+
+<pre>
+inorder [-3, 2, 1, |4|, 5, 6], postorder [-3, 1, 2, 5, 6, |4|]
+
+           4
+           |
+           |
+    2      |      6
+  /   \    |     /
+-3     1   |    5
+
+
+inorder [-3, |2|, 1], postorder [-3, 1, |2|]
+
+     2
+     |
+-3   |   1
+
+
+inorder [5, |6|], postorder [5, |6|]
+
+     6
+     |
+5    |
+
+
+</pre>
+
+<p>As in the previsou section, recursively applying this idea constructs the binary tree.</p>
+
+<h4 id="java-code-for-constructing-a-binary-tree-from-inorder-and-postorder-traversal">Java code for constructing a binary tree from inorder and postorder traversal</h4>
+
+<noscript><pre>import java.util.ArrayList;
+import java.util.List;
+
+public class ConstructBinaryTreeFromInorderAndPostorder {
+    static class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+        TreeNode(int x) { val = x; }
+    }
+
+    static TreeNode arrays2tree(int[] inorder, int[] postorder,
+                                int inStart, int inEnd,
+                                int postStart, int postEnd) {
+        if (postStart &gt; postEnd) {
+            return null;
+        }
+        TreeNode node = new TreeNode(postorder[postEnd]);
+        int leftEnd = 0;
+        for (int i = inStart; i&lt;= inEnd; i++) {
+            if (node.val == inorder[i]) {
+                leftEnd  = i;
+                break;
+            }
+        }
+        node.left = arrays2tree(inorder, postorder,
+                inStart, leftEnd - 1,
+                postStart, postStart + leftEnd - inStart -1);
+        node.right = arrays2tree(inorder, postorder,
+                leftEnd + 1, inEnd,
+                postStart + leftEnd - inStart, postEnd - 1);
+        return node;
+    }
+
+    static TreeNode arrays2tree(int[] inorder, int[] postorder) {
+        return arrays2tree(inorder, postorder,
+                0, inorder.length - 1, 0, postorder.length - 1);
+    }
+
+    static void inorder(TreeNode root, List&lt;Integer&gt; inner) {
+        if (root == null) {
+            return;
+        }
+        inorder(root.left, inner);
+        inner.add(root.val);
+        inorder(root.right, inner);
+    }
+
+    static void postorder(TreeNode root, List&lt;Integer&gt; inner) {
+        if (root == null) {
+            return;
+        }
+        postorder(root.left, inner);
+        postorder(root.right, inner);
+        inner.add(root.val);
+    }
+
+    static List&lt;List&lt;Integer&gt;&gt; tree2arrays(TreeNode root) {
+        List&lt;List&lt;Integer&gt;&gt; result = new ArrayList();
+        result.add(new ArrayList());
+        result.add(new ArrayList());
+        inorder(root, result.get(0));
+        postorder(root, result.get(1));
+        return result;
+    }
+
+    public static void main(String[] args) {
+        TreeNode root;
+        List&lt;List&lt;Integer&gt;&gt; result;
+        int[] in0 = {-3, 2, 1, 4, 5, 6};
+        int[] post0 = {-3, 1, 2, 5, 6, 4};
+        root = arrays2tree(in0, post0);
+        result = tree2arrays(root);
+        System.out.println(result);
+
+        int[] in1 = {2, 4, 1, -3};
+        int[] post1 = {4, 2, -3, 1};
+        root = arrays2tree(in1, post1);
+        result = tree2arrays(root);
+        System.out.println(result);
+    }
+}</pre></noscript>
+<script src="https://gist.github.com/yokolet/e2b2713f68c2e59d467a4929a26178d8.js"> </script>
+
+<p>The result is:</p>
+
+<pre>
+[[-3, 2, 1, 4, 5, 6], [-3, 1, 2, 5, 6, 4]]
+[[2, 4, 1, -3], [4, 2, -3, 1]]
+</pre>
+
+<h4 id="resources">Resources</h4>
+
+<ul>
+  <li><a href="http://www.geeksforgeeks.org/serialize-deserialize-binary-tree/">Serialize and Deserialize a Binary Tree</a></li>
+  <li><a href="http://www.programcreek.com/2014/05/leetcode-serialize-and-deserialize-binary-tree-java/">Serialize and Deserialize Binary Tree</a></li>
+  <li><a href="https://kennyzhuang.gitbooks.io/algorithms-collection/content/serialize_and_deserialize_binary_tree.html">Serialize and deserialize binary tree</a></li>
+  <li><a href="http://www.geeksforgeeks.org/construct-tree-from-given-inorder-and-preorder-traversal/">Construct Tree from given Inorder and Preorder traversals</a></li>
+  <li><a href="http://www.programcreek.com/2014/06/leetcode-construct-binary-tree-from-preorder-and-inorder-traversal-java/">Construct Binary Tree from Preorder and Inorder Traversal</a></li>
+  <li><a href="http://www.geeksforgeeks.org/construct-a-binary-tree-from-postorder-and-inorder/">Construct a Binary Tree from Postorder and Inorder</a></li>
+  <li><a href="http://www.programcreek.com/2013/01/construct-binary-tree-from-inorder-and-postorder-traversal/">Constrcut Binary Tree from Inorder and Postorder Traversal</a></li>
+</ul>
+
+</div>
+
+    <footer class="site-footer">
+        
+        <span class="site-footer-owner"><a href="https://github.com/yokolet/yokolet.github.com">yokolet.com</a> is maintained by <a
+                href="https://github.com/yokolet">Yoko Harada</a>.</span>
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+    </footer>
+</main>
+</body>
+</html>

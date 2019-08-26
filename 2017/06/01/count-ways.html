@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang=" en-US">
+<head>
+
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+
+      gtag('js', new Date());
+      gtag('config', 'UA-761764-8');
+    </script>
+    
+    <meta charset="UTF-8">
+
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Count Ways to Do [something] | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="Count Ways to Do [something]" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notes about programming" />
+<meta property="og:description" content="Notes about programming" />
+<link rel="canonical" href="/2017/06/01/count-ways.html" />
+<meta property="og:url" content="/2017/06/01/count-ways.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-06-01T00:00:00-07:00" />
+<script type="application/ld+json">
+{"url":"/2017/06/01/count-ways.html","headline":"Count Ways to Do [something]","dateModified":"2017-06-01T00:00:00-07:00","datePublished":"2017-06-01T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"/2017/06/01/count-ways.html"},"description":"Notes about programming","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/assets/css/all.css?v=">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    
+        <link rel="icon" type="image/ico" href="/assets/image/favicon.ico">
+    
+</head>
+<body>
+<header class="page-header" role="banner">
+    <div class="nav">
+        
+            <a href="/" class="btn back"><i class="fas fa-chevron-circle-left"></i> Back</a>
+        
+        
+            <a href="/about/" class="btn">About <i class="fas fa-info-circle"></i></a>
+        
+    </div>
+    <h1 class="project-name">yokolet's notelets</h1>
+    <h2 class="project-tagline">Notes about programming</h2>
+
+    
+</header>
+
+<main id="content" class="main-content" role="main">
+    <div class="content container">
+    <div class="post-date">
+        <time>June 01, 2017 </time>
+    </div>
+    <h1 class="post-title">Count Ways to Do [something]</h1>
+    <h4 id="count-ways-problems">Count Ways Problems</h4>
+
+<p>“Count how may ways to do …” is one type of alogrithm questions.
+For example, count ways to climb up stairs, count ways to make sum by given coins, 
+or count ways to reach from top left to bottom right corner.</p>
+
+<p>For this type of problem, recursion and dynamic programming are often used.
+The recursion is an instintictive solution and understandable.
+However, sometime, its performance goes really worse, say, exponential.
+While the dynamic programming solution stays on O(n^2) time complexity.</p>
+
+<p>The count ways problems have a similar idea with bits of variations.
+Not to confuse those, I’m going to write a memo about three problems:
+climbimg stairs, coin change, and unique paths.</p>
+
+<h4 id="problem-description---climbing-stairs">Problem Description - Climbing Stairs</h4>
+
+<p>“Given two integers, m (number of steps) and n (number of stairs),
+find how many ways to climbing up the stair”
+is a typical problem of this sort.
+The steps can be any number between 1 to m.</p>
+
+<p>For example, m = 3 and n = 5 are given,
+possible ways are 13 in total.</p>
+
+<pre>
+
+                                         0
+
+                       /                 |        \
+                     /                   |          \
+                   /                     |            \
+                  1                      2             3
+            /     |     \          /     |   \         |  \
+          /       |       \      /       |     \       |   \
+         1        2        3    1        2     [3]     1   [2]
+      /  | \      | \      |    | \      |             |
+    /    |   \    |   \    |    |   \    |             |
+   1     2   [3]  1   [2] [1]   1   [2] [1]           [1]
+  / \    |        |             |
+ 1  [2] [1]      [1]           [1]
+ |
+[1]
+
+[1, 1, 1, 1, 1], [1, 1, 1, 2], [1, 1, 2, 1], [1, 1, 3], [1, 2, 1, 1], [1, 2, 2], [1, 3, 1]
+[2, 1, 1, 1], [2, 1, 2], [2, 2, 1], [2, 3],
+[3, 1, 1], [3, 2]
+</pre>
+
+<p>As in the above, 2 -&gt; 3 and 3 -&gt; 2 are different.
+The order of steps taken matters for this problem.</p>
+
+<h4 id="the-idea-to-solve-climbing-stairs">The idea to solve climbing stairs</h4>
+
+<p>Since I took a dynamic programming approach, I used an auxiliary array to save states.
+The auxiliary array has a length of n + 1 to have an initialization parameter.
+The index 0 and 1 of the array (<code class="highlighter-rouge">memo</code>) is initialized with the value 1.
+Then, the array will be filled out one by one while increasing number of stairs one by one.
+Below describes how the auxiliary array (<code class="highlighter-rouge">memo[i]</code>) will be changed in case of  m = 3 and n = 4.</p>
+
+<pre>
+
+
+stairs 0   1            2                   3                          4
+
+       0   0            0                   0                          0
+           |          /   \            /    |   \                /     |     \
+           1         1     2          1     2    3              1      2      3
+                     |              /   \   |                 / | \    | \    |
+                     1             1     2  1               /   |  \   |  \   |
+                                   |                       1    2   3  1   2  1
+                                   1                     /   \  |      |
+                                                        1     2 1      1
+                                                        |
+                                                        1
+
+memo(state)
+[1, 1, 0, 0, 0]   [1, 1, 2, 0, 0]   [1, 1, 2, 4, 0]          [1, 1, 2, 4, 7]
+
+</pre>
+
+<h4 id="java-code-for-climbing-stairs">Java code for climbing stairs</h4>
+
+<p>Here’s the code to count ways to climbing stairs.</p>
+
+<noscript><pre>public class CountWaysToClimbStairs {
+    // M: steps, 1, 2, 3, ..., M
+    // N: stairs, nth
+    static int countWays(int m, int n) {
+        if (n &lt; 2) {
+            return 1;
+        }
+        int[] memo = new int[n + 1];
+        // initialize
+        memo[0] = 1;
+        memo[1] = 1;
+        // fill the rest
+        for (int i = 2; i &lt;= n; i++) {
+            for (int j = 1; j &lt;= m &amp;&amp; j &lt;= i; j++) {
+                memo[i] += memo[i - j];
+            }
+        }
+        return memo[n];
+    }
+
+    public static void main(String[] args) {
+        int M = 3;
+        int N = 5;
+        System.out.println(countWays(M, N));
+        M = 3;
+        N = 4;
+        System.out.println(countWays(M, N));
+        M = 3;
+        N = 3;
+        System.out.println(countWays(M, N));
+    }
+}
+</pre></noscript>
+<script src="https://gist.github.com/yokolet/1cf65d7dc89c17f43123363f581985af.js"> </script>
+
+<p>The result is:</p>
+
+<pre>
+13
+7
+4
+</pre>
+
+<h4 id="problem-description---coin-change">Problem Description - Coin Change</h4>
+
+<p>“Given coins (or denominators) and sum, find how many ways to make the sum”
+is a common problem description.
+Mostly, infinite number of each coins are available to make the sum.
+Sometime, there’s a limitation of available coins.
+However, basic idea is the same.</p>
+
+<p>For example, coins = <code class="highlighter-rouge">[1, 2, 3]</code> and sum = 5 are given,
+possible ways of making sum of 5 will be:
+<code class="highlighter-rouge">[1, 1, 1, 1, 1], [1, 1, 1, 2], [1, 2, 2], [1, 1, 3], [2, 3]</code>
+So, the answer is 5.</p>
+
+<p>There’s a very similar, but different coin change problem.
+Another coin change problem asks minimum number of coins to make a given sum.
+This is not what I’m going to write here.
+This memo is about how many combinations are there.</p>
+
+<h4 id="the-idea-for-coin-change">The idea for coin change</h4>
+
+<p>Like climbing stairs, I took a dynamic programming approach, I used an auxiliary table
+to save states.
+The auxiliary table (<code class="highlighter-rouge">memo</code>) has a size [number of coins + 1] x [sum + 1].
+Plus one is to have initialization parameters.
+Table’s first column means sum = 0 and initialized with 1.
+This is because sum = 0 can be created by an empty set.
+Table’s first row (except 0) means no coins.
+The first row form 1 to sum + 1 will be initialized with 0.
+Then fill the rest of the table.
+The value, <code class="highlighter-rouge">memo[i][j]</code> shows a number of patters to make sum j using coins[0] to coiins[i - 1].</p>
+
+<p>If coins = <code class="highlighter-rouge">[1, 2, 3]</code> and sum = 5 are given, the final auxiliary table, <code class="highlighter-rouge">memo</code> will be:</p>
+
+<pre>
+               sum
+         0  1  2  3  4  5
+        ------------------
+coins 0| 1  0  0  0  0  0
+      1| 1  1  1  1  1  1
+      2| 1  1  2  2  3  3
+      3| 1  1  2  3  4  5
+
+</pre>
+
+<h4 id="java-code-for-coin-change">Java code for coin change</h4>
+
+<p>Below is the code to count ways to making a sum.</p>
+
+<noscript><pre>public class CountWaysToMakeSum {
+    static int countWays(int[] coins, int S) {
+        int n = coins.length;
+        int[][] memo = new int[n + 1][S + 1];
+        // initialize
+        // sum is zero, so empty set is the answer
+        for (int i = 0; i &lt;= n; i++) {
+            memo[i][0] = 1;
+        }
+        // no coin given, unable to make sum
+        for (int i = 1; i &lt;= S; i++) {
+            memo[0][i] = 0;
+        }
+        // fill the rest
+        for (int i = 1; i &lt;= n; i++) {
+            for (int j = 1; j &lt;= S; j++) {
+                // excludes coins[i]
+                memo[i][j] = memo[i - 1][j];
+                if (coins[i - 1] &lt;= j) {
+                    // includes coins[i]
+                    memo[i][j] += memo[i][j - coins[i - 1]];
+                }
+            }
+        }
+        return memo[n][S];
+    }
+
+    public static void main(String[] args) {
+        int S = 5;
+        int[] coins = {1, 2, 3};
+        System.out.println(countWays(coins, S));
+        S = 4;
+        System.out.println(countWays(coins, S));
+        int[] coins1 = {2, 5, 3, 6};
+        S = 10;
+        System.out.println(countWays(coins1, S));
+    }
+}
+</pre></noscript>
+<script src="https://gist.github.com/yokolet/33c80d1fbd73075fca0648d4d23164c1.js"> </script>
+
+<p>The result is:</p>
+
+<pre>
+5
+4
+5
+</pre>
+
+<h4 id="problem-description---unique-paths">Problem Description - Unique Paths</h4>
+
+<p>Given two integers, m and n, which expresses m rows and n columns,
+find how many unique paths are there from top left to bottom right.
+Available directions are right and down only.</p>
+
+<p>For example, m = 3 and n = 4 are given, three of all possible paths
+are like this:</p>
+
+<pre>
+
++---+---+---+---+     +---+---+---+---+     +---+---+---+---+
+| x-----------┐ |     | x-------┐ |   |     | x |   |   |   |
++---+---+---+-|-+     +---+---+-|-+---+     +-|-+---+---+---+
+|   |   |   | | |     |   |   | | |   |     | └-----------┐ |
++---+---+---+-|-+     +---+---+-|-+---+     +---+---+---+-|-+
+|   |   |   | x |     |   |   | └---x |     |   |   |   | x |
++---+---+---+- -+     +---+---+---+---+     +---+---+---+---+
+
+</pre>
+
+<h4 id="the-idea-for-unique-paths">The idea for unique paths</h4>
+
+<p>Like other two problems, I chose the dynamic programming to find the answer,
+I used auxiliary table to save states.
+The auxiliary table (<code class="highlighter-rouge">memo</code>) has a size [m] x [n].
+In this case, plus one doesn’t need since the first row and column can be
+initialized without any previous state.
+Movments are only right and down.
+Given that, the first row are all 1 since from left is the only one way.
+The first columns are all 1 as well since from above is the only one way.
+Then, fill the rest of the table by expanding the path one by one, right or down.</p>
+
+<p>At each table[i][j], the values on above table[i - 1][j] and left table[i][j - 1] will be added up.
+This way, ways to come index i, j will be calculated.
+When traversal reaches to the bottom right index, table[m - 1][n - 1], the answer is there.</p>
+
+<h4 id="java-code--for-unique-paths">Java code  for unique paths</h4>
+
+<p>Below is the code to count ways to reach from top left to bottom right.</p>
+
+<noscript><pre>public class CountWaysToReachBottomRight {
+    // m: rows
+    // n: columns
+    static int countWays(int m, int n) {
+        int[][] memo = new int[m][n];
+        // initialize
+        // first row - only one way from left
+        for (int i = 0; i &lt; n; i++) {
+            memo[0][i]  = 1;
+        }
+        // first column - only one way from above
+        for (int i = 0; i &lt; m; i++) {
+            memo[i][0] = 1;
+        }
+        // fill the rest
+        for (int i = 1; i &lt; m; i++) {
+            for (int j = 1; j &lt; n; j++) {
+                // from above + from left
+                memo[i][j] = memo[i - 1][j] + memo[i][j - 1];
+            }
+        }
+        return memo[m - 1][n - 1];
+    }
+
+    public static void main(String[] args) {
+        int m = 3;
+        int n = 3;
+        System.out.println(countWays(m, n));
+        m = 3;
+        n = 4;
+        System.out.println(countWays(m, n));
+    }
+}
+</pre></noscript>
+<script src="https://gist.github.com/yokolet/586b6a4a08c7ef3b6f4be2085a6a6b93.js"> </script>
+
+<p>The result is:</p>
+
+<pre>
+6
+10
+</pre>
+
+<h4 id="resources">Resources</h4>
+
+<ul>
+  <li><a href="http://www.geeksforgeeks.org/count-ways-reach-nth-stair/">Count ways to reach the n’th stair</a></li>
+  <li><a href="http://algorithms.tutorialhorizon.com/dynamic-programming-stairs-climbing-puzzle/">Stairs Climbing Puzzle</a></li>
+  <li><a href="http://www.geeksforgeeks.org/dynamic-programming-set-7-coin-change/">Coin Change</a></li>
+  <li><a href="http://algorithms.tutorialhorizon.com/dynamic-programming-coin-change-problem/">Coin Change Problem</a></li>
+  <li><a href="http://www.geeksforgeeks.org/count-possible-paths-top-left-bottom-right-nxm-matrix/">Count all possible paths from top left to bottom right of a mXn matrix</a></li>
+  <li><a href="http://algorithms.tutorialhorizon.com/dynamic-programming-count-all-paths-from-top-left-to-bottom-right-of-a-mxn-matrix/">Count all paths from top left to bottom right of a mXn matrix</a></li>
+  <li><a href="http://www.programcreek.com/2014/05/leetcode-unique-paths-java/">Unique Paths</a></li>
+</ul>
+
+</div>
+
+    <footer class="site-footer">
+        
+        <span class="site-footer-owner"><a href="https://github.com/yokolet/yokolet.github.com">yokolet.com</a> is maintained by <a
+                href="https://github.com/yokolet">Yoko Harada</a>.</span>
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+    </footer>
+</main>
+</body>
+</html>

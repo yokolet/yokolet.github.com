@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang=" en-US">
+<head>
+
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+
+      gtag('js', new Date());
+      gtag('config', 'UA-761764-8');
+    </script>
+    
+    <meta charset="UTF-8">
+
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>K Partition Problem | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="K Partition Problem" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notes about programming" />
+<meta property="og:description" content="Notes about programming" />
+<link rel="canonical" href="/2017/05/23/k-partition-problem.html" />
+<meta property="og:url" content="/2017/05/23/k-partition-problem.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-05-23T00:00:00-07:00" />
+<script type="application/ld+json">
+{"url":"/2017/05/23/k-partition-problem.html","headline":"K Partition Problem","dateModified":"2017-05-23T00:00:00-07:00","datePublished":"2017-05-23T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"/2017/05/23/k-partition-problem.html"},"description":"Notes about programming","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/assets/css/all.css?v=">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    
+        <link rel="icon" type="image/ico" href="/assets/image/favicon.ico">
+    
+</head>
+<body>
+<header class="page-header" role="banner">
+    <div class="nav">
+        
+            <a href="/" class="btn back"><i class="fas fa-chevron-circle-left"></i> Back</a>
+        
+        
+            <a href="/about/" class="btn">About <i class="fas fa-info-circle"></i></a>
+        
+    </div>
+    <h1 class="project-name">yokolet's notelets</h1>
+    <h2 class="project-tagline">Notes about programming</h2>
+
+    
+</header>
+
+<main id="content" class="main-content" role="main">
+    <div class="content container">
+    <div class="post-date">
+        <time>May 23, 2017 </time>
+    </div>
+    <h1 class="post-title">K Partition Problem</h1>
+    <h4 id="divide-an-array-of-integers-into-k-fair-amount-groups">Divide an array of integers into K fair amount groups</h4>
+
+<p>The problem is: given an array of integers, divide into k subarrays
+so that the differences of sum of each subarray will be minimized.
+Keep the order of the given array.</p>
+
+<p>For example,</p>
+
+<pre>
+
+given: [1, 2, 3, 4, 5, 6, 7, 8]
+
+k = 3: [[1, 2, 3, 4, 5], [6, 7], [8, 9]]
+k = 4: [[1, 2, 3, 4], [5, 6], [7, 8], [9]]
+
+</pre>
+
+<p>This is called the linear parition, k-partition problem or, simply, partition problem.
+Despite the simple problem description, it is quite hard to solve.
+Spent some amount of time, finally, I could figure out how to solve this problem.
+Thinking its difficulty, this should be a good entry.
+For that reason, I’m going to write down a memo here.</p>
+
+<h4 id="the-idea">The idea</h4>
+
+<p>The problem is well described in the document, <a href="http://www8.cs.umu.se/kurser/TDBA77/VT06/algorithms/BOOK/BOOK2/NODE45.HTM">The Partition Problem</a> .
+Also, the first answer of this <a href="https://www.quora.com/A-group-of-N-integer-numbers-need-to-be-divided-fairly-into-K-subgroups-A-fair-division-is-that-the-max-of-the-sums-of-K-subgroups-is-minimal">Quora question</a> is a good one to understand how to solve. After reading those, what I can explain by my own words is below.</p>
+
+<p>This is a dynamic programming problem. The states to keep track are optimum ways of partitioning, which will be saved in an auxiliary table.
+Suppose the auxiliary table is <code class="highlighter-rouge">M[n][k]</code> (n: size of given array, k: number of partitions), each element of <code class="highlighter-rouge">M[i][j]</code>(i’th element, j paritions) will be computed by minimizing the maximum sum of partition when the given array is divided into j starting from index i.</p>
+
+<pre>
+
+given: {s[0], s[1], ... , s[n-1]}
+
+M[i][j] = min (max (M[x][j - 1], s[i] + s[i+1] + ... + s[x]));
+
+x: from 0 to i-1
+
+</pre>
+
+<p>To avoid calculate partial sums repeatedly, the algorithm calculates a prefix sum.
+The prefix sum of index i is caclulate from the sum to the index i - 1.</p>
+
+<pre>
+
+sum[i] = sum[i - 1] + s[i]
+
+</pre>
+
+<p>To compute sum from i to m is same as <code class="highlighter-rouge">sum[m] - sum[i - 1]</code>.
+So, repeatedly calculating same sums will be eliminated.</p>
+
+<h4 id="java-code">Java code</h4>
+
+<p>The code consists from two parts: build auxiliary tables to form partitions and reconstruct partitions.
+While partitioning, the algorithm uses one more table for divisers as described in the lecture note <a href="http://www3.cs.stonybrook.edu/~algorith/video-lectures/2007/lecture18.pdf">Applications of Dynamic Porgramming</a>. The diviser table will be used to reconstruct the partitions.</p>
+
+<noscript><pre>import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class LinearPartition {
+    static int INF = Integer.MAX_VALUE;
+
+    static int[][] partition(int[] values, int k) {
+        int n = values.length;
+        int[][] M = new int[n][k];
+        int[][] D = new int[n - 1][k - 1];
+
+        // initialize
+        M[0][0] = values[0];
+        // compute prefix sums
+        for (int i = 1; i &lt; n; i++) {
+            M[i][0] = values[i] + M[i - 1][0];
+        }
+        // initialize boundary condition
+        for (int i = 1; i &lt; k; i++) {
+            M[0][i] = values[0];
+        }
+
+        // fill the rest
+        for (int i = 1; i &lt; n; i++) {
+            for (int j = 1; j &lt; k; j++) {
+                int current_min = -1;
+                int minx = INF;
+                for (int x = 0; x &lt; i; x++) {
+                    int s = Math.max(M[x][j - 1], M[i][0] - M[x][0]);
+                    if (current_min &lt; 0 || s &lt; current_min) {
+                        current_min = s;
+                        minx = x;
+                    }
+                }
+                M[i][j] = current_min;
+                D[i - 1][j - 1] = minx;
+            }
+        }
+        return D;
+    }
+
+    static List&lt;List&lt;Integer&gt;&gt; reconstructPartition(int[] values, int[][] D, int k) {
+        List&lt;List&lt;Integer&gt;&gt; result = new ArrayList();
+        int n = D.length;
+        k = k - 2;
+        while (k &gt;= 0) {
+            List&lt;Integer&gt; inner = new ArrayList();
+            for (int i = D[n - 1][k] + 1; i &lt; n + 1; i++) {
+                inner.add(values[i]);
+            }
+            result.add(inner);
+            n = D[n - 1][k];
+            k--;
+        }
+
+        List&lt;Integer&gt; inner = new ArrayList();
+        for (int i = 0; i &lt; n + 1; i++) {
+            inner.add(values[i]);
+        }
+        result.add(inner);
+        Collections.reverse(result);
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] values0 = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        int k = 3;
+        int[][] D = partition(values0, k);
+        System.out.println(reconstructPartition(values0, D, k));
+        k = 2;
+        D = partition(values0, k);
+        System.out.println(reconstructPartition(values0, D, k));
+        k = 4;
+        D = partition(values0, k);
+        System.out.println(reconstructPartition(values0, D, k));
+
+        int[] values1 = {1, 1, 1, 1, 1, 1, 1, 1, 1};
+        k = 3;
+        D = partition(values1, k);
+        System.out.println(reconstructPartition(values1, D, k));
+        k = 2;
+        D = partition(values1, k);
+        System.out.println(reconstructPartition(values1, D, k));
+
+        int[] values2 = {1, 1, 1, 1, 1, 2, 2, 2, 2};
+        k = 3;
+        D = partition(values2, k);
+        System.out.println(reconstructPartition(values2, D, k));
+        k = 2;
+        D = partition(values2, k);
+        System.out.println(reconstructPartition(values2, D, k));
+    }
+}</pre></noscript>
+<script src="https://gist.github.com/yokolet/fbc34619196b29bd730e1f5329f6253a.js"> </script>
+
+<p>The code returns the result:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="o">[[</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">],</span> <span class="o">[</span><span class="mi">6</span><span class="o">,</span> <span class="mi">7</span><span class="o">],</span> <span class="o">[</span><span class="mi">8</span><span class="o">,</span> <span class="mi">9</span><span class="o">]]</span>
+<span class="o">[[</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">],</span> <span class="o">[</span><span class="mi">7</span><span class="o">,</span> <span class="mi">8</span><span class="o">,</span> <span class="mi">9</span><span class="o">]]</span>
+<span class="o">[[</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">],</span> <span class="o">[</span><span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">],</span> <span class="o">[</span><span class="mi">7</span><span class="o">,</span> <span class="mi">8</span><span class="o">],</span> <span class="o">[</span><span class="mi">9</span><span class="o">]]</span>
+<span class="o">[[</span><span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">],</span> <span class="o">[</span><span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">],</span> <span class="o">[</span><span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">]]</span>
+<span class="o">[[</span><span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">],</span> <span class="o">[</span><span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">]]</span>
+<span class="o">[[</span><span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">],</span> <span class="o">[</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">2</span><span class="o">],</span> <span class="o">[</span><span class="mi">2</span><span class="o">,</span> <span class="mi">2</span><span class="o">]]</span>
+<span class="o">[[</span><span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">],</span> <span class="o">[</span><span class="mi">2</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">2</span><span class="o">]]</span></code></pre></figure>
+
+<h4 id="resources">Resources</h4>
+
+<ul>
+  <li><a href="http://www8.cs.umu.se/kurser/TDBA77/VT06/algorithms/BOOK/BOOK2/NODE45.HTM">The Partition Problem</a></li>
+  <li><a href="http://www3.cs.stonybrook.edu/~algorith/video-lectures/2007/lecture18.pdf">Applications of Dynamic Programming</a></li>
+  <li><a href="https://www.quora.com/A-group-of-N-integer-numbers-need-to-be-divided-fairly-into-K-subgroups-A-fair-division-is-that-the-max-of-the-sums-of-K-subgroups-is-minimal">Quora question</a></li>
+  <li><a href="http://stackoverflow.com/questions/7938809/how-to-understand-the-dynamic-programming-solution-in-linear-partitioning">Stack Overflow question</a></li>
+  <li><a href="https://gist.github.com/abrie/b962ee399d06ada95e88">gist: LinearPartitionTestApplication.java</a></li>
+</ul>
+
+</div>
+
+    <footer class="site-footer">
+        
+        <span class="site-footer-owner"><a href="https://github.com/yokolet/yokolet.github.com">yokolet.com</a> is maintained by <a
+                href="https://github.com/yokolet">Yoko Harada</a>.</span>
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+    </footer>
+</main>
+</body>
+</html>
