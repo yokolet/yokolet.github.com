@@ -1,91 +1,67 @@
-# User Settings | Edit there as per required
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely edit after that. If you find
+# yourself editing this file very often, consider using Jekyll's data files
+# feature for the data you need to update frequently.
+#
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
 
+# Site settings
+# These are used to personalize your new site. If you look in the HTML files,
+# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
+# You can create any custom variable you would like, and they will be accessible
+# in the templates via {{ site.myvariable }}.
 title: yokolet's notelets
-url: "http://yokolet.github.io"
-baseurl: ""
-
-# This will show up at the top of index page
-site_heading: >
-    yokolet<span class="faded">'s notelets</span>
-
-author: Yoko Harada
-# This description will show up in google search results
-# (for index page) etc.
-description: >
-    Mostly for myself, algorithms, some technologies, etc about what I learned.
-
-# This will what will show against &copy; in the footer
-copyright: Yoko Harada
-# Toggle your short bio, which will displayed on your index page
-# Just toggle it and run jekyll again to see
-intro: false         # Tip: Remove the span from site_heading if intro is set to true
-# This will be displayed in your intro
-short_bio: >
-    Welcome! This is <span>accent</span>, a mobile friendly theme for Jekyll. The main feature of this
-    theme is that you can change the accent color. Refer the
-    <a class="underline different-highlight" href="http://ankitsultana.me/accent/documentation.html">
-        Documentation
-    </a>
-    to know how.
-
-# Comments are powered by disqus
-# comments: true
-
-# keep about_stub roughly 12 words long for best results
-# This will show up at the bottom of each post
-# Note that about_footer should be true if you want
-# to see author information at the bottom of each post
-about_stub: >
-    Mostly for myself, writes memos about what I learned.
-
-about_footer: true
-
+email: yokolet@gmail.com
+description: >- # this means to ignore newlines until "baseurl:"
+  Notes about programming
+baseurl: "/new_note" # the subpath of your site, e.g. /blog
+url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: yokolet
-github_username: yokolet
+github_username:  yokolet
+google_analytics: UA-761764-8
+
+github:
+  is_project_page: true
+  repository_url: https://github.com/yokolet/yokolet.github.com
+  repository_name: yokolet.com
+  owner_url: https://github.com/yokolet
+  owner_name: Yoko Harada
 
 favicon: true
-favicon_location: "/images/favicon.ico"
+favicon_location: "/assets/image/favicon.ico"
 
-profile_picture: /images/rose-400-circle.png
-paginate: 7
-paginate_path: "/page/:num"
-tracking_id: UA-761764-8  # google analytics
-
-# Social Stuff | open graph and twitter cards
-og_image: "images/accent.png" # This will show in facebook thumbnails
-twitter_image: "http://ankitsultana.me/images/accent.png?1234" # This will show in twitter cards
-
-####################################
-####################################
-####################################
-### Build Settings | Don't Touch ###
-####################################
-####################################
-####################################
-
+# Build settings
 markdown: kramdown
-
+theme: jekyll-theme-cayman
 plugins:
-    - jekyll-paginate
-    - jekyll-gist
+  - jekyll-feed
+  - jekyll-gist
+  - jekyll-paginate-v2
 
-sass:
-    style: compressed
-    sass_dir: _sass
+# pagination settings
+pagination:
+  enabled: true
+  collection: 'posts'
+  per_page: 12
+  permalink: '/page/:num/'
+  sort_reverse: true
+  sort_field: 'date'
+  trail:
+    before: 2
+    after: 2
 
-# Scopes
-defaults:
-    -
-        scope:
-            path:   ""
-            type:   "pages"
-        values:
-            layout: "page"
-    -
-        scope:
-            path:   ""
-            type:   "posts"
-        values:
-            layout: "post"
-
-exclude: [vendor] # For travis ci
+# Exclude from processing.
+# The following items will not be processed, by default. Create a custom list
+# to override the default setting.
+exclude:
+   - Gemfile
+   - Gemfile.lock
+   - tmp
+#   - node_modules
+#   - vendor/bundle/
+#   - vendor/cache/
+#   - vendor/gems/
+#   - vendor/ruby/
