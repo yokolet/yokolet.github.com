@@ -1,4 +1,159 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.6">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2019-08-26T11:51:30-07:00</updated><id>/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Notes about programming</subtitle><entry><title type="html">Maximal Square and Rectangle</title><link href="/2017/06/16/maximal-area.html" rel="alternate" type="text/html" title="Maximal Square and Rectangle" /><published>2017-06-16T00:00:00-07:00</published><updated>2017-06-16T00:00:00-07:00</updated><id>/2017/06/16/maximal-area</id><content type="html" xml:base="/2017/06/16/maximal-area.html">&lt;h4 id=&quot;maximal-siblings&quot;&gt;Maximal Siblings&lt;/h4&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.6">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2019-08-28T21:34:21-07:00</updated><id>/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Notes about programming</subtitle><entry><title type="html">HackerRank Code Testing by Clojure</title><link href="/2019/08/28/hackerank-code-testing-by-clojure.html" rel="alternate" type="text/html" title="HackerRank Code Testing by Clojure" /><published>2019-08-28T16:20:00-07:00</published><updated>2019-08-28T16:20:00-07:00</updated><id>/2019/08/28/hackerank-code-testing-by-clojure</id><content type="html" xml:base="/2019/08/28/hackerank-code-testing-by-clojure.html">&lt;h4 id=&quot;hackerrank-code-testing-by-clojure&quot;&gt;HackerRank Code Testing by Clojure&lt;/h4&gt;
+
+&lt;p&gt;Recently, I decided to give Clojure a try.
+I used to write Clojure code for my day job, however, no Clojure at all for two years.
+Instead, almost all were done by Python.
+I became familiar with Python’s functional programming world now.
+Aside of ML/DL projects, I did bunch at HackerRank, leetcode or sort.
+After a while, I thought, “maybe I can solve problems by Clojure like Python…”&lt;/p&gt;
+
+&lt;p&gt;Luckily, HackerRank supports Clojure. So, I started.&lt;/p&gt;
+
+&lt;p&gt;Soon, I hit the wall. I wanted to test a code. Okay, writing test is not hard.
+Something quite hard was the HackerRank platform.
+Test data comes in from &lt;code class=&quot;highlighter-rouge&quot;&gt;STDIN&lt;/code&gt;. Something output to &lt;code class=&quot;highlighter-rouge&quot;&gt;STDOUT&lt;/code&gt; is tested.
+For many problems, it’s effective to have &lt;code class=&quot;highlighter-rouge&quot;&gt;read-line&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;println&lt;/code&gt; in the code side.&lt;/p&gt;
+
+&lt;p&gt;I did quite a lot of research and trials so that the code can be tested
+without any modification on HackerRank platform.
+This experience, setting up a testing environment was a good Clojure study.
+That’s why I wrote the blog post.
+This post may help other Clojure newbies to figure out how.&lt;/p&gt;
+
+&lt;h4 id=&quot;binding-stdin&quot;&gt;Binding &lt;code class=&quot;highlighter-rouge&quot;&gt;STDIN&lt;/code&gt;&lt;/h4&gt;
+
+&lt;p&gt;Clojure has &lt;a href=&quot;https://clojuredocs.org/clojure.core/binding&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;clojure.core/binding&lt;/code&gt;&lt;/a&gt; function.
+This function is used to create new bindings, which is like, replacing the current bindings.
+In Clojure, &lt;code class=&quot;highlighter-rouge&quot;&gt;STDIN&lt;/code&gt; is bind to &lt;code class=&quot;highlighter-rouge&quot;&gt;*in*&lt;/code&gt;.
+So, what should be done is to bind &lt;code class=&quot;highlighter-rouge&quot;&gt;*in*&lt;/code&gt; to something else.&lt;/p&gt;
+
+&lt;p&gt;Next question is what should be “something else.”&lt;/p&gt;
+
+&lt;p&gt;HackerRank test case is provided by a file.
+People can get the test data file if they pay 5 Hackos.
+The “Hackos” are points people can get when their solutions successfully pass all tests.
+Unless the problem is a very entry level, the test case file tends to pretty big.
+It’s unable to write the test data in the code often.
+For this reason, I wanted to get the test data from a file and bind it to &lt;code class=&quot;highlighter-rouge&quot;&gt;*in*&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;What I did was:&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;create a file under &lt;code class=&quot;highlighter-rouge&quot;&gt;resource&lt;/code&gt; directory&lt;/li&gt;
+  &lt;li&gt;read it as a resource&lt;/li&gt;
+  &lt;li&gt;convert it to a reader&lt;/li&gt;
+  &lt;li&gt;bind the reader to &lt;code class=&quot;highlighter-rouge&quot;&gt;*in*&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clojure.java.io&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:as&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;io&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;with-open&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rdr&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;io/reader&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;io/resource&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;binding&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;*in*&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rdr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Since the project was created by the &lt;a href=&quot;https://leiningen.org/&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;leningen&lt;/code&gt;&lt;/a&gt;,
+the &lt;code class=&quot;highlighter-rouge&quot;&gt;resources&lt;/code&gt; directory is already on the path. Just to give a relative file path
+as &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt;, the file is read. The &lt;code class=&quot;highlighter-rouge&quot;&gt;f&lt;/code&gt; is a function which consumes data from &lt;code class=&quot;highlighter-rouge&quot;&gt;STDIN&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h4 id=&quot;catching-stdout&quot;&gt;Catching &lt;code class=&quot;highlighter-rouge&quot;&gt;STDOUT&lt;/code&gt;&lt;/h4&gt;
+
+&lt;p&gt;Now, reading from &lt;code class=&quot;highlighter-rouge&quot;&gt;STDIN&lt;/code&gt; was cleared. Next will be to catch &lt;code class=&quot;highlighter-rouge&quot;&gt;STDOUT&lt;/code&gt;.
+Clojure has a convenient function &lt;a href=&quot;https://clojuredocs.org/clojure.core/with-out-str&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;clojure.core/with-out-str&lt;/code&gt;&lt;/a&gt;.
+Compared to a reading part, catching &lt;code class=&quot;highlighter-rouge&quot;&gt;STDOU&lt;/code&gt; was much easier.
+For example:&lt;/p&gt;
+
+&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;;; define function which prints to stdout&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;say-it&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;seriously?&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;can't believe&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; assign STDOUT to &quot;out&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;with-out-str&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;say-it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; what's in the &quot;out&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;seriously?\ncan't believe\n&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; 
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The same idea for the reading can be applied to &lt;code class=&quot;highlighter-rouge&quot;&gt;STDOUT&lt;/code&gt; – printing out to a file under &lt;code class=&quot;highlighter-rouge&quot;&gt;resources&lt;/code&gt; directory.
+However, in general, the expected output is simple for the HackerRank problems.
+At this moment, &lt;code class=&quot;highlighter-rouge&quot;&gt;with-out-str&lt;/code&gt; function satisfies my needs.&lt;/p&gt;
+
+&lt;h4 id=&quot;wrapping-tests&quot;&gt;Wrapping Tests&lt;/h4&gt;
+
+&lt;p&gt;So far, &lt;code class=&quot;highlighter-rouge&quot;&gt;STDIN&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;STDOUT&lt;/code&gt; work well to fit with the HackerRank platform.
+However, to bind resource reader to &lt;code class=&quot;highlighter-rouge&quot;&gt;STDIN&lt;/code&gt;, I should write &lt;code class=&quot;highlighter-rouge&quot;&gt;with-open ...&lt;/code&gt; in every test case. 
+I want to avoid writing the same lines again and again.
+After searching online, I found &lt;a href=&quot;https://clojuredocs.org/clojure.test/use-fixtures&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;clojure.test/use-fixtures&lt;/code&gt;&lt;/a&gt; function.
+This function works like Unit test’s &lt;code class=&quot;highlighter-rouge&quot;&gt;setUp()/tearDown()&lt;/code&gt; methods.
+As the Clojure API document explains:&lt;/p&gt;
+
+&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;my-test-fixture&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;create-db&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;   &lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; setUp&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;           &lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; test&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;destroy-db&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; tearDown&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;use-fixtures&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:once&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;my-test-fixture&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Define the fixture function, then call &lt;code class=&quot;highlighter-rouge&quot;&gt;use-fixture&lt;/code&gt; function.
+The tests in the same namespace are all wrapped by the fixture.&lt;/p&gt;
+
+&lt;p&gt;Below is an example test by the &lt;code class=&quot;highlighter-rouge&quot;&gt;use-fixture&lt;/code&gt; function.&lt;/p&gt;
+
+&lt;noscript&gt;&lt;pre&gt;;; A solution and test code for https://www.hackerrank.com/challenges/30-dictionaries-and-maps/problem
+
+;; test/thirty-days-code.core_test.clj
+(ns thirty-days-code.core-test
+  (:require [clojure.java.io :as io]
+            [clojure.test :refer :all]))
+
+(defn wrap-test [n f]
+  (with-open [rdr (io/reader (io/resource n))]
+    (binding [*in* rdr]
+      (f))))
+
+;; test/thirty_days_code.phone_number_test.clj
+(ns thirty-days-code.phone-number-test
+  (:require [clojure.test :refer :all]
+            [thirty-days-code.core-test :as core-test]
+            [thirty-days-code.phone-number :refer :all]))
+
+(defn phone-number-test-fixture [f]
+  (core-test/wrap-test &amp;quot;test-data/phone-number.txt&amp;quot; f))
+(use-fixtures :once phone-number-test-fixture)
+
+(def expected &amp;quot;sam=99912222\nNot found\nharry=12299933\n&amp;quot;)
+(deftest phone-number-test
+  (testing &amp;quot;given a name should find a phone number&amp;quot;
+    (let [result (with-out-str (phone-number))]
+      (is (= expected result)))))
+
+;; solution
+;; src/thirty_days_code.phone_number.clj
+(ns thirty-days-code.phone-number)
+
+(defn phone-number []
+  (let [n (Integer/parseInt (clojure.string/trim (read-line)))
+        book (reduce (fn [acc line]
+                       (let [l (clojure.string/trim line)
+                             [k v] (clojure.string/split l #&amp;quot;\s+&amp;quot;)]
+                         (assoc acc k (str k &amp;quot;=&amp;quot; v))))
+                     {}
+                     (repeatedly n #(read-line)))]
+    (doseq [q (line-seq (java.io.BufferedReader. *in*))]
+      (println (get book q &amp;quot;Not found&amp;quot;)))))&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/yokolet/efad0031c483bcc77ea9ada37e708db2.js&quot;&gt; &lt;/script&gt;
+
+&lt;h4 id=&quot;gotchas&quot;&gt;Gotchas&lt;/h4&gt;
+
+&lt;p&gt;The function &lt;code class=&quot;highlighter-rouge&quot;&gt;use-fixture&lt;/code&gt; made my test code simple. It’s good.
+However, it has a downside.
+Some problems provide multiple test cases, which means multiple resource files on my test environment.
+Since only one &lt;code class=&quot;highlighter-rouge&quot;&gt;use-fixture&lt;/code&gt; is applied to all tests in the same namespace,
+my &lt;code class=&quot;highlighter-rouge&quot;&gt;wrap-test&lt;/code&gt; and fixture design don’t work nicely.
+There should be a way to cope with this problem.
+It will be my next challenge.&lt;/p&gt;
+
+&lt;p&gt;If you are interested, my solution and test code for &lt;a href=&quot;https://www.hackerrank.com/domains/tutorials/30-days-of-code&quot;&gt;30 Days of Code&lt;/a&gt;
+are in my repository, &lt;a href=&quot;https://github.com/yokolet/thirty-day-code&quot;&gt;thirty-day-code&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">HackerRank Code Testing by Clojure</summary></entry><entry><title type="html">Maximal Square and Rectangle</title><link href="/2017/06/16/maximal-area.html" rel="alternate" type="text/html" title="Maximal Square and Rectangle" /><published>2017-06-16T00:00:00-07:00</published><updated>2017-06-16T00:00:00-07:00</updated><id>/2017/06/16/maximal-area</id><content type="html" xml:base="/2017/06/16/maximal-area.html">&lt;h4 id=&quot;maximal-siblings&quot;&gt;Maximal Siblings&lt;/h4&gt;
 
 &lt;p&gt;A bunch of algorithm questions take a style of “maximum is a good thing.”
 Maximal sum, maximal length or maximal size are examples.
@@ -2730,252 +2885,4 @@ When traversal reaches to the bottom right index, table[m - 1][n - 1], the answe
   &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/count-possible-paths-top-left-bottom-right-nxm-matrix/&quot;&gt;Count all possible paths from top left to bottom right of a mXn matrix&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;http://algorithms.tutorialhorizon.com/dynamic-programming-count-all-paths-from-top-left-to-bottom-right-of-a-mxn-matrix/&quot;&gt;Count all paths from top left to bottom right of a mXn matrix&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2014/05/leetcode-unique-paths-java/&quot;&gt;Unique Paths&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">Count Ways Problems</summary></entry><entry><title type="html">Palindromic Substring</title><link href="/2017/05/30/palindromic-substring.html" rel="alternate" type="text/html" title="Palindromic Substring" /><published>2017-05-30T00:00:00-07:00</published><updated>2017-05-30T00:00:00-07:00</updated><id>/2017/05/30/palindromic-substring</id><content type="html" xml:base="/2017/05/30/palindromic-substring.html">&lt;h4 id=&quot;palindromic-substring-problems&quot;&gt;Palindromic Substring Problems&lt;/h4&gt;
-
-&lt;p&gt;Palindrome is, like “racecar,” a reversed and the original are exactly the same string.
-I see many types of palindrome related problems.
-Sometime, problems are based on palindromic &lt;em&gt;substrings&lt;/em&gt;.
-Sometime, those are palindromic &lt;em&gt;subsequences&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;The most typical problem is asking the longest palindromic substring or subsequence.
-However, not just the longest, asking paritions is another popular problem.
-As for partition problems, palindromes should be substrings.
-This kind of problems can be solved by a dynamic programming.
-The dynamic programming solution creates a truthy table which will have trues
-when the index i to j is a palindrom.&lt;/p&gt;
-
-&lt;p&gt;I’m going to write down three types of palindromic substring related problems:
-the longest, minimum cuts, and printing all palindromic partitions.&lt;/p&gt;
-
-&lt;h4 id=&quot;problem-description&quot;&gt;Problem Description&lt;/h4&gt;
-
-&lt;p&gt;Always, a string will be given to this sort of problems, for example, “aabcbd.”
-That’s it for an input.
-Then, problems ask what should be found: the longest, min cut (also partitions), print all palindromic partitions, etc.
-The longest is relatively easy problem since there’s only one the longest palindrome.
-Theoretically, multiple longests are possible.
-But, normally if one longest is found, that’s the answer.
-For example, “aabcbd” is given, the answer is “bcb.”&lt;/p&gt;
-
-&lt;p&gt;Min cut is more diffucult. It requires an optimal partitioning.
-Since a length one string is a palindrome, [a | a | b | c | b | d] (5 cuts) is one of the
-partitioning based on palindrome.
-However, it’s obvious 5-cut isn’t the optimal. [aa | bcd | d] (2 cuts) is the answer.&lt;/p&gt;
-
-&lt;p&gt;Printing all palindromic partitions is way more difficult.
-Some solutions don’t take a dynamic programming approach, like in the
-“&lt;a href=&quot;http://www.geeksforgeeks.org/given-a-string-print-all-possible-palindromic-partition/&quot;&gt;Given a string, print all possible palindromic partitions&lt;/a&gt;.”
-When a dynamic approach is chosen, the solution will be two steps.&lt;/p&gt;
-&lt;ol&gt;
-  &lt;li&gt;create a table to find palindromes.&lt;/li&gt;
-  &lt;li&gt;recursively iterate the given string looking at the palindrome table.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;The answer for “aabcbd” will be:
-&lt;code class=&quot;highlighter-rouge&quot;&gt;[[a, a, b, c, b, d], [a, a, bcb, d], [aa, b, c, b, d], [aa, bcb, d]]&lt;/code&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;the-idea-to-create-a-truthy-table&quot;&gt;The idea to create a truthy table&lt;/h4&gt;
-
-&lt;p&gt;The truthy table is a key to solve this kind of problems by a dynamic programming.
-The table saves true/false, whether index i to j is a palindrome or not.
-Values in the table are so-called, “states,” of the dynamic programming.&lt;/p&gt;
-
-&lt;p&gt;The table will be created expanding the range one by one, also shifting the
-starting index one by one.
-When filling out the table, a direction is diagonal, from upper left to lower right.&lt;/p&gt;
-
-&lt;pre&gt;
-
-   a a b c b d
-   _ _ _ _ _ _
-a |\ \ \ \ \ \
-a |  \ \ \ \ \
-b |    \ \ \ \
-c |      \ \ \
-b |        \ \
-d |          \
-
-&lt;/pre&gt;
-
-&lt;p&gt;Going on by diagonal, i j indices will be incremented with an extra index k.
-The k expresses a length of substring.&lt;/p&gt;
-
-&lt;pre&gt;
-for (int k = 3; k &amp;lt;= n; k++) {
-    for (int i = 0; i &amp;lt; n - k + 1; i++) {
-        int j = i + k - 1;
-	    table[i][j] = ...
-    }
-}
-&lt;/pre&gt;
-
-&lt;p&gt;The way to expand the length and check whether substring is a palindrome or not will be proceeded like this:&lt;/p&gt;
-
-&lt;pre&gt;
-
-    a a b c b d       a a b c b d       a a b c b d       a a b c b d       a a b c b d       a a b c b d
-    0 1 2 3 4 5       0 1 2 3 4 5       0 1 2 3 4 5       0 1 2 3 4 5       0 1 2 3 4 5       0 1 2 3 4 5
-    _ _ _ _ _ _       _ _ _ _ _ _       _ _ _ _ _ _       _ _ _ _ _ _       _ _ _ _ _ _       - - - - - -
-a 0|T             a 0|T T           a 0|T T F         a 0|T T F F       a 0|T T F F F     a 0|T T F F F F
-a 1|  T           a 1|  T F         a 1|  T F F       a 1|  T F F F     a 1|  T F F F F   a 1|  T F F F F
-b 2|    T         b 2|    T F       b 2|    T F T     b 2|    T F F F   b 2|    T F T F   b 2|    T F T F
-c 3|      T       c 3|      T F     c 3|      T F F   c 3|      T F F   c 3|      T F F   c 3|      T F F
-b 4|        T     b 4|        T F   b 4|        T F   b 4|        T F   b 4|        T F   b 4|        T F
-ff5|          T   d 5|          T   d 5|          T   d 5|          T   d 5|          T   d 5|          T
-
-&lt;/pre&gt;
-
-&lt;p&gt;The logic to check whether the substring from index i to j is a palindrome or not is:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;if characters at index i and j are the same,&lt;/li&gt;
-  &lt;li&gt;if a previous state (saved at index i + 1 and j - 1) is true,&lt;/li&gt;
-  &lt;li&gt;the position at index i and j will be true.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h4 id=&quot;the-idea-to-find-the-longest&quot;&gt;The idea to find the longest&lt;/h4&gt;
-
-&lt;p&gt;The table saves whether the substring of index i to j is a palindrome or not.
-Given that, when the value is true, i - j + 1 is the length of palindrome.
-Checking all true positions and compare the length will give me the answer.&lt;/p&gt;
-
-&lt;h4 id=&quot;the-idea-to-find-minimum-cuts&quot;&gt;The idea to find minimum cuts&lt;/h4&gt;
-
-&lt;p&gt;The same as the longest problem, minimum cuts sees the table.
-The cuts happens when the last character of the substring doesn’t form the palindrome.
-Otherwise, the boundary should be expanded one by one.&lt;/p&gt;
-
-&lt;h4 id=&quot;the-idea-to-print-all-palindromic-substrings&quot;&gt;The idea to print all palindromic substrings&lt;/h4&gt;
-
-&lt;p&gt;Likewise, looking at table, adds palindrome one by one, shifting the starting index.
-In this case, depth first search by recursion will be a good way to find palindromes
-from the rest of the substring.&lt;/p&gt;
-
-&lt;h4 id=&quot;java-code&quot;&gt;Java code&lt;/h4&gt;
-
-&lt;p&gt;Below is the Java code to find means anytime.&lt;/p&gt;
-
-&lt;noscript&gt;&lt;pre&gt;import java.util.ArrayList;
-import java.util.List;
-
-public class PalindromicSubstring {
-    static boolean[][] partition(String s) {
-        int n = s.length();
-        boolean[][] memo = new boolean[n][n];
-
-        // initialize
-        // length one string is a palindrome
-        for (int i = 0; i &amp;lt; n; i++) {
-            memo[i][i] = true;
-        }
-
-        // check length 2 substring
-        for (int i = 0; i &amp;lt; n - 1; i++) {
-            if (s.charAt(i) == s.charAt(i + 1)) {
-                memo[i][i + 1] = true;
-            }
-        }
-
-        // fill the rest
-        for (int k = 3; k &amp;lt;= n; k++) {
-            for (int i = 0; i &amp;lt; n - k + 1; i++) {
-                int j = i + k - 1;
-                if (s.charAt(i) == s.charAt(j) &amp;amp;&amp;amp; memo[i + 1][j - 1]) {
-                    memo[i][j] = true;
-                }
-            }
-        }
-        return memo;
-    }
-
-    static String findLongest(boolean[][] memo, String s) {
-        int n = s.length();
-        int start = 0;
-        int maxLen = 0;
-        for (int i = 0; i &amp;lt; n; i++) {
-            for (int j = i + 1; j &amp;lt; n; j++) {
-                if (memo[i][j]) {
-                    int len = j - i + 1;
-                    if (len &amp;gt; maxLen) {
-                        start = i;
-                        maxLen = len;
-                    }
-                }
-            }
-        }
-        return s.substring(start, start + maxLen);
-    }
-
-    static int findMinCuts(boolean[][] memo, String s) {
-        int n = s.length();
-        int[] cut = new int[n];
-        for (int i = 0; i &amp;lt; n; i++) {
-            if (memo[0][i]) {
-                cut[i] = 0;
-            } else {
-                cut[i] = Integer.MAX_VALUE;
-                for (int j = 0; j &amp;lt; i; j++) {
-                    if (memo[j + 1][i] &amp;amp;&amp;amp; cut[i] &amp;gt; cut[j] + 1) {
-                        cut[i] = cut[j] + 1;
-                    }
-                }
-            }
-        }
-        return cut[n - 1];
-    }
-
-    static void findPalindromes(boolean[][] memo, List&amp;lt;List&amp;lt;String&amp;gt;&amp;gt; result,
-                                String sub, List&amp;lt;String&amp;gt; cur, int index) {
-        if (index == sub.length()) {
-            result.add(new ArrayList(cur));
-        }
-
-        for (int i = index; i &amp;lt; sub.length(); i++) {
-            if (memo[index][i]) {
-                cur.add(sub.substring(index, i + 1));
-                findPalindromes(memo, result, sub, cur, i + 1);
-                cur.remove(cur.size() - 1);
-            }
-        }
-    }
-
-    static List&amp;lt;List&amp;lt;String&amp;gt;&amp;gt; printAllPalindromicPartitions(boolean[][] memo, String s) {
-        List&amp;lt;List&amp;lt;String&amp;gt;&amp;gt; result = new ArrayList();
-        findPalindromes(memo, result, s, new ArrayList(), 0);
-        return result;
-    }
-
-    public static void main(String[] args) {
-        String s = &amp;quot;aab&amp;quot;;
-        boolean[][] memo = partition(s);
-        System.out.println(&amp;quot;longest: &amp;quot; + findLongest(memo, s));
-        System.out.println(&amp;quot;min cuts: &amp;quot; + findMinCuts(memo, s));
-        System.out.println(&amp;quot;all: &amp;quot; + printAllPalindromicPartitions(memo, s));
-
-        s = &amp;quot;aabcbd&amp;quot;;
-        memo = partition(s);
-        System.out.println(&amp;quot;longest: &amp;quot; + findLongest(memo, s));
-        System.out.println(&amp;quot;min cuts: &amp;quot; + findMinCuts(memo, s));
-        System.out.println(&amp;quot;all: &amp;quot; + printAllPalindromicPartitions(memo, s));
-    }
-}&lt;/pre&gt;&lt;/noscript&gt;
-&lt;script src=&quot;https://gist.github.com/yokolet/3e9c879f1ca0a8e3775100bb22bb66fa.js&quot;&gt; &lt;/script&gt;
-
-&lt;p&gt;The result is:&lt;/p&gt;
-
-&lt;pre&gt;
-longest: aa
-min cuts: 1
-all: [[a, a, b], [aa, b]]
-longest: bcb
-min cuts: 2
-all: [[a, a, b, c, b, d], [a, a, bcb, d], [aa, b, c, b, d], [aa, bcb, d]]
-&lt;/pre&gt;
-
-&lt;h4 id=&quot;resources&quot;&gt;Resources&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2013/12/leetcode-solution-of-longest-palindromic-substring-java/&quot;&gt;Longest Palindromic Substring&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/dynamic-programming-set-17-palindrome-partitioning/&quot;&gt;Palindrome Partitioning&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/given-a-string-print-all-possible-palindromic-partition/&quot;&gt;Given a string, print all possible palindromic partitions&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">Palindromic Substring Problems</summary></entry></feed>
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Count Ways Problems</summary></entry></feed>
