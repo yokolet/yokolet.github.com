@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang=" en-US">
+<head>
+
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+
+      gtag('js', new Date());
+      gtag('config', 'UA-761764-8');
+    </script>
+    
+    <meta charset="UTF-8">
+
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Prime Check of a Big Number | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="Prime Check of a Big Number" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="The Problem" />
+<meta property="og:description" content="The Problem" />
+<link rel="canonical" href="/2019/09/04/prime-check-of-a-big-number.html" />
+<meta property="og:url" content="/2019/09/04/prime-check-of-a-big-number.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-09-04T21:05:00-07:00" />
+<script type="application/ld+json">
+{"url":"/2019/09/04/prime-check-of-a-big-number.html","headline":"Prime Check of a Big Number","dateModified":"2019-09-04T21:05:00-07:00","datePublished":"2019-09-04T21:05:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"/2019/09/04/prime-check-of-a-big-number.html"},"description":"The Problem","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/assets/css/all.css?v=">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    
+        <link rel="icon" type="image/ico" href="/assets/image/favicon.ico">
+    
+</head>
+<body>
+<header class="page-header" role="banner">
+    <div class="nav">
+        
+            <a href="/" class="btn back"><i class="fas fa-chevron-circle-left"></i> Back</a>
+        
+        
+            <a href="/about/" class="btn">About <i class="fas fa-info-circle"></i></a>
+        
+    </div>
+    <h1 class="project-name">yokolet's notelets</h1>
+    <h2 class="project-tagline">Notes about programming</h2>
+
+    
+</header>
+
+<main id="content" class="main-content" role="main">
+    <div class="content container">
+    <div class="post-date">
+        <time>September 04, 2019 </time>
+    </div>
+    <h1 class="post-title">Prime Check of a Big Number</h1>
+    <h4 id="the-problem">The Problem</h4>
+
+<p>“Given an integer <code class="highlighter-rouge">n</code>, find whether <code class="highlighter-rouge">n</code> is a prime number or not” – This is a typical
+algorithm question.
+If the given number is small, repeating a division from 2 to <code class="highlighter-rouge">n</code> gives the answer.</p>
+
+<p>A better solution would be to stop looping at square root of <code class="highlighter-rouge">n</code>.
+Suppose the given number <code class="highlighter-rouge">n</code> is not a prime number (composite number), the <code class="highlighter-rouge">n</code> has
+two numbers <code class="highlighter-rouge">a, b</code> where <code class="highlighter-rouge">n = ab</code>.
+From the equation, both <code class="highlighter-rouge">a</code> and <code class="highlighter-rouge">b</code> should be equal to or less than square root of <code class="highlighter-rouge">n</code>.
+So, if the factor of <code class="highlighter-rouge">n</code> exists, the factor should be the equal to or less than square root of <code class="highlighter-rouge">n</code>.
+Checking the number up to square root of <code class="highlighter-rouge">n</code> is enough to find <code class="highlighter-rouge">n</code> is prime or not.</p>
+
+<p>However, looping over up to square root of <code class="highlighter-rouge">n</code> runs slow still once the given number becomes bigger.
+Well-known faster algorithm is the Sieve of Eratosthenes (<a href="https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Wikipedia</a>).
+The algorithm starts from a boolean array of size n initialized by <code class="highlighter-rouge">true</code> value.
+The iteration goes from 2 to n while crossing out all multiples of 2, then 3, 5, … (set <code class="highlighter-rouge">false</code> to all multiples of 2, 3, 5…).
+In the end, if the last array element is true, the given number <code class="highlighter-rouge">n</code> is confirmed the prime number.</p>
+
+<p>The problem of the Sieve of Eratosthenes is a memory consumption.
+HackerRank problem has teasing test cases of <code class="highlighter-rouge">100000003</code> and <code class="highlighter-rouge">1000000007</code>.
+Those numbers easily cause memory out of error.
+The naive looping approach ends up in a timeout failure.</p>
+
+<h4 id="combination-of-sieve-and-looping">Combination of Sieve and Looping</h4>
+
+<p>There should be plenty of solutions to find a given big number is a prime or not.
+What came up in my mind is a combination of the sieve and looping over.
+The first step is to find all prime numbers up to square root of the given number using the sieve.
+The second step is to loop over the division by prime numbers found in the first step.
+This solution has the time complexity of O(square root of n), which made all HackerRank test cases pass.
+The solution would be a good entry here as my memo.</p>
+
+<noscript><pre>import java.util.*;
+
+public class PrimeNumber {
+
+    private List&lt;Integer&gt; sieve(int m) {
+        List&lt;Integer&gt; p = new ArrayList&lt;Integer&gt;();
+        if (m &lt;= 1) { return p; }
+        boolean[] ary = new boolean[m+1];
+        Arrays.fill(ary, 2, m+1, true);
+        for (int i = 2; i &lt;= m; i++) {
+            if (ary[i]) {
+                p.add(i);
+                for (int j = i * 2; j &lt;= m; j += i) {
+                    ary[j] = false;
+                }
+            }
+        }
+        return p;
+    }
+
+    private boolean checkPrime(int n, List&lt;Integer&gt; p) {
+        if (p.size() == 0) { return true; }
+        for (int i = p.size()-1; i &gt;= 0; i--) {
+            if (n % p.get(i) == 0) { return false; }
+        }
+        return true;
+    }
+    
+    public String isPrime(int n) {
+        if (n &lt;= 1) { return &quot;Not prime&quot;; }
+        int m = (int)Math.sqrt(n);
+        List&lt;Integer&gt; primes = sieve(m);
+        return checkPrime(n, primes) ? &quot;Prime&quot; : &quot;Not prime&quot;;
+    }
+}</pre></noscript>
+<script src="https://gist.github.com/yokolet/6a16de49404c7306019b052cdb7b9401.js"> </script>
+
+
+</div>
+
+    <footer class="site-footer">
+        <h3> Copyright &copy; Yoko Harada</h3>
+        
+        <span class="site-footer-owner"><i class="fab fa-github-alt"></i>
+            <a href="https://github.com/yokolet/yokolet.github.com">yokolet.com</a>
+        </span>
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+    </footer>
+</main>
+</body>
+</html>

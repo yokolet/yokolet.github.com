@@ -1,4 +1,72 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.6">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2019-08-28T21:34:21-07:00</updated><id>/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Notes about programming</subtitle><entry><title type="html">HackerRank Code Testing by Clojure</title><link href="/2019/08/28/hackerank-code-testing-by-clojure.html" rel="alternate" type="text/html" title="HackerRank Code Testing by Clojure" /><published>2019-08-28T16:20:00-07:00</published><updated>2019-08-28T16:20:00-07:00</updated><id>/2019/08/28/hackerank-code-testing-by-clojure</id><content type="html" xml:base="/2019/08/28/hackerank-code-testing-by-clojure.html">&lt;h4 id=&quot;hackerrank-code-testing-by-clojure&quot;&gt;HackerRank Code Testing by Clojure&lt;/h4&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.6">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2019-09-04T22:52:16-07:00</updated><id>/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Notes about programming</subtitle><entry><title type="html">Prime Check of a Big Number</title><link href="/2019/09/04/prime-check-of-a-big-number.html" rel="alternate" type="text/html" title="Prime Check of a Big Number" /><published>2019-09-04T21:05:00-07:00</published><updated>2019-09-04T21:05:00-07:00</updated><id>/2019/09/04/prime-check-of-a-big-number</id><content type="html" xml:base="/2019/09/04/prime-check-of-a-big-number.html">&lt;h4 id=&quot;the-problem&quot;&gt;The Problem&lt;/h4&gt;
+
+&lt;p&gt;“Given an integer &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt;, find whether &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt; is a prime number or not” – This is a typical
+algorithm question.
+If the given number is small, repeating a division from 2 to &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt; gives the answer.&lt;/p&gt;
+
+&lt;p&gt;A better solution would be to stop looping at square root of &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt;.
+Suppose the given number &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt; is not a prime number (composite number), the &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt; has
+two numbers &lt;code class=&quot;highlighter-rouge&quot;&gt;a, b&lt;/code&gt; where &lt;code class=&quot;highlighter-rouge&quot;&gt;n = ab&lt;/code&gt;.
+From the equation, both &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;b&lt;/code&gt; should be equal to or less than square root of &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt;.
+So, if the factor of &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt; exists, the factor should be the equal to or less than square root of &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt;.
+Checking the number up to square root of &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt; is enough to find &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt; is prime or not.&lt;/p&gt;
+
+&lt;p&gt;However, looping over up to square root of &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt; runs slow still once the given number becomes bigger.
+Well-known faster algorithm is the Sieve of Eratosthenes (&lt;a href=&quot;https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes&quot;&gt;Wikipedia&lt;/a&gt;).
+The algorithm starts from a boolean array of size n initialized by &lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt; value.
+The iteration goes from 2 to n while crossing out all multiples of 2, then 3, 5, … (set &lt;code class=&quot;highlighter-rouge&quot;&gt;false&lt;/code&gt; to all multiples of 2, 3, 5…).
+In the end, if the last array element is true, the given number &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt; is confirmed the prime number.&lt;/p&gt;
+
+&lt;p&gt;The problem of the Sieve of Eratosthenes is a memory consumption.
+HackerRank problem has teasing test cases of &lt;code class=&quot;highlighter-rouge&quot;&gt;100000003&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;1000000007&lt;/code&gt;.
+Those numbers easily cause memory out of error.
+The naive looping approach ends up in a timeout failure.&lt;/p&gt;
+
+&lt;h4 id=&quot;combination-of-sieve-and-looping&quot;&gt;Combination of Sieve and Looping&lt;/h4&gt;
+
+&lt;p&gt;There should be plenty of solutions to find a given big number is a prime or not.
+What came up in my mind is a combination of the sieve and looping over.
+The first step is to find all prime numbers up to square root of the given number using the sieve.
+The second step is to loop over the division by prime numbers found in the first step.
+This solution has the time complexity of O(square root of n), which made all HackerRank test cases pass.
+The solution would be a good entry here as my memo.&lt;/p&gt;
+
+&lt;noscript&gt;&lt;pre&gt;import java.util.*;
+
+public class PrimeNumber {
+
+    private List&amp;lt;Integer&amp;gt; sieve(int m) {
+        List&amp;lt;Integer&amp;gt; p = new ArrayList&amp;lt;Integer&amp;gt;();
+        if (m &amp;lt;= 1) { return p; }
+        boolean[] ary = new boolean[m+1];
+        Arrays.fill(ary, 2, m+1, true);
+        for (int i = 2; i &amp;lt;= m; i++) {
+            if (ary[i]) {
+                p.add(i);
+                for (int j = i * 2; j &amp;lt;= m; j += i) {
+                    ary[j] = false;
+                }
+            }
+        }
+        return p;
+    }
+
+    private boolean checkPrime(int n, List&amp;lt;Integer&amp;gt; p) {
+        if (p.size() == 0) { return true; }
+        for (int i = p.size()-1; i &amp;gt;= 0; i--) {
+            if (n % p.get(i) == 0) { return false; }
+        }
+        return true;
+    }
+    
+    public String isPrime(int n) {
+        if (n &amp;lt;= 1) { return &amp;quot;Not prime&amp;quot;; }
+        int m = (int)Math.sqrt(n);
+        List&amp;lt;Integer&amp;gt; primes = sieve(m);
+        return checkPrime(n, primes) ? &amp;quot;Prime&amp;quot; : &amp;quot;Not prime&amp;quot;;
+    }
+}&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/yokolet/6a16de49404c7306019b052cdb7b9401.js&quot;&gt; &lt;/script&gt;</content><author><name></name></author><summary type="html">The Problem</summary></entry><entry><title type="html">HackerRank Code Testing by Clojure</title><link href="/2019/08/28/hackerank-code-testing-by-clojure.html" rel="alternate" type="text/html" title="HackerRank Code Testing by Clojure" /><published>2019-08-28T16:20:00-07:00</published><updated>2019-08-28T16:20:00-07:00</updated><id>/2019/08/28/hackerank-code-testing-by-clojure</id><content type="html" xml:base="/2019/08/28/hackerank-code-testing-by-clojure.html">&lt;h4 id=&quot;hackerrank-code-testing-by-clojure&quot;&gt;HackerRank Code Testing by Clojure&lt;/h4&gt;
 
 &lt;p&gt;Recently, I decided to give Clojure a try.
 I used to write Clojure code for my day job, however, no Clojure at all for two years.
@@ -2566,323 +2634,4 @@ public class RemoveInvalidParentheses {
   &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/remove-invalid-parentheses/&quot;&gt;Remove Invalid Parentheses (GeeksforGeeks)&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2014/05/leetcode-remove-invalid-parentheses-java/&quot;&gt;Remove Invalid Parentheses (Program Creek)&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://kennyzhuang.gitbooks.io/algorithms-collection/content/remove_invalid_parentheses1.html&quot;&gt;Remove Invalid Parentheses (Algorithms Collection)&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">Simple Problem Yet Complicated Solution</summary></entry><entry><title type="html">Count Ways to Do [something]</title><link href="/2017/06/01/count-ways.html" rel="alternate" type="text/html" title="Count Ways to Do [something]" /><published>2017-06-01T00:00:00-07:00</published><updated>2017-06-01T00:00:00-07:00</updated><id>/2017/06/01/count-ways</id><content type="html" xml:base="/2017/06/01/count-ways.html">&lt;h4 id=&quot;count-ways-problems&quot;&gt;Count Ways Problems&lt;/h4&gt;
-
-&lt;p&gt;“Count how may ways to do …” is one type of alogrithm questions.
-For example, count ways to climb up stairs, count ways to make sum by given coins, 
-or count ways to reach from top left to bottom right corner.&lt;/p&gt;
-
-&lt;p&gt;For this type of problem, recursion and dynamic programming are often used.
-The recursion is an instintictive solution and understandable.
-However, sometime, its performance goes really worse, say, exponential.
-While the dynamic programming solution stays on O(n^2) time complexity.&lt;/p&gt;
-
-&lt;p&gt;The count ways problems have a similar idea with bits of variations.
-Not to confuse those, I’m going to write a memo about three problems:
-climbimg stairs, coin change, and unique paths.&lt;/p&gt;
-
-&lt;h4 id=&quot;problem-description---climbing-stairs&quot;&gt;Problem Description - Climbing Stairs&lt;/h4&gt;
-
-&lt;p&gt;“Given two integers, m (number of steps) and n (number of stairs),
-find how many ways to climbing up the stair”
-is a typical problem of this sort.
-The steps can be any number between 1 to m.&lt;/p&gt;
-
-&lt;p&gt;For example, m = 3 and n = 5 are given,
-possible ways are 13 in total.&lt;/p&gt;
-
-&lt;pre&gt;
-
-                                         0
-
-                       /                 |        \
-                     /                   |          \
-                   /                     |            \
-                  1                      2             3
-            /     |     \          /     |   \         |  \
-          /       |       \      /       |     \       |   \
-         1        2        3    1        2     [3]     1   [2]
-      /  | \      | \      |    | \      |             |
-    /    |   \    |   \    |    |   \    |             |
-   1     2   [3]  1   [2] [1]   1   [2] [1]           [1]
-  / \    |        |             |
- 1  [2] [1]      [1]           [1]
- |
-[1]
-
-[1, 1, 1, 1, 1], [1, 1, 1, 2], [1, 1, 2, 1], [1, 1, 3], [1, 2, 1, 1], [1, 2, 2], [1, 3, 1]
-[2, 1, 1, 1], [2, 1, 2], [2, 2, 1], [2, 3],
-[3, 1, 1], [3, 2]
-&lt;/pre&gt;
-
-&lt;p&gt;As in the above, 2 -&amp;gt; 3 and 3 -&amp;gt; 2 are different.
-The order of steps taken matters for this problem.&lt;/p&gt;
-
-&lt;h4 id=&quot;the-idea-to-solve-climbing-stairs&quot;&gt;The idea to solve climbing stairs&lt;/h4&gt;
-
-&lt;p&gt;Since I took a dynamic programming approach, I used an auxiliary array to save states.
-The auxiliary array has a length of n + 1 to have an initialization parameter.
-The index 0 and 1 of the array (&lt;code class=&quot;highlighter-rouge&quot;&gt;memo&lt;/code&gt;) is initialized with the value 1.
-Then, the array will be filled out one by one while increasing number of stairs one by one.
-Below describes how the auxiliary array (&lt;code class=&quot;highlighter-rouge&quot;&gt;memo[i]&lt;/code&gt;) will be changed in case of  m = 3 and n = 4.&lt;/p&gt;
-
-&lt;pre&gt;
-
-
-stairs 0   1            2                   3                          4
-
-       0   0            0                   0                          0
-           |          /   \            /    |   \                /     |     \
-           1         1     2          1     2    3              1      2      3
-                     |              /   \   |                 / | \    | \    |
-                     1             1     2  1               /   |  \   |  \   |
-                                   |                       1    2   3  1   2  1
-                                   1                     /   \  |      |
-                                                        1     2 1      1
-                                                        |
-                                                        1
-
-memo(state)
-[1, 1, 0, 0, 0]   [1, 1, 2, 0, 0]   [1, 1, 2, 4, 0]          [1, 1, 2, 4, 7]
-
-&lt;/pre&gt;
-
-&lt;h4 id=&quot;java-code-for-climbing-stairs&quot;&gt;Java code for climbing stairs&lt;/h4&gt;
-
-&lt;p&gt;Here’s the code to count ways to climbing stairs.&lt;/p&gt;
-
-&lt;noscript&gt;&lt;pre&gt;public class CountWaysToClimbStairs {
-    // M: steps, 1, 2, 3, ..., M
-    // N: stairs, nth
-    static int countWays(int m, int n) {
-        if (n &amp;lt; 2) {
-            return 1;
-        }
-        int[] memo = new int[n + 1];
-        // initialize
-        memo[0] = 1;
-        memo[1] = 1;
-        // fill the rest
-        for (int i = 2; i &amp;lt;= n; i++) {
-            for (int j = 1; j &amp;lt;= m &amp;amp;&amp;amp; j &amp;lt;= i; j++) {
-                memo[i] += memo[i - j];
-            }
-        }
-        return memo[n];
-    }
-
-    public static void main(String[] args) {
-        int M = 3;
-        int N = 5;
-        System.out.println(countWays(M, N));
-        M = 3;
-        N = 4;
-        System.out.println(countWays(M, N));
-        M = 3;
-        N = 3;
-        System.out.println(countWays(M, N));
-    }
-}
-&lt;/pre&gt;&lt;/noscript&gt;
-&lt;script src=&quot;https://gist.github.com/yokolet/1cf65d7dc89c17f43123363f581985af.js&quot;&gt; &lt;/script&gt;
-
-&lt;p&gt;The result is:&lt;/p&gt;
-
-&lt;pre&gt;
-13
-7
-4
-&lt;/pre&gt;
-
-&lt;h4 id=&quot;problem-description---coin-change&quot;&gt;Problem Description - Coin Change&lt;/h4&gt;
-
-&lt;p&gt;“Given coins (or denominators) and sum, find how many ways to make the sum”
-is a common problem description.
-Mostly, infinite number of each coins are available to make the sum.
-Sometime, there’s a limitation of available coins.
-However, basic idea is the same.&lt;/p&gt;
-
-&lt;p&gt;For example, coins = &lt;code class=&quot;highlighter-rouge&quot;&gt;[1, 2, 3]&lt;/code&gt; and sum = 5 are given,
-possible ways of making sum of 5 will be:
-&lt;code class=&quot;highlighter-rouge&quot;&gt;[1, 1, 1, 1, 1], [1, 1, 1, 2], [1, 2, 2], [1, 1, 3], [2, 3]&lt;/code&gt;
-So, the answer is 5.&lt;/p&gt;
-
-&lt;p&gt;There’s a very similar, but different coin change problem.
-Another coin change problem asks minimum number of coins to make a given sum.
-This is not what I’m going to write here.
-This memo is about how many combinations are there.&lt;/p&gt;
-
-&lt;h4 id=&quot;the-idea-for-coin-change&quot;&gt;The idea for coin change&lt;/h4&gt;
-
-&lt;p&gt;Like climbing stairs, I took a dynamic programming approach, I used an auxiliary table
-to save states.
-The auxiliary table (&lt;code class=&quot;highlighter-rouge&quot;&gt;memo&lt;/code&gt;) has a size [number of coins + 1] x [sum + 1].
-Plus one is to have initialization parameters.
-Table’s first column means sum = 0 and initialized with 1.
-This is because sum = 0 can be created by an empty set.
-Table’s first row (except 0) means no coins.
-The first row form 1 to sum + 1 will be initialized with 0.
-Then fill the rest of the table.
-The value, &lt;code class=&quot;highlighter-rouge&quot;&gt;memo[i][j]&lt;/code&gt; shows a number of patters to make sum j using coins[0] to coiins[i - 1].&lt;/p&gt;
-
-&lt;p&gt;If coins = &lt;code class=&quot;highlighter-rouge&quot;&gt;[1, 2, 3]&lt;/code&gt; and sum = 5 are given, the final auxiliary table, &lt;code class=&quot;highlighter-rouge&quot;&gt;memo&lt;/code&gt; will be:&lt;/p&gt;
-
-&lt;pre&gt;
-               sum
-         0  1  2  3  4  5
-        ------------------
-coins 0| 1  0  0  0  0  0
-      1| 1  1  1  1  1  1
-      2| 1  1  2  2  3  3
-      3| 1  1  2  3  4  5
-
-&lt;/pre&gt;
-
-&lt;h4 id=&quot;java-code-for-coin-change&quot;&gt;Java code for coin change&lt;/h4&gt;
-
-&lt;p&gt;Below is the code to count ways to making a sum.&lt;/p&gt;
-
-&lt;noscript&gt;&lt;pre&gt;public class CountWaysToMakeSum {
-    static int countWays(int[] coins, int S) {
-        int n = coins.length;
-        int[][] memo = new int[n + 1][S + 1];
-        // initialize
-        // sum is zero, so empty set is the answer
-        for (int i = 0; i &amp;lt;= n; i++) {
-            memo[i][0] = 1;
-        }
-        // no coin given, unable to make sum
-        for (int i = 1; i &amp;lt;= S; i++) {
-            memo[0][i] = 0;
-        }
-        // fill the rest
-        for (int i = 1; i &amp;lt;= n; i++) {
-            for (int j = 1; j &amp;lt;= S; j++) {
-                // excludes coins[i]
-                memo[i][j] = memo[i - 1][j];
-                if (coins[i - 1] &amp;lt;= j) {
-                    // includes coins[i]
-                    memo[i][j] += memo[i][j - coins[i - 1]];
-                }
-            }
-        }
-        return memo[n][S];
-    }
-
-    public static void main(String[] args) {
-        int S = 5;
-        int[] coins = {1, 2, 3};
-        System.out.println(countWays(coins, S));
-        S = 4;
-        System.out.println(countWays(coins, S));
-        int[] coins1 = {2, 5, 3, 6};
-        S = 10;
-        System.out.println(countWays(coins1, S));
-    }
-}
-&lt;/pre&gt;&lt;/noscript&gt;
-&lt;script src=&quot;https://gist.github.com/yokolet/33c80d1fbd73075fca0648d4d23164c1.js&quot;&gt; &lt;/script&gt;
-
-&lt;p&gt;The result is:&lt;/p&gt;
-
-&lt;pre&gt;
-5
-4
-5
-&lt;/pre&gt;
-
-&lt;h4 id=&quot;problem-description---unique-paths&quot;&gt;Problem Description - Unique Paths&lt;/h4&gt;
-
-&lt;p&gt;Given two integers, m and n, which expresses m rows and n columns,
-find how many unique paths are there from top left to bottom right.
-Available directions are right and down only.&lt;/p&gt;
-
-&lt;p&gt;For example, m = 3 and n = 4 are given, three of all possible paths
-are like this:&lt;/p&gt;
-
-&lt;pre&gt;
-
-+---+---+---+---+     +---+---+---+---+     +---+---+---+---+
-| x-----------┐ |     | x-------┐ |   |     | x |   |   |   |
-+---+---+---+-|-+     +---+---+-|-+---+     +-|-+---+---+---+
-|   |   |   | | |     |   |   | | |   |     | └-----------┐ |
-+---+---+---+-|-+     +---+---+-|-+---+     +---+---+---+-|-+
-|   |   |   | x |     |   |   | └---x |     |   |   |   | x |
-+---+---+---+- -+     +---+---+---+---+     +---+---+---+---+
-
-&lt;/pre&gt;
-
-&lt;h4 id=&quot;the-idea-for-unique-paths&quot;&gt;The idea for unique paths&lt;/h4&gt;
-
-&lt;p&gt;Like other two problems, I chose the dynamic programming to find the answer,
-I used auxiliary table to save states.
-The auxiliary table (&lt;code class=&quot;highlighter-rouge&quot;&gt;memo&lt;/code&gt;) has a size [m] x [n].
-In this case, plus one doesn’t need since the first row and column can be
-initialized without any previous state.
-Movments are only right and down.
-Given that, the first row are all 1 since from left is the only one way.
-The first columns are all 1 as well since from above is the only one way.
-Then, fill the rest of the table by expanding the path one by one, right or down.&lt;/p&gt;
-
-&lt;p&gt;At each table[i][j], the values on above table[i - 1][j] and left table[i][j - 1] will be added up.
-This way, ways to come index i, j will be calculated.
-When traversal reaches to the bottom right index, table[m - 1][n - 1], the answer is there.&lt;/p&gt;
-
-&lt;h4 id=&quot;java-code--for-unique-paths&quot;&gt;Java code  for unique paths&lt;/h4&gt;
-
-&lt;p&gt;Below is the code to count ways to reach from top left to bottom right.&lt;/p&gt;
-
-&lt;noscript&gt;&lt;pre&gt;public class CountWaysToReachBottomRight {
-    // m: rows
-    // n: columns
-    static int countWays(int m, int n) {
-        int[][] memo = new int[m][n];
-        // initialize
-        // first row - only one way from left
-        for (int i = 0; i &amp;lt; n; i++) {
-            memo[0][i]  = 1;
-        }
-        // first column - only one way from above
-        for (int i = 0; i &amp;lt; m; i++) {
-            memo[i][0] = 1;
-        }
-        // fill the rest
-        for (int i = 1; i &amp;lt; m; i++) {
-            for (int j = 1; j &amp;lt; n; j++) {
-                // from above + from left
-                memo[i][j] = memo[i - 1][j] + memo[i][j - 1];
-            }
-        }
-        return memo[m - 1][n - 1];
-    }
-
-    public static void main(String[] args) {
-        int m = 3;
-        int n = 3;
-        System.out.println(countWays(m, n));
-        m = 3;
-        n = 4;
-        System.out.println(countWays(m, n));
-    }
-}
-&lt;/pre&gt;&lt;/noscript&gt;
-&lt;script src=&quot;https://gist.github.com/yokolet/586b6a4a08c7ef3b6f4be2085a6a6b93.js&quot;&gt; &lt;/script&gt;
-
-&lt;p&gt;The result is:&lt;/p&gt;
-
-&lt;pre&gt;
-6
-10
-&lt;/pre&gt;
-
-&lt;h4 id=&quot;resources&quot;&gt;Resources&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/count-ways-reach-nth-stair/&quot;&gt;Count ways to reach the n’th stair&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://algorithms.tutorialhorizon.com/dynamic-programming-stairs-climbing-puzzle/&quot;&gt;Stairs Climbing Puzzle&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/dynamic-programming-set-7-coin-change/&quot;&gt;Coin Change&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://algorithms.tutorialhorizon.com/dynamic-programming-coin-change-problem/&quot;&gt;Coin Change Problem&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/count-possible-paths-top-left-bottom-right-nxm-matrix/&quot;&gt;Count all possible paths from top left to bottom right of a mXn matrix&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://algorithms.tutorialhorizon.com/dynamic-programming-count-all-paths-from-top-left-to-bottom-right-of-a-mxn-matrix/&quot;&gt;Count all paths from top left to bottom right of a mXn matrix&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2014/05/leetcode-unique-paths-java/&quot;&gt;Unique Paths&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">Count Ways Problems</summary></entry></feed>
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Simple Problem Yet Complicated Solution</summary></entry></feed>
