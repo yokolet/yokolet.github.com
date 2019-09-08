@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang=" en-US">
+<head>
+
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+
+      gtag('js', new Date());
+      gtag('config', 'UA-761764-8');
+    </script>
+    
+    <meta charset="UTF-8">
+
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Catalan number | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="Catalan number" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="What is Catalan number" />
+<meta property="og:description" content="What is Catalan number" />
+<link rel="canonical" href="/2019/09/08/catalan-number.html" />
+<meta property="og:url" content="/2019/09/08/catalan-number.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-09-08T12:41:00-07:00" />
+<script type="application/ld+json">
+{"url":"/2019/09/08/catalan-number.html","headline":"Catalan number","dateModified":"2019-09-08T12:41:00-07:00","datePublished":"2019-09-08T12:41:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"/2019/09/08/catalan-number.html"},"description":"What is Catalan number","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/assets/css/all.css?v=">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    
+        <link rel="icon" type="image/ico" href="/assets/image/favicon.ico">
+    
+</head>
+<body>
+<header class="page-header" role="banner">
+    <div class="nav">
+        
+            <a href="/" class="btn back"><i class="fas fa-chevron-circle-left"></i> Back</a>
+        
+        
+            <a href="/about/" class="btn">About <i class="fas fa-info-circle"></i></a>
+        
+    </div>
+    <h1 class="project-name">yokolet's notelets</h1>
+    <h2 class="project-tagline">Notes about programming</h2>
+
+    
+</header>
+
+<main id="content" class="main-content" role="main">
+    <div class="content container">
+    <div class="post-date">
+        <time>September 08, 2019 </time>
+    </div>
+    <h1 class="post-title">Catalan number</h1>
+    <h4 id="what-is-catalan-number">What is <strong>Catalan number</strong></h4>
+
+<p>The Catalan number belongs to the domain of combinatorial mathematics.
+It is a sequence of natural numbers such that:
+<code class="highlighter-rouge">1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012, 742900, 2674440, 9694845, 35357670, 129644790, 477638700, 1767263190, ...</code>
+The sequence appears in counting problems.
+Wikipedia has the details about the sequence: <a href="https://en.wikipedia.org/wiki/Catalan_number">Catalan Number</a>.</p>
+
+<p>The algorithm of the Catalan number calculation is not difficult.
+Once the problem is identified as the Catalan number,
+the solution will come up relatively easy.
+However, something not easy is to identify it is the Catalan number problem.</p>
+
+<h4 id="various-types-of-counting-problems">Various types of counting problems</h4>
+
+<p>The Wikipedia article mentions various types of counting problems which are solved by the Catalan number.
+One more great resource is “Catalan Numbers” (<a href="http://www.geometer.org/mathcircles/catalan.pdf">http://www.geometer.org/mathcircles/catalan.pdf</a>).
+The document refers to multiple counting problems as well as how to solve those.
+For a reference, it’s worth writing a memo what kind of problems are out there.</p>
+
+<ol>
+  <li>
+    <p>Balanced parentheses</p>
+
+    <p>Problem: Given <code class="highlighter-rouge">n</code> pairs of parentheses, how many patterns exist to create
+ valid (balanced) combinations of parentheses.</p>
+
+    <p>Example:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> n  counts  patterns
+ 0  1       *
+ 1  1       ()
+ 2  2       (()) ()()
+ 3  5       ((())) ()(()) ()()() (())() (()())
+</code></pre></div>    </div>
+
+    <p>Note: This is a basic pattern of the Catalan number.</p>
+  </li>
+  <li>
+    <p>Dyck words</p>
+
+    <p>Problem: Given <code class="highlighter-rouge">n</code>, how many patterns exist to create words of n Xs and n Ys such that
+ in every prefix of the word frequency(‘X’) ≥ frequency(‘Y’)</p>
+
+    <p>Example:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> n  counts  patterns
+ 0  1       *
+ 1  1       XY 
+ 2  2       XXYY XYXY
+ 3  5       XXXYYY XYXXYY XYXYXY XXYYXY XXYXYY
+</code></pre></div>    </div>
+
+    <p>Note: If X and Y are mapped ( and ) respectively, the problem is the same as
+ the balanced parentheses.</p>
+  </li>
+  <li>
+    <p>Mountain Ranges</p>
+
+    <p>Problem: Given <code class="highlighter-rouge">n</code> pairs of sticks, how many patterns exist to create mountains.</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> n  counts  patterns
+ 0  1       *
+ 1  1       /\
+ 2  2       /\
+           /  \  /\/\
+ 3  5        /\
+            /  \     /\             /\      /\/\
+           /    \  /\/  \  /\/\/\  /  \/\  /    \
+</code></pre></div>    </div>
+
+    <p>Note: If / and \ are mapped to ( and ) respectively, the problem is the same as
+ the balanced parentheses.</p>
+  </li>
+  <li>
+    <p>Binary Search Trees</p>
+
+    <p>Problem: Given <code class="highlighter-rouge">n</code>, how many unique binary search tress exist to create node value <code class="highlighter-rouge">1 to n</code>.</p>
+
+    <p>Example:</p>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> n  counts  patterns
+ 0  1       *
+ 1  1       1
+ 2  2         2  1
+             /    \
+            1      2
+ 3  5           3    3     2    1    1
+               /    /     / \    \    \
+             2    1     1   3    3    2
+            /      \            /      \
+           1        2          2        3
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Diagonal Paths</p>
+
+    <p>Problem: Given <code class="highlighter-rouge">n x n</code> grid, how many paths of length <code class="highlighter-rouge">2n</code> exist from bottom left to upper right corner.</p>
+
+    <p>Example:</p>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> n  counts  patterns
+ 0  1       *
+ 1  1        ↑
+            →
+ 2  2         ↑       ↑
+              ↑    ↑ →
+           → →    →
+ 3  5           ↑        ↑         ↑        ↑          ↑
+                ↑        ↑      ↑ →      ↑ →           ↑
+                ↑   ↑ → →    ↑ →         ↑         ↑ →
+           → → →   →        →         → →      → → 
+</code></pre></div>    </div>
+
+    <p>Note: If → and ↑ are mapped to ( and ), the problem is the same as the
+ balanced parentheses.</p>
+  </li>
+  <li>
+    <p>Multiplication orderings</p>
+
+    <p>Problem: Given <code class="highlighter-rouge">n+1</code> numbers to multiply together, how many patterns exist to make multiplication
+ precedences without changing the order of numbers.</p>
+
+    <p>Example:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> n  counts  patterns
+ 0  1       (a)
+ 1  1       (ab)
+ 2  2       ((ab)c) (a(bc))
+ 3  5       (((ab)c)d) ((ab)(cd)) ((a(bc))d) (a((bc)d)) (a(b(cd)))
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Polygon Triangulation</p>
+
+    <p>Problem: Given <code class="highlighter-rouge">n+2</code> sides of convex polygon, how many patterns exist to cut into
+ triangles of non-crossing line segments.</p>
+  </li>
+  <li>
+    <p>Handshaking</p>
+
+    <p>Problem: Given <code class="highlighter-rouge">2n</code> people seated around the round table, how many patterns exists to
+ shake hands without crossing arms.</p>
+  </li>
+</ol>
+
+<h4 id="code-example">Code Example</h4>
+
+<p>For all problems above, the number of patterns can be found the code below:</p>
+
+<noscript><pre>public class CatalanNumbers {
+    public int numPatterns(int n) {
+        double count = 1.0;
+        for (double i = 1.0; i &lt;= n; i += 1.0) {
+            count *= ((i + n) / i);
+        }
+        return (int) Math.round(count / (n + 1));
+    }
+
+    public int numPatternsDP(int n) {
+        long[] memo = new long[n+1];
+        memo[0] = memo[1] = 1;
+        for (int i = 2; i &lt;= n; i++) {
+            memo[i] = 0;
+            for (int j = 0; j &lt; i; j++) {
+                memo[i] += memo[j] * memo[i-j-1];
+            }
+        }
+        return (int)memo[n];
+    }
+}</pre></noscript>
+<script src="https://gist.github.com/yokolet/f33be1919df2015a172fd3c80f89aaef.js"> </script>
+
+<p>The first <code class="highlighter-rouge">numPatterns</code> method runs faster if the problem asks only one number such as:</p>
+
+<ul>
+  <li>leetcode: <a href="https://leetcode.com/problems/unique-binary-search-trees/">Unique Binary Search Trees</a></li>
+  <li>topcoder: <a href="https://community.topcoder.com/stat?c=problem_statement&amp;pm=7868&amp;rd=10777">Hands Shaking</a></li>
+</ul>
+
+<p>However, when problem asks accumulation of patterns such as:</p>
+
+<ul>
+  <li>HackerRank: <a href="https://www.hackerrank.com/contests/walmart-codesprint-algo/challenges/popsicle-stick-mountains">Popsicle Stick Mountains</a></li>
+</ul>
+
+<p>the second DP solution works to avoid repetition.</p>
+
+</div>
+
+    <footer class="site-footer">
+        <h3> Copyright &copy; Yoko Harada</h3>
+        
+        <span class="site-footer-owner"><i class="fab fa-github-alt"></i>
+            <a href="https://github.com/yokolet/yokolet.github.com">yokolet.com</a>
+        </span>
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+    </footer>
+</main>
+</body>
+</html>

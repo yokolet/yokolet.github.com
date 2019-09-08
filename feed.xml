@@ -1,4 +1,188 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.6">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2019-09-04T22:52:16-07:00</updated><id>/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Notes about programming</subtitle><entry><title type="html">Prime Check of a Big Number</title><link href="/2019/09/04/prime-check-of-a-big-number.html" rel="alternate" type="text/html" title="Prime Check of a Big Number" /><published>2019-09-04T21:05:00-07:00</published><updated>2019-09-04T21:05:00-07:00</updated><id>/2019/09/04/prime-check-of-a-big-number</id><content type="html" xml:base="/2019/09/04/prime-check-of-a-big-number.html">&lt;h4 id=&quot;the-problem&quot;&gt;The Problem&lt;/h4&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.6">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2019-09-08T15:48:53-07:00</updated><id>/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Notes about programming</subtitle><entry><title type="html">Catalan number</title><link href="/2019/09/08/catalan-number.html" rel="alternate" type="text/html" title="Catalan number" /><published>2019-09-08T12:41:00-07:00</published><updated>2019-09-08T12:41:00-07:00</updated><id>/2019/09/08/catalan-number</id><content type="html" xml:base="/2019/09/08/catalan-number.html">&lt;h4 id=&quot;what-is-catalan-number&quot;&gt;What is &lt;strong&gt;Catalan number&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;p&gt;The Catalan number belongs to the domain of combinatorial mathematics.
+It is a sequence of natural numbers such that:
+&lt;code class=&quot;highlighter-rouge&quot;&gt;1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012, 742900, 2674440, 9694845, 35357670, 129644790, 477638700, 1767263190, ...&lt;/code&gt;
+The sequence appears in counting problems.
+Wikipedia has the details about the sequence: &lt;a href=&quot;https://en.wikipedia.org/wiki/Catalan_number&quot;&gt;Catalan Number&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The algorithm of the Catalan number calculation is not difficult.
+Once the problem is identified as the Catalan number,
+the solution will come up relatively easy.
+However, something not easy is to identify it is the Catalan number problem.&lt;/p&gt;
+
+&lt;h4 id=&quot;various-types-of-counting-problems&quot;&gt;Various types of counting problems&lt;/h4&gt;
+
+&lt;p&gt;The Wikipedia article mentions various types of counting problems which are solved by the Catalan number.
+One more great resource is “Catalan Numbers” (&lt;a href=&quot;http://www.geometer.org/mathcircles/catalan.pdf&quot;&gt;http://www.geometer.org/mathcircles/catalan.pdf&lt;/a&gt;).
+The document refers to multiple counting problems as well as how to solve those.
+For a reference, it’s worth writing a memo what kind of problems are out there.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Balanced parentheses&lt;/p&gt;
+
+    &lt;p&gt;Problem: Given &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt; pairs of parentheses, how many patterns exist to create
+ valid (balanced) combinations of parentheses.&lt;/p&gt;
+
+    &lt;p&gt;Example:&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; n  counts  patterns
+ 0  1       *
+ 1  1       ()
+ 2  2       (()) ()()
+ 3  5       ((())) ()(()) ()()() (())() (()())
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;Note: This is a basic pattern of the Catalan number.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Dyck words&lt;/p&gt;
+
+    &lt;p&gt;Problem: Given &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt;, how many patterns exist to create words of n Xs and n Ys such that
+ in every prefix of the word frequency(‘X’) ≥ frequency(‘Y’)&lt;/p&gt;
+
+    &lt;p&gt;Example:&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; n  counts  patterns
+ 0  1       *
+ 1  1       XY 
+ 2  2       XXYY XYXY
+ 3  5       XXXYYY XYXXYY XYXYXY XXYYXY XXYXYY
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;Note: If X and Y are mapped ( and ) respectively, the problem is the same as
+ the balanced parentheses.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Mountain Ranges&lt;/p&gt;
+
+    &lt;p&gt;Problem: Given &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt; pairs of sticks, how many patterns exist to create mountains.&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; n  counts  patterns
+ 0  1       *
+ 1  1       /\
+ 2  2       /\
+           /  \  /\/\
+ 3  5        /\
+            /  \     /\             /\      /\/\
+           /    \  /\/  \  /\/\/\  /  \/\  /    \
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;Note: If / and \ are mapped to ( and ) respectively, the problem is the same as
+ the balanced parentheses.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Binary Search Trees&lt;/p&gt;
+
+    &lt;p&gt;Problem: Given &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt;, how many unique binary search tress exist to create node value &lt;code class=&quot;highlighter-rouge&quot;&gt;1 to n&lt;/code&gt;.&lt;/p&gt;
+
+    &lt;p&gt;Example:&lt;/p&gt;
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; n  counts  patterns
+ 0  1       *
+ 1  1       1
+ 2  2         2  1
+             /    \
+            1      2
+ 3  5           3    3     2    1    1
+               /    /     / \    \    \
+             2    1     1   3    3    2
+            /      \            /      \
+           1        2          2        3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Diagonal Paths&lt;/p&gt;
+
+    &lt;p&gt;Problem: Given &lt;code class=&quot;highlighter-rouge&quot;&gt;n x n&lt;/code&gt; grid, how many paths of length &lt;code class=&quot;highlighter-rouge&quot;&gt;2n&lt;/code&gt; exist from bottom left to upper right corner.&lt;/p&gt;
+
+    &lt;p&gt;Example:&lt;/p&gt;
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; n  counts  patterns
+ 0  1       *
+ 1  1        ↑
+            →
+ 2  2         ↑       ↑
+              ↑    ↑ →
+           → →    →
+ 3  5           ↑        ↑         ↑        ↑          ↑
+                ↑        ↑      ↑ →      ↑ →           ↑
+                ↑   ↑ → →    ↑ →         ↑         ↑ →
+           → → →   →        →         → →      → → 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;Note: If → and ↑ are mapped to ( and ), the problem is the same as the
+ balanced parentheses.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Multiplication orderings&lt;/p&gt;
+
+    &lt;p&gt;Problem: Given &lt;code class=&quot;highlighter-rouge&quot;&gt;n+1&lt;/code&gt; numbers to multiply together, how many patterns exist to make multiplication
+ precedences without changing the order of numbers.&lt;/p&gt;
+
+    &lt;p&gt;Example:&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; n  counts  patterns
+ 0  1       (a)
+ 1  1       (ab)
+ 2  2       ((ab)c) (a(bc))
+ 3  5       (((ab)c)d) ((ab)(cd)) ((a(bc))d) (a((bc)d)) (a(b(cd)))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Polygon Triangulation&lt;/p&gt;
+
+    &lt;p&gt;Problem: Given &lt;code class=&quot;highlighter-rouge&quot;&gt;n+2&lt;/code&gt; sides of convex polygon, how many patterns exist to cut into
+ triangles of non-crossing line segments.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Handshaking&lt;/p&gt;
+
+    &lt;p&gt;Problem: Given &lt;code class=&quot;highlighter-rouge&quot;&gt;2n&lt;/code&gt; people seated around the round table, how many patterns exists to
+ shake hands without crossing arms.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;code-example&quot;&gt;Code Example&lt;/h4&gt;
+
+&lt;p&gt;For all problems above, the number of patterns can be found the code below:&lt;/p&gt;
+
+&lt;noscript&gt;&lt;pre&gt;public class CatalanNumbers {
+    public int numPatterns(int n) {
+        double count = 1.0;
+        for (double i = 1.0; i &amp;lt;= n; i += 1.0) {
+            count *= ((i + n) / i);
+        }
+        return (int) Math.round(count / (n + 1));
+    }
+
+    public int numPatternsDP(int n) {
+        long[] memo = new long[n+1];
+        memo[0] = memo[1] = 1;
+        for (int i = 2; i &amp;lt;= n; i++) {
+            memo[i] = 0;
+            for (int j = 0; j &amp;lt; i; j++) {
+                memo[i] += memo[j] * memo[i-j-1];
+            }
+        }
+        return (int)memo[n];
+    }
+}&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/yokolet/f33be1919df2015a172fd3c80f89aaef.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;The first &lt;code class=&quot;highlighter-rouge&quot;&gt;numPatterns&lt;/code&gt; method runs faster if the problem asks only one number such as:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;leetcode: &lt;a href=&quot;https://leetcode.com/problems/unique-binary-search-trees/&quot;&gt;Unique Binary Search Trees&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;topcoder: &lt;a href=&quot;https://community.topcoder.com/stat?c=problem_statement&amp;amp;pm=7868&amp;amp;rd=10777&quot;&gt;Hands Shaking&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;However, when problem asks accumulation of patterns such as:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;HackerRank: &lt;a href=&quot;https://www.hackerrank.com/contests/walmart-codesprint-algo/challenges/popsicle-stick-mountains&quot;&gt;Popsicle Stick Mountains&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;the second DP solution works to avoid repetition.&lt;/p&gt;</content><author><name></name></author><summary type="html">What is Catalan number</summary></entry><entry><title type="html">Prime Check of a Big Number</title><link href="/2019/09/04/prime-check-of-a-big-number.html" rel="alternate" type="text/html" title="Prime Check of a Big Number" /><published>2019-09-04T21:05:00-07:00</published><updated>2019-09-04T21:05:00-07:00</updated><id>/2019/09/04/prime-check-of-a-big-number</id><content type="html" xml:base="/2019/09/04/prime-check-of-a-big-number.html">&lt;h4 id=&quot;the-problem&quot;&gt;The Problem&lt;/h4&gt;
 
 &lt;p&gt;“Given an integer &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt;, find whether &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt; is a prime number or not” – This is a typical
 algorithm question.
@@ -2271,367 +2455,4 @@ public class ConstructBinaryTreeFromInorderAndPostorder {
   &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2014/06/leetcode-construct-binary-tree-from-preorder-and-inorder-traversal-java/&quot;&gt;Construct Binary Tree from Preorder and Inorder Traversal&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/construct-a-binary-tree-from-postorder-and-inorder/&quot;&gt;Construct a Binary Tree from Postorder and Inorder&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2013/01/construct-binary-tree-from-inorder-and-postorder-traversal/&quot;&gt;Constrcut Binary Tree from Inorder and Postorder Traversal&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">Serialize/Deserialize</summary></entry><entry><title type="html">Parentheses Love</title><link href="/2017/06/02/parens-love.html" rel="alternate" type="text/html" title="Parentheses Love" /><published>2017-06-02T00:00:00-07:00</published><updated>2017-06-02T00:00:00-07:00</updated><id>/2017/06/02/parens-love</id><content type="html" xml:base="/2017/06/02/parens-love.html">&lt;h4 id=&quot;simple-problem-yet-complicated-solution&quot;&gt;Simple Problem Yet Complicated Solution&lt;/h4&gt;
-
-&lt;p&gt;As a lisp family language programmer, I used to write a lot of paretheses.
-Specifically, &lt;code class=&quot;highlighter-rouge&quot;&gt;(&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;)&lt;/code&gt;.
-However, in an algorithm world, in a problem description, &lt;em&gt;parentheses&lt;/em&gt; often includes
-other brackets as well, such as &lt;code class=&quot;highlighter-rouge&quot;&gt;{}&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;[]&lt;/code&gt;.
-Out of my curiosity, I googled names of so-called parentheses.
-According Wikipedia’s &lt;a href=&quot;https://en.wikipedia.org/wiki/Bracket&quot;&gt;Bracket&lt;/a&gt;, it looks those
-have their own names with a lot of variants. Probably, famous ones are these.&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;()&lt;/code&gt;&lt;/th&gt;
-      &lt;th&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;[]&lt;/code&gt;&lt;/th&gt;
-      &lt;th&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;{}&lt;/code&gt;&lt;/th&gt;
-      &lt;th&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;&amp;gt;&lt;/code&gt;&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;parentheses&lt;/td&gt;
-      &lt;td&gt;brackets&lt;/td&gt;
-      &lt;td&gt;braces&lt;/td&gt;
-      &lt;td&gt;chevrons&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;round brackets&lt;/td&gt;
-      &lt;td&gt;square brackets&lt;/td&gt;
-      &lt;td&gt;curly brackets&lt;/td&gt;
-      &lt;td&gt;angle brackets&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;In terms of algoritm problems, differences in names don’t matter so much.
-Even the shape doesn’t matter so much.
-For example, “&lt;code class=&quot;highlighter-rouge&quot;&gt;(()), ()()&lt;/code&gt;” has the same meaning as “&lt;code class=&quot;highlighter-rouge&quot;&gt;\\//, \/\/&lt;/code&gt;”, “&lt;code class=&quot;highlighter-rouge&quot;&gt;##!!, #!#!&lt;/code&gt;”, etc.
-Among such symbols, parens are look nice and familiar to programmer’s eyes.
-When solving parens related problems, an open/close pair helps visually.&lt;/p&gt;
-
-&lt;p&gt;To express parens love, I’m going to write about three parens-y problems:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;valid parentheses&lt;/li&gt;
-  &lt;li&gt;generate parentheses&lt;/li&gt;
-  &lt;li&gt;remove invalid parenthese&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;problem-description---valid-parentheses&quot;&gt;Problem Description - Valid Parentheses&lt;/h4&gt;
-
-&lt;p&gt;Given an expression string containing &lt;code class=&quot;highlighter-rouge&quot;&gt;{&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;}&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;[&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;]&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;(&lt;/code&gt;, and &lt;code class=&quot;highlighter-rouge&quot;&gt;)&lt;/code&gt;, check
-paris and orders of parens are valid.
-For example, &lt;code class=&quot;highlighter-rouge&quot;&gt;[()]{}&lt;/code&gt; should return true, and &lt;code class=&quot;highlighter-rouge&quot;&gt;[(])&lt;/code&gt; should return false.&lt;/p&gt;
-
-&lt;h4 id=&quot;the-idea-to-solve-valid-parentheses-problem&quot;&gt;The idea to solve valid parentheses problem&lt;/h4&gt;
-
-&lt;p&gt;This is an easy stack problem.
-If the character is one of opening parens, stack it up.
-If the character is one of closing parens and top of the stack is a matching pair, pop it.
-Otherwise, return false.
-Lastly, if the stack is empty, the given string is valid.&lt;/p&gt;
-
-&lt;h4 id=&quot;java-code-for-valid-parentheses-problem&quot;&gt;Java code for valid parentheses problem&lt;/h4&gt;
-
-&lt;noscript&gt;&lt;pre&gt;import java.util.*;
-
-public class ValidParentheses {
-    static boolean isValid(String s) {
-        Map&amp;lt;Character, Character&amp;gt; m = new HashMap();
-        m.put(&amp;#39;{&amp;#39;, &amp;#39;}&amp;#39;);
-        m.put(&amp;#39;[&amp;#39;, &amp;#39;]&amp;#39;);
-        m.put(&amp;#39;(&amp;#39;, &amp;#39;)&amp;#39;);
-        Stack&amp;lt;Character&amp;gt; stack = new Stack();
-        Set&amp;lt;Character&amp;gt; openers = m.keySet();
-        Collection&amp;lt;Character&amp;gt; closers = m.values();
-        for (int i=0; i&amp;lt;s.length(); i++) {
-            char c = s.charAt(i);
-            if (openers.contains(c)) {
-                stack.push(c);
-            } else if (closers.contains(c)) {
-                if (!stack.isEmpty()
-                        &amp;amp;&amp;amp; m.get(stack.peek()) == c) {
-                    stack.pop();
-                } else {
-                    return false;
-                }
-            }
-        }
-        return stack.size() == 0 ? true : false;
-    }
-
-    public static void main(String[] args) {
-        String s = &amp;quot;[()]{}{[()()]()}&amp;quot;;
-        System.out.println(s + &amp;quot;: &amp;quot; + isValid(s));
-        s = &amp;quot;[(])&amp;quot;;
-        System.out.println(s + &amp;quot;: &amp;quot; + isValid(s));
-        s = &amp;quot;(a())()&amp;quot;;
-        System.out.println(s + &amp;quot;: &amp;quot; + isValid(s));
-    }
-}
-&lt;/pre&gt;&lt;/noscript&gt;
-&lt;script src=&quot;https://gist.github.com/yokolet/13cf1644dbc7f5ffc268d6bbb8f6d33f.js&quot;&gt; &lt;/script&gt;
-
-&lt;p&gt;The result is:&lt;/p&gt;
-
-&lt;pre&gt;
-[()]{}{[()()]()}: true
-[(]): false
-(a())(): true
-&lt;/pre&gt;
-
-&lt;h4 id=&quot;problem-description---generate-parentheses&quot;&gt;Problem Description - Generate Parentheses&lt;/h4&gt;
-
-&lt;p&gt;Given integer n, which denotes a number of paris of parentheses,
-generate all valid combinations of parentheses.
-For example, n = 3, the answer will be:
-&lt;code class=&quot;highlighter-rouge&quot;&gt;((())), (()()), (())(), ()(()), ()()()&lt;/code&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;the-idea-to-generate-valid-parentheses&quot;&gt;The idea to generate valid parentheses&lt;/h4&gt;
-
-&lt;p&gt;Despite the simple problem descriptoin and simple input (only one integer),
-This problem needs some considerations.
-If I draw pictures of n = 2 and n = 3, parens trees look like this:&lt;/p&gt;
-
-&lt;pre&gt;
-
-n = 2
-   (
- /   \
-(     )
-|     |
-)     (
-|     |
-)     )  2 patterns
-
-
-&lt;/pre&gt;
-
-&lt;pre&gt;
-
-n = 3
-             (
-        /        \
-      /            \
-    (               )
- /     \            |
-(       )           (
-|     /   \       /   \
-)   (      )     (     )
-|   |      |     |     |
-)   )      (     )     (
-|   |      |     |     |
-)   )      )     )     )  5 patterns
-
-&lt;/pre&gt;
-
-&lt;p&gt;While I was drawing, I cared three conditions:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;how many opening parans are left&lt;/li&gt;
-  &lt;li&gt;how many closing parens are left&lt;/li&gt;
-  &lt;li&gt;available opening parens &amp;lt; available closing parens&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;As in the pcitures above, the parens can be expressed as a tree.
-To track down to all leaf nodes, Depth First Search (DFS) style algorithm would work.
-Going deeper in the tree while caring three conditions will find all combinations.&lt;/p&gt;
-
-&lt;p&gt;DFS has two styles, recursive and iterative.
-I chose the iterative since recursion tends to raise stack overflow exception.&lt;/p&gt;
-
-&lt;h4 id=&quot;java-code-for-generating-valid-parentheses&quot;&gt;Java code for generating valid parentheses&lt;/h4&gt;
-
-&lt;noscript&gt;&lt;pre&gt;import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
-
-public class GenerateParentheses {
-    static class SItem {
-        // how many opening parens are left
-        int openLeft;
-        // how many closing parens are left
-        int closeLeft;
-        // generated parens so far
-        String parens;
-        SItem(int l, int r, String p) {
-            openLeft = l;
-            closeLeft = r;
-            parens = p;
-        }
-    }
-
-    static List&amp;lt;String&amp;gt; generate(int n) {
-        List&amp;lt;String&amp;gt; result = new ArrayList();
-        Stack&amp;lt;SItem&amp;gt; stack = new Stack();
-        stack.push(new SItem(n - 1, n, &amp;quot;(&amp;quot;));
-        SItem item;
-        while (!stack.isEmpty()) {
-            item = stack.pop();
-            if (item.openLeft &amp;gt; 0) {
-                stack.push(new SItem(item.openLeft - 1, item.closeLeft, item.parens + &amp;quot;(&amp;quot;));
-            }
-            if (item.openLeft &amp;lt; item.closeLeft) {
-                stack.push(new SItem(item.openLeft, item.closeLeft - 1, item.parens + &amp;quot;)&amp;quot;));
-            }
-            if (item.openLeft == 0 &amp;amp;&amp;amp; item.closeLeft == 0) {
-                result.add(item.parens);
-            }
-        }
-        return result;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(generate(2));
-        System.out.println(generate(3));
-        System.out.println(generate(4));
-    }
-}
-&lt;/pre&gt;&lt;/noscript&gt;
-&lt;script src=&quot;https://gist.github.com/yokolet/6ec539a2db6a07068f68b9bc217a26c9.js&quot;&gt; &lt;/script&gt;
-
-&lt;p&gt;The result is:&lt;/p&gt;
-
-&lt;pre&gt;
-[()(), (())]
-[()()(), ()(()), (())(), (()()), ((()))]
-[()()()(), ()()(()), ()(())(), ()(()()), ()((())), (())()(), (())(()), (()())(), (()()()), (()(())), ((()))(), ((())()), ((()())), (((())))]
-&lt;/pre&gt;
-
-&lt;h4 id=&quot;problem-description---remove-invalid-parentheses&quot;&gt;Problem Description - Remove Invalid Parentheses&lt;/h4&gt;
-
-&lt;p&gt;Given a string which contains parentheses, remove minimum number of invalid parentheses
-to make it valid. Return all possible patterns.
-For example, &lt;code class=&quot;highlighter-rouge&quot;&gt;()())()&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;(a)())()&lt;/code&gt; is given,&lt;/p&gt;
-
-&lt;pre&gt;
-()())()   -&amp;gt;  ()()()    ()())()  -&amp;gt; (())()
-    ^                    ^ 
-    remove               remove
-
-(a)())()   -&amp;gt;  (a)()()    (a)())()  -&amp;gt; (a())()
-     ^                      ^ 
-     remove                 remove
-&lt;/pre&gt;
-
-&lt;h4 id=&quot;the-idea-for-removing-invalid-parnetheses&quot;&gt;The idea for removing invalid parnetheses&lt;/h4&gt;
-
-&lt;p&gt;This problem is not easy. There may be more than one solutions.
-For example, a given string is &lt;code class=&quot;highlighter-rouge&quot;&gt;(a)())()&lt;/code&gt;, the answer will be
-&lt;code class=&quot;highlighter-rouge&quot;&gt;(a)()()&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;(a())()&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;The problem asks &lt;em&gt;minimum&lt;/em&gt; number of parens to remove.
-So, it’s a good idea to start checking from a whole string.
-If the string is valid, I’m done.&lt;/p&gt;
-
-&lt;p&gt;If the string is not valid, eliminate only one paren either opening or closing
-at every position.
-When the number of parens either opening or closing is n in total,
-I will get n substrings. These will be checked next.
-All valid substrings are the answer.&lt;/p&gt;
-
-&lt;p&gt;If there’s no valid substring, eliminate only one paren either opening or closing
-at every position of every substring.
-I will get n * (n - 1) substrings. These will be checked next.&lt;/p&gt;
-
-&lt;p&gt;To go over all substrings, I used Queue and BSF style iteration.
-Not like generating parentheses problem, substrings are being cut short one by one.
-In extreme case, it will become an empty string.&lt;/p&gt;
-
-&lt;h4 id=&quot;java-code--for-removing-invalid-parentheses&quot;&gt;Java code  for removing invalid parentheses&lt;/h4&gt;
-
-&lt;noscript&gt;&lt;pre&gt;import java.util.*;
-
-public class RemoveInvalidParentheses {
-    // check char is a opening/closing paren
-    // since only parens will be taken care of
-    static boolean isParen(char c) {
-        return c == &amp;#39;(&amp;#39; || c == &amp;#39;)&amp;#39;;
-    }
-
-    // check substring&amp;#39;s parens are valid
-    static boolean isValid(String s) {
-        int count = 0;
-        for (int i=0; i&amp;lt;s.length(); i++) {
-            if (s.charAt(i) == &amp;#39;(&amp;#39;) {
-                count++;
-            } else if (s.charAt(i) == &amp;#39;)&amp;#39;) {
-                count--;
-                if (count &amp;lt; 0) {
-                    return false;
-                }
-            }
-        }
-        return count == 0;
-    }
-
-    static List&amp;lt;String&amp;gt; removeInvalid(String s) {
-        List&amp;lt;String&amp;gt; result = new ArrayList();
-        if (s == null) {
-            return result;
-        }
-
-        // saves already tested valid substrings
-        Set&amp;lt;String&amp;gt; visited = new HashSet();
-        // Queue for BSF
-        Queue&amp;lt;String&amp;gt; queue = new LinkedList();
-        queue.offer(s);
-        visited.add(s);
-        String cur;
-        boolean found = false;
-        while (!queue.isEmpty()) {
-            cur = queue.poll();
-            if (isValid(cur)) {
-                result.add(cur);
-                visited.add(cur);
-                found = true;
-            }
-            if (found) {
-                continue;
-            }
-
-            // to check all parens in this substring
-            // looping over the substring
-            for (int i=0; i&amp;lt;cur.length(); i++) {
-                if (isParen(cur.charAt(i))) {
-                    // create a substring excluding the current char
-                    String temp = cur.substring(0, i) + cur.substring(i + 1);
-                    if (!visited.contains(temp)) {
-                        queue.offer(temp);
-                        visited.add(temp);
-                    }
-                }
-            }
-        }
-        return result;
-    }
-    
-    public static void main(String[] args) {
-        String s = &amp;quot;(a)())()&amp;quot;;
-        System.out.println(removeInvalid(s));
-    }
-}&lt;/pre&gt;&lt;/noscript&gt;
-&lt;script src=&quot;https://gist.github.com/yokolet/440060611aee3cc816e36b6fb1ff4196.js&quot;&gt; &lt;/script&gt;
-
-&lt;p&gt;The result is:&lt;/p&gt;
-
-&lt;pre&gt;
-[(a())(), (a)()()]
-&lt;/pre&gt;
-
-&lt;h4 id=&quot;resources&quot;&gt;Resources&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/check-for-balanced-parentheses-in-an-expression/&quot;&gt;Check for balanced parentheses in an expression&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2012/12/leetcode-valid-parentheses-java/&quot;&gt;Valid Parentheses&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://algorithms.tutorialhorizon.com/algorithms-find-whether-given-the-sequence-of-parentheses-are-well-formed/&quot;&gt;Find Whether Given Sequence of parentheses are well formed&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/print-all-combinations-of-balanced-parentheses/&quot;&gt;Print all combinations of balanced parentheses&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2014/01/leetcode-generate-parentheses-java/&quot;&gt;Generate Parentheses&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://algorithms.tutorialhorizon.com/generate-all-valid-parenthesis-strings-of-length-2n-of-given-n/&quot;&gt;Print All Possible Valid Combinations Of Parentheses of Given ‘N’&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/remove-invalid-parentheses/&quot;&gt;Remove Invalid Parentheses (GeeksforGeeks)&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2014/05/leetcode-remove-invalid-parentheses-java/&quot;&gt;Remove Invalid Parentheses (Program Creek)&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://kennyzhuang.gitbooks.io/algorithms-collection/content/remove_invalid_parentheses1.html&quot;&gt;Remove Invalid Parentheses (Algorithms Collection)&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">Simple Problem Yet Complicated Solution</summary></entry></feed>
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Serialize/Deserialize</summary></entry></feed>
