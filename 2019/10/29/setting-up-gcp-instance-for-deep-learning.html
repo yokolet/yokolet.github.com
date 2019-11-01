@@ -529,6 +529,11 @@ For example, type below:</p>
  <span class="o">(</span><span class="nb">env</span><span class="o">)</span> jupyter@my-tf2-instance:~/intro-to-deep-learning<span class="nv">$ </span>jupyter contrib nbextension <span class="nb">install</span> <span class="nt">--user</span>
  <span class="o">(</span><span class="nb">env</span><span class="o">)</span> jupyter@my-tf2-instance:~/intro-to-deep-learning<span class="nv">$ </span>jupyter nbextensions_configurator <span class="nb">enable</span> <span class="nt">--user</span>
 </code></pre></div>    </div>
+
+    <p>Be careful about extensions, especially labextension.
+ The installed extensions may load Python 3.5.
+ As a result, whole notebook will use Python 3.5 even though the Python to
+ start <code class="highlighter-rouge">jupyter notebook</code> is 3.7.</p>
   </li>
   <li>
     <p>Start <code class="highlighter-rouge">jupyter notebook</code></p>
@@ -599,6 +604,16 @@ When you continue to work on another day, what to do is much less.</p>
  The URL is <code class="highlighter-rouge">http://localhost:8080</code>.</p>
 
     <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="o">(</span><span class="nb">env</span><span class="o">)</span> jupyter@my-tf2-instance:~/intro-to-deep-learning<span class="nv">$ </span>jupyter notebook 
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Add SSH from the instance to GitHub</p>
+
+    <p>When you login to the instance, the SSH identity to access GitHub repos is not saved.
+ Startup ssh authentication agent and add identity.</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> jupyter@my-tf2-instance:~<span class="nv">$ </span><span class="nb">eval</span> <span class="s2">"</span><span class="si">$(</span>ssh-agent <span class="nt">-s</span><span class="si">)</span><span class="s2">"</span>
+ jupyter@my-tf2-instance:~<span class="nv">$ </span>ssh-add ~/.ssh/id_rsa
 </code></pre></div>    </div>
   </li>
   <li>

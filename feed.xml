@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.6">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2019-10-30T21:27:01-07:00</updated><id>/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Notes about programming</subtitle><entry><title type="html">Setting Up GCP Instance for Deep Learning</title><link href="/2019/10/29/setting-up-gcp-instance-for-deep-learning.html" rel="alternate" type="text/html" title="Setting Up GCP Instance for Deep Learning" /><published>2019-10-29T17:40:00-07:00</published><updated>2019-10-29T17:40:00-07:00</updated><id>/2019/10/29/setting-up-gcp-instance-for-deep-learning</id><content type="html" xml:base="/2019/10/29/setting-up-gcp-instance-for-deep-learning.html">&lt;h3 id=&quot;about-this-blog-post&quot;&gt;About this blog post&lt;/h3&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.6">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2019-10-31T22:26:50-07:00</updated><id>/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Notes about programming</subtitle><entry><title type="html">Setting Up GCP Instance for Deep Learning</title><link href="/2019/10/29/setting-up-gcp-instance-for-deep-learning.html" rel="alternate" type="text/html" title="Setting Up GCP Instance for Deep Learning" /><published>2019-10-29T17:40:00-07:00</published><updated>2019-10-29T17:40:00-07:00</updated><id>/2019/10/29/setting-up-gcp-instance-for-deep-learning</id><content type="html" xml:base="/2019/10/29/setting-up-gcp-instance-for-deep-learning.html">&lt;h3 id=&quot;about-this-blog-post&quot;&gt;About this blog post&lt;/h3&gt;
 
 &lt;p&gt;This post is going to be very different from what I write here.
 The content is a memo how I create a GCP (Google Cloud Platform) instance for Deep Learning.
@@ -463,6 +463,11 @@ For example, type below:&lt;/p&gt;
  &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; jupyter@my-tf2-instance:~/intro-to-deep-learning&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;jupyter contrib nbextension &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--user&lt;/span&gt;
  &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; jupyter@my-tf2-instance:~/intro-to-deep-learning&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;jupyter nbextensions_configurator &lt;span class=&quot;nb&quot;&gt;enable&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--user&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;Be careful about extensions, especially labextension.
+ The installed extensions may load Python 3.5.
+ As a result, whole notebook will use Python 3.5 even though the Python to
+ start &lt;code class=&quot;highlighter-rouge&quot;&gt;jupyter notebook&lt;/code&gt; is 3.7.&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
     &lt;p&gt;Start &lt;code class=&quot;highlighter-rouge&quot;&gt;jupyter notebook&lt;/code&gt;&lt;/p&gt;
@@ -533,6 +538,16 @@ When you continue to work on another day, what to do is much less.&lt;/p&gt;
  The URL is &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt;.&lt;/p&gt;
 
     &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; jupyter@my-tf2-instance:~/intro-to-deep-learning&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;jupyter notebook 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Add SSH from the instance to GitHub&lt;/p&gt;
+
+    &lt;p&gt;When you login to the instance, the SSH identity to access GitHub repos is not saved.
+ Startup ssh authentication agent and add identity.&lt;/p&gt;
+
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; jupyter@my-tf2-instance:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;eval&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;ssh-agent &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+ jupyter@my-tf2-instance:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ssh-add ~/.ssh/id_rsa
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
   &lt;/li&gt;
   &lt;li&gt;
