@@ -529,11 +529,6 @@ For example, type below:</p>
  <span class="o">(</span><span class="nb">env</span><span class="o">)</span> jupyter@my-tf2-instance:~/intro-to-deep-learning<span class="nv">$ </span>jupyter contrib nbextension <span class="nb">install</span> <span class="nt">--user</span>
  <span class="o">(</span><span class="nb">env</span><span class="o">)</span> jupyter@my-tf2-instance:~/intro-to-deep-learning<span class="nv">$ </span>jupyter nbextensions_configurator <span class="nb">enable</span> <span class="nt">--user</span>
 </code></pre></div>    </div>
-
-    <p>Be careful about extensions, especially labextension.
- The installed extensions may load Python 3.5.
- As a result, whole notebook will use Python 3.5 even though the Python to
- start <code class="highlighter-rouge">jupyter notebook</code> is 3.7.</p>
   </li>
   <li>
     <p>Start <code class="highlighter-rouge">jupyter notebook</code></p>
@@ -545,6 +540,11 @@ For example, type below:</p>
 
     <p>Above may raise some errors since newly installed jupyter doesn’t have some extensions installed.
  However, the notebook itself starts running.</p>
+
+    <p>Be careful about installing extensions, especially labextension.
+ The installed extensions may load Python 3.5.
+ As a result, whole notebook will use Python 3.5 even though the Python to
+ start <code class="highlighter-rouge">jupyter notebook</code> is 3.7.</p>
   </li>
   <li>
     <p>Connect to <code class="highlighter-rouge">jupyter notebook</code></p>
