@@ -37,6 +37,14 @@ toc: true
   - Just reading posts doesn't require authentication
 - Ruby on Rails, GraphQL, React/Redux, OAuth, PostgreSQL
 
+#### City of Raleigh Crime Map
+- [https://github.com/yokolet/pastoral-valleys](https://github.com/yokolet/pastoral-valleys)
+- Making queries to City of Raleigh Open Data API, plotted data on a map with a filtering feature.
+- Frontend
+    - Knockout JS, Ajax, jQuery, responsive web application.
+- Backend
+    - Google App Engine, Google Map API, Python, Flask, REST
+
 ## C++
 
 #### Snake Game
