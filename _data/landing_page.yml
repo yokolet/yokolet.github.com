@@ -1,0 +1,15 @@
+items:
+  - title: Who am I
+    subtitle: Software Developer
+    description: |-
+      #### What I Do
+      Polyglot / Full Stack Web Development / Machine Learning / XML processing / Backend System Development & Deployment
+  
+      #### Languages I Use
+      Python / Clojure / Ruby / Java / Bash / SQL / JavaScript / C++
+
+    socials:
+      - url: https://github.com/yokolet
+        icon: fa-github
+      - url: https://www.linkedin.com/in/yokolet/
+        icon: fa-linkedin

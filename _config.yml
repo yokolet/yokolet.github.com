@@ -1,0 +1,72 @@
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely edit after that. If you find
+# yourself editing this file very often, consider using Jekyll's data files
+# feature for the data you need to update frequently.
+#
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
+
+# Site settings
+# These are used to personalize your new site. If you look in the HTML files,
+# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
+# You can create any custom variable you would like, and they will be accessible
+# in the templates via {{ site.myvariable }}.
+title: yokolet's notelets
+email: yokolet@gmail.com
+description: >- # this means to ignore newlines until "baseurl:"
+  Blog site mostly for programming topics.
+baseurl: "" # the subpath of your site, e.g. /blog
+domain: yokolet.com
+url: https://yokolet.github.io
+twitter_username: yokolet
+github_username:  yokolet
+
+# Build settings
+markdown: kramdown
+
+# disable default syntax highlighter
+highlighter: none
+kramdown:
+  syntax_highlighter_opts:
+    disable: true
+
+#theme: bulma-clean-theme
+remote_theme: chrisrhymes/bulma-clean-theme
+plugins:
+  - jekyll-feed
+
+# bulma-clean-theme settings
+fixed_navbar: top
+hide_share_buttons: true
+paginate: 5
+paginate_path: "/blog/page:num"
+defaults:
+  -
+    scope:
+      path: ""
+      type: "pages"
+    values:
+      show_sidebar: false
+  -
+    scope:
+      path: ""
+      type: "posts"
+    values:
+      author: "Yoko Harada"
+      layout: post
+      show_sidebar: true
+
+
+# Exclude from processing.
+# The following items will not be processed, by default. Create a custom list
+# to override the default setting.
+# exclude:
+#   - Gemfile
+#   - Gemfile.lock
+#   - node_modules
+#   - vendor/bundle/
+#   - vendor/cache/
+#   - vendor/gems/
+#   - vendor/ruby/

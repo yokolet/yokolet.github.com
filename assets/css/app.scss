@@ -1,0 +1,19 @@
+---
+---
+//$primary: #2a586fc9;
+$primary: #444444;
+// Import Main CSS file from theme
+@import "main";
+
+code[class*="language-"],
+pre[class*="language-"] {
+  font-size: 0.9em;
+}
+
+.number {
+  display: inline-flex;
+  font-size: 0.9em;
+  margin-right: 0rem;
+  padding: 0rem;
+  vertical-align: baseline;
+}

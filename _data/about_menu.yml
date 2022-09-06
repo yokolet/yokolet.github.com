@@ -1,0 +1,6 @@
+- label: About
+  items:
+    - name: Who am I
+      link: /about/whoami/
+    - name: Portfolio
+      link: /about/portfolio/

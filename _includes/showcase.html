@@ -1,0 +1,62 @@
+{% if page.showcase %}
+{% assign showcase = site.data.[page.showcase] %}
+
+{% for item in showcase.items %}
+<section class="showcase">
+    <div class="showcase-content">
+        <div class="columns is-centered">
+            <div class="column is-8-desktop is-12-tablet">
+                <p class="title">{{ item.title }}</p>
+                <p class="subtitle">{{ item.subtitle }}</p>
+
+                {% if item.github %}
+                <div class="buttons is-centered">
+                    <a href="https://github.com/{{ item.github }}/stargazers" class="button is-white is-small">
+                        <img alt="GitHub stars" src="https://img.shields.io/github/stars/{{ item.github }}?style=social">
+                    </a>
+                    <a href="https://github.com/{{ showcase.github }}/network/members" class="button is-white is-small">
+                        <img alt="GitHub forks" src="https://img.shields.io/github/forks/{{ item.github }}?style=social">
+                    </a>
+                    <a href="https://github.com/{{ item.github }}/watchers" class="button is-white is-small">
+                        <img alt="GitHub watchers" src="https://img.shields.io/github/watchers/{{ item.github }}?style=social">
+                    </a>
+                </div>
+                {% endif %}
+
+                <div class="content">
+                    <p>{{ item.description | markdownify }}</p>
+                </div>
+
+                {% if item.features %}
+                <ul class="block-list {{ item.features_styles }}">
+                    {% for feature in item.features %}
+                    <li>{{ feature }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+                {% if item.tags %}
+                {% assign tags = item.tags | split: "," %}
+                <div class="tags is-centered">
+                    {% for tag in tags %}
+                    {% include tag.html tag=tag style="is-dark" %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if item.socials %}
+                {% for social in item.socials %}
+                <div class="icon callout-icon">
+                    <a href="{{ social.url }}" class="button is-white is-small">
+                        <i class="fa-brands {{ social.icon }} fa-4x"></i>
+                    </a>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endfor %}
+{% endif %}
