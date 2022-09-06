@@ -22,6 +22,7 @@ domain: yokolet.com
 url: https://yokolet.github.io
 twitter_username: yokolet
 github_username:  yokolet
+google_analytics: UA-761764-8
 
 # Build settings
 markdown: kramdown
