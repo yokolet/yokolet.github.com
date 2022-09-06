@@ -3,7 +3,7 @@ layout: page
 menubar: about_menu
 title: Portfolio
 subtitle: My projects
-hero_image: /assets/img/IMG_1493.jpeg
+hero_image: /assets/img/small_pond.jpeg
 show_sidebar: false
 toc: true
 ---
