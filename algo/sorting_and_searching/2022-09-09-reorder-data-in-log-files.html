@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Reorder Data in Log Files | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Reorder Data in Log Files" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/sorting_and_searching/2022-09-09-reorder-data-in-log-files.html" />
+<meta property="og:url" content="http://localhost:4000/algo/sorting_and_searching/2022-09-09-reorder-data-in-log-files.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-09-09T19:14:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Reorder Data in Log Files" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-09T19:14:00+09:00","datePublished":"2022-09-09T19:14:00+09:00","description":"Blog site mostly for programming topics.","headline":"Reorder Data in Log Files","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/sorting_and_searching/2022-09-09-reorder-data-in-log-files.html"},"url":"http://localhost:4000/algo/sorting_and_searching/2022-09-09-reorder-data-in-log-files.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Reorder Data in Log Files</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Sep 9, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>This is just a sorting problem.
+However, some clever comparator is required.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>You are given an array of <code>logs</code>.
+Each log is a space-delimited string of words, where the first word is the identifier.</p>
+
+  <p>There are two types of logs:</p>
+  <ul>
+    <li>Letter-logs: All words (except the identifier) consist of lowercase English letters.</li>
+    <li>Digit-logs: All words (except the identifier) consist of digits.</li>
+  </ul>
+
+  <p>Reorder these logs so that:</p>
+  <ol>
+    <li>The letter-logs come before all digit-logs.</li>
+    <li>The letter-logs are sorted lexicographically by their contents.
+If their contents are the same, then sort them lexicographically by their identifiers.</li>
+    <li>The digit-logs maintain their relative ordering.</li>
+  </ol>
+
+  <p>Return the final order of the logs.</p>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= logs.length &lt;= 100</code></li>
+    <li><code>3 &lt;= logs[i].length &lt;= 100</code></li>
+    <li>All the tokens of <code>logs[i]</code> are separated by a single space.</li>
+    <li><code>logs[i]</code> is guaranteed to have an identifier and at least one word after the identifier.</li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/reorder-data-in-log-files/">https://leetcode.com/problems/reorder-data-in-log-files/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>Example 1:
+Input: logs = ["dig1 8 1 5 1","let1 art can","dig2 3 6","let2 own kit dig","let3 art zero"]
+Output: ["let1 art can","let3 art zero","let2 own kit dig","dig1 8 1 5 1","dig2 3 6"]
+Explanation:
+The letter-log contents are all different, so their ordering is "art can", "art zero", "own kit dig".
+The digit-logs have a relative order of "dig1 8 1 5 1", "dig2 3 6".
+</code></pre>
+
+<pre><code>Example 2:
+Input: logs = ["a1 9 2 3 1","g1 act car","zo4 4 7","ab1 off key dog","a8 act zoo"]
+Output: ["g1 act car","a8 act zoo","ab1 off key dog","a1 9 2 3 1","zo4 4 7"]
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>This solution relies on Python’s tuple sorting feature.
+While sorting the tuple, the first element, the second element if the first is the same
+will be used to compare.
+The custom comparator returns <code>(1,)</code> for digit logs so that digit logs come later.
+For letter logs, it returns <code>(0, string except id, id)</code> to comply with the condition.
+With this custom comparator, just soring the log gives us the answer.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-python">class Solution:
+    def reorderLogFiles(self, logs: List[str]) -&gt; List[str]:
+        def comp(log):
+            id_, rest = log.split(' ', 1)
+            if rest[0].isdigit():
+                return (1, )
+            else:
+                return (0, rest, id_)
+        return sorted(logs, key=comp)
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: <code>O(nlog(n))</code></li>
+  <li>Space: <code>O(1)</code></li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Medium
+</span>
+    
+    <span class="tag  is-primary ">
+    Sorting
+</span>
+    
+    <span class="tag  is-primary ">
+    Array
+</span>
+    
+    <span class="tag  is-primary ">
+    String
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

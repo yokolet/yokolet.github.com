@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>LRU Cache | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="LRU Cache" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/design/2022-09-09-lru-cache.html" />
+<meta property="og:url" content="http://localhost:4000/algo/design/2022-09-09-lru-cache.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-09-09T23:09:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="LRU Cache" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-09T23:09:00+09:00","datePublished":"2022-09-09T23:09:00+09:00","description":"Blog site mostly for programming topics.","headline":"LRU Cache","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/design/2022-09-09-lru-cache.html"},"url":"http://localhost:4000/algo/design/2022-09-09-lru-cache.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">LRU Cache</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Sep 9, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>This is well-known LRU (least recently used) cache problem.
+A Class skeleton is provided.
+We should implement initializer and methods.</p>
+
+<p>The solution here uses Python’s OrderedDict, which guarantees the order of
+keys in first come basis.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.</p>
+
+  <p>Implement the LRUCache class:</p>
+  <ul>
+    <li><code>LRUCache(int capacity)</code> Initialize the LRU cache with positive size capacity.</li>
+    <li><code>int get(int key)</code> Return the value of the key if the key exists, otherwise return -1.</li>
+    <li><code>void put(int key, int value)</code> Update the value of the key if the key exists.
+ Otherwise, add the key-value pair to the cache.
+ If the number of keys exceeds the capacity from this operation, evict the least recently used key.</li>
+    <li>The functions get and put must each run in <code>O(1)</code> average time complexity.</li>
+  </ul>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= capacity &lt;= 3000</code></li>
+    <li><code>0 &lt;= key &lt;= 10**4</code></li>
+    <li><code>0 &lt;= value &lt;= 10**5</code></li>
+    <li>At most <code>2 * 10**5</code> calls will be made to get and put.</li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/lru-cache/">https://leetcode.com/problems/lru-cache/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>Example 1:
+Input
+["LRUCache", "put", "put", "get", "put", "get", "put", "get", "get", "get"]
+[[2], [1, 1], [2, 2], [1], [3, 3], [2], [4, 4], [1], [3], [4]]
+Output
+[null, null, null, 1, null, -1, null, -1, 3, 4]
+
+Explanation
+LRUCache lRUCache = new LRUCache(2);
+lRUCache.put(1, 1); // cache is {1=1}
+lRUCache.put(2, 2); // cache is {1=1, 2=2}
+lRUCache.get(1);    // return 1
+lRUCache.put(3, 3); // LRU key was 2, evicts key 2, cache is {1=1, 3=3}
+lRUCache.get(2);    // returns -1 (not found)
+lRUCache.put(4, 4); // LRU key was 1, evicts key 1, cache is {4=4, 3=3}
+lRUCache.get(1);    // return -1 (not found)
+lRUCache.get(3);    // return 3
+lRUCache.get(4);    // return 4
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>The cache size and key order are what we should maintain.
+The solution here uses Python’s OrderedDict to maintain the order.
+Everytime the key is referenced, that key moved to the end for both <code>get/put</code> method.
+When the cache size grows up to the specified capacity,
+The least recently used key is deleted.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-python">class LRUCache:
+
+    def __init__(self, capacity: int):
+        self.cache = collections.OrderedDict()
+        self.capacity = capacity
+
+    def get(self, key: int) -&gt; int:
+        if key in self.cache:
+            self.cache.move_to_end(key)
+            return self.cache[key]
+        else:
+            return -1
+
+    def put(self, key: int, value: int) -&gt; None:
+        if key not in self.cache and len(self.cache) == self.capacity:
+            self.cache.popitem(last=False)
+        self.cache[key] = value
+        self.cache.move_to_end(key)
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: <code>O(1)</code></li>
+  <li>Space: <code>O(n)</code> – n is a capacity</li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Medium
+</span>
+    
+    <span class="tag  is-primary ">
+    Design
+</span>
+    
+    <span class="tag  is-primary ">
+    Hash Table
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

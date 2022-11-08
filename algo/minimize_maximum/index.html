@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Algorithm | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Algorithm" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/minimize_maximum/" />
+<meta property="og:url" content="http://localhost:4000/algo/minimize_maximum/" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Algorithm" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Blog site mostly for programming topics.","headline":"Algorithm","url":"http://localhost:4000/algo/minimize_maximum/"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-medium  is-bold is-primary"  style="background: url('/assets/img/fall_pond.jpeg') no-repeat center center; background-size: cover;" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Algorithm</h1>
+            <p class="subtitle is-3">Minimize Maximum</p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    
+
+<aside class="menu">
+
+    <p class="menu-label">Algorithm / Minimize Maximum</p>
+    <ul class="menu-list">
+        
+        <li>
+            <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-splitting-array" class="">Splitting Array</a>
+            
+        </li>
+        
+        <li>
+            <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-shipping-packages-in-d-days" class="">Shipping Packages in D Days</a>
+            
+        </li>
+        
+        <li>
+            <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-divide-chocolate" class="">Divide Chocolate</a>
+            
+        </li>
+        
+        <li>
+            <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-balls-in-a-bag" class="">Minimum Limit of Balls in a Bag</a>
+            
+        </li>
+        
+        <li>
+            <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-candies-to-k-children" class="">Maximum Candies Allocated to K Children</a>
+            
+        </li>
+        
+        <li>
+            <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-cutting-ribbons" class="">Cutting Ribbons</a>
+            
+        </li>
+        
+        <li>
+            <a href="/algo/minimize_maximum/2022-07-25-minimize-maximum-koko-eating-bananas" class="">Koko Eating Bananas</a>
+            
+        </li>
+        
+        <li>
+            <a href="/algo/minimize_maximum/2022-07-26-minimize-maximum-min-days-to-make-m-bouquets" class="">Minimum Number of Days to Make m Bouquets</a>
+            
+        </li>
+            
+    </ul>
+
+</aside>
+                </div>
+                
+                <div class="column is-8">
+                    
+                    
+                    
+                    
+                    
+<div class="content">
+    <h2 id="algorithm">Algorithm</h2>
+<h3 id="minimize-maximum">Minimize Maximum</h3>
+<h4 id="how-to-solve-this-type-of-problems">How to solve this type of problems</h4>
+<ul>
+  <li>Use binary search to find an optimal solution
+    <ol>
+      <li>Find low and high values. Those depend on the problems.
+ Figure out what those should be by reading the problem carefully.</li>
+      <li>Run binary search</li>
+      <li>Based on the mid value, create groups checking given array’s values one by one.</li>
+      <li>If the number of groups are small, mid value should be smaller to create more groups.
+ Otherwise, mid value should be bigger to create less groups.</li>
+    </ol>
+  </li>
+</ul>
+
+</div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

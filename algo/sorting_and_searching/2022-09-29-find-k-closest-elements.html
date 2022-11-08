@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Find K Closest Elements | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Find K Closest Elements" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/sorting_and_searching/2022-09-29-find-k-closest-elements.html" />
+<meta property="og:url" content="http://localhost:4000/algo/sorting_and_searching/2022-09-29-find-k-closest-elements.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-09-29T11:41:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Find K Closest Elements" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-29T11:41:00+09:00","datePublished":"2022-09-29T11:41:00+09:00","description":"Blog site mostly for programming topics.","headline":"Find K Closest Elements","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/sorting_and_searching/2022-09-29-find-k-closest-elements.html"},"url":"http://localhost:4000/algo/sorting_and_searching/2022-09-29-find-k-closest-elements.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Find K Closest Elements</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Sep 29, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>Since the given array is sorted, the binary search might be a key to solve the problem.
+In fact, finding the closest index of the given value is the first step for one solution.
+From the closest index, expanding left and/or right indices to a necessary range works.
+Another solution would be to sort the given array using a custom comparator.
+This solution is simple, but needs additional sortings.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>Given a sorted integer array <code>arr</code>, two integers k and x, return the k closest
+integers to x in the array. The result should also be sorted in ascending order.</p>
+
+  <p>An integer <code>a</code> is closer to <code>x</code> than an integer <code>b</code> if:</p>
+  <ul>
+    <li><code>|a - x| &lt; |b - x|</code>, or</li>
+    <li><code>|a - x| == |b - x|</code> and <code>a &lt; b</code></li>
+  </ul>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= k &lt;= arr.length</code></li>
+    <li><code>1 &lt;= arr.length &lt;= 10**4</code></li>
+    <li><code>arr</code> is sorted in ascending order.</li>
+    <li><code>-10**4 &lt;= arr[i], x &lt;= 10**4</code></li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/find-k-closest-elements/">https://leetcode.com/problems/find-k-closest-elements/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>Example 1
+Input: arr = [1,2,3,4,5], k = 4, x = 3
+Output: [1,2,3,4]
+</code></pre>
+
+<pre><code>Example 2
+Input: arr = [1,2,3,4,5], k = 4, x = -1
+Output: [1,2,3,4]
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>The first step is to find the closest index to the given value x.
+The x may or may not in the given array.
+It might exists beyond the given array’s range.
+Once the closest index is found, expand left and right pointer until the range size becomes k.
+We should be careful not to set left and right beyond the array range.
+Other than that, decrement the left pointer or increment the right pointer based on
+the difference between x and each element.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-python">class FindKClosectElements:
+    def findClosestElements(self, arr: List[int], k: int, x: int) -&gt; List[int]:
+        n = len(arr)
+        if n == k:
+            return arr
+        left = bisect.bisect_left(arr, x) - 1
+        right = left + 1
+        while right - left - 1 &lt; k:
+            if left == -1:
+                right += 1
+                continue
+            if right == n or abs(arr[left] - x) &lt;= abs(arr[right] - x):
+                left -= 1
+            else:
+                right += 1
+        return arr[left + 1:right]
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: <code>O(long(n) + k)</code></li>
+  <li>Space: <code>O(1)</code></li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Medium
+</span>
+    
+    <span class="tag  is-primary ">
+    Binary Search
+</span>
+    
+    <span class="tag  is-primary ">
+    Two Pointers
+</span>
+    
+    <span class="tag  is-primary ">
+    Sorting
+</span>
+    
+    <span class="tag  is-primary ">
+    Array
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

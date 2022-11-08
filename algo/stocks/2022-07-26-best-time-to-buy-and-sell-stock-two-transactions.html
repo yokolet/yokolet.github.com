@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Best Time to Buy and Sell Stock – Two Transactions | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Best Time to Buy and Sell Stock – Two Transactions" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-two-transactions.html" />
+<meta property="og:url" content="http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-two-transactions.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-07-26T19:58:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Best Time to Buy and Sell Stock – Two Transactions" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-07-26T19:58:00+09:00","datePublished":"2022-07-26T19:58:00+09:00","description":"Blog site mostly for programming topics.","headline":"Best Time to Buy and Sell Stock – Two Transactions","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-two-transactions.html"},"url":"http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-two-transactions.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Best Time to Buy and Sell Stock -- Two Transactions</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Jul 26, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>This is the third buy-sell-stock problem which has a slight variation to the basic one.
+In this problem, we can buy and sell stock at most twice.
+This is not an easy problem.
+However, if we focus on value differences in the array, we can find a couple of approaches to solve this.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>You are given an array <code>prices</code> where <code>prices[i]</code> is the price of a given stock on the i-th day.</p>
+
+  <p>Find the maximum profit you can achieve. You may complete at most two transactions.</p>
+
+  <p><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/">https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>example 1:
+Input: prices = [3,3,5,0,0,3,1,4]
+Answer: 6
+Explanation: 6 is the best profit which is from:
+buy: index 3, sell: index 5, profit: 3
+buy: index 6, sell: index 7, profit: 3
+</code></pre>
+<pre><code>example 2:
+Input: prices = [1,2,3,4,5]
+Answer: 4
+Explanation: 4 is the best profit which is from buying on the index 0 an selling on the index 4.
+</code></pre>
+<pre><code>example 3:
+Input: prices = [7,6,4,3,1]
+Answer: 0
+Explanation: the array value is ever descreasing. There is no profit available.
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>Among some approaches, going over left to right, right to left and combine those might be an easy one.
+Like the basic buy and sell stock problem, calculate max profit and save it for memoization.
+Then, going over from right to left to calculate max profit ans save it in another vector for memoization.
+When the max profit is calculated from right side, it sees how much decreased.
+Lastly, sum of left max profits and one index shifted right max profits are compared.
+The right profits came from one index shifted to the right, which means ranges are not overwrapped.
+That’s how max profit from at most two transactions will be found.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-cpp">class BestTimeToBuyAndSellStockThree
+{
+public:
+  int maxProfit(vector&lt;int&gt; &amp;prices)
+  {
+    int n = prices.size();
+    vector&lt;int&gt; left(n, 0), right(n + 1, 0);
+    int left_min = prices[0], right_max = prices[n - 1];
+    for (int i = 1; i &lt; n; ++i)
+    {
+      left[i] = max(left[i - 1], prices[i] - left_min);
+      left_min = min(left_min, prices[i]);
+    }
+    for (int i = n - 2; i &gt;= 0; --i)
+    {
+      right[i] = max(right[i + 1], right_max - prices[i]);
+      right_max = max(right_max, prices[i]);
+    }
+    int max_profit = 0;
+    for (int i = 0; i &lt; n; ++i)
+    {
+      max_profit = max(max_profit, left[i] + right[i + 1]);
+    }
+    return max_profit;
+  }
+};
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: O(n) – n: length of the input array.</li>
+  <li>Space: O(n)</li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Hard
+</span>
+    
+    <span class="tag  is-primary ">
+    Array
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

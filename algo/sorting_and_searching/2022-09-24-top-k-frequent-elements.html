@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Top K Frequent Elements | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Top K Frequent Elements" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/sorting_and_searching/2022-09-24-top-k-frequent-elements.html" />
+<meta property="og:url" content="http://localhost:4000/algo/sorting_and_searching/2022-09-24-top-k-frequent-elements.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-09-24T21:05:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Top K Frequent Elements" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-24T21:05:00+09:00","datePublished":"2022-09-24T21:05:00+09:00","description":"Blog site mostly for programming topics.","headline":"Top K Frequent Elements","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/sorting_and_searching/2022-09-24-top-k-frequent-elements.html"},"url":"http://localhost:4000/algo/sorting_and_searching/2022-09-24-top-k-frequent-elements.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Top K Frequent Elements</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Sep 24, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>The problem asks about a frequency of array elements.
+This means we should start from getting the frequency.
+Then, sort the elements based on the frequencies.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>Given an integer array <code>nums</code> and an integer <code>k</code>, return the k most frequent elements.
+You may return the answer in any order.</p>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= nums.length &lt;= 10**5</code></li>
+    <li><code>-10**4 &lt;= nums[i] &lt;= 10**4</code></li>
+    <li><code>k</code> is in the range <code>[1, the number of unique elements in the array]</code>.</li>
+    <li>It is guaranteed that the answer is unique.</li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/top-k-frequent-elements/">https://leetcode.com/problems/top-k-frequent-elements/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>Example 1
+Input: nums = [1,1,1,2,2,3], k = 2
+Output: [1,2]
+</code></pre>
+
+<pre><code>Example 2
+Input: nums = [1], k = 1
+Output: [1]
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>The first step is to get a frequency list.
+The following steps are: sort by frequency, then get first k elements.
+The first solution uses heap’s push and pop, which is a basic approach.
+The second solution uses Python heap’s <code>nlargest</code> function.
+It is straightforward and effective, but only when the function came up in our mind.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-python">class TopKFrequentElements:
+    def topKFrequent(self, nums: List[int], k: int) -&gt; List[int]:
+        counter = collections.Counter(nums)
+        queue = []
+        for num, counts in counter.items():
+            heapq.heappush(queue, (-counts, num))
+        result = []
+        for _ in range(k):
+            _, num = heapq.heappop(queue)
+            result.append(num)
+        return result
+</code></pre>
+
+<pre><code class="language-python">class TopKFrequentElements:
+    def topKFrequent(self, nums: List[int], k: int) -&gt; List[int]:
+        counter = collections.Counter(nums)
+        return heapq.nlargest(k, counter.keys(), key=counter.get)
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: <code>O(nlog(n))</code></li>
+  <li>Space: <code>O(n)</code></li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Medium
+</span>
+    
+    <span class="tag  is-primary ">
+    Counting
+</span>
+    
+    <span class="tag  is-primary ">
+    Heap (Priority Queue)
+</span>
+    
+    <span class="tag  is-primary ">
+    Sorting
+</span>
+    
+    <span class="tag  is-primary ">
+    Hash Table
+</span>
+    
+    <span class="tag  is-primary ">
+    Array
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

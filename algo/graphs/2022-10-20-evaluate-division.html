@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Evaluate Division | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Evaluate Division" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/graphs/2022-10-20-evaluate-division.html" />
+<meta property="og:url" content="http://localhost:4000/algo/graphs/2022-10-20-evaluate-division.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-10-20T20:19:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Evaluate Division" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-10-20T20:19:00+09:00","datePublished":"2022-10-20T20:19:00+09:00","description":"Blog site mostly for programming topics.","headline":"Evaluate Division","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/graphs/2022-10-20-evaluate-division.html"},"url":"http://localhost:4000/algo/graphs/2022-10-20-evaluate-division.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Evaluate Division</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Oct 20, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>This problem might look like a simple math, and a greedy approach works.
+However, creating a graph works better.
+The path, a to b’s edge has a weight v, while b to a’s edge has a weight 1 / v.
+While visiting edges, it’s weight will be multiplied.
+The graph traversal can do by either of BFS or DFS.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>You are given an array of variable pairs <code>equations</code> and an array of real numbers <code>values</code>, where
+<code>equations[i] = [A[i], B[i]]</code> and <code>values[i]</code> represent the equation <code>A[i] / B[i] = values[i]</code>. Each <code>A[i]</code>
+or <code>B[i]</code> is a string that represents a single variable.</p>
+
+  <p>You are also given some <code>queries</code>, where <code>queries[j] = [C[j], D[j]]</code> represents the j-th query where you must
+find the answer for C[j] / D[j] = ?.</p>
+
+  <p>Return the answers to all <code>queries</code>. If a single answer cannot be determined, return -1.0.</p>
+
+  <p>Note: The input is always valid. You may assume that evaluating the queries will not result in division by zero and
+that there is no contradiction.</p>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= equations.length &lt;= 20</code></li>
+    <li><code>equations[i].length == 2</code></li>
+    <li><code>1 &lt;= A[i].length, Bi.length &lt;= 5</code></li>
+    <li><code>values.length == equations.length</code></li>
+    <li><code>0.0 &lt; values[i] &lt;= 20.0</code></li>
+    <li><code>1 &lt;= queries.length &lt;= 20</code></li>
+    <li><code>queries[i].length == 2</code></li>
+    <li><code>1 &lt;= C[j].length, D[j].length &lt;= 5</code></li>
+    <li><code>A[i], B[i], C[j], D[j]</code> consist of lower case English letters and digits.</li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/evaluate-division/">https://leetcode.com/problems/evaluate-division/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>Example 1
+Input: equations = [["a","b"],["b","c"]], values = [2.0,3.0], queries = [["a","c"],["b","a"],["a","e"],["a","a"],["x","x"]]
+Output: [6.00000,0.50000,-1.00000,1.00000,-1.00000]
+Explanation: 
+Given: a / b = 2.0, b / c = 3.0
+queries are: a / c = ?, b / a = ?, a / e = ?, a / a = ?, x / x = ?
+return: [6.0, 0.5, -1.0, 1.0, -1.0 ]
+</code></pre>
+
+<pre><code>Example 2
+Input: equations = [["a","b"],["b","c"],["bc","cd"]], values = [1.5,2.5,5.0], queries = [["a","c"],["c","b"],["bc","cd"],["cd","bc"]]
+Output: [3.75000,0.40000,5.00000,0.20000]
+</code></pre>
+
+<pre><code>Example 3
+Input: equations = [["a","b"]], values = [0.5], queries = [["a","b"],["b","a"],["a","c"],["x","y"]]
+Output: [0.50000,2.00000,-1.00000,-1.00000]
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>The first step is to build a graph.
+The adjacency list has a neighbor of itself to handle the [“a”, “a”] query.
+The neighbor list is a tuple of node and edge value.</p>
+
+<p>The second step is a search.
+Except edge value calculation, it is nothing special.
+When a popped out node is the destination, the path is found along with the edge value.
+If not, add the neighbor node with updated edge value.
+If queue becomes empty without finding the destination, the path doesn’t exist.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-python">class EvaluateDivision:
+    def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -&gt; List[float]:
+        graph = {}
+        
+        def buildGraph():
+            for i in range(len(equations)):
+                s, d, v = equations[i][0], equations[i][1], values[i]
+                if s not in graph:
+                    graph[s] = [(s, 1)]
+                if d not in graph:
+                    graph[d] = [(d, 1)]
+                graph[s].append((d, v))
+                graph[d].append((s, 1 / v))
+
+        def search(src, dst):
+            if src not in graph or dst not in graph:
+                return -1
+            queue = [(src, 1)]
+            seen = {src}
+            while queue:
+                cur_n, cur_v = queue.pop(0)
+                for next_n, next_v in graph[cur_n]:
+                    if next_n == dst:
+                        return cur_v * next_v
+                    elif next_n not in seen:
+                        seen.add(next_n)
+                        queue.append((next_n, cur_v * next_v))
+            return -1
+        
+        buildGraph()
+        return [search(s, d) for s, d in queries]
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: <code>O(mn)</code> – m: number of queries, n: number of equations</li>
+  <li>Space: <code>O(n)</code></li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Medium
+</span>
+    
+    <span class="tag  is-primary ">
+    Graph
+</span>
+    
+    <span class="tag  is-primary ">
+    Breadth-First Search
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

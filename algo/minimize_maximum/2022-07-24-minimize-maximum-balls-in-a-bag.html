@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Minimize Maximum – Minimum Limit of Balls in a Bag | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Minimize Maximum – Minimum Limit of Balls in a Bag" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/minimize_maximum/2022-07-24-minimize-maximum-balls-in-a-bag.html" />
+<meta property="og:url" content="http://localhost:4000/algo/minimize_maximum/2022-07-24-minimize-maximum-balls-in-a-bag.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-07-24T22:59:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Minimize Maximum – Minimum Limit of Balls in a Bag" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-07-24T22:59:00+09:00","datePublished":"2022-07-24T22:59:00+09:00","description":"Blog site mostly for programming topics.","headline":"Minimize Maximum – Minimum Limit of Balls in a Bag","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/minimize_maximum/2022-07-24-minimize-maximum-balls-in-a-bag.html"},"url":"http://localhost:4000/algo/minimize_maximum/2022-07-24-minimize-maximum-balls-in-a-bag.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Minimize Maximum -- Minimum Limit of Balls in a Bag</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Jul 24, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>This is the sixth minimize-maximum algorithm problem.
+This problem has a variation compared to the basic, splitting array problem.
+If we look around other minimize maximum problems, it is very close to the candies allocation to k children problem.
+The problem might be as straightforward as the candies problem.
+A difference is, the problem gives a number of operations rather than the number of groups to be created.
+Again, the problem is the type of minimize-maximum.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>You are given an integer array nums where the i-th bag contains <code>nums[i]</code> balls.
+You are also given an integer <code>maxOperations</code>.</p>
+
+  <p>You can take any bag of balls and divide it into two new bags with a positive number of balls.
+Above operation can be performed at most maxOperations times.
+Example: <code>5</code> -&gt; <code>[1, 4]</code> or <code>[2, 3]</code> by one operation.</p>
+
+  <p>Your penalty is the maximum number of balls in a bag.
+You want to minimize your penalty after the operations.</p>
+
+  <p>Return the minimum possible penalty after performing the operations.</p>
+
+  <p><a href="https://leetcode.com/problems/minimum-limit-of-balls-in-a-bag/">https://leetcode.com/problems/minimum-limit-of-balls-in-a-bag/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>example 1:
+Input: nums = [9], maxOperations = 2
+Answer: 3
+Explanation: nums array goes: [9] -&gt; [6,3] -&gt; [3,3,3] by 2 operations. 
+3 is the minimized largest penalty when the array elements are splitted.
+</code></pre>
+<pre><code>example 2:
+Input: nums = [2,4,8,2], maxOperations = 4
+Answer: 2
+Explanation: nums array goes:
+[2,4,8,2] -&gt; [2,4,4,4,2] -&gt; [2,2,2,4,4,2] -&gt; [2,2,2,2,2,4,2] -&gt; [2,2,2,2,2,2,2,2] by 4 operations.
+2 is the minimized largest penalty when the array elements are splitted.
+</code></pre>
+<pre><code>example 3:
+Input: nums = [7,17], maxOperations = 2
+Answer: 7
+Explanation: nums array goes: [7,17] -&gt; [7,7,10] -&gt; [7,7,3,7] by 2 operations.
+7 is the minimized largest penalty when the array elements are splitted.
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>Each element of the given nums array should be divided into smaller number of pair based on a certain criteria.
+The criteria is middle value of the array.</p>
+
+<p>So, we will count how many elements can be divided in to two based on the middle value.
+The smallest value (left) can be 1, and the largest (right) will be the maximum value in the given array.
+The middle value is set to <code>(left + right) / 2</code> as normal.</p>
+
+<p>Next step is to adjust the left or right values.
+If the number of operations is less than the specified value, the middle value should be smaller to do more operations.
+If the number of operations is greater than the specified value, the middle value should be greater to do less operations.
+The left and right value updates follow a common way:  <code>right = mid - 1</code>, <code>left = mid + 1</code>;</p>
+
+<p>When the binary search is over, we can find the answer.
+The answer from the binary search is the left value.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-cpp">#include &lt;vector&gt;
+#include &lt;numeric&gt;
+#include &lt;iostream&gt;
+using namespace std;
+
+class MinimumLimitOfBallsInABag
+{
+private:
+  bool check(vector&lt;int&gt; &amp;nums, int maxOperations, int mid)
+  {
+    int count = 0;
+    for (int i = 0; i &lt; nums.size(); ++i)
+      {
+        if (nums[i] &gt;= mid)
+        {
+          count += ceil((double)nums[i] / mid) - 1;
+        }
+      }
+      return count &lt;= maxOperations;
+  }
+public:
+  int minimumSize(vector&lt;int&gt; &amp;nums, int maxOperations)
+  {
+    int n = nums.size();
+    int left = 1, right = *max_element(nums.begin(), nums.end());
+    while (left &lt;= right)
+    {
+      int mid = (left + right) / 2;
+      if (check(nums, maxOperations, mid))
+      {
+        right = mid - 1;
+      }
+      else
+      {
+        left = mid + 1;
+      }
+    }
+    return left;
+  }
+};
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: O(n log(s)) – s: sum of elements in the array</li>
+  <li>Space: O(1)</li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Medium
+</span>
+    
+    <span class="tag  is-primary ">
+    Binary Search
+</span>
+    
+    <span class="tag  is-primary ">
+    Array
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

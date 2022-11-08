@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Minimum Time to Make Rope Colorful | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Minimum Time to Make Rope Colorful" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/arrays/2022-10-03-minimum-time-to-make-rope-colorful.html" />
+<meta property="og:url" content="http://localhost:4000/algo/arrays/2022-10-03-minimum-time-to-make-rope-colorful.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-10-03T14:14:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Minimum Time to Make Rope Colorful" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-10-03T14:14:00+09:00","datePublished":"2022-10-03T14:14:00+09:00","description":"Blog site mostly for programming topics.","headline":"Minimum Time to Make Rope Colorful","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/arrays/2022-10-03-minimum-time-to-make-rope-colorful.html"},"url":"http://localhost:4000/algo/arrays/2022-10-03-minimum-time-to-make-rope-colorful.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Minimum Time to Make Rope Colorful</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Oct 3, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>A couple of approaches are there. Among them, two pointers works well in this problem.
+The problem asks to find a range sum and maximum while the same character repeats.
+The left pointer is on the previous smaller values, and the right pointer goes on one by one.
+When the character changes, update the left pointer.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>Alice has <code>n</code> balloons arranged on a rope. You are given a 0-indexed string colors where <code>colors[i]</code> is
+the color of the ith balloon.
+Alice wants the rope to be colorful. She does not want two consecutive balloons to be of the same color,
+so she asks Bob for help. Bob can remove some balloons from the rope to make it colorful.
+You are given a 0-indexed integer array <code>neededTime</code> where <code>neededTime[i]</code> is the time (in seconds) that
+Bob needs to remove the i-th balloon from the rope.</p>
+
+  <p>Return the minimum time Bob needs to make the rope colorful.</p>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>n == colors.length == neededTime.length</code></li>
+    <li><code>1 &lt;= n &lt;= 10**5</code></li>
+    <li><code>1 &lt;= neededTime[i] &lt;= 10**4</code></li>
+    <li>colors contains only lowercase English letters.</li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/minimum-time-to-make-rope-colorful/">https://leetcode.com/problems/minimum-time-to-make-rope-colorful/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>Example 1
+Input: colors = "abaac", neededTime = [1,2,3,4,5]
+Output: 3
+Explanation: Optimal arrangement is "ab_ac." Total cost is 3.
+</code></pre>
+
+<pre><code>Example 2
+Input: colors = "abc", neededTime = [1,2,3]
+Output: 0
+Explanation: The rope is already colorful.
+</code></pre>
+
+<pre><code>Example 3
+Input: colors = "aabaa", neededTime = [1,2,3,4,1]
+Output: 2
+Explanation: Optimal arrangement is "_aba_." Total cost is 2.
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>The solution here maintains a running sum.
+When the same color’s current neededTime (right pointer) is bigger,
+add previous neededTime (left pointer) will be added to the total.
+In such case, increment left pointer. Otherwise, add current neededTime (right pointer).
+If the colors are different, set the current pointer to left pointer.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-python">class MinimumTimeToMakeRopeColorful:
+    def minCost(self, colors: str, neededTime: List[int]) -&gt; int:
+        n = len(colors)
+        left = 0
+        total = 0
+        for i in range(1, n):
+            if colors[i] == colors[left]:
+                if neededTime[left] &lt; neededTime[i]:
+                    total += neededTime[left]
+                    left = i
+                else:
+                    total += neededTime[i]
+            else:
+                left = i
+        return total
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: <code>O(n)</code></li>
+  <li>Space: <code>O(1)</code></li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Medium
+</span>
+    
+    <span class="tag  is-primary ">
+    Two Pointers
+</span>
+    
+    <span class="tag  is-primary ">
+    Greedy
+</span>
+    
+    <span class="tag  is-primary ">
+    Array
+</span>
+    
+    <span class="tag  is-primary ">
+    String
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

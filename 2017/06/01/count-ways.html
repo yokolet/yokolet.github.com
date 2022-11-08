@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Count Ways to Do [something] | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Count Ways to Do [something]" />
+<meta name="author" content="Yoko Harada" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/2017/06/01/count-ways.html" />
+<meta property="og:url" content="http://localhost:4000/2017/06/01/count-ways.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-06-01T00:00:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Count Ways to Do [something]" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Yoko Harada"},"dateModified":"2017-06-01T00:00:00+09:00","datePublished":"2017-06-01T00:00:00+09:00","description":"Blog site mostly for programming topics.","headline":"Count Ways to Do [something]","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2017/06/01/count-ways.html"},"url":"http://localhost:4000/2017/06/01/count-ways.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Count Ways to Do [something]</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-8">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Jun 1, 2017</p>
+
+    
+
+    <p>“Count how may ways to do …” is one type of algorithm questions.
+For example, count ways to climb up stairs, count ways to make sum by given coins, 
+or count ways to reach from top left to bottom right corner.</p>
+
+<p>For this type of problem, recursion and dynamic programming are often used.
+The recursion is an instinctive and understandable solution.
+However, sometime, its performance goes really worse, say, exponential.
+While the dynamic programming solution stays on O(n^2) time complexity.</p>
+
+<p>The count ways problems have a similar idea with bits of variations.
+Not to confuse those, I’m going to write a memo about three problems:
+climbimg stairs, coin change, and unique paths.</p>
+
+<h4 id="problem-description---climbing-stairs">Problem Description - Climbing Stairs</h4>
+
+<p>“Given two integers, m (number of steps) and n (number of stairs),
+find how many ways to climbing up the stair”
+is a typical problem of this sort.
+The steps can be any number between 1 to m.</p>
+
+<p>For example, m = 3 and n = 5 are given,
+possible ways are 13 in total.</p>
+
+<pre>
+
+                                         0
+
+                       /                 |        \
+                     /                   |          \
+                   /                     |            \
+                  1                      2             3
+            /     |     \          /     |   \         |  \
+          /       |       \      /       |     \       |   \
+         1        2        3    1        2     [3]     1   [2]
+      /  | \      | \      |    | \      |             |
+    /    |   \    |   \    |    |   \    |             |
+   1     2   [3]  1   [2] [1]   1   [2] [1]           [1]
+  / \    |        |             |
+ 1  [2] [1]      [1]           [1]
+ |
+[1]
+
+[1, 1, 1, 1, 1], [1, 1, 1, 2], [1, 1, 2, 1], [1, 1, 3], [1, 2, 1, 1], [1, 2, 2], [1, 3, 1]
+[2, 1, 1, 1], [2, 1, 2], [2, 2, 1], [2, 3],
+[3, 1, 1], [3, 2]
+</pre>
+
+<p>As in the above, 2 -&gt; 3 and 3 -&gt; 2 are different.
+The order of steps taken matters for this problem.</p>
+
+<h4 id="the-idea-to-solve-climbing-stairs">The idea to solve climbing stairs</h4>
+
+<p>Since I took a dynamic programming approach, I used an auxiliary array to save states.
+The auxiliary array has a length of n + 1 to have an initialization parameter.
+The index 0 and 1 of the array (<code>memo</code>) is initialized with the value 1.
+Then, the array will be filled out one by one while increasing number of stairs one by one.
+Below describes how the auxiliary array (<code>memo[i]</code>) will be changed in case of  m = 3 and n = 4.</p>
+
+<pre>
+
+
+stairs 0   1            2                   3                          4
+
+       0   0            0                   0                          0
+           |          /   \            /    |   \                /     |     \
+           1         1     2          1     2    3              1      2      3
+                     |              /   \   |                 / | \    | \    |
+                     1             1     2  1               /   |  \   |  \   |
+                                   |                       1    2   3  1   2  1
+                                   1                     /   \  |      |
+                                                        1     2 1      1
+                                                        |
+                                                        1
+
+memo(state)
+[1, 1, 0, 0, 0]   [1, 1, 2, 0, 0]   [1, 1, 2, 4, 0]          [1, 1, 2, 4, 7]
+
+</pre>
+
+<h4 id="java-code-for-climbing-stairs">Java code for climbing stairs</h4>
+
+<p>Here’s the code to count ways to climbing stairs.</p>
+
+<script src="https://gist.github.com/yokolet/1cf65d7dc89c17f43123363f581985af.js"> </script>
+
+<p>The result is:</p>
+
+<pre>
+13
+7
+4
+</pre>
+
+<h4 id="problem-description---coin-change">Problem Description - Coin Change</h4>
+
+<p>“Given coins (or denominators) and sum, find how many ways to make the sum”
+is a common problem description.
+Mostly, infinite number of each coins are available to make the sum.
+Sometime, there’s a limitation of available coins.
+However, basic idea is the same.</p>
+
+<p>For example, coins = <code>[1, 2, 3]</code> and sum = 5 are given,
+possible ways of making sum of 5 will be:
+<code>[1, 1, 1, 1, 1], [1, 1, 1, 2], [1, 2, 2], [1, 1, 3], [2, 3]</code>
+So, the answer is 5.</p>
+
+<p>There’s a very similar, but different coin change problem.
+Another coin change problem asks minimum number of coins to make a given sum.
+This is not what I’m going to write here.
+This memo is about how many combinations are there.</p>
+
+<h4 id="the-idea-for-coin-change">The idea for coin change</h4>
+
+<p>Like climbing stairs, I took a dynamic programming approach, I used an auxiliary table
+to save states.
+The auxiliary table (<code>memo</code>) has a size [number of coins + 1] x [sum + 1].
+Plus one is to have initialization parameters.
+Table’s first column means sum = 0 and initialized with 1.
+This is because sum = 0 can be created by an empty set.
+Table’s first row (except 0) means no coins.
+The first row form 1 to sum + 1 will be initialized with 0.
+Then fill the rest of the table.
+The value, <code>memo[i][j]</code> shows a number of patters to make sum j using coins[0] to coiins[i - 1].</p>
+
+<p>If coins = <code>[1, 2, 3]</code> and sum = 5 are given, the final auxiliary table, <code>memo</code> will be:</p>
+
+<pre>
+               sum
+         0  1  2  3  4  5
+        ------------------
+coins 0| 1  0  0  0  0  0
+      1| 1  1  1  1  1  1
+      2| 1  1  2  2  3  3
+      3| 1  1  2  3  4  5
+
+</pre>
+
+<h4 id="java-code-for-coin-change">Java code for coin change</h4>
+
+<p>Below is the code to count ways to making a sum.</p>
+
+<script src="https://gist.github.com/yokolet/33c80d1fbd73075fca0648d4d23164c1.js"> </script>
+
+<p>The result is:</p>
+
+<pre>
+5
+4
+5
+</pre>
+
+<h4 id="problem-description---unique-paths">Problem Description - Unique Paths</h4>
+
+<p>Given two integers, m and n, which expresses m rows and n columns,
+find how many unique paths are there from top left to bottom right.
+Available directions are right and down only.</p>
+
+<p>For example, m = 3 and n = 4 are given, three of all possible paths
+are like this:</p>
+
+<pre>
+
++---+---+---+---+     +---+---+---+---+     +---+---+---+---+
+| x-----------┐ |     | x-------┐ |   |     | x |   |   |   |
++---+---+---+-|-+     +---+---+-|-+---+     +-|-+---+---+---+
+|   |   |   | | |     |   |   | | |   |     | └-----------┐ |
++---+---+---+-|-+     +---+---+-|-+---+     +---+---+---+-|-+
+|   |   |   | x |     |   |   | └---x |     |   |   |   | x |
++---+---+---+- -+     +---+---+---+---+     +---+---+---+---+
+
+</pre>
+
+<h4 id="the-idea-for-unique-paths">The idea for unique paths</h4>
+
+<p>Like other two problems, I chose the dynamic programming to find the answer,
+I used auxiliary table to save states.
+The auxiliary table (<code>memo</code>) has a size [m] x [n].
+In this case, plus one doesn’t need since the first row and column can be
+initialized without any previous state.
+Movements are only right and down.
+Given that, the first row are all 1 since from left is the only one way.
+The first columns are all 1 as well since from above is the only one way.
+Then, fill the rest of the table by expanding the path one by one, right or down.</p>
+
+<p>At each table[i][j], the values on above table[i - 1][j] and left table[i][j - 1] will be added up.
+This way, ways to come index i, j will be calculated.
+When traversal reaches to the bottom right index, table[m - 1][n - 1], the answer is there.</p>
+
+<h4 id="java-code--for-unique-paths">Java code  for unique paths</h4>
+
+<p>Below is the code to count ways to reach from top left to bottom right.</p>
+
+<script src="https://gist.github.com/yokolet/586b6a4a08c7ef3b6f4be2085a6a6b93.js"> </script>
+
+<p>The result is:</p>
+
+<pre>
+6
+10
+</pre>
+
+<h4 id="resources">Resources</h4>
+
+<ul>
+  <li><a href="http://www.geeksforgeeks.org/count-ways-reach-nth-stair/">Count ways to reach the n’th stair</a></li>
+  <li><a href="http://algorithms.tutorialhorizon.com/dynamic-programming-stairs-climbing-puzzle/">Stairs Climbing Puzzle</a></li>
+  <li><a href="http://www.geeksforgeeks.org/dynamic-programming-set-7-coin-change/">Coin Change</a></li>
+  <li><a href="http://algorithms.tutorialhorizon.com/dynamic-programming-coin-change-problem/">Coin Change Problem</a></li>
+  <li><a href="http://www.geeksforgeeks.org/count-possible-paths-top-left-bottom-right-nxm-matrix/">Count all possible paths from top left to bottom right of a mXn matrix</a></li>
+  <li><a href="http://algorithms.tutorialhorizon.com/dynamic-programming-count-all-paths-from-top-left-to-bottom-right-of-a-mxn-matrix/">Count all paths from top left to bottom right of a mXn matrix</a></li>
+  <li><a href="http://www.programcreek.com/2014/05/leetcode-unique-paths-java/">Unique Paths</a></li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+</div>
+
+
+
+
+                </div>
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    <p class="title is-4">Latest Posts</p>
+
+<div class="columns is-multiline">
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/10/30/setting-up-gcp-instance-for-deep-learning.html">Setting Up GCP Instance for Deep Learning</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>This post is going to be very different from what I write here.
+The content is a memo how I create a GCP (Google Cloud Platform) instance for Deep Learning.
+While I study algorithm stuff, I also have been studying Deep Learning.
+In my early days, I tried to train my Deep Learning model only on a laptop.
+My laptop is 2012 model MacBook Pro, so I would say it is reasonably fast.
+However, when it comes to Deep Learning, the training was quite painful on the such machine.
+Often, I ran the training over night to get a disappointed result.
+Still, I didn’t use any of pricey cloud environment
+since it was my personal study unrelated to my day job.
+I wanted to save money.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/10/30/setting-up-gcp-instance-for-deep-learning.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Oct 30, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/09/10/complete-binary-tree.html">Complete Binary Tree</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>Problems which ask a binary tree traverse, add/delete nodes, etc. are popular in algorithm questions.
+The binary trees are often just a binary tree or binary search tree.
+Sometimes, the problem pinpoints a particular type of a binary tree,
+for example, a balanced binary tree or complete binary tree.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/09/10/complete-binary-tree.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Sep 10, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/09/09/catalan-number.html">Catalan number</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>What is <strong>Catalan number</strong> ?
+The Catalan number belongs to the domain of combinatorial mathematics.
+It is a sequence of natural numbers such that:
+<code>1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012, 742900, 2674440, 9694845, 35357670, 129644790, 477638700, 1767263190, ...</code>
+The sequence appears in counting problems.
+Wikipedia has the details about the sequence: <a href="https://en.wikipedia.org/wiki/Catalan_number">Catalan Number</a>.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/09/09/catalan-number.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Sep 9, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

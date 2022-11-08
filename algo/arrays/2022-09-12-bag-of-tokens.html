@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Bag of Tokens | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Bag of Tokens" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/arrays/2022-09-12-bag-of-tokens.html" />
+<meta property="og:url" content="http://localhost:4000/algo/arrays/2022-09-12-bag-of-tokens.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-09-12T13:08:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Bag of Tokens" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-12T13:08:00+09:00","datePublished":"2022-09-12T13:08:00+09:00","description":"Blog site mostly for programming topics.","headline":"Bag of Tokens","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/arrays/2022-09-12-bag-of-tokens.html"},"url":"http://localhost:4000/algo/arrays/2022-09-12-bag-of-tokens.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Bag of Tokens</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Sep 12, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>Since the order of the given array doesn’t matter, start from sorting the array.
+The greedy approach can be applied.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>You have an initial power of <code>power</code>, an initial score of <code>0</code>, and
+a bag of <code>tokens</code> where <code>tokens[i]</code> is the value of the i-th token (0-indexed).
+Your goal is to maximize your total score by potentially playing each token in one of two ways:</p>
+  <ul>
+    <li>If your current <code>power</code> is at least <code>tokens[i]</code>, you may play the i-th token face up,
+losing <code>tokens[i]</code> power and gaining <code>1</code> score.</li>
+    <li>If your current <code>score</code> is at least 1, you may play the i-th token face down,
+gaining <code>tokens[i]</code> power and losing <code>1</code> score.</li>
+  </ul>
+
+  <p>Each token may be played at most once and in any order. You do not have to play all the tokens.</p>
+
+  <p>Return the largest possible score you can achieve after playing any number of tokens.</p>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>0 &lt;= tokens.length &lt;= 1000</code></li>
+    <li><code>0 &lt;= tokens[i], power &lt; 10**4</code></li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/bag-of-tokens/">https://leetcode.com/problems/bag-of-tokens/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>Example 1:
+Input: tokens = [100], power = 50
+Output: 0
+Explanation: Playing the only token in the bag is impossible because you either have too little power or
+too little score.
+</code></pre>
+
+<pre><code>Example 2:
+Input: tokens = [100,200], power = 150
+Output: 1
+Explanation: Play the 0th token (100) face up, your power becomes 50 and score becomes 1.
+There is no need to play the 1st token since you cannot play it face up to add to your score.
+</code></pre>
+
+<pre><code>Example 3:
+Input: tokens = [100,200,300,400], power = 200
+Output: 2
+Explanation: Play the tokens in this order to get a score of 2:
+1. Play the 0th token (100) face up, your power becomes 100 and score becomes 1.
+2. Play the 3rd token (400) face down, your power becomes 500 and score becomes 0.
+3. Play the 1st token (200) face up, your power becomes 300 and score becomes 1.
+4. Play the 2nd token (300) face up, your power becomes 0 and score becomes 2.
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>Since the order doesn’t matter, start from sorting the token array.
+Take smaller token to get a score, then take bigger token to gain power.
+The process lose opposites, power for more scores, scores for more power.
+Use two pointers, low and high.
+As the low pointer proceeds, it gains the score and loses power.
+When the power becomes lower than the current token, the high pointer starts working.
+When the score becomes 0, it’s back to low pointer to get more scores.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-python">class BagOfTokens:
+    def bagOfTokensScore(self, tokens: List[int], power: int) -&gt; int:
+        tokens.sort()
+        score = 0
+        low, high = 0, len(tokens) - 1
+        while low &lt;= high:
+            if power &gt;= tokens[low]:
+                power -= tokens[low]
+                score += 1
+                low += 1
+            elif low &lt; high and score:
+                power += tokens[high]
+                score -= 1
+                high -= 1
+            else:
+                break
+        return score
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: <code>O(nlog(n))</code></li>
+  <li>Space: <code>O(1)</code></li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Medium
+</span>
+    
+    <span class="tag  is-primary ">
+    Sorting
+</span>
+    
+    <span class="tag  is-primary ">
+    Two Pointers
+</span>
+    
+    <span class="tag  is-primary ">
+    Greedy
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

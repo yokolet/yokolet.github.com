@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Gas Station | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Gas Station" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/arrays/2022-10-16-gas-station.html" />
+<meta property="og:url" content="http://localhost:4000/algo/arrays/2022-10-16-gas-station.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-10-16T23:33:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Gas Station" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-10-16T23:33:00+09:00","datePublished":"2022-10-16T23:33:00+09:00","description":"Blog site mostly for programming topics.","headline":"Gas Station","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/arrays/2022-10-16-gas-station.html"},"url":"http://localhost:4000/algo/arrays/2022-10-16-gas-station.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Gas Station</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Oct 16, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>A naive idea is to start from every index and check all stations can be reached.
+However, a greedy approach makes it possible to do in one path.
+Just calculate gas - cost at each index.
+If the accumulation of the diff becomes negative, the start should be moved.
+This way, we can get the answer.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>There are <code>n</code> gas stations along a circular route, where the amount of gas at the i-th station is <code>gas[i]</code>.</p>
+
+  <p>You have a car with an unlimited gas tank and it costs <code>cost[i]</code> of gas to travel from the i-th station to
+its next (i + 1)-th station. You begin the journey with an empty tank at one of the gas stations.</p>
+
+  <p>Given two integer arrays <code>gas</code> and <code>cost</code>, return the starting gas station’s index if you can travel around
+the circuit once in the clockwise direction, otherwise return -1.
+If there exists a solution, it is guaranteed to be unique</p>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>n == gas.length == cost.length</code></li>
+    <li><code>1 &lt;= n &lt;= 10**5</code></li>
+    <li><code>0 &lt;= gas[i], cost[i] &lt;= 10**4</code></li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/gas-station/">https://leetcode.com/problems/gas-station/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>Example 1
+Input: gas = [1,2,3,4,5], cost = [3,4,5,1,2]
+Output: 3
+Explanation:
+Start at station 3 (index 3) and fill up with 4 unit of gas. Your tank = 0 + 4 = 4
+Travel to station 4. Your tank = 4 - 1 + 5 = 8
+Travel to station 0. Your tank = 8 - 2 + 1 = 7
+Travel to station 1. Your tank = 7 - 3 + 2 = 6
+Travel to station 2. Your tank = 6 - 4 + 3 = 5
+Travel to station 3. The cost is 5. Your gas is just enough to travel back to station 3.
+Therefore, return 3 as the starting index.
+</code></pre>
+
+<pre><code>Example 2
+Input: gas = [2,3,4], cost = [3,4,3]
+Output: -1
+Explanation:
+You can't start at station 0 or 1, as there is not enough gas to travel to the next station.
+Let's start at station 2 and fill up with 4 unit of gas. Your tank = 0 + 4 = 4
+Travel to station 0. Your tank = 4 - 3 + 2 = 3
+Travel to station 1. Your tank = 3 - 3 + 3 = 3
+You cannot travel back to station 2, as it requires 4 unit of gas but you only have 3.
+Therefore, you can't travel around the circuit once no matter where you start.
+</code></pre>
+
+<pre><code>Example 3
+Input: gas = [3,1,1], cost = [1,2,2]
+Output: 0
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>At first, check there is enough amount of gas compared to cost.
+If it is, there should be an unique solution.
+Calculate gas - cost.
+If the accumulation of gas - cost becomes negative, it’s impossible to reach to the starting point.
+So, initialize the parameter and update start index.
+When the all stations are checked, we get the answer.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-python">class GasStation:
+    def canCompleteCircuit(self, gas: List[int], cost: List[int]) -&gt; int:
+        if sum(gas) &lt; sum(cost):
+            return -1
+        n = len(gas)
+        total, start = 0, 0
+        for i in range(n):
+            total += gas[i] - cost[i]
+            if total &lt; 0:
+                total = 0
+                start = i + 1
+        return start
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: <code>O(n)</code></li>
+  <li>Space: <code>O(1)</code></li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Medium
+</span>
+    
+    <span class="tag  is-primary ">
+    Greedy
+</span>
+    
+    <span class="tag  is-primary ">
+    Array
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

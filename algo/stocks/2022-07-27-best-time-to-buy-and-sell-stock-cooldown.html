@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Best Time to Buy and Sell Stock – with Cooldown | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Best Time to Buy and Sell Stock – with Cooldown" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/stocks/2022-07-27-best-time-to-buy-and-sell-stock-cooldown.html" />
+<meta property="og:url" content="http://localhost:4000/algo/stocks/2022-07-27-best-time-to-buy-and-sell-stock-cooldown.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-07-27T21:29:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Best Time to Buy and Sell Stock – with Cooldown" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-07-27T21:29:00+09:00","datePublished":"2022-07-27T21:29:00+09:00","description":"Blog site mostly for programming topics.","headline":"Best Time to Buy and Sell Stock – with Cooldown","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/stocks/2022-07-27-best-time-to-buy-and-sell-stock-cooldown.html"},"url":"http://localhost:4000/algo/stocks/2022-07-27-best-time-to-buy-and-sell-stock-cooldown.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Best Time to Buy and Sell Stock -- with Cooldown</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Jul 27, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>This is the fifth buy-sell-stock problem which has a slight variation to the basic one.
+In this problem, we need to hold a day after the stocks are sold.
+Aside of that, we can buy and sell as many times as we want.
+That being said, the problem looks similar to the buy and sell multiple times.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>You are given an array <code>prices</code> where <code>prices[i]</code> is the price of a given stock on the i-th day.</p>
+
+  <p>Find the maximum profit you can achieve.
+You may complete as many transactions as you like
+(i.e., buy one and sell one share of the stock multiple times) with the following restrictions:</p>
+
+  <blockquote>
+    <p>After you sell your stock, you cannot buy stock on the next day (i.e., cooldown one day).</p>
+  </blockquote>
+
+  <p>Note: You may not engage in multiple transactions simultaneously
+(i.e., you must sell the stock before you buy again).</p>
+
+  <p><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/">https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>example 1:
+Input: prices = [1,2,3,0,2]
+Answer: 3
+Explanation: 3 is the best profit which is from:
+buy: index 0, sell: index 1, profit: 1
+buy: index 3, sell: index 4, profit: 2
+</code></pre>
+<pre><code>example 2:
+Input: prices = [1]
+Answer: 0
+Explanation: Stocks must be bought before selling those. There's no way to make profit.
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>The the problem states, we can buy and sell as many time as we want.
+This indicates the profit can be calculated by day-to-day difference.
+However, we should put the cooldown day before buying next.
+The solution uses the idea of DP: compare buying today or keep previous buy.
+Selling stocks is the same as buying. It compares selling today or keep previous sell.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-cpp">#include &lt;vector&gt;
+#include &lt;iostream&gt;
+using namespace std;
+
+class BestTimeToBuyAndSellStockWithCooldown
+{
+public:
+  int maxProfit(vector&lt;int&gt; &amp;prices)
+  {
+    vector&lt;int&gt; buy(prices.size()), sell(prices.size()), rest(prices.size());
+    buy[0] = -prices[0];
+    for (int i = 1; i &lt; prices.size(); i++)
+    {
+      // Held a previous stock OR buy this stock
+      buy[i] = max(buy[i - 1], sell[i - 1] - prices[i]);
+      // Reset, don't have any stock in hand, available to buy
+      sell[i] = max(sell[i - 1], rest[i - 1]);
+      // Sold, sell the stock
+      rest[i] = buy[i - 1] + prices[i];
+    }
+    return max(sell[prices.size() - 1], rest[prices.size() - 1]);
+  }
+};
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: O(n) – n: length of the input array.</li>
+  <li>Space: O(n)</li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Medium
+</span>
+    
+    <span class="tag  is-primary ">
+    Array
+</span>
+    
+    <span class="tag  is-primary ">
+    DP
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

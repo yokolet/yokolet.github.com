@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Subarray Sum Equals K | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Subarray Sum Equals K" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/arrays/2022-10-26-subarray-sum-equals-k.html" />
+<meta property="og:url" content="http://localhost:4000/algo/arrays/2022-10-26-subarray-sum-equals-k.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-10-26T15:04:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Subarray Sum Equals K" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-10-26T15:04:00+09:00","datePublished":"2022-10-26T15:04:00+09:00","description":"Blog site mostly for programming topics.","headline":"Subarray Sum Equals K","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/arrays/2022-10-26-subarray-sum-equals-k.html"},"url":"http://localhost:4000/algo/arrays/2022-10-26-subarray-sum-equals-k.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Subarray Sum Equals K</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Oct 26, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>The problem gives us an array and asks about sum which is k.
+This signals the prefix sum and hash table.
+It is a kind of 2-sum problem.
+That’s why the hash table works.
+The keys of the hash table are accumulated sums.
+While going over the given array, if accumulated sum minus k exists in the table, the sum equals to k is found.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>Given an array of integers <code>nums</code> and an integer <code>k</code>, return the total number of subarrays whose sum equals to <code>k</code>.</p>
+
+  <p>A subarray is a contiguous non-empty sequence of elements within an array.</p>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= nums.length &lt;= 2 * 10**4</code></li>
+    <li><code>-1000 &lt;= nums[i] &lt;= 1000</code></li>
+    <li><code>-10**7 &lt;= k &lt;= 10**7</code></li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/subarray-sum-equals-k/">https://leetcode.com/problems/subarray-sum-equals-k/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>Example 1
+Input: nums = [1,1,1], k = 2
+Output: 2
+</code></pre>
+
+<pre><code>Example 2
+Input: nums = [1,2,3], k = 3
+Output: 2
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>The solution here starts from initializing the accumulated value and hash table.
+The value of the hash table is a number of times the accumulated value appeared.
+So, the initial value is sum 0 and count 1.
+While checking the array value one by one, find accumulated value minus k.
+Like 2-sum problem, the accumulated sum minus k exists in the hash table, add up the count.
+Then, count up at the current accumulated sum.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-python">class SubarraySumEqualsK:
+    def subarraySum(self, nums: List[int], k: int) -&gt; int:
+        acc, memo = 0, {0: 1}
+        count = 0
+        for v in nums:
+            acc += v
+            diff = acc - k
+            if diff in memo:
+                count += memo[diff]
+            if acc in memo:
+                memo[acc] += 1
+            else:
+                memo[acc] = 1
+        return count
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: <code>O(n)</code></li>
+  <li>Space: <code>O(n)</code></li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Medium
+</span>
+    
+    <span class="tag  is-primary ">
+    Prefix Sum
+</span>
+    
+    <span class="tag  is-primary ">
+    Hash Table
+</span>
+    
+    <span class="tag  is-primary ">
+    Array
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>AngularJS on Hoplon | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="AngularJS on Hoplon" />
+<meta name="author" content="Yoko Harada" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/2014/03/24/angularjsonhoplon.html" />
+<meta property="og:url" content="http://localhost:4000/2014/03/24/angularjsonhoplon.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2014-03-24T00:00:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="AngularJS on Hoplon" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Yoko Harada"},"dateModified":"2014-03-24T00:00:00+09:00","datePublished":"2014-03-24T00:00:00+09:00","description":"Blog site mostly for programming topics.","headline":"AngularJS on Hoplon","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2014/03/24/angularjsonhoplon.html"},"url":"http://localhost:4000/2014/03/24/angularjsonhoplon.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">AngularJS on Hoplon</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-8">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Mar 24, 2014</p>
+
+    
+
+    <p>About a month ago, <a href="https://github.com/alandipert">Alan Dipert</a> and <a href="https://github.com/micha">Micha Niskin</a> gave a presentation at Triangle Clojure Users Meetup.
+Their topic was about Hoplon, <a href="hoplon.io">hoplon.io</a>, ClojureScript Framework.
+It was impressive one.</p>
+
+<p>Hoplon made easy to get started ClojureScript coding by its boot 
+(if you have tried ClojureScript, you should know it is really cumbersome to just start it).
+Also, Hoplon has a simple state machine and a feature to render HTML tags.
+Except boot, everything works on ClojureScript, not Clojure.</p>
+
+<p>After their presentation, one attendee asked a question, “What about AngularJS? Does Angular work on Hoplon?”</p>
+
+<!--more-->
+
+<p>Recently, this question would be one of FAQs for all client side frameworks.
+There’s no doubt AngularJS is becoming an industry standard.
+Although Hoplon has an ability to do the same thing as AngularJS,
+my curiosity pushed me to try it out.</p>
+
+<p>Whether AngularJS works on Hoplon or not?
+The answer is yes.
+Besides, it was effortless than I expected.
+<br /><br /></p>
+
+<h4 id="the-first-very-simple-angularjs-on-hoplon">The first very simple AngularJS on Hoplon</h4>
+
+<p>Following Hoplon’s <a href="http://hoplon.io/#/getting-started/">Gettting Started</a> documment,
+I created the directories and files below:</p>
+
+<pre><code>.
+├── README.md
+├── assets
+│   └── css
+│       └── main.css
+├── build.boot
+├── resources
+│   └── public
+│       ├── css
+│       │   └── main.css
+│       ├── hello-angular.html
+│       └── main.js
+└── src
+    ├── angular.inc.js
+    └── hello_angular.cljs.hl
+
+6 directories, 8 files
+</code></pre>
+
+<p>Hoplon compiles and puts everyting under src together to <code>resource/public/main.js</code>.
+The extension, <code>inc.js</code>, is for external JavaScript file.
+I downloaded Angular’s minified JavaScript file and put it under src directory with the extension, inc.js.</p>
+
+<p>Below is a whole code of <code>hello_angular.cljs.hl</code>.</p>
+
+<figure class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nf">page</span><span class="w"> </span><span class="s">"hello-angular.html"</span><span class="p">)</span><span class="w">
+
+</span><span class="p">(</span><span class="nf">html</span><span class="w"> </span><span class="no">:ng-app</span><span class="w"> </span><span class="s">""</span><span class="w">
+      </span><span class="p">(</span><span class="nf">head</span><span class="w">
+       </span><span class="p">(</span><span class="nf">title</span><span class="w"> </span><span class="s">"AngularJS on Hoplon"</span><span class="p">))</span><span class="w">
+      </span><span class="p">(</span><span class="nf">body</span><span class="w">
+       </span><span class="p">(</span><span class="nf">p</span><span class="w"> </span><span class="s">"Next line uses angular's double curly braces"</span><span class="p">)</span><span class="w">
+       </span><span class="p">(</span><span class="nf">div</span><span class="w"> </span><span class="s">"Nothing here {{'yet' + '!'}}"</span><span class="p">)))</span></code></pre></figure>
+
+<p>That’s it. Hoplon generates <code>resrouces/public/hello-angular.html</code>, which is on the first line.
+On browser, open the hello-angular.html file.
+If you use html code inspection feature, you’ll see the output as in below:</p>
+
+<p><img width="500" src="http://localhost:4000/assets/img/hello-angular-html.png" alt="generated html code" /></p>
+
+<p>As you can see <code>class="ng-binding"</code> on the line which has Angular’s double curly braces,
+AngularJS on Hoplon worked without any special effort.
+<br /><br /></p>
+
+<h4 id="angularjs-controller-written-by-clojurescript">AngularJS controller written by ClojureScript</h4>
+
+<p>Writing AngularJS’s controller in ClojureScript is nothing new.
+Already, people have tried this, and libraries/blog posts are out there.
+The difference here is I tried that on Hoplon.</p>
+
+<p>This simple application has buttons which has 1 to 4 on it.
+When one of button is clicked, the image name will be changed to corresponding one.
+For example, when button 2 is clicked, picture2.png will show up.</p>
+
+<p>Now, the directory structure becomes below:</p>
+
+<pre><code>.
+├── README.md
+├── assets
+│   ├── css
+│   │   └── main.css
+│   └── img
+│       ├── picture1.png
+│       ├── picture2.png
+│       ├── picture3.png
+│       └── picture4.png
+├── build.boot
+├── resources
+│   └── public
+│       ├── angular-buttons.html
+│       ├── css
+│       │   └── main.css
+│       ├── hello-angular.html
+│       ├── img
+│       │   ├── picture1.png
+│       │   ├── picture2.png
+│       │   ├── picture3.png
+│       │   └── picture4.png
+│       └── main.js
+└── src
+    ├── angular.inc.js
+    ├── angular_buttons.cljs.hl
+    ├── controllers
+    │   └── buttons.cljs.hl
+    └── hello_angular.cljs.hl
+
+9 directories, 19 files
+</code></pre>
+
+<p>I put images under <code>assets/img</code> directory, then Hoplon’s boot copies those to <code>resources/public/img</code> directory.</p>
+
+<p>For this button application, I created <code>src/angular_buttons.cljs.hl</code> below:</p>
+
+<figure class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nf">page</span><span class="w"> </span><span class="s">"angular-buttons.html"</span><span class="p">)</span><span class="w">
+
+</span><span class="p">(</span><span class="nf">html</span><span class="w"> </span><span class="no">:ng-app</span><span class="w"> </span><span class="s">"buttonApp"</span><span class="w">
+      </span><span class="p">(</span><span class="nf">head</span><span class="w">
+       </span><span class="p">(</span><span class="nf">title</span><span class="w"> </span><span class="s">"Buttons by AngularJS on Hoplon"</span><span class="p">))</span><span class="w">
+      </span><span class="p">(</span><span class="nf">body</span><span class="w">
+       </span><span class="p">(</span><span class="nf">div</span><span class="w"> </span><span class="s">"Buttons by AngularJS on Hoplon"</span><span class="p">)</span><span class="w">
+       </span><span class="p">(</span><span class="nf">div</span><span class="w"> </span><span class="no">:ng-controller</span><span class="w"> </span><span class="s">"ButtonsCtrl"</span><span class="w"> </span><span class="no">:ng-model</span><span class="w"> </span><span class="s">"myngmodel"</span><span class="n">,</span><span class="w"> </span><span class="no">:ng-init</span><span class="w"> </span><span class="s">"myngmodel=1"</span><span class="w">
+            </span><span class="p">(</span><span class="nf">button</span><span class="w"> </span><span class="no">:ng-repeat</span><span class="w"> </span><span class="s">"index in ['1', '2', '3', '4']"</span><span class="w"> </span><span class="no">:ng-click</span><span class="w"> </span><span class="s">"update(index)"</span><span class="w"> </span><span class="s">"{{index}}"</span><span class="p">)</span><span class="w">
+            </span><span class="p">(</span><span class="nf">div</span><span class="w"> </span><span class="p">(</span><span class="nf">img</span><span class="w"> </span><span class="no">:src</span><span class="w"> </span><span class="s">"img/picture{{myngmodel}}.png"</span><span class="p">)))))</span></code></pre></figure>
+
+<p>Angular’s controller code is <code>src/controllers/buttons.cljs.hl</code>, which is:</p>
+
+<figure class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nf">ns</span><span class="w"> </span><span class="n">controllers.buttons</span><span class="p">)</span><span class="w">
+
+</span><span class="p">(</span><span class="k">def</span><span class="w"> </span><span class="n">buttonApp</span><span class="w">
+  </span><span class="p">(</span><span class="nf">.module</span><span class="w"> </span><span class="n">js/angular</span><span class="w"> </span><span class="s">"buttonApp"</span><span class="w"> </span><span class="p">(</span><span class="nf">array</span><span class="p">)))</span><span class="w">
+
+</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">buttonsCtrl</span><span class="w"> </span><span class="p">[</span><span class="n">$scope</span><span class="p">]</span><span class="w">
+  </span><span class="p">(</span><span class="nb">aset</span><span class="w"> </span><span class="n">$scope</span><span class="w"> </span><span class="s">"update"</span><span class="w"> </span><span class="p">(</span><span class="err">ƒ</span><span class="w"> </span><span class="p">[</span><span class="nb">index</span><span class="p">]</span><span class="w"> </span><span class="p">(</span><span class="nb">aset</span><span class="w"> </span><span class="n">$scope</span><span class="w"> </span><span class="s">"myngmodel"</span><span class="w"> </span><span class="nb">index</span><span class="p">))))</span><span class="w">
+
+</span><span class="p">(</span><span class="nf">.controller</span><span class="w"> </span><span class="n">buttonApp</span><span class="w"> </span><span class="s">"ButtonsCtrl"</span><span class="w"> </span><span class="n">buttonsCtrl</span><span class="p">)</span></code></pre></figure>
+
+<p>That’s it. Hoplon compiles and puts all together.
+When the button is clicked, <code>update(index)</code> method gets run.
+The method is defined in line 7 of <code>buttons.cljs.hl</code>.</p>
+
+<p>Again, if you use browser’s inspection feature, you’ll see the generated code below.
+Also, you’ll see picture name will be changed to picture3.png or picture4.png.</p>
+
+<p><img width="700" src="http://localhost:4000/assets/img/angular-buttons-html.png" alt="generated html code" />
+<br /><br /></p>
+
+<h4 id="it-worked">It worked!</h4>
+
+<p>As I tried, AngularJS worked on Hoplon.
+Thinking of what Hoplon can do, probably, people who are willing to write ClojureScript code
+don’t need AngularJS.
+However, AngularJS has a lot of handy directives.
+In some cases, AngularJS may be a choice.
+<br /><br /></p>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    AngularJS
+</span>
+    
+    <span class="tag  is-primary ">
+    Hoplon
+</span>
+    
+    <span class="tag  is-primary ">
+    ClojureScript
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    <p class="title is-4">Latest Posts</p>
+
+<div class="columns is-multiline">
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/10/30/setting-up-gcp-instance-for-deep-learning.html">Setting Up GCP Instance for Deep Learning</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>This post is going to be very different from what I write here.
+The content is a memo how I create a GCP (Google Cloud Platform) instance for Deep Learning.
+While I study algorithm stuff, I also have been studying Deep Learning.
+In my early days, I tried to train my Deep Learning model only on a laptop.
+My laptop is 2012 model MacBook Pro, so I would say it is reasonably fast.
+However, when it comes to Deep Learning, the training was quite painful on the such machine.
+Often, I ran the training over night to get a disappointed result.
+Still, I didn’t use any of pricey cloud environment
+since it was my personal study unrelated to my day job.
+I wanted to save money.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/10/30/setting-up-gcp-instance-for-deep-learning.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Oct 30, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/09/10/complete-binary-tree.html">Complete Binary Tree</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>Problems which ask a binary tree traverse, add/delete nodes, etc. are popular in algorithm questions.
+The binary trees are often just a binary tree or binary search tree.
+Sometimes, the problem pinpoints a particular type of a binary tree,
+for example, a balanced binary tree or complete binary tree.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/09/10/complete-binary-tree.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Sep 10, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/09/09/catalan-number.html">Catalan number</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>What is <strong>Catalan number</strong> ?
+The Catalan number belongs to the domain of combinatorial mathematics.
+It is a sequence of natural numbers such that:
+<code>1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012, 742900, 2674440, 9694845, 35357670, 129644790, 477638700, 1767263190, ...</code>
+The sequence appears in counting problems.
+Wikipedia has the details about the sequence: <a href="https://en.wikipedia.org/wiki/Catalan_number">Catalan Number</a>.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/09/09/catalan-number.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Sep 9, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Minimum Adjacent Swaps for K Consecutive Ones | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Minimum Adjacent Swaps for K Consecutive Ones" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/arrays/2022-09-18-minimum-adjacent-swaps-for-k-consecutive-ones.html" />
+<meta property="og:url" content="http://localhost:4000/algo/arrays/2022-09-18-minimum-adjacent-swaps-for-k-consecutive-ones.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-09-18T17:36:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Minimum Adjacent Swaps for K Consecutive Ones" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-18T17:36:00+09:00","datePublished":"2022-09-18T17:36:00+09:00","description":"Blog site mostly for programming topics.","headline":"Minimum Adjacent Swaps for K Consecutive Ones","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/arrays/2022-09-18-minimum-adjacent-swaps-for-k-consecutive-ones.html"},"url":"http://localhost:4000/algo/arrays/2022-09-18-minimum-adjacent-swaps-for-k-consecutive-ones.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Minimum Adjacent Swaps for K Consecutive Ones</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Sep 18, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>This is another 0, 1 minimum swap problem.
+However, this problem is much complicated.
+The swaps can be done only adjacent indicies.
+Up to the given number of 1s could be rearranged to consecutive, the process is over.
+For this problem, we should focus on the right and left side within the range.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>You are given an integer array, <code>nums</code>, and an integer <code>k</code>.
+<code>nums</code> comprises of only 0’s and 1’s.
+In one move, you can choose two adjacent indices and swap their values.</p>
+
+  <p>Return the minimum number of moves required so that nums has <code>k</code> consecutive 1’s.</p>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= nums.length &lt;= 10**5</code></li>
+    <li><code>nums[i]</code> is 0 or 1.</li>
+    <li><code>1 &lt;= k &lt;= sum(nums)</code></li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/minimum-adjacent-swaps-for-k-consecutive-ones/">https://leetcode.com/problems/minimum-adjacent-swaps-for-k-consecutive-ones/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>Example 1
+Input: nums = [1,0,0,1,0,1], k = 2
+Output: 1
+Explanation: In 1 move, nums could be [1,0,0,0,1,1] and have 2 consecutive 1's.
+</code></pre>
+
+<pre><code>Example 2
+Input: nums = [1,0,0,0,0,0,1,1], k = 3
+Output: 5
+Explanation: In 5 moves, the leftmost 1 can be shifted right until nums = [0,0,0,0,0,1,1,1].
+</code></pre>
+
+<pre><code>Example 3
+Input: nums = [1,1,0,1], k = 2
+Output: 0
+Explanation: nums already has 2 consecutive 1's.
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>Let’s see the first example:</p>
+<pre><code>nums: [1, 0, 0, 1, 0, 1], k = 2
+prefix: [0, 0, 3, 8]
+</code></pre>
+<p>When <code>k = 2</code>, we assume nums subarray<code>[1, 0, 0, 0, 1]</code> to become <code>[0, 0, 1, 1, 0]</code> (or <code>[0, 1, 1, 0, 0]</code>).
+In this case, 3 swaps are required.
+Going over to the right, let’s think <code>[0, 0, 1, 0, 1]</code> to become <code>[0, 0, 1, 1, 0]</code>.
+In this case, 1 swap is required.</p>
+
+<p>The first step is to create a prefix sum of 1’s indicies.
+The prefix sum quickly finds the index of nums where the number of 1’s are k.
+Take k from prefix sum and find the middle as well as right and left sides sum.
+To find minimum difference between right sum and left sum is the second step.
+Lastly, subtract the center position since it doesn’t move during the swapping.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-python">class MinimumAdjacentSwapsForKConsecutiveOnes:
+    def minMoves(self, nums: List[int], k: int) -&gt; int:
+        indices = [idx for idx, v in enumerate(nums) if v]
+        n = len(indices)
+        prefix = [0]
+        for i in range(n):
+            prefix.append(prefix[-1] + indices[i])
+        min_v = float('inf')
+        for i in range(n - k + 1):
+            r_sum = prefix[i + k] - prefix[i + (k + 1) // 2]
+            l_sum = prefix[i + k // 2] - prefix[i]
+            min_v = min(min_v, r_sum - l_sum)
+        return min_v - (k // 2) * ((k + 1) // 2)
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: <code>O(n)</code></li>
+  <li>Space: <code>O(m)</code> – m: number of 1’s</li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Hard
+</span>
+    
+    <span class="tag  is-primary ">
+    Sliding Window
+</span>
+    
+    <span class="tag  is-primary ">
+    Prefix Sum
+</span>
+    
+    <span class="tag  is-primary ">
+    Greedy
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

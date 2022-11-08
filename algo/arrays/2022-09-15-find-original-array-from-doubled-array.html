@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Find Original Array From Doubled Array | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Find Original Array From Doubled Array" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/arrays/2022-09-15-find-original-array-from-doubled-array.html" />
+<meta property="og:url" content="http://localhost:4000/algo/arrays/2022-09-15-find-original-array-from-doubled-array.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-09-15T12:58:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Find Original Array From Doubled Array" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-15T12:58:00+09:00","datePublished":"2022-09-15T12:58:00+09:00","description":"Blog site mostly for programming topics.","headline":"Find Original Array From Doubled Array","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/arrays/2022-09-15-find-original-array-from-doubled-array.html"},"url":"http://localhost:4000/algo/arrays/2022-09-15-find-original-array-from-doubled-array.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Find Original Array From Doubled Array</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Sep 15, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>This problem needs a frequency table.
+While checking the doubled value is in the frequency table,
+the count should be decremented not to use the same value more than once.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>An integer array <code>original</code> is transformed into a doubled array changed by
+appending twice the value of every element in original,
+and then randomly shuffling the resulting array.</p>
+
+  <p>Given an array <code>changed</code>, return <code>original</code> if changed is a doubled array.
+If <code>changed</code> is not a doubled array, return an empty array.
+The elements in <code>original</code> may be returned in any order.</p>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= changed.length &lt;= 10**5</code></li>
+    <li><code>0 &lt;= changed[i] &lt;= 10**5</code></li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/find-original-array-from-doubled-array/">https://leetcode.com/problems/find-original-array-from-doubled-array/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>Example 1:
+Input: changed = [1,3,4,2,6,8]
+Output: [1,3,4]
+Explanation: One possible original array could be [1,3,4], [3,1,4] and any order
+</code></pre>
+
+<pre><code>Example 2:
+Input: changed = [6,3,0,1]
+Output: []
+Explanation: changed is not a doubled array.
+</code></pre>
+
+<pre><code>Example 3:
+Input: changed = [1]
+Output: []
+Explanation: changed is not a doubled array.
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>The first step is to create a frequency table and sort the given array.
+Start from smallest value and check its doubled value exists and whose count is more than 0.
+If it does, add the value to the result array and count down.
+This way, we get the answer.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-python">class FindOriginalArrayFromDoubledArray:
+    def findOriginalArray(self, changed: List[int]) -&gt; List[int]:
+        freq = collections.Counter(changed)
+        changed.sort()
+        original = []
+        for v in changed:
+            if freq[v]:
+                freq[v] -= 1
+                twice = v * 2
+                if twice in freq and freq[twice] &gt; 0:
+                    freq[twice] -= 1
+                    original.append(v)
+                else:
+                    return []
+        return original
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: <code>O(n)</code></li>
+  <li>Space: <code>O(n)</code></li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Medium
+</span>
+    
+    <span class="tag  is-primary ">
+    Hash Table
+</span>
+    
+    <span class="tag  is-primary ">
+    Sorting
+</span>
+    
+    <span class="tag  is-primary ">
+    Greedy
+</span>
+    
+    <span class="tag  is-primary ">
+    Array
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

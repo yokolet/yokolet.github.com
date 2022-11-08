@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Maximum Length of Repeated Subarray | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Maximum Length of Repeated Subarray" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/dynamic_programming/2022-09-20-maximum-length-of-repeated-subarray.html" />
+<meta property="og:url" content="http://localhost:4000/algo/dynamic_programming/2022-09-20-maximum-length-of-repeated-subarray.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-09-20T21:58:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Maximum Length of Repeated Subarray" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-20T21:58:00+09:00","datePublished":"2022-09-20T21:58:00+09:00","description":"Blog site mostly for programming topics.","headline":"Maximum Length of Repeated Subarray","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/dynamic_programming/2022-09-20-maximum-length-of-repeated-subarray.html"},"url":"http://localhost:4000/algo/dynamic_programming/2022-09-20-maximum-length-of-repeated-subarray.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Maximum Length of Repeated Subarray</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Sep 20, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>This problem can be solved by multiple approaches.
+A naive solution would be to create a character map and check subarray equality.
+However, the naive approach runs slow.
+If we look at the problem carefully, the comparison should be done at each index while extending the range.
+The next comparison is an extension of previous comparison.
+This means the dynamic programing is among multiple approaches.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>Given two integer arrays <code>nums1</code> and <code>nums2</code>, return the maximum length of a subarray
+that appears in both arrays.</p>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= nums1.length, nums2.length &lt;= 1000</code></li>
+    <li><code>0 &lt;= nums1[i], nums2[i] &lt;= 100</code></li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/maximum-length-of-repeated-subarray/">https://leetcode.com/problems/maximum-length-of-repeated-subarray/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>Example 1
+Input: nums1 = [1,2,3,2,1], nums2 = [3,2,1,4,7]
+Output: 3
+Explanation: The repeated subarray with maximum length is [3,2,1].
+</code></pre>
+
+<pre><code>Example 2
+Input: nums1 = [0,0,0,0,0], nums2 = [0,0,0,0,0]
+Output: 5
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>The DP solution is the approach taken here.
+The 2 dimensional auxiliary array is used to save the state so far.
+If the array values are the same at index i of nums1 and j of nums2, extend the length by one.
+Then compare the maximum value.
+In the end, we get the answer.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-python">class MaximumLengthOfRepeatedSubarray:
+    def findLength(self, nums1: List[int], nums2: List[int]) -&gt; int:
+        m, n = len(nums1), len(nums2)
+        memo = [[0 for _ in range(n + 1)] for _ in range(m + 1)]
+        max_v = 0
+        for i in range(1, m + 1):
+            for j in range(1, n + 1):
+                if nums1[i - 1] == nums2[j - 1]:
+                    memo[i][j] = memo[i - 1][j - 1] + 1
+                max_v = max(max_v, memo[i][j])
+        return max_v
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: <code>O(mn)</code> – m, n: length of nums1 and nums2</li>
+  <li>Space: <code>O(mn)</code></li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Medium
+</span>
+    
+    <span class="tag  is-primary ">
+    Dynamic Programming
+</span>
+    
+    <span class="tag  is-primary ">
+    Sliding Window
+</span>
+    
+    <span class="tag  is-primary ">
+    Array
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

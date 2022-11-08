@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Design Snake Game | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Design Snake Game" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/design/2022-10-31-design-snake-game.html" />
+<meta property="og:url" content="http://localhost:4000/algo/design/2022-10-31-design-snake-game.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-10-31T15:33:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Design Snake Game" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-10-31T15:33:00+09:00","datePublished":"2022-10-31T15:33:00+09:00","description":"Blog site mostly for programming topics.","headline":"Design Snake Game","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/design/2022-10-31-design-snake-game.html"},"url":"http://localhost:4000/algo/design/2022-10-31-design-snake-game.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Design Snake Game</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Oct 31, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>This problem is a well-known snake game implementation.
+How to manage the snake body coordinates is the key to solve this problem.
+When the snake head collides in to its body, the function should return -1.
+When the snake head comes to the food location, its body gets longer by one.
+Given those requirements, the snake body should be an array.
+When the snake gets longer, simply add its head to the array.
+When the snake moves without getting longer, remove the first coordinate from the array.
+Other than that, when the snake head goes out of the grid, it returns -1.
+When the snake head is on the food location, increment the score.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>Design a Snake game that is played on a device with screen size <code>height x width</code>. Play the game online if you are
+not familiar with the game.</p>
+
+  <p>The snake is initially positioned at the top left corner <code>(0, 0)</code> with a length of <code>1</code> unit.
+You are given an array <code>food</code> where <code>food[i] = (r[i], c[i])</code> is the row and column position of a piece of food that
+the snake can eat. When a snake eats a piece of food, its length and the game’s score both increase by 1.
+Each piece of food appears one by one on the screen, meaning the second piece of food will not appear until the
+snake eats the first piece of food. When a piece of food appears on the screen, it is guaranteed that it will not
+appear on a block occupied by the snake.</p>
+
+  <p>The game is over if the snake goes out of bounds (hits a wall) or if its head occupies a space that its body occupies
+after moving (i.e. a snake of length 4 cannot run into itself).</p>
+
+  <p>Implement the SnakeGame class:</p>
+  <ul>
+    <li><code>SnakeGame(int width, int height, int[][] food)</code> Initializes the object with a screen of size height x width and
+ the positions of the food.</li>
+    <li><code>int move(String direction)</code> Returns the score of the game after applying one direction move by the snake. If the
+ game is over, return -1.</li>
+  </ul>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= width, height &lt;= 10**4</code></li>
+    <li><code>1 &lt;= food.length &lt;= 50</code></li>
+    <li><code>food[i].length == 2</code></li>
+    <li><code>0 &lt;= r[i] &lt; height</code></li>
+    <li><code>0 &lt;= c[i] &lt; width</code></li>
+    <li><code>direction.length == 1</code></li>
+    <li>direction is ‘U’, ‘D’, ‘L’, or ‘R’.</li>
+    <li>At most 10**4 calls will be made to <code>move</code>.</li>
+  </ul>
+
+  <p><a href=""></a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>Example 1
+Input
+["SnakeGame", "move", "move", "move", "move", "move", "move"]
+[[3, 2, [[1, 2], [0, 1]]], ["R"], ["D"], ["R"], ["U"], ["L"], ["U"]]
+Output
+[null, 0, 0, 1, 1, 2, -1]
+
+Explanation
+SnakeGame snakeGame = new SnakeGame(3, 2, [[1, 2], [0, 1]]);
+snakeGame.move("R"); // return 0
+snakeGame.move("D"); // return 0
+snakeGame.move("R"); // return 1, snake eats the first piece of food. The second piece of food appears at (0, 1).
+snakeGame.move("U"); // return 1
+snakeGame.move("L"); // return 2, snake eats the second food. No more food appears.
+snakeGame.move("U"); // return -1, game over because snake collides with border
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>The snake should save all coordinates it passed, so it is an array of (row, col) tuple.
+Calculate the snake’s new head, and check it is within the grid.
+If not return -1.
+Also, check the first food location.
+If the snake head is on the first food location, remove the first food from the array and increment the score.
+If it is not on the food location, the snake body won’t get longer.
+Remove the first coordinate from the snake array, which is the equivalent to just move in the same length.
+Lastly, add the new snake head to to array.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-python">class SnakeGame:
+
+    def __init__(self, width: int, height: int, food: List[List[int]]):
+        self.rows = height
+        self.cols = width
+        self.food = food
+        self.snake = [(0, 0)]  # (row, col)
+        self.score = 0
+        
+
+    def move(self, direction: str) -&gt; int:
+        dirs = {
+            'U': (-1, 0),
+            'D': (1, 0),
+            'L': (0, -1),
+            'R': (0, 1)
+        }
+        sr, sc = self.snake[-1][0] + dirs[direction][0], self.snake[-1][1] + dirs[direction][1]
+        if sr &lt; 0 or sr &gt;= self.rows or sc &lt; 0 or sc &gt;= self.cols:
+            return -1
+        if self.food and sr == self.food[0][0] and sc == self.food[0][1]:
+            self.food.pop(0)
+            self.score += 1
+        else:
+            self.snake.pop(0)
+        if (sr, sc) in self.snake:
+            return -1
+        self.snake.append((sr, sc))
+        return self.score
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: <code>O(1)</code></li>
+  <li>Space: <code>O(m * n + k)</code> – m, n: grid’s width, height, k: number of food</li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Medium
+</span>
+    
+    <span class="tag  is-primary ">
+    Design
+</span>
+    
+    <span class="tag  is-primary ">
+    Queue
+</span>
+    
+    <span class="tag  is-primary ">
+    Matrix
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

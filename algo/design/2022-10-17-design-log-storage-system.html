@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Design Log Storage System | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Design Log Storage System" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/design/2022-10-17-design-log-storage-system.html" />
+<meta property="og:url" content="http://localhost:4000/algo/design/2022-10-17-design-log-storage-system.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-10-17T14:33:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Design Log Storage System" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-10-17T14:33:00+09:00","datePublished":"2022-10-17T14:33:00+09:00","description":"Blog site mostly for programming topics.","headline":"Design Log Storage System","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/design/2022-10-17-design-log-storage-system.html"},"url":"http://localhost:4000/algo/design/2022-10-17-design-log-storage-system.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Design Log Storage System</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Oct 17, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>When a problem is related to logging, how to handle timestamp is a key to solve the problem.
+Sometime it is already an integer, float, but sometime is is given as a string.
+Whether the timestamp string should be converted to specific datetime object or not is a design decision.
+In this case, using it just as a string makes the code simpler.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>You are given several logs, where each log contains a unique ID and timestamp. Timestamp is a string that has
+the following format: <code>Year:Month:Day:Hour:Minute:Second</code>, for example, 2017:01:01:23:59:59. All domains are
+zero-padded decimal numbers.</p>
+
+  <p>Implement the <code>LogSystem</code> class:</p>
+  <ul>
+    <li><code>LogSystem()</code> Initializes the <code>LogSystem</code> object.</li>
+    <li><code>void put(int id, string timestamp)</code> Stores the given log <code>(</code>id, timestamp)` in your storage system.</li>
+    <li><code>int[] retrieve(string start, string end, string granularity)</code> Returns the IDs of the logs whose timestamps are
+ within the range from <code>start</code> to <code>end</code> inclusive. The <code>start</code> and <code>end</code> all have the same format as timestamp,
+ and <code>granularity</code> means how precise the range should be (i.e. to the exact Day, Minute, etc.). For example,
+ <code>start = "2017:01:01:23:59:59"</code>, <code>end = "2017:01:02:23:59:59"</code>, and <code>granularity = "Day"</code> means that we need
+ to find the logs within the inclusive range from Jan. 1st 2017 to Jan. 2nd 2017, and the Hour, Minute, and
+ Second for each log entry can be ignored.</li>
+  </ul>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= id &lt;= 500</code></li>
+    <li><code>2000 &lt;= Year &lt;= 2017</code></li>
+    <li><code>1 &lt;= Month &lt;= 12</code></li>
+    <li><code>1 &lt;= Day &lt;= 31</code></li>
+    <li><code>0 &lt;= Hour &lt;= 23</code></li>
+    <li><code>0 &lt;= Minute, Second &lt;= 59</code></li>
+    <li><code>granularity</code> is one of the values <code>["Year", "Month", "Day", "Hour", "Minute", "Second"]</code>.</li>
+    <li>At most 500 calls will be made to <code>put</code> and <code>retrieve</code>.</li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/design-log-storage-system/">https://leetcode.com/problems/design-log-storage-system/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>Example 1
+
+Input
+["LogSystem", "put", "put", "put", "retrieve", "retrieve"]
+[[], [1, "2017:01:01:23:59:59"], [2, "2017:01:01:22:59:59"], [3, "2016:01:01:00:00:00"],
+["2016:01:01:01:01:01", "2017:01:01:23:00:00", "Year"], ["2016:01:01:01:01:01", "2017:01:01:23:00:00", "Hour"]]
+Output
+[null, null, null, null, [3, 2, 1], [2, 1]]
+
+Explanation
+LogSystem logSystem = new LogSystem();
+logSystem.put(1, "2017:01:01:23:59:59");
+logSystem.put(2, "2017:01:01:22:59:59");
+logSystem.put(3, "2016:01:01:00:00:00");
+
+// return [3,2,1], because you need to return all logs between 2016 and 2017.
+logSystem.retrieve("2016:01:01:01:01:01", "2017:01:01:23:00:00", "Year");
+
+// return [2,1], because you need to return all logs between Jan. 1, 2016 01:XX:XX and Jan. 1, 2017 23:XX:XX.
+// Log 3 is not returned because Jan. 1, 2016 00:00:00 comes before the start of the range.
+logSystem.retrieve("2016:01:01:01:01:01", "2017:01:01:23:00:00", "Hour");
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>The given timestamp strings are like: ‘yyyy:mm:dd:hh:MM:ss’ always.
+Additionally, all are zero padded.
+This means comparison by string is easy.
+The granularity parameter specified the length of string comparison.
+If it is ‘Year’, the first 4 letters should be compared.
+If it is ‘Hour’, the first 13 letters should be compared.
+Given that, the solution here has a granularity to index table.
+To retrieve the ids in the range, timestamp strings are compared up to the granularity index.
+The answer is straightforward.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-python">class LogSystem:
+
+    def __init__(self):
+        self.logs = []
+        self.indices = {
+            'Year': 5, 'Month': 8, 'Day': 11,
+            'Hour': 14, 'Minute': 17, 'Second': 20
+        }
+
+
+    def put(self, id: int, timestamp: str) -&gt; None:
+        self.logs.append((id, timestamp))
+        
+
+    def retrieve(self, start: str, end: str, granularity: str) -&gt; List[int]:
+        idx = self.indices[granularity]
+        s, e = start[:idx], end[:idx]
+        return [id_ for id_, timestamp in self.logs if s &lt;= timestamp[:idx] &lt;= e]
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: put – <code>O(1)</code>, retrieve – <code>O(n)</code>: n is a total number of logs</li>
+  <li>Space: <code>O(n)</code></li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Medium
+</span>
+    
+    <span class="tag  is-primary ">
+    Hash Table
+</span>
+    
+    <span class="tag  is-primary ">
+    String
+</span>
+    
+    <span class="tag  is-primary ">
+    Design
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

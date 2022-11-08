@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Algorithm | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Algorithm" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/sorting_and_searching/" />
+<meta property="og:url" content="http://localhost:4000/algo/sorting_and_searching/" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Algorithm" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Blog site mostly for programming topics.","headline":"Algorithm","url":"http://localhost:4000/algo/sorting_and_searching/"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-medium  is-bold is-primary"  style="background: url('/assets/img/fall_pond.jpeg') no-repeat center center; background-size: cover;" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Algorithm</h1>
+            <p class="subtitle is-3">Sorting and Searching</p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    
+
+<aside class="menu">
+
+    <p class="menu-label">Algorithm / Sorting and Searching</p>
+    <ul class="menu-list">
+        
+        <li>
+            <a href="/algo/sorting_and_searching/2022-09-09-analyze-user-website-visit-pattern" class="">Analyze User Website Visit Pattern</a>
+            
+        </li>
+        
+        <li>
+            <a href="/algo/sorting_and_searching/2022-09-21-divide-intervals-into-minimum-number-of-groups" class="">Divide Intervals Into Minimum Number of Groups</a>
+            
+        </li>
+        
+        <li>
+            <a href="/algo/sorting_and_searching/2022-10-29-earliest-possible-day-of-full-bloom" class="">Earliest Possible Day of Full Bloom</a>
+            
+        </li>
+        
+        <li>
+            <a href="/algo/sorting_and_searching/2022-09-29-find-k-closest-elements" class="">Find K Closest Elements</a>
+            
+        </li>
+        
+        <li>
+            <a href="/algo/sorting_and_searching/2022-09-19-find-k-th-smallest-pair-distance" class="">Find K-th Smallest Pair Distance</a>
+            
+        </li>
+        
+        <li>
+            <a href="/algo/sorting_and_searching/2022-09-10-k-closest-points-to-origin" class="">K Closest Points to Origin</a>
+            
+        </li>
+        
+        <li>
+            <a href="/algo/sorting_and_searching/2022-09-13-maximum-units-on-a-truck" class="">Maximum Units on a Truck</a>
+            
+        </li>
+        
+        <li>
+            <a href="/algo/sorting_and_searching/2022-09-10-meeting-rooms-ii" class="">Meeting Rooms II -- Minimum Rooms</a>
+            
+        </li>
+        
+        <li>
+            <a href="/algo/sorting_and_searching/2022-09-13-minimum-cost-to-connect-sticks" class="">Minimum Cost to Connect Sticks</a>
+            
+        </li>
+        
+        <li>
+            <a href="/algo/sorting_and_searching/2022-09-10-plates-between-candles" class="">Plates Between Candles</a>
+            
+        </li>
+        
+        <li>
+            <a href="/algo/sorting_and_searching/2022-09-09-reorder-data-in-log-files" class="">Reorder Data in Log Files</a>
+            
+        </li>
+        
+        <li>
+            <a href="/algo/sorting_and_searching/2022-09-12-reorganize-string" class="">Reorganize String</a>
+            
+        </li>
+        
+        <li>
+            <a href="/algo/sorting_and_searching/2022-09-10-search-suggestions-system" class="">Search Suggestions System</a>
+            
+        </li>
+        
+        <li>
+            <a href="/algo/sorting_and_searching/2022-10-14-sliding-window-median" class="">Sliding Window Median</a>
+            
+        </li>
+        
+        <li>
+            <a href="/algo/sorting_and_searching/2022-09-24-top-k-frequent-elements" class="">Top K Frequent Elements</a>
+            
+        </li>
+            
+    </ul>
+
+</aside>
+                </div>
+                
+                <div class="column is-8">
+                    
+                    
+                    
+                    
+                    
+<div class="content">
+    <h2 id="algorithm">Algorithm</h2>
+<h3 id="sorting-and-searching">Sorting and Searching</h3>
+
+</div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

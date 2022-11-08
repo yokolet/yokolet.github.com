@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Find Triangular Sum of an Array | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Find Triangular Sum of an Array" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/others/2022-09-10-find-triangular-sum-of-an-array.html" />
+<meta property="og:url" content="http://localhost:4000/algo/others/2022-09-10-find-triangular-sum-of-an-array.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-09-10T23:16:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Find Triangular Sum of an Array" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-10T23:16:00+09:00","datePublished":"2022-09-10T23:16:00+09:00","description":"Blog site mostly for programming topics.","headline":"Find Triangular Sum of an Array","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/others/2022-09-10-find-triangular-sum-of-an-array.html"},"url":"http://localhost:4000/algo/others/2022-09-10-find-triangular-sum-of-an-array.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Find Triangular Sum of an Array</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Sep 10, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>This is a math problem.
+The brute force solution barely passes all tests, however, it is very slow.
+To fins an optimal solution, some mathematical insight is required.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>You are given a 0-indexed integer array <code>nums,</code> where <code>nums[i]</code> is a digit between 0 and 9 (inclusive).
+The triangular sum of <code>nums</code> is the value of the only element present in nums
+after the following process terminates:</p>
+  <ol>
+    <li>Let nums comprise of <code>n</code> elements. If <code>n == 1</code>, end the process.
+Otherwise, create a new 0-indexed integer array <code>newNums</code> of length <code>n - 1</code>.</li>
+    <li>For each index <code>i</code>, where <code>0 &lt;= i &lt; n - 1</code>, assign the value of <code>newNums[i]</code> as <code>(nums[i] + nums[i+1]) % 10</code>,
+where <code>%</code> denotes modulo operator.</li>
+    <li>Replace the array <code>nums</code> with <code>newNums</code>.</li>
+    <li>Repeat the entire process starting from step 1.
+Return the triangular sum of <code>nums</code>.</li>
+  </ol>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= nums.length &lt;= 1000</code></li>
+    <li><code>0 &lt;= nums[i] &lt;= 9</code></li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/find-triangular-sum-of-an-array/">https://leetcode.com/problems/find-triangular-sum-of-an-array/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>Example 1:
+Input: nums = [1,2,3,4,5]
+Output: 8
+
+1, 2, 3, 4, 5
+3, 5, 7, 9
+8, 2, 6
+0, 8,
+8
+</code></pre>
+
+<pre><code>Example 2:
+Input: nums = [5]
+Output: 5
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+
+<p>Here, the mathematical, optimal solution and brute force solutions are.
+The mathematical solution is from combination idea:
+each number is multiplied by the number of routes to the top.
+In the solution, this number is “<code>cnk</code>”.
+Additionally, the calculation uses: <code>(a % 10 + b % 10) % 10 = (a + b) % 10</code>.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-python">class FindTriangularSumOfAnArrayMath:
+    def triangularSum(self, nums: List[int]) -&gt; int:
+        n = len(nums)-1
+        total = 0
+        cnk = 1
+        for i in range(len(nums)):
+            total += nums[i] * cnk
+            total %= 10
+            cnk = cnk * (n-i) // (i+1)
+        return total
+
+class FindTriangularSumOfAnArrayBF:
+    def triangularSum(self, nums: List[int]) -&gt; int:
+        n, prev = len(nums), nums
+        for _ in range(n - 1):
+            cur = []
+            for i in range(len(prev) - 1):
+                cur.append((prev[i] + prev[i + 1]) % 10)
+            prev = cur
+        return prev[0]
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: <code>O(n)</code> – math solution, <code>O(n^2)</code> – brute force solution</li>
+  <li>Space: <code>O(1)</code> – math solution, <code>O(n)</code> – brute force solution</li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Medium
+</span>
+    
+    <span class="tag  is-primary ">
+    Math
+</span>
+    
+    <span class="tag  is-primary ">
+    Array
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

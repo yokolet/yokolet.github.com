@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Weird Puzzle Questions - Egg and Celebrity | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Weird Puzzle Questions - Egg and Celebrity" />
+<meta name="author" content="Yoko Harada" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/2017/06/13/weird-puzzles.html" />
+<meta property="og:url" content="http://localhost:4000/2017/06/13/weird-puzzles.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-06-13T00:00:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Weird Puzzle Questions - Egg and Celebrity" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Yoko Harada"},"dateModified":"2017-06-13T00:00:00+09:00","datePublished":"2017-06-13T00:00:00+09:00","description":"Blog site mostly for programming topics.","headline":"Weird Puzzle Questions - Egg and Celebrity","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2017/06/13/weird-puzzles.html"},"url":"http://localhost:4000/2017/06/13/weird-puzzles.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Weird Puzzle Questions - Egg and Celebrity</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-8">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Jun 13, 2017</p>
+
+    
+
+    <p>I’m going to write about two weird algorithm problems.
+Those seem quite weired at least to me, yet famous as algorithm questions.
+One is so-called egg dropping, another is finding a celebrity.
+I see these two problems here and there.
+From that, I guess those two are famous algorithm questions.
+But, at least, those two are quite weird.
+Some call them <em>puzzle</em>. (Yeah, maybe… I was totally puzzled.)</p>
+
+<p>The egg dropping and finding a celebrity problems are unrelated.
+The approaches and solutions are very different.
+However, in terms of their weirdness,
+I’m going to write a memo put those two together here.</p>
+
+<h4 id="problem-description---egg-dropping">Problem Description - Egg Dropping</h4>
+
+<p>Many algorithm questions have succinct descriptions.
+Not like those, this problem needs lengthy explanation.
+I re-read a few times to understand such long description correctly.
+Also, it was to figure out how to solve the problem.</p>
+
+<p>The problem is sometime called “Two Egg Problem” since often <em>two</em> eggs are used.
+These two eggs play a role to find the highest, safe floor to drop the egg without breaking it.
+The problem description is:</p>
+
+<ul>
+  <li>K floors are there in total.</li>
+  <li>There exists the highest floor an egg safely lands.</li>
+  <li>Two (or more) eggs are given.</li>
+  <li>If the egg doesn’t break after the dropping, it can be reused.</li>
+  <li>If the egg breaks, the broken egg won’t be used again.</li>
+  <li>If the egg safely lands after dropping from the floor K_j, lower floors of K_j are considered safe.</li>
+</ul>
+
+<p>Given above conditions, “find the highest, safe floor to drop the egg” is the problem.</p>
+
+<h4 id="the-idea-to-find-the-highest-safe-floor">The idea to find the highest safe floor</h4>
+
+<p>A bruto force solution is always there which starts dropping the egg from the lowest floor.
+Then, try one by one going upward to the top floor.
+At some floor, the egg will break for the first time.
+One floor below (the last safe floor) is the answer.
+If only one egg is available, this is only way to solve the problem.</p>
+
+<p>However, there’s an effective solution when multiple eggs are available.</p>
+
+<p>This problem is often categorized to dynamic programming.
+So, an optimal substructure exists:</p>
+
+<ul>
+  <li>the egg breaks</li>
+  <li>the egg doesn’t break (safely lands)</li>
+</ul>
+
+<p>The state to maintain in memorization table is a minimum number of attemps.
+For example, table[i][j] expresses the minimum attemps at i eggs and j-th floor.</p>
+
+<p>table[i][j] will be calcuated by:</p>
+
+<pre>
+
+min(1 + max(table[i - 1][k - 1], table[i][j - k])) where k = 1 to j
+            ^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^
+                  breaks          doesn't break
+
+</pre>
+
+<h4 id="java-code-for-finding-the-highest-safe-floor">Java code for finding the highest safe floor</h4>
+
+<script src="https://gist.github.com/yokolet/a6843a4336e46e13fa7a3ef44ef2d0b9.js"> </script>
+
+<p>Above prints:</p>
+
+<pre>
+
+8
+
+</pre>
+
+<p>Time complexity: O(nk^2), n: eggs, k: floors</p>
+
+<h4 id="problem-description---finding-a-celebrity">Problem Description - Finding a Celebrity</h4>
+
+<p>This problem also has a lot of descriptions like egg dropping problem.
+The details are:</p>
+
+<ul>
+  <li>n people come to a party</li>
+  <li>one of them is a celebrity either he or she</li>
+  <li>this only one celebrity does not know anyone in the party</li>
+  <li>all n - 1 people know who is the celebrity</li>
+  <li>only one available question is “does A know B?”</li>
+  <li><code>boolean know(int A, int B)</code> method is proveded which returns true if A knows B</li>
+</ul>
+
+<p>Given above conditions, “find the celebrity in the minimum
+number of questions” is the problem.</p>
+
+<h4 id="the-idea-to-find-the-celebrity">The idea to find the celebrity</h4>
+
+<p>The problem describes relations between people.
+If I draw the relations, it will be a directed graph of n people (n nodes).
+The celebrity node has an out-degree zero and in-degree n - 1.</p>
+
+<pre>
+
+              +----------------------+
+              |                      |
+              v                      |
+ (p0) -----&gt; (C) &lt;----- (p2) &lt;----- (p3)
+            ^   ^^
+            |   | \
+            |   |   \
+            |   |     \
+         (p4) (p5) &lt;--- (p6)
+
+</pre>
+
+<p>Given the graph above, the method, <code>know(A, B)</code>, is the same as <code>has an edge from A to B</code>.</p>
+
+<p>To solve this problem, a typical approach consists of two steps.</p>
+
+<ol>
+  <li>Elimination step</li>
+  <li>Verification step</li>
+</ol>
+
+<p>The elimination step eliminates people who are not a celeb apprently.
+Here, stack is a good data structure.
+After pushing all poeple to the stack, run <code>know</code> method.
+If A has an edge to B, eliminates A since A is not a celeb.
+Also, check the edge from B to A.</p>
+
+<p>The verification step verifies the last person is a celeb.
+This is because the elimination process may leave no celeb person in the stack.
+For example, a top rightmost node p3 in the graph has two outbound edges.
+Suppose the first question is made against the celeb (C), p3 will be removed.
+Later, p2 appears, and nobody says “I know p2.”</p>
+
+<p>For this reason, the verification step is there to
+ensure the person in the stack is the celeb.</p>
+
+<h4 id="java-code-for-square-root-implementation">Java code for square root implementation</h4>
+
+<script src="https://gist.github.com/yokolet/8b9e766261890b78e849d162efcf82a1.js"> </script>
+
+<p>Time complexity: O(n), space complexity O(n)</p>
+
+<p>The result is:</p>
+
+<pre>
+1
+</pre>
+
+<h4 id="resources">Resources</h4>
+
+<ul>
+  <li><a href="http://www.geeksforgeeks.org/dynamic-programming-set-11-egg-dropping-puzzle/">Dynamic Programming Set 11 (Egg Dropping Puzzle)</a></li>
+  <li><a href="https://www.youtube.com/watch?v=3hcaVyX00_4">Egg Dropping Dynamic Programming (YouTube)</a></li>
+  <li><a href="http://www.geeksforgeeks.org/the-celebrity-problem/">The Celebrity Problem</a></li>
+  <li><a href="https://www.cs.princeton.edu/courses/archive/spring13/cos423/problem0-1.pdf">Celebrity Identification Problem</a></li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+</div>
+
+
+
+
+                </div>
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    <p class="title is-4">Latest Posts</p>
+
+<div class="columns is-multiline">
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/10/30/setting-up-gcp-instance-for-deep-learning.html">Setting Up GCP Instance for Deep Learning</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>This post is going to be very different from what I write here.
+The content is a memo how I create a GCP (Google Cloud Platform) instance for Deep Learning.
+While I study algorithm stuff, I also have been studying Deep Learning.
+In my early days, I tried to train my Deep Learning model only on a laptop.
+My laptop is 2012 model MacBook Pro, so I would say it is reasonably fast.
+However, when it comes to Deep Learning, the training was quite painful on the such machine.
+Often, I ran the training over night to get a disappointed result.
+Still, I didn’t use any of pricey cloud environment
+since it was my personal study unrelated to my day job.
+I wanted to save money.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/10/30/setting-up-gcp-instance-for-deep-learning.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Oct 30, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/09/10/complete-binary-tree.html">Complete Binary Tree</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>Problems which ask a binary tree traverse, add/delete nodes, etc. are popular in algorithm questions.
+The binary trees are often just a binary tree or binary search tree.
+Sometimes, the problem pinpoints a particular type of a binary tree,
+for example, a balanced binary tree or complete binary tree.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/09/10/complete-binary-tree.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Sep 10, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/09/09/catalan-number.html">Catalan number</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>What is <strong>Catalan number</strong> ?
+The Catalan number belongs to the domain of combinatorial mathematics.
+It is a sequence of natural numbers such that:
+<code>1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012, 742900, 2674440, 9694845, 35357670, 129644790, 477638700, 1767263190, ...</code>
+The sequence appears in counting problems.
+Wikipedia has the details about the sequence: <a href="https://en.wikipedia.org/wiki/Catalan_number">Catalan Number</a>.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/09/09/catalan-number.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Sep 9, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

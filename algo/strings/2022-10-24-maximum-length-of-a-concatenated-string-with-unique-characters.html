@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Maximum Length of a Concatenated String with Unique Characters | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Maximum Length of a Concatenated String with Unique Characters" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/strings/2022-10-24-maximum-length-of-a-concatenated-string-with-unique-characters.html" />
+<meta property="og:url" content="http://localhost:4000/algo/strings/2022-10-24-maximum-length-of-a-concatenated-string-with-unique-characters.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-10-24T14:43:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Maximum Length of a Concatenated String with Unique Characters" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-10-24T14:43:00+09:00","datePublished":"2022-10-24T14:43:00+09:00","description":"Blog site mostly for programming topics.","headline":"Maximum Length of a Concatenated String with Unique Characters","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/strings/2022-10-24-maximum-length-of-a-concatenated-string-with-unique-characters.html"},"url":"http://localhost:4000/algo/strings/2022-10-24-maximum-length-of-a-concatenated-string-with-unique-characters.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Maximum Length of a Concatenated String with Unique Characters</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Oct 24, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>This problem requires every combination of given array.
+Each string has two conditions whether it is included or not.
+The recursion might be the way to solve this problem.
+Additionally, using set, bit manipulation style approach exists.
+The solution here used the bit manipulation style to check the uniqueness.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>You are given an array of strings <code>arr</code>. A string <code>s</code> is formed by the concatenation of a subsequence of <code>arr</code> that
+has unique characters.</p>
+
+  <p>Return the maximum possible length of <code>s</code>.</p>
+
+  <p>A subsequence is an array that can be derived from another array by deleting some or no elements without changing
+the order of the remaining elements.</p>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= arr.length &lt;= 16</code></li>
+    <li><code>1 &lt;= arr[i].length &lt;= 26</code></li>
+    <li><code>arr[i]</code> contains only lowercase English letters.</li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/maximum-length-of-a-concatenated-string-with-unique-characters/">https://leetcode.com/problems/maximum-length-of-a-concatenated-string-with-unique-characters/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>Example 1
+Input: arr = ["un","iq","ue"]
+Output: 4
+Explanation: All the valid concatenations are:
+- ""
+- "un"
+- "iq"
+- "ue"
+- "uniq" ("un" + "iq")
+- "ique" ("iq" + "ue")
+Maximum length is 4.
+</code></pre>
+
+<pre><code>Example 2
+Input: arr = ["cha","r","act","ers"]
+Output: 6
+Explanation: Possible longest valid concatenations are "chaers" ("cha" + "ers") and "acters" ("act" + "ers").
+</code></pre>
+
+<pre><code>Example 3
+Input: arr = ["abcdefghijklmnopqrstuvwxyz"]
+Output: 26
+Explanation: The only string in arr has all 26 characters.
+</code></pre>
+
+<pre><code>Example 4
+InputL arr = ["a", "abc", "d", "de", "def"]
+Output: 6
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>The first step is to create string sets of only unique character set.
+If the string in the given array is “aa,” it will be omitted.
+The next step is character comparison by set operations.
+If the intersection of previous set is empty, take or and append it to the result array.
+In the end, get the maximum length from the result array which is the answer.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-python">class MaximumLengthOfAConcatenatedStringWithUniqueCharacters:
+    def maxLength(self, arr: List[str]) -&gt; int:
+        charsets = []
+        for s in arr:
+            u = set(s)
+            if len(u) == len(s): charsets.append(u)
+        result = [set()]
+        for c in charsets:
+            for r in result:
+                if not c &amp; r:
+                    result.append(c | r)
+        return max(len(r) for r in result)
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: <code>O(2^n)</code></li>
+  <li>Space: <code>O(2^n)</code></li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Medium
+</span>
+    
+    <span class="tag  is-primary ">
+    String
+</span>
+    
+    <span class="tag  is-primary ">
+    Bit Manipulation
+</span>
+    
+    <span class="tag  is-primary ">
+    Array
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

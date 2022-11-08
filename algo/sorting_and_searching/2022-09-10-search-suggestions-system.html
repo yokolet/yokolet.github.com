@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Search Suggestions System | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Search Suggestions System" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/sorting_and_searching/2022-09-10-search-suggestions-system.html" />
+<meta property="og:url" content="http://localhost:4000/algo/sorting_and_searching/2022-09-10-search-suggestions-system.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-09-10T16:07:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Search Suggestions System" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-10T16:07:00+09:00","datePublished":"2022-09-10T16:07:00+09:00","description":"Blog site mostly for programming topics.","headline":"Search Suggestions System","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/sorting_and_searching/2022-09-10-search-suggestions-system.html"},"url":"http://localhost:4000/algo/sorting_and_searching/2022-09-10-search-suggestions-system.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Search Suggestions System</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Sep 10, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>This is a prefix search problem.
+The size of prefix gets longer in each search.
+Trie is a good data structure for this type of problems.
+However, binary search is another good way to find the answer.
+Since the problem asks “lexicographically minimums,”
+input data should be sorted at the beginning.
+If the language is Python, binary search is a good algorithm to apply.
+Python’s binary search function supports string like a number.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>You are given an array of strings <code>products</code> and a string <code>searchWord</code>.
+Design a system that suggests at most three product names from <code>products</code>
+after each character of <code>searchWord</code> is typed.
+Suggested products should have common prefix with <code>searchWord</code>.
+If there are more than three products with a common prefix, return the three lexicographically minimums products.</p>
+
+  <p>Return a list of lists of the suggested products after each character of <code>searchWord</code> is typed.</p>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= products.length &lt;= 1000</code></li>
+    <li><code>1 &lt;= products[i].length &lt;= 3000</code></li>
+    <li><code>1 &lt;= sum(products[i].length) &lt;= 2 * 104</code></li>
+    <li>All the strings of products are unique.</li>
+    <li><code>products[i]</code> consists of lowercase English letters.</li>
+    <li><code>1 &lt;= searchWord.length &lt;= 1000</code></li>
+    <li><code>searchWord</code> consists of lowercase English letters.</li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/search-suggestions-system/">https://leetcode.com/problems/search-suggestions-system/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>Example 1:
+Input: products = ["mobile","mouse","moneypot","monitor","mousepad"], searchWord = "mouse"
+Output: [["mobile","moneypot","monitor"],["mobile","moneypot","monitor"],["mouse","mousepad"],["mouse","mousepad"],["mouse","mousepad"]]
+Explanation: products sorted lexicographically = ["mobile","moneypot","monitor","mouse","mousepad"].
+</code></pre>
+
+<pre><code>Example 2:
+Input: products = ["havana"], searchWord = "havana"
+Output: [["havana"],["havana"],["havana"],["havana"],["havana"],["havana"]]
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>The solution here uses the binary search.
+The <code>products</code> list is sorted at the beginning.
+The prefix will be extended a character by character.
+Do bisect_left with the prefix, then add up to 3 words with the same prefix to the result.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-python">class SearchSuggestionsSystem:
+    def suggestedProducts(self, products: List[str], searchWord: str) -&gt; List[List[str]]:
+        products.sort()
+        result = []
+        for i in range(len(searchWord)):
+            prefix = searchWord[:i + 1]
+            sub = []
+            idx = bisect.bisect_left(products, prefix)
+            while idx &lt; len(products) and len(sub) &lt; 3 and products[idx][:i + 1] == prefix:
+                sub.append(products[idx])
+                idx += 1
+            result.append(sub)
+        return result    
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: <code>O(n*log(n))</code></li>
+  <li>Space: <code>O(1)</code></li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Medium
+</span>
+    
+    <span class="tag  is-primary ">
+    Binary Search
+</span>
+    
+    <span class="tag  is-primary ">
+    String
+</span>
+    
+    <span class="tag  is-primary ">
+    Trie
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

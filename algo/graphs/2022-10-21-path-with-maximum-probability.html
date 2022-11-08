@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Path with Maximum Probability | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Path with Maximum Probability" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/graphs/2022-10-21-path-with-maximum-probability.html" />
+<meta property="og:url" content="http://localhost:4000/algo/graphs/2022-10-21-path-with-maximum-probability.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-10-21T17:27:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Path with Maximum Probability" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-10-21T17:27:00+09:00","datePublished":"2022-10-21T17:27:00+09:00","description":"Blog site mostly for programming topics.","headline":"Path with Maximum Probability","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/graphs/2022-10-21-path-with-maximum-probability.html"},"url":"http://localhost:4000/algo/graphs/2022-10-21-path-with-maximum-probability.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Path with Maximum Probability</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Oct 21, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>It’s apparent, Dijkstra algorithm works to find the answer.
+After creating a graph with edge weight, traverse the graph using heap.
+When the node is the end node, the result is there.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>You are given an undirected weighted graph of <code>n</code> nodes (0-indexed), represented by an edge list where
+<code>edges[i] = [a, b]</code> is an undirected edge connecting the nodes <code>a</code> and <code>b</code> with a probability of success of
+traversing that edge <code>succProb[i]</code>.</p>
+
+  <p>Given two nodes <code>start</code> and <code>end</code>, find the path with the maximum probability of success to go from <code>start</code> to <code>end</code>
+and return its success probability.</p>
+
+  <p>If there is no path from <code>start</code> to <code>end</code>, return 0. Your answer will be accepted if it differs from the correct
+answer by at most 1e-5.</p>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>2 &lt;= n &lt;= 10^4</code></li>
+    <li><code>0 &lt;= start, end &lt; n</code></li>
+    <li><code>start != end</code></li>
+    <li><code>0 &lt;= a, b &lt; n</code></li>
+    <li><code>a != b</code></li>
+    <li><code>0 &lt;= succProb.length == edges.length &lt;= 2*10^4</code></li>
+    <li><code>0 &lt;= succProb[i] &lt;= 1</code></li>
+    <li>There is at most one edge between every two nodes.</li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/path-with-maximum-probability/">https://leetcode.com/problems/path-with-maximum-probability/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>Example 1
+Input: n = 3, edges = [[0,1],[1,2],[0,2]], succProb = [0.5,0.5,0.2], start = 0, end = 2
+Output: 0.25000
+Explanation: There are two paths from start to end, one having a probability of success = 0.2 and the other has
+0.5 * 0.5 = 0.25.
+</code></pre>
+
+<pre><code>Example 2
+Input: n = 3, edges = [[0,1],[1,2],[0,2]], succProb = [0.5,0.5,0.3], start = 0, end = 2
+Output: 0.30000
+</code></pre>
+
+<pre><code>Example 3
+Input: n = 3, edges = [[0,1]], succProb = [0.5], start = 0, end = 2
+Output: 0.00000
+Explanation: There is no path between 0 and 2.
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>The solution here uses Python’s collections.defaultdict for isolated node (no edges) to return empty array.
+The adjacency list has the neighbor node with edge weight.
+Once the graph is created, the next step is to traverse the graph.
+To make it max heap, the probability is a negative value.
+Except probability calculation, traversal is nothing special.
+When popped out node is the end node, return the probability making it positive.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-python">class PathWithMaximumProbability:
+    def maxProbability(self, n: int, edges: List[List[int]], succProb: List[float], start: int, end: int) -&gt; float:
+        graph = collections.defaultdict(list)
+        def buildGraph():
+            for i in range(len(edges)):
+                s, d, v = edges[i][0], edges[i][1], succProb[i]
+                graph[s].append((d, v))
+                graph[d].append((s, v))
+
+        def search():
+            visited = set()
+            queue = [(-1, start)]
+            while queue:
+                cur_prob, cur_n = heapq.heappop(queue)
+                if cur_n == end:
+                    return (-1) * cur_prob
+                visited.add(cur_n)
+                for next_n, next_prob in graph[cur_n]:
+                    if next_n not in visited:
+                        heapq.heappush(queue, (next_prob * cur_prob, next_n))
+            return 0
+        
+        buildGraph()
+        return search() 
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: <code>O(e * log(v))</code> – v: number of vertices, n: number of edges on each vertex</li>
+  <li>Space: <code>O(e + v)</code></li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Medium
+</span>
+    
+    <span class="tag  is-primary ">
+    Heap (Priority Queue)
+</span>
+    
+    <span class="tag  is-primary ">
+    Shortest Path
+</span>
+    
+    <span class="tag  is-primary ">
+    Graph
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

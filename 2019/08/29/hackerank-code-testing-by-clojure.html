@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>HackerRank Code Testing by Clojure | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="HackerRank Code Testing by Clojure" />
+<meta name="author" content="Yoko Harada" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Recently, I decided to give Clojure a try. This post is about testing HackerRank problems on a local env." />
+<meta property="og:description" content="Recently, I decided to give Clojure a try. This post is about testing HackerRank problems on a local env." />
+<link rel="canonical" href="http://localhost:4000/2019/08/29/hackerank-code-testing-by-clojure.html" />
+<meta property="og:url" content="http://localhost:4000/2019/08/29/hackerank-code-testing-by-clojure.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-08-29T08:20:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="HackerRank Code Testing by Clojure" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Yoko Harada"},"dateModified":"2019-08-29T08:20:00+09:00","datePublished":"2019-08-29T08:20:00+09:00","description":"Recently, I decided to give Clojure a try. This post is about testing HackerRank problems on a local env.","headline":"HackerRank Code Testing by Clojure","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2019/08/29/hackerank-code-testing-by-clojure.html"},"url":"http://localhost:4000/2019/08/29/hackerank-code-testing-by-clojure.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">HackerRank Code Testing by Clojure</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-8">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Aug 29, 2019</p>
+
+    
+
+    <p>Recently, I decided to give Clojure a try.
+This post is about testing HackerRank problems on a local env.</p>
+
+<p>I used to write Clojure code for my day job, however, no Clojure at all for two years.
+Instead, almost all were done by Python.
+I became familiar with Python’s functional programming world now.
+Aside of ML/DL projects, I did bunch at HackerRank, leetcode or sort.
+After a while, I thought, “maybe I can solve problems by Clojure like Python…”</p>
+
+<p>Luckily, HackerRank supports Clojure. So, I started.</p>
+
+<p>Soon, I hit the wall. I wanted to test a code. Okay, writing test is not hard.
+Something quite hard was the HackerRank platform.
+Test data comes in from <code>STDIN</code>. Something output to <code>STDOUT</code> is tested.
+For many problems, it’s effective to have <code>read-line</code> and <code>println</code> in the code side.</p>
+
+<p>I did quite a lot of research and trials so that the code can be tested
+without any modification on HackerRank platform.
+This experience, setting up a testing environment was a good Clojure study.
+That’s why I wrote the blog post.
+This post may help other Clojure newbies to figure out how.</p>
+
+<h4 id="binding-stdin">Binding <code>STDIN</code></h4>
+
+<p>Clojure has <a href="https://clojuredocs.org/clojure.core/binding"><code>clojure.core/binding</code></a> function.
+This function is used to create new bindings, which is like, replacing the current bindings.
+In Clojure, <code>STDIN</code> is bind to <code>*in*</code>.
+So, what should be done is to bind <code>*in*</code> to something else.</p>
+
+<p>Next question is what should be “something else.”</p>
+
+<p>HackerRank test case is provided by a file.
+People can get the test data file if they pay 5 Hackos.
+The “Hackos” are points people can get when their solutions successfully pass all tests.
+Unless the problem is a very entry level, the test case file tends to pretty big.
+It’s unable to write the test data in the code often.
+For this reason, I wanted to get the test data from a file and bind it to <code>*in*</code>.</p>
+
+<p>What I did was:</p>
+<ol>
+  <li>create a file under <code>resource</code> directory</li>
+  <li>read it as a resource</li>
+  <li>convert it to a reader</li>
+  <li>bind the reader to <code>*in*</code></li>
+</ol>
+
+<pre><code class="language-clojure">(require '[clojure.java.io :as io])
+(with-open [rdr (io/reader (io/resource n))]
+    (binding [*in* rdr]
+      (f)))
+</code></pre>
+
+<p>Since the project was created by the <a href="https://leiningen.org/"><code>leningen</code></a>,
+the <code>resources</code> directory is already on the path. Just to give a relative file path
+as <code>n</code>, the file is read. The <code>f</code> is a function which consumes data from <code>STDIN</code>.</p>
+
+<h4 id="catching-stdout">Catching <code>STDOUT</code></h4>
+
+<p>Now, reading from <code>STDIN</code> was cleared. Next will be to catch <code>STDOUT</code>.
+Clojure has a convenient function <a href="https://clojuredocs.org/clojure.core/with-out-str"><code>clojure.core/with-out-str</code></a>.
+Compared to a reading part, catching <code>STDOU</code> was much easier.
+For example:</p>
+
+<pre><code class="language-clojure">;; define function which prints to stdout
+&gt; (defn say-it []
+    (println "seriously?")
+    (println "can't believe"))
+
+;; assign STDOUT to "out"
+&gt; (def out (with-out-str (say-it)))
+
+;; what's in the "out"
+&gt; out
+"seriously?\ncan't believe\n" 
+</code></pre>
+
+<p>The same idea for the reading can be applied to <code>STDOUT</code> – printing out to a file under <code>resources</code> directory.
+However, in general, the expected output is simple for the HackerRank problems.
+At this moment, <code>with-out-str</code> function satisfies my needs.</p>
+
+<h4 id="wrapping-tests">Wrapping Tests</h4>
+
+<p>So far, <code>STDIN</code> and <code>STDOUT</code> work well to fit with the HackerRank platform.
+However, to bind resource reader to <code>STDIN</code>, I should write <code>with-open ...</code> in every test case. 
+I want to avoid writing the same lines again and again.
+After searching online, I found <a href="https://clojuredocs.org/clojure.test/use-fixtures"><code>clojure.test/use-fixtures</code></a> function.
+This function works like Unit test’s <code>setUp()/tearDown()</code> methods.
+As the Clojure API document explains:</p>
+
+<pre><code class="language-clojure">(defn my-test-fixture [f]
+        (create-db)   ;; setUp
+        (f)           ;; test
+        (destroy-db)) ;; tearDown
+(use-fixtures :once my-test-fixture
+</code></pre>
+<p>Define the fixture function, then call <code>use-fixture</code> function.
+The tests in the same namespace are all wrapped by the fixture.</p>
+
+<p>Below is an example test by the <code>use-fixture</code> function.</p>
+
+<script src="https://gist.github.com/yokolet/efad0031c483bcc77ea9ada37e708db2.js"> </script>
+
+<h4 id="gotchas">Gotchas</h4>
+
+<p>The function <code>use-fixture</code> made my test code simple. It’s good.
+However, it has a downside.
+Some problems provide multiple test cases, which means multiple resource files on my test environment.
+Since only one <code>use-fixture</code> is applied to all tests in the same namespace,
+my <code>wrap-test</code> and fixture design don’t work nicely.
+There should be a way to cope with this problem.
+It will be my next challenge.</p>
+
+<p>If you are interested, my solution and test code for <a href="https://www.hackerrank.com/domains/tutorials/30-days-of-code">30 Days of Code</a>
+are in my repository, <a href="https://github.com/yokolet/thirty-day-code">thirty-day-code</a>.</p>
+
+</div>
+
+<div class="tags">
+    
+</div>
+
+
+
+
+                </div>
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    <p class="title is-4">Latest Posts</p>
+
+<div class="columns is-multiline">
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/10/30/setting-up-gcp-instance-for-deep-learning.html">Setting Up GCP Instance for Deep Learning</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>This post is going to be very different from what I write here.
+The content is a memo how I create a GCP (Google Cloud Platform) instance for Deep Learning.
+While I study algorithm stuff, I also have been studying Deep Learning.
+In my early days, I tried to train my Deep Learning model only on a laptop.
+My laptop is 2012 model MacBook Pro, so I would say it is reasonably fast.
+However, when it comes to Deep Learning, the training was quite painful on the such machine.
+Often, I ran the training over night to get a disappointed result.
+Still, I didn’t use any of pricey cloud environment
+since it was my personal study unrelated to my day job.
+I wanted to save money.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/10/30/setting-up-gcp-instance-for-deep-learning.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Oct 30, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/09/10/complete-binary-tree.html">Complete Binary Tree</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>Problems which ask a binary tree traverse, add/delete nodes, etc. are popular in algorithm questions.
+The binary trees are often just a binary tree or binary search tree.
+Sometimes, the problem pinpoints a particular type of a binary tree,
+for example, a balanced binary tree or complete binary tree.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/09/10/complete-binary-tree.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Sep 10, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/09/09/catalan-number.html">Catalan number</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>What is <strong>Catalan number</strong> ?
+The Catalan number belongs to the domain of combinatorial mathematics.
+It is a sequence of natural numbers such that:
+<code>1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012, 742900, 2674440, 9694845, 35357670, 129644790, 477638700, 1767263190, ...</code>
+The sequence appears in counting problems.
+Wikipedia has the details about the sequence: <a href="https://en.wikipedia.org/wiki/Catalan_number">Catalan Number</a>.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/09/09/catalan-number.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Sep 9, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

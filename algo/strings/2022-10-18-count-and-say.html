@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Count and Say | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Count and Say" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/strings/2022-10-18-count-and-say.html" />
+<meta property="og:url" content="http://localhost:4000/algo/strings/2022-10-18-count-and-say.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-10-18T15:30:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Count and Say" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-10-18T15:30:00+09:00","datePublished":"2022-10-18T15:30:00+09:00","description":"Blog site mostly for programming topics.","headline":"Count and Say","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/strings/2022-10-18-count-and-say.html"},"url":"http://localhost:4000/algo/strings/2022-10-18-count-and-say.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Count and Say</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Oct 18, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>This is a relatively straightforward problem.
+Just count the same character and add count + character to the result.
+Both iterative and recursion work to get the final answer.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>The count-and-say sequence is a sequence of digit strings defined by the recursive formula:</p>
+  <ul>
+    <li><code>countAndSay(1) = "1"</code></li>
+    <li><code>countAndSay(n)</code> is the way you would “say” the digit string from countAndSay(n-1), which is then
+ converted into a different digit string.</li>
+  </ul>
+
+  <p>To determine how you “say” a digit string, split it into the minimal number of substrings such that each substring
+contains exactly one unique digit. Then for each substring, say the number of digits, then say the digit. Finally,
+concatenate every said digit.</p>
+
+  <p>For example, the saying and conversion for digit string “3322251”:
+“23321511”: two threes, three twos, one five, one one</p>
+
+  <p>Given a positive integer n, return the nth term of the count-and-say sequence.</p>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= n &lt;= 30</code></li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/count-and-say/">https://leetcode.com/problems/count-and-say/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>Example 1
+Input: n = 1
+Output: "1"
+Explanation: This is the base case.
+</code></pre>
+
+<pre><code>Example 2
+Input: n = 4
+Output: "1211"
+Explanation:
+countAndSay(1) = "1"
+countAndSay(2) = say "1" = one 1 = "11"
+countAndSay(3) = say "11" = two 1's = "21"
+countAndSay(4) = say "21" = one 2 + one 1 = "12" + "11" = "1211"
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>The solution here took an iterative approach.
+Check the current character is the same as the previous one.
+If it is the same, count up. If not, update the result and initialize parameters.
+This repeats n - 1 times. Then, we get the answer.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-python">class CountAndSay:
+    def countAndSay(self, n: int) -&gt; str:
+        result = '1'
+        for _ in range(n - 1):
+            prev, cur, cnt = '', '', 0
+            for i in range(len(result)):
+                if prev and result[i] != prev:
+                    cur += (str(cnt) + prev)
+                    cnt = 0
+                prev = result[i]
+                cnt += 1
+            cur += (str(cnt) + prev)
+            result = cur
+        return result
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: <code>O(4^(n/3))</code></li>
+  <li>Space: <code>O(4^(n/3))</code></li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Medium
+</span>
+    
+    <span class="tag  is-primary ">
+    String
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

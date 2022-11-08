@@ -1,7 +1,16 @@
-# yokolet's notelets
+# yokole's notelets
 
 This a blog site for __yokolet's notelets__ hosted at [yokolet.com](https://yokolet.com/).
-The site was written by [jekyll](jekyllrb.com) with the bulma-clean-theme.
+The site was written by [jekyll](jekyllrb.com) with the bulma clean theme.
+
+This jekyll site uses a plugin which is not a supported one by GitHub.
+Because of the plugin, the automatic deployment fails.
+
+
+The twin repositories for the website are:
+
+- jekyll project: [new-note](https://github.com/yokolet/new-note)
+- static website: [yokolet.github.com](https://github.com/yokolet/yokolet.github.com)
 
 ### Credits
 

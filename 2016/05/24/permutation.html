@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Permutation | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Permutation" />
+<meta name="author" content="Yoko Harada" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/2016/05/24/permutation.html" />
+<meta property="og:url" content="http://localhost:4000/2016/05/24/permutation.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2016-05-24T00:00:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Permutation" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Yoko Harada"},"dateModified":"2016-05-24T00:00:00+09:00","datePublished":"2016-05-24T00:00:00+09:00","description":"Blog site mostly for programming topics.","headline":"Permutation","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2016/05/24/permutation.html"},"url":"http://localhost:4000/2016/05/24/permutation.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Permutation</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-8">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: May 24, 2016</p>
+
+    
+
+    <p>Well, how bad naive implementation of generating permutation?
+Permutation is a well-known problem in mathematics as well as
+programming. If a set of three characters, {A, B, C}, its permutation
+is:</p>
+
+<pre><code>ABC, ACB, BAC, BCA, CAB, CBA
+</code></pre>
+
+<p>Three characters generate six patterns, which is <code>3*2*1</code>, a factorial
+of its size.</p>
+
+<p>The easiest implementation is a brute-force, recursing all. How
+many times will it repeat? The answer is a factorial of total number of given
+characters. Crap! In terms of Big-O complexity, the factorial is the
+worst. See Big-O Complexitiy Chart at
+<a href="http://bigocheatsheet.com/">Big-O Cheat Sheet</a>.
+To generate only 10 letters of permutation, 3628800 times repetition
+must be done.</p>
+
+<h4 id="how-to-effectively-find-permutation">How to effectively find permutation</h4>
+
+<p>This is a famous problem, so it’s easy to find the solution for “how to
+effectively find/generate permutation.” As far as I googled, these
+three were the best.</p>
+
+<ul>
+  <li><a href="https://www.nayuki.io/page/next-lexicographical-permutation-algorithm">Next lexicographical permutation algorithm</a></li>
+  <li><a href="http://www.geeksforgeeks.org/lexicographic-permutations-of-string/">Print all permutations in sorted (lexicograpic) order</a></li>
+  <li>the answer by Michal Forišek
+<a href="https://www.quora.com/How-would-you-explain-an-algorithm-that-generates-permutations-using-lexicographic-ordering">How would you explain an algorithm that generates permutations using loxicographic ordering?</a></li>
+</ul>
+
+<p>Overall, above three take the same approach. The trick is
+<em>lexicographical order</em>. The lexicographical order is not the goal
+but is the way to effectively generates permutations.
+Above three <em>use</em> the lexicographical order to find next permutations
+one by one. When there’s no next permutation, all permutations are
+generated.</p>
+
+<h4 id="permutation-generation-code">Permutation generation code</h4>
+
+<p>Steps of the algorithm are:</p>
+
+<ol>
+  <li>(optional) sort given string or array</li>
+  <li>find longest non-increasing suffix such that <code>array[index] &lt;= array[index+1]</code></li>
+  <li>identify the pivot index such that the first <code>array[index] &gt; array[index+1]</code></li>
+  <li>find the ceil (successor), the right most index such that <code>array[pivot] &lt; array[succ]</code></li>
+  <li>swap the pivot and successor, array[pivot] and array[succ]</li>
+  <li>reverse the suffix from array[pivot+1] to array[array.length-1]
+if the array has been sorted at step 1, sort suffix instead of reversing</li>
+</ol>
+
+<p>The sorted version of permutation in Java will be something like this:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.util.Arrays</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AllPermutations</span> <span class="o">{</span>
+    <span class="kd">static</span> <span class="kt">void</span> <span class="nf">sortedPermutations</span><span class="o">(</span><span class="kt">char</span><span class="o">[]</span> <span class="n">array</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">parallelSort</span><span class="o">(</span><span class="n">array</span><span class="o">);</span>
+        <span class="kt">boolean</span> <span class="n">isFinished</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(!</span><span class="n">isFinished</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">count</span> <span class="o">!=</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">count</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">((</span><span class="k">new</span> <span class="nc">String</span><span class="o">(</span><span class="n">array</span><span class="o">))</span> <span class="o">+</span> <span class="s">" "</span><span class="o">);</span> <span class="n">count</span><span class="o">++;</span>
+
+            <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="na">length</span><span class="o">-</span><span class="mi">2</span><span class="o">;</span>
+            <span class="c1">// find non-increasing suffix</span>
+            <span class="k">while</span><span class="o">(</span><span class="n">index</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">array</span><span class="o">[</span><span class="n">index</span><span class="o">]</span> <span class="o">&lt;=</span> <span class="n">array</span><span class="o">[</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="o">])</span> <span class="k">break</span><span class="o">;</span>
+                <span class="n">index</span><span class="o">--;</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">index</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">isFinished</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="c1">// the pivot is array[index]</span>
+                <span class="c1">// find the rightmost successor to the pivot in suffix</span>
+                <span class="kt">int</span> <span class="n">succ</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="na">length</span><span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+                <span class="k">while</span><span class="o">(</span><span class="n">array</span><span class="o">[</span><span class="n">succ</span><span class="o">]</span> <span class="o">&lt;=</span> <span class="n">array</span><span class="o">[</span><span class="n">index</span><span class="o">])</span> <span class="n">succ</span><span class="o">--;</span>
+                <span class="c1">// swap the pivot and successor</span>
+                <span class="kt">char</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">array</span><span class="o">[</span><span class="n">index</span><span class="o">];</span>
+                <span class="n">array</span><span class="o">[</span><span class="n">index</span><span class="o">]</span> <span class="o">=</span> <span class="n">array</span><span class="o">[</span><span class="n">succ</span><span class="o">];</span>
+                <span class="n">array</span><span class="o">[</span><span class="n">succ</span><span class="o">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">;</span>
+                <span class="c1">// sort suffix</span>
+                <span class="nc">Arrays</span><span class="o">.</span><span class="na">parallelSort</span><span class="o">(</span><span class="n">array</span><span class="o">,</span> <span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="o">,</span> <span class="n">array</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">sortedPermutations</span><span class="o">(</span><span class="s">"ABCDE"</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>The above code prints:</p>
+
+<pre>
+ABCDE ABCED ABDCE ABDEC ABECD ABEDC ACBDE ACBED ACDBE ACDEB
+ACEBD ACEDB ADBCE ADBEC ADCBE ADCEB ADEBC ADECB AEBCD AEBDC
+AECBD AECDB AEDBC AEDCB BACDE BACED BADCE BADEC BAECD BAEDC
+BCADE BCAED BCDAE BCDEA BCEAD BCEDA BDACE BDAEC BDCAE BDCEA
+BDEAC BDECA BEACD BEADC BECAD BECDA BEDAC BEDCA CABDE CABED
+CADBE CADEB CAEBD CAEDB CBADE CBAED CBDAE CBDEA CBEAD CBEDA
+CDABE CDAEB CDBAE CDBEA CDEAB CDEBA CEABD CEADB CEBAD CEBDA
+CEDAB CEDBA DABCE DABEC DACBE DACEB DAEBC DAECB DBACE DBAEC
+DBCAE DBCEA DBEAC DBECA DCABE DCAEB DCBAE DCBEA DCEAB DCEBA
+DEABC DEACB DEBAC DEBCA DECAB DECBA EABCD EABDC EACBD EACDB
+EADBC EADCB EBACD EBADC EBCAD EBCDA EBDAC EBDCA ECABD ECADB
+ECBAD ECBDA ECDAB ECDBA EDABC EDACB EDBAC EDBCA EDCAB EDCBA 
+</pre>
+
+</div>
+
+<div class="tags">
+    
+</div>
+
+
+
+
+                </div>
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    <p class="title is-4">Latest Posts</p>
+
+<div class="columns is-multiline">
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/10/30/setting-up-gcp-instance-for-deep-learning.html">Setting Up GCP Instance for Deep Learning</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>This post is going to be very different from what I write here.
+The content is a memo how I create a GCP (Google Cloud Platform) instance for Deep Learning.
+While I study algorithm stuff, I also have been studying Deep Learning.
+In my early days, I tried to train my Deep Learning model only on a laptop.
+My laptop is 2012 model MacBook Pro, so I would say it is reasonably fast.
+However, when it comes to Deep Learning, the training was quite painful on the such machine.
+Often, I ran the training over night to get a disappointed result.
+Still, I didn’t use any of pricey cloud environment
+since it was my personal study unrelated to my day job.
+I wanted to save money.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/10/30/setting-up-gcp-instance-for-deep-learning.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Oct 30, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/09/10/complete-binary-tree.html">Complete Binary Tree</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>Problems which ask a binary tree traverse, add/delete nodes, etc. are popular in algorithm questions.
+The binary trees are often just a binary tree or binary search tree.
+Sometimes, the problem pinpoints a particular type of a binary tree,
+for example, a balanced binary tree or complete binary tree.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/09/10/complete-binary-tree.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Sep 10, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/09/09/catalan-number.html">Catalan number</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>What is <strong>Catalan number</strong> ?
+The Catalan number belongs to the domain of combinatorial mathematics.
+It is a sequence of natural numbers such that:
+<code>1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012, 742900, 2674440, 9694845, 35357670, 129644790, 477638700, 1767263190, ...</code>
+The sequence appears in counting problems.
+Wikipedia has the details about the sequence: <a href="https://en.wikipedia.org/wiki/Catalan_number">Catalan Number</a>.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/09/09/catalan-number.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Sep 9, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

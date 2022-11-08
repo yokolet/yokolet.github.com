@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Best Time to Buy and Sell Stock – At Most K Transactions | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Best Time to Buy and Sell Stock – At Most K Transactions" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-k-transactions.html" />
+<meta property="og:url" content="http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-k-transactions.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-07-26T23:09:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Best Time to Buy and Sell Stock – At Most K Transactions" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-07-26T23:09:00+09:00","datePublished":"2022-07-26T23:09:00+09:00","description":"Blog site mostly for programming topics.","headline":"Best Time to Buy and Sell Stock – At Most K Transactions","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-k-transactions.html"},"url":"http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-k-transactions.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Best Time to Buy and Sell Stock -- At Most K Transactions</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Jul 26, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>This is the fourth buy-sell-stock problem which has another variation to the basic one.
+In this problem, we can buy and sell stock at most given k times.
+This is not an easy problem.
+It looks just an extension of at most two transactions problem.
+However, bi-directional profit calculation doesn’t work any more.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>You are given an integer array <code>prices</code> where <code>prices[i]</code> is the price of a given stock on the i-th day, and an integer <code>k</code>.</p>
+
+  <p>Find the maximum profit you can achieve. You may complete at most <code>k</code> transactions.</p>
+
+  <p><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/">https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>example 1:
+Input: k = 2, prices = [2,4,1]
+Answer: 2
+Explanation: 2 is the best profit which is from:
+buy: index 0, sell: index 1, profit: 2
+</code></pre>
+<pre><code>example 2:
+Input: k = 2, prices = [3,2,6,5,0,3]
+Answer: 7
+Explanation: 7 is the best profit which is from:
+buy: index 1, sell: index 2, profit: 4
+buy: index 4, sell: index 5, profit: 3
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>In general, this kind of problems can be solved by DP.
+For a memoization, the solution uses a matrix of k + 1 * n (n is a size of prices).
+Starting from smaller k, calculate larger k one by one.
+The previous profit calculation looks at the previous transaction and price of previous day.
+The maximum of current previous profit and calculated value will be next previous profit.
+To calculate today’s profit, it looks at the same transaction and today’s price.
+The maximum of previous day’s profit and previous value + today’s price will be the current profit.</p>
+
+<p>In the end, the answer will be bottom right of the memoization matrix.</p>
+
+<h2 id="solution">Solution</h2>
+<ul>
+  <li>Python</li>
+</ul>
+
+<pre><code class="language-python">class BestTimeToBuyAndSellStockFour:
+    def maxProfit(self, k: int, prices: List[int]) -&gt; int:
+        n = len(prices)
+        if n == 0:
+            return 0
+        memo = [[0 for _ in range(n)] for _ in range(k + 1)]
+        for i in range(1, k + 1):
+            prev = float('-inf')
+            for j in range(1, n):
+                prev = max(prev, memo[i - 1][j - 1] - prices[j - 1])
+                memo[i][j] = max(memo[i][j - 1], prev + prices[j])
+        return memo[k][n - 1]
+</code></pre>
+<ul>
+  <li>C++</li>
+</ul>
+
+<pre><code class="language-cpp">#include &lt;vector&gt;
+#include &lt;iostream&gt;
+using namespace std;
+
+class BestTimeToBuyAndSellStockFour
+{
+public:
+  int maxProfit(int k, vector&lt;int&gt; &amp;prices)
+  {
+    int n = prices.size();
+    if (n == 0)
+      return 0;
+    vector&lt;vector&lt;int&gt;&gt; memo(k + 1, vector&lt;int&gt;(n, 0));
+    int prev;
+    for (int i = 1; i &lt;= k; ++i)
+    {
+      prev = INT_MIN;
+      for (int j = 1; j &lt; n; ++j)
+      {
+        prev = max(prev, memo[i - 1][j - 1] - prices[j - 1]);
+        memo[i][j] = max(memo[i][j - 1], prev + prices[j]);
+      }
+    }
+    return memo[k][n - 1];
+  }
+};
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: O(kn) – n: length of the input array.</li>
+  <li>Space: O(kn)</li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Hard
+</span>
+    
+    <span class="tag  is-primary ">
+    Array
+</span>
+    
+    <span class="tag  is-primary ">
+    DP
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

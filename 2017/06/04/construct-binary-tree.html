@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Construct Binary Tree | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Construct Binary Tree" />
+<meta name="author" content="Yoko Harada" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/2017/06/04/construct-binary-tree.html" />
+<meta property="og:url" content="http://localhost:4000/2017/06/04/construct-binary-tree.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-06-04T00:00:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Construct Binary Tree" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Yoko Harada"},"dateModified":"2017-06-04T00:00:00+09:00","datePublished":"2017-06-04T00:00:00+09:00","description":"Blog site mostly for programming topics.","headline":"Construct Binary Tree","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2017/06/04/construct-binary-tree.html"},"url":"http://localhost:4000/2017/06/04/construct-binary-tree.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Construct Binary Tree</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-8">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Jun 4, 2017</p>
+
+    
+
+    <p>Serialize, Deserialize a binary tree are a popular algorithm questions
+It depends on a programming language, but in most cases,
+a binary tree is expressed by an object tree.
+Each node can have at most two children: left node and right node.
+Once the binary tree is constructed, it is not language neutral anymore.</p>
+
+<p>What is a programming language independent form?
+A <em>string</em> would be the answer.
+Sometime, creating a string from binary tree is called <em>serialize</em>.
+On the contrary, constructing binary tree is sometime called <em>deserialize</em>.</p>
+
+<p>Next to the string, another language independent form would be an array of intergers.
+There are some differences to treat integers among programming languages.
+However, still, integers are common to all.</p>
+
+<p>A way to serialize the binary tree is not unique.
+Occasionally, a question allows me to choose my favorit style.
+As far as I learned, there are a few typical styles:
+string with parens, string with markers,
+combination of preorder/inorder or inorder/postorder.</p>
+
+<p>Although the goals are the same, “construct a binary tree” and “construct a string,”
+I need to apply different ideas.
+So, I’m going to write a memo here to clarify the difference.</p>
+
+<h4 id="problem-description---string-with-parens">Problem Description - String with Parens</h4>
+
+<p>Given a string with parens, construct a binary tree.
+When creating a node, always left child should come first.
+If node is empty, it is an empty string.</p>
+
+<p>For example, <code>4(2(-3)(1))(6(5))</code> is a given string, the tree should be:</p>
+<pre>
+
+         4
+       /   \
+     /      \
+    2        6
+  /   \     /
+-3     1   5
+
+</pre>
+
+<p>In this problem, the first digit(s) is the root node, and
+all subtrees under root are surrouded by a pair of parens.
+Each node can take both positive and negative values.</p>
+
+<p>As for serialization, when the tree above is given,
+the string <code>4(2(-3)(1))(6(5))</code> should be returned.</p>
+
+<h4 id="the-idea-to-construct-fromto-a-string-with-parens">The idea to construct from/to a string with parens</h4>
+
+<p>Constructing the tree comes first.
+Here, what I need to care about are:</p>
+
+<ul>
+  <li>an index to point a specific character in a given string</li>
+  <li>left or right to add a new node.</li>
+</ul>
+
+<p>Since this is a binary tree, recursive approach would work like traversing the binary tree.
+The point is when go right while incrementing the index.
+At first, it should go left as far as encountering opening parens.
+Then, coming back from deeper process, check opening parens again.
+This time, the opening paren indicates the tree should go right.
+Other than this main logic, I added index range check not to end up an exception.</p>
+
+<p>This serialization is a preorder traversal.
+What I need to care about are:</p>
+
+<ul>
+  <li>when returns from the subtree traversal, add closing paren</li>
+  <li>only left child may have <code>()</code> (empty) expression, but right child is not</li>
+</ul>
+
+<p>Because of this, extra null checks are mixed in basic preorder traversal.</p>
+
+<h4 id="java-code-for-constructing-a-binary-tree-from-a-string-with-parens">Java code for constructing a binary tree from a string with parens</h4>
+
+<script src="https://gist.github.com/yokolet/363f409ffddc72521ab540cde3f6f13d.js"> </script>
+
+<p>The result is:</p>
+
+<pre>
+4(2(-3)(1))(6(5))
+1(2()(4))(-3)
+</pre>
+
+<h4 id="problem-description---string-with-markers">Problem Description - String with Markers</h4>
+
+<p>Given a string with markers ($s), construct a binary tree.
+For example, <code>4,2,-3,$,$,1,$,$,6,5,$,$,$</code> is given,
+the constructed tree should be:</p>
+
+<pre>
+
+         4
+       /   \
+     /      \
+    2        6
+  /   \     /
+-3     1   5
+
+</pre>
+
+<p>In this problem, digits are separated by a comma (delimiter).
+When left and/or right child is null, it is expressed by a marker, <code>$</code>.</p>
+
+<p>A serialization creates a string exactly the same as input to deserialization.</p>
+
+<h4 id="the-idea-to-construct-fromto-a-string-with-markers">The idea to construct from/to a string with markers</h4>
+
+<p>Again, constructing the binary tree comes first.
+This is quite similar but easier than the previous, the string with parens style.
+Simply traversing in a preorder is all to construct a tree.
+When the Marker (<code>$</code>) is found, it goes back.
+Sicne each values are separated by a comma, finding a value portion from the string
+is easy as well.</p>
+
+<p>Constructing a string from tree is also easier then previous style.
+Here again, simply traversing in the preorder creates a string.
+While a node is there, add a value and delimiter.
+When it comes to children of leaf node, a marker will be added.</p>
+
+<h4 id="java-code-for-constructing-a-binary-tree-from-a-string-with-markers">Java code for constructing a binary tree from a string with markers</h4>
+
+<script src="https://gist.github.com/yokolet/f332e785f645e8b06c2914ff033b211c.js"> </script>
+
+<p>The result is:</p>
+
+<pre>
+4,2,-3,$,$,1,$,$,6,5,$,$,$
+1,2,$,4,$,$,-3,$,$
+</pre>
+
+<h4 id="problem-description---a-combination-of-preorder-and-inorder-traversal">Problem Description - A Combination of Preorder and Inorder Traversal</h4>
+
+<p>Given two arrays of integers, preorder and inorder, construct a binary tree.
+For example, preorder <code>[4, 2, -3, 1, 6, 5]</code>, inorder <code>[-3, 2, 1, 4, 5, 6]</code>
+are given, the constructed tree should be:</p>
+
+<pre>
+
+         4
+       /   \
+     /      \
+    2        6
+  /   \     /
+-3     1   5
+
+</pre>
+
+<h4 id="the-idea-to-construct-fromto-preorder-and-inorder">The idea to construct from/to preorder and inorder</h4>
+
+<p>If I look at difference of ways to traverse trees, there’s interesting fact.
+The first element in preorder is a root.
+The same value in inorder divides left and right subtrees.</p>
+
+<pre>
+preorder [|4|, 2, -3, 1, 6, 5], inorder [-3, 2, 1, |4|, 5, 6]
+
+           4
+           |
+           |
+    2      |      6
+  /   \    |     /
+-3     1   |    5
+
+</pre>
+
+<p>Now, I will look at the left subtree only.
+The arrays are preorder <code>[2, -3, 1]</code>, inorder <code>[-3, 2, 1]</code>.
+Again, the first element in preorder divides inorder into left and right subtrees.</p>
+
+<pre>
+preorder [|2|, -3, 1], inorder [-3, |2|, 1]
+
+     2
+     |
+-3   |   1
+
+</pre>
+
+<p>The same division happens in the right subtree, preorder <code>[6, 5]</code> and inorder <code>[5, 6]</code>.</p>
+
+<pre>
+preorder [|6|, 5], inorder [5, |6|]
+
+     6
+     |
+5    |
+
+</pre>
+
+<p>This way, I can figure out what integers should go left or right.</p>
+
+<h4 id="java-code-for-constructing-a-binary-tree-from-preorder-and-inorder-traversal">Java code for constructing a binary tree from preorder and inorder traversal</h4>
+
+<script src="https://gist.github.com/yokolet/6eef5a0806b3a5a7cba0f442fef395fe.js"> </script>
+
+<p>The result is:</p>
+
+<pre>
+[[4, 2, -3, 1, 6, 5], [-3, 2, 1, 4, 5, 6]]
+[[1, 2, 4, -3], [2, 4, 1, -3]]
+</pre>
+
+<h4 id="problem-description---a-combination-of-inorder-and-postorder-traversal">Problem Description - A Combination of Inorder and Postorder Traversal</h4>
+
+<p>Given two arrays of integers, inorder and postorder, construct a binary tree.
+For example, inorder <code>[-3, 2, 1, 4, 5, 6]</code>, postorder <code>[-3, 1, 2, 5, 6, 4]</code>
+are given, the constructed tree should be:</p>
+
+<pre>
+
+         4
+       /   \
+     /      \
+    2        6
+  /   \     /
+-3     1   5
+
+</pre>
+
+<h4 id="the-idea-to-construct-fromto-inorder-and-postorder">The idea to construct from/to inorder and postorder</h4>
+
+<p>Just glancing at this problem, everybody finds this is very similar to the previous one.
+In the preorder, a root is the first element while the last in the postorder.</p>
+
+<p>The same logic to divide left and right subtree is able to apply
+looking at the last element in the subtree area.</p>
+
+<pre>
+inorder [-3, 2, 1, |4|, 5, 6], postorder [-3, 1, 2, 5, 6, |4|]
+
+           4
+           |
+           |
+    2      |      6
+  /   \    |     /
+-3     1   |    5
+
+
+inorder [-3, |2|, 1], postorder [-3, 1, |2|]
+
+     2
+     |
+-3   |   1
+
+
+inorder [5, |6|], postorder [5, |6|]
+
+     6
+     |
+5    |
+
+
+</pre>
+
+<p>As in the previous section, recursively applying this idea constructs the binary tree.</p>
+
+<h4 id="java-code-for-constructing-a-binary-tree-from-inorder-and-postorder-traversal">Java code for constructing a binary tree from inorder and postorder traversal</h4>
+
+<script src="https://gist.github.com/yokolet/e2b2713f68c2e59d467a4929a26178d8.js"> </script>
+
+<p>The result is:</p>
+
+<pre>
+[[-3, 2, 1, 4, 5, 6], [-3, 1, 2, 5, 6, 4]]
+[[2, 4, 1, -3], [4, 2, -3, 1]]
+</pre>
+
+<h4 id="resources">Resources</h4>
+
+<ul>
+  <li><a href="http://www.geeksforgeeks.org/serialize-deserialize-binary-tree/">Serialize and Deserialize a Binary Tree</a></li>
+  <li><a href="http://www.programcreek.com/2014/05/leetcode-serialize-and-deserialize-binary-tree-java/">Serialize and Deserialize Binary Tree</a></li>
+  <li><a href="https://kennyzhuang.gitbooks.io/algorithms-collection/content/serialize_and_deserialize_binary_tree.html">Serialize and deserialize binary tree</a></li>
+  <li><a href="http://www.geeksforgeeks.org/construct-tree-from-given-inorder-and-preorder-traversal/">Construct Tree from given Inorder and Preorder traversals</a></li>
+  <li><a href="http://www.programcreek.com/2014/06/leetcode-construct-binary-tree-from-preorder-and-inorder-traversal-java/">Construct Binary Tree from Preorder and Inorder Traversal</a></li>
+  <li><a href="http://www.geeksforgeeks.org/construct-a-binary-tree-from-postorder-and-inorder/">Construct a Binary Tree from Postorder and Inorder</a></li>
+  <li><a href="http://www.programcreek.com/2013/01/construct-binary-tree-from-inorder-and-postorder-traversal/">Constrcut Binary Tree from Inorder and Postorder Traversal</a></li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+</div>
+
+
+
+
+                </div>
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    <p class="title is-4">Latest Posts</p>
+
+<div class="columns is-multiline">
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/10/30/setting-up-gcp-instance-for-deep-learning.html">Setting Up GCP Instance for Deep Learning</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>This post is going to be very different from what I write here.
+The content is a memo how I create a GCP (Google Cloud Platform) instance for Deep Learning.
+While I study algorithm stuff, I also have been studying Deep Learning.
+In my early days, I tried to train my Deep Learning model only on a laptop.
+My laptop is 2012 model MacBook Pro, so I would say it is reasonably fast.
+However, when it comes to Deep Learning, the training was quite painful on the such machine.
+Often, I ran the training over night to get a disappointed result.
+Still, I didn’t use any of pricey cloud environment
+since it was my personal study unrelated to my day job.
+I wanted to save money.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/10/30/setting-up-gcp-instance-for-deep-learning.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Oct 30, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/09/10/complete-binary-tree.html">Complete Binary Tree</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>Problems which ask a binary tree traverse, add/delete nodes, etc. are popular in algorithm questions.
+The binary trees are often just a binary tree or binary search tree.
+Sometimes, the problem pinpoints a particular type of a binary tree,
+for example, a balanced binary tree or complete binary tree.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/09/10/complete-binary-tree.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Sep 10, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/09/09/catalan-number.html">Catalan number</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>What is <strong>Catalan number</strong> ?
+The Catalan number belongs to the domain of combinatorial mathematics.
+It is a sequence of natural numbers such that:
+<code>1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012, 742900, 2674440, 9694845, 35357670, 129644790, 477638700, 1767263190, ...</code>
+The sequence appears in counting problems.
+Wikipedia has the details about the sequence: <a href="https://en.wikipedia.org/wiki/Catalan_number">Catalan Number</a>.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/09/09/catalan-number.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Sep 9, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

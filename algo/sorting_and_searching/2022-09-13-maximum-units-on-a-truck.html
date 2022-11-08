@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Maximum Units on a Truck | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Maximum Units on a Truck" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/sorting_and_searching/2022-09-13-maximum-units-on-a-truck.html" />
+<meta property="og:url" content="http://localhost:4000/algo/sorting_and_searching/2022-09-13-maximum-units-on-a-truck.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-09-13T14:13:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Maximum Units on a Truck" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-13T14:13:00+09:00","datePublished":"2022-09-13T14:13:00+09:00","description":"Blog site mostly for programming topics.","headline":"Maximum Units on a Truck","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/sorting_and_searching/2022-09-13-maximum-units-on-a-truck.html"},"url":"http://localhost:4000/algo/sorting_and_searching/2022-09-13-maximum-units-on-a-truck.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Maximum Units on a Truck</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Sep 13, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>This problem might look like dynamic programming.
+However, the input array’s order does not  matter.
+Sorting and greedy approach works.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>You are assigned to put some amount of boxes onto one truck.
+You are given a 2D array <code>boxTypes</code>, where <code>boxTypes[i] = [numberOfBoxes(i), numberOfUnitsPerBox(i)]</code>:</p>
+  <ul>
+    <li><code>numberOfBoxes(i)</code> is the number of boxes of type <code>i</code>.</li>
+    <li><code>numberOfUnitsPerBox(i)</code> is the number of units in each box of the type <code>i</code>.</li>
+  </ul>
+
+  <p>You are also given an integer <code>truckSize</code>, which is the maximum number of boxes that can be put on the truck.
+You can choose any boxes to put on the truck as long as the number of boxes does not exceed <code>truckSize</code>.
+Return the maximum total number of units that can be put on the truck.</p>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= boxTypes.length &lt;= 1000</code></li>
+    <li><code>1 &lt;= numberOfBoxes(i), numberOfUnitsPerBox(i) &lt;= 1000</code></li>
+    <li><code>1 &lt;= truckSize &lt;= 10**6</code></li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/maximum-units-on-a-truck/">https://leetcode.com/problems/maximum-units-on-a-truck/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>Example 1:
+Input: boxTypes = [[1,3],[2,2],[3,1]], truckSize = 4
+Output: 8
+Explanation: There are:
+- 1 box of the first type that contains 3 units.
+- 2 boxes of the second type that contain 2 units each.
+- 3 boxes of the third type that contain 1 unit each.
+You can take all the boxes of the first and second types, and one box of the third type.
+The total number of units will be = (1 * 3) + (2 * 2) + (1 * 1) = 8.
+</code></pre>
+
+<pre><code>Example 2:
+Input: boxTypes = [[5,10],[2,5],[4,7],[3,9]], truckSize = 10
+Output: 91
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>For the first step, sort <code>boxTypes</code> array by units.
+The second step is to go over the sorted <code>boxTypes</code> array.
+Possible number of boxes to put on the truck is minimum of boxes and current truckSize.
+Add up possible number of boxes times current units.
+If the truckSize becomes zero, a loop is over.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-python">class MaximumUnitsOnATruck:
+    def maximumUnits(self, boxTypes: List[List[int]], truckSize: int) -&gt; int:
+        boxTypes.sort(key=lambda x: x[1], reverse=True)
+        amount = 0
+        for b, u in boxTypes:
+            cur = min(b, truckSize)
+            amount += cur * u
+            truckSize -= cur
+            if truckSize == 0:
+                break
+        return amount
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: <code>O(nlong(n))</code></li>
+  <li>Space: <code>O(1)</code></li>
+</ul>
+
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Easy
+</span>
+    
+    <span class="tag  is-primary ">
+    Sorting
+</span>
+    
+    <span class="tag  is-primary ">
+    Greedy
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

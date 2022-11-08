@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Skyline Problem | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Skyline Problem" />
+<meta name="author" content="Yoko Harada" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/2017/05/26/skyline-problem.html" />
+<meta property="og:url" content="http://localhost:4000/2017/05/26/skyline-problem.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-05-26T00:00:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Skyline Problem" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Yoko Harada"},"dateModified":"2017-05-26T00:00:00+09:00","datePublished":"2017-05-26T00:00:00+09:00","description":"Blog site mostly for programming topics.","headline":"Skyline Problem","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2017/05/26/skyline-problem.html"},"url":"http://localhost:4000/2017/05/26/skyline-problem.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Skyline Problem</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-8">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: May 26, 2017</p>
+
+    
+
+    <p>The skyline problem is another famous algorithm problem using bars, like
+<a href="http://yokolet.github.io/2017/05/25/largest-rectangle-in-histogram.html">Lagest Rectangle in a Histogram</a>.
+Although the problem is described using bars, it is totally another problem
+compared to the largest rectangle. The skyline problem asks range maximum values.</p>
+
+<p>While the largest rectangle has almost only one effective algorithm (using stack),
+this problem has a few effective ways to solve it.</p>
+
+<p>For example:</p>
+
+<ul>
+  <li><a href="https://youtu.be/GSBLe8cKu0s">heap sort (YouTube)</a> / <a href="https://github.com/mission-peace/interview/blob/master/src/com/interview/geometry/SkylineDrawing.java">heap sort (Code)</a></li>
+  <li><a href="http://www.geeksforgeeks.org/divide-and-conquer-set-7-the-skyline-problem/">devide and conquer</a></li>
+  <li><a href="https://discuss.leetcode.com/topic/20091/a-segment-tree-solution">segment tree</a></li>
+</ul>
+
+<p>The first solution by heap sort is the most popular, simplest way.
+So, the solutions are here and there with a slight variation.
+The second, divide and conquer (merge sort) is interesting solution.
+Not so popular, but still a few are using this technique.
+The third by the segement tree is not so popular, but shows very unique two-step solution.
+In case of the segment tree, the tree should be created first.
+Then making queries of intervals gives the result.</p>
+
+<h4 id="problem-description">Problem Description</h4>
+
+<p>The coordinates of each building will be given by <code>[left, right, height]</code>.
+The input is an array of three element arrays. For example,</p>
+
+<pre>
+[[1, 5, 11], [2, 7, 6], [3, 9, 13], [12, 16, 7], [14, 25, 3],
+ [19, 22, 18], [23, 29, 13], [24, 28, 4]]
+</pre>
+
+<p>This input creates buildings below:</p>
+
+<pre>
+
+   .
+18 .                                     +-----+
+   .                                     |     |
+   .                                     |     |
+15 .                                     |     |
+   .                                     |     |
+   .     +-----------+                   |     | +-----------+
+   .     |           |                   |     | |           |
+   . +---|----+      |                   |     | |           |
+10 . |   |    |      |                   |     | |           |
+   . |   |    |      |                   |     | |           |
+   . |   |    |      |                   |     | |           |
+   . |   |    |      |     +-------+     |     | |           |
+   . | +-|-------+   |     |       |     |     | |           |
+ 5 . | | |    |  |   |     |       |     |     | |           |
+   . | | |    |  |   |     |       |     |     | | +-------+ |
+   . | | |    |  |   |     |   +---------|-----|-|-|-+     | |
+   . | | |    |  |   |     |   |   |     |     | | | |     | |
+   . | | |    |  |   |     |   |   |     |     | | | |     | |
+ 0 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+   0         5         10        15        20        25        30
+</pre>
+
+<p>From this input, the problem requires to find <code>[position, height]</code> pairs
+to draw outer shape.
+In the picture below, positions of <code>@</code> should be returned.
+Since, lines only go left, up or down, <code>@</code>s are enough to draw the outer shape (skyline).</p>
+
+<pre>
+[[1, 11], [3, 13], [9, 0], [12, 7], [16, 3], [19, 18], [22, 3], [23, 13], [29, 0]]
+</pre>
+
+<pre>
+
+   .
+18 .                                     @-----+
+   .                                     |     |
+   .                                     |     |
+15 .                                     |     |
+   .                                     |     |
+   .     @-----------+                   |     | @-----------+
+   .     |           |                   |     | |           |
+   . @---|           |                   |     | |           |
+10 . |               |                   |     | |           |
+   . |               |                   |     | |           |
+   . |               |                   |     | |           |
+   . |               |     @-------+     |     | |           |
+   . |               |     |       |     |     | |           |
+ 5 . |               |     |       |     |     | |           |
+   . |               |     |       |     |     | |           |
+   . |               |     |       @-----|     @-|           |
+   . |               |     |       |     |     | |           |
+   . |               |     |       |     |     | |           |
+ 0 . . . . . . . . . @ . . . . . . . . . . . . . . . . . . . @ . .
+   0         5         10        15        20        25        30
+</pre>
+
+<h4 id="the-idea">The idea</h4>
+
+<p>As far as I compared three well-cited solutions, I decided to choose the first, heap sort
+solution. It is simple and easy to understand.
+However, I ended up in a slight variation of the typical way.</p>
+
+<p>The key ideas is re-queuing the lower height buildings as possible surviors.
+All buildings are sorted by the left position (starting position).
+If multiple buildings have the same left value, those will be sorted by their height.
+Before the re-queuing lower height buildings, those left position will be
+adjusted to the end of a current maximum height building.
+This way, when the higher building ends, the lower previously started buildings show up
+again as possible candidates.</p>
+
+<p>Not like typical heap sort solutions, my solution uses one PriorityQueue only.
+Although there’s not a big difference in terms of big-O notation,
+it is slightly space effective.
+Downside is time complexity depends on how buildings are shaped.
+This solution was accepted by LeetCode testing (14 ms), it won’t so bad even though
+building locations are complicated.</p>
+
+<h4 id="java-code">Java code</h4>
+
+<p>Below is the Java code explaied above.</p>
+
+<script src="https://gist.github.com/yokolet/5cc5af72ddcc1b53af6784123a78bb23.js"> </script>
+
+<p>The result is:</p>
+
+<pre>
+[[1, 11], [3, 13], [9, 0], [12, 7], [16, 3], [19, 18], [22, 3], [23, 13], [29, 0]]
+[[2, 10], [3, 15], [7, 12], [12, 0], [15, 10], [20, 8], [24, 0]]
+</pre>
+
+<h4 id="thoughts">Thoughts</h4>
+
+<p>If I neglect real height differences of the skyline and delete vertical bars,
+it turns to below:</p>
+
+<pre>
+
+   .                                     @-----
+   .     @-----------                            @-----------
+   . @---                                                     
+   .                       @-------                          
+   .                               @-----      @-             
+   . . . . . . . . . @-----. . . . . . . . . . . . . . . . . @ . .
+   0         5         10        15        20        25        30
+
+</pre>
+
+<p>This has been seen somewhere else.
+It is quite similar to a weighted scheduling problem.
+Most weighted scheduling doesn’t require lower priority jobs to come back.
+However, if it does, the solution will be almost equivalant to the skyline problem.</p>
+
+<h4 id="resources">Resources</h4>
+
+<ul>
+  <li><a href="https://youtu.be/GSBLe8cKu0s">Skyline Problem (YouTube)</a> / <a href="https://github.com/mission-peace/interview/blob/master/src/com/interview/geometry/SkylineDrawing.java">SkylineDrawing.java (Code)</a></li>
+  <li><a href="http://www.geeksforgeeks.org/divide-and-conquer-set-7-the-skyline-problem/">Devide and Conquer - Set 7 (The Skyline Problem)</a></li>
+  <li>
+    <p><a href="https://discuss.leetcode.com/topic/20091/a-segment-tree-solution">segment tree</a></p>
+  </li>
+  <li><a href="http://www.zrzahid.com/the-skyline-problem/">The Skyline Problem</a></li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+</div>
+
+
+
+
+                </div>
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    <p class="title is-4">Latest Posts</p>
+
+<div class="columns is-multiline">
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/10/30/setting-up-gcp-instance-for-deep-learning.html">Setting Up GCP Instance for Deep Learning</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>This post is going to be very different from what I write here.
+The content is a memo how I create a GCP (Google Cloud Platform) instance for Deep Learning.
+While I study algorithm stuff, I also have been studying Deep Learning.
+In my early days, I tried to train my Deep Learning model only on a laptop.
+My laptop is 2012 model MacBook Pro, so I would say it is reasonably fast.
+However, when it comes to Deep Learning, the training was quite painful on the such machine.
+Often, I ran the training over night to get a disappointed result.
+Still, I didn’t use any of pricey cloud environment
+since it was my personal study unrelated to my day job.
+I wanted to save money.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/10/30/setting-up-gcp-instance-for-deep-learning.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Oct 30, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/09/10/complete-binary-tree.html">Complete Binary Tree</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>Problems which ask a binary tree traverse, add/delete nodes, etc. are popular in algorithm questions.
+The binary trees are often just a binary tree or binary search tree.
+Sometimes, the problem pinpoints a particular type of a binary tree,
+for example, a balanced binary tree or complete binary tree.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/09/10/complete-binary-tree.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Sep 10, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/09/09/catalan-number.html">Catalan number</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>What is <strong>Catalan number</strong> ?
+The Catalan number belongs to the domain of combinatorial mathematics.
+It is a sequence of natural numbers such that:
+<code>1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012, 742900, 2674440, 9694845, 35357670, 129644790, 477638700, 1767263190, ...</code>
+The sequence appears in counting problems.
+Wikipedia has the details about the sequence: <a href="https://en.wikipedia.org/wiki/Catalan_number">Catalan Number</a>.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/09/09/catalan-number.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Sep 9, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

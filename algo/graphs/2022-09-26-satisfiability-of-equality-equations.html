@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Satisfiability of Equality Equations | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Satisfiability of Equality Equations" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/graphs/2022-09-26-satisfiability-of-equality-equations.html" />
+<meta property="og:url" content="http://localhost:4000/algo/graphs/2022-09-26-satisfiability-of-equality-equations.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-09-26T14:39:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Satisfiability of Equality Equations" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-26T14:39:00+09:00","datePublished":"2022-09-26T14:39:00+09:00","description":"Blog site mostly for programming topics.","headline":"Satisfiability of Equality Equations","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/graphs/2022-09-26-satisfiability-of-equality-equations.html"},"url":"http://localhost:4000/algo/graphs/2022-09-26-satisfiability-of-equality-equations.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Satisfiability of Equality Equations</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Sep 26, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>This is a graph problem since the equations define the relations between two node.
+The equations will create a directed cycle graph.
+The depth-first search or union find will give us the answer.
+In this case, the problem is related to groups, not like paths.
+For this reason, the solution here took the union find approach.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>You are given an array of strings <code>equations</code> that represent relationships between variables
+where each string <code>equations[i]</code> is of length 4 and takes one of two different forms: <code>"x[i]==y[i]"</code> or <code>"x[i]!=y[i]"</code>.
+Here, <code>x[i]</code> and <code>y[i]</code> are lowercase letters (not necessarily different) that represent one-letter variable names.</p>
+
+  <p>Return <code>true</code> if it is possible to assign integers to variable names so as to satisfy all the given equations, or <code>false</code> otherwise.</p>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= equations.length &lt;= 500</code></li>
+    <li><code>equations[i].length == 4</code></li>
+    <li><code>equations[i][0]</code> is a lowercase letter</li>
+    <li><code>equations[i][1]</code> is either ‘=’ or ‘!’</li>
+    <li><code>equations[i][2] </code>is ‘=’.</li>
+    <li><code>equations[i][3]</code> is a lowercase letter.</li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/satisfiability-of-equality-equations/">https://leetcode.com/problems/satisfiability-of-equality-equations/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>Example 1
+Input: equations = ["a==b","b!=a"]
+Output: false
+</code></pre>
+
+<pre><code>Example 2
+Input: equations = ["b==a","a==b"]
+Output: true
+</code></pre>
+
+<pre><code>Example 3
+Input: ["a==b","b!=c","c==a"]
+Output: false
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>The approach here is a union find.
+So, two functions, find and union were defined first.
+Then, the solution took 2 step traversal of the equations (relations).
+Pick up <code>==</code> equations to union groups.
+Next, pick up <code>!=</code> equations to test two groups are not in the same group.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-python">class SatisfiabilityOfEqualityEquations:
+    def equationsPossible(self, equations: List[str]) -&gt; bool:
+        groups = [i for i in range(26)]
+        
+        def atoi(ch):
+            return ord(ch) - ord('a')
+        
+        def find(x):
+            while x != groups[x]:
+                x = groups[x]
+            return x
+        
+        def union(x, y):
+            group_x, group_y = find(x), find(y)
+            if group_x &lt; group_y:
+                groups[group_y] = group_x
+            else:
+                groups[group_x] = group_y
+
+        for eq in equations:
+            if eq[1] == '=':
+                x, y = atoi(eq[0]), atoi(eq[3])
+                union(x, y)
+        for eq in equations:
+            if eq[1] == '!':
+                x, y = atoi(eq[0]), atoi(eq[3])
+                if find(x) == find(y):
+                    return False
+        return True
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: <code>O(n)</code></li>
+  <li>Space: <code>O(1)</code> – auxiliary array has always length 26, constant</li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Medium
+</span>
+    
+    <span class="tag  is-primary ">
+    Graph
+</span>
+    
+    <span class="tag  is-primary ">
+    Union Find
+</span>
+    
+    <span class="tag  is-primary ">
+    String
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

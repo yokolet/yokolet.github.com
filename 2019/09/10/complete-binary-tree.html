@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Complete Binary Tree | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Complete Binary Tree" />
+<meta name="author" content="Yoko Harada" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Problems which ask a binary tree traverse, add/delete nodes, etc. are popular in algorithm questions. The binary trees are often just a binary tree or binary search tree. Sometimes, the problem pinpoints a particular type of a binary tree, for example, a balanced binary tree or complete binary tree." />
+<meta property="og:description" content="Problems which ask a binary tree traverse, add/delete nodes, etc. are popular in algorithm questions. The binary trees are often just a binary tree or binary search tree. Sometimes, the problem pinpoints a particular type of a binary tree, for example, a balanced binary tree or complete binary tree." />
+<link rel="canonical" href="http://localhost:4000/2019/09/10/complete-binary-tree.html" />
+<meta property="og:url" content="http://localhost:4000/2019/09/10/complete-binary-tree.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-09-10T13:19:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Complete Binary Tree" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Yoko Harada"},"dateModified":"2019-09-10T13:19:00+09:00","datePublished":"2019-09-10T13:19:00+09:00","description":"Problems which ask a binary tree traverse, add/delete nodes, etc. are popular in algorithm questions. The binary trees are often just a binary tree or binary search tree. Sometimes, the problem pinpoints a particular type of a binary tree, for example, a balanced binary tree or complete binary tree.","headline":"Complete Binary Tree","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2019/09/10/complete-binary-tree.html"},"url":"http://localhost:4000/2019/09/10/complete-binary-tree.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Complete Binary Tree</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-8">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Sep 10, 2019</p>
+
+    
+
+    <p>Problems which ask a binary tree traverse, add/delete nodes, etc. are popular in algorithm questions.
+The binary trees are often just a binary tree or binary search tree.
+Sometimes, the problem pinpoints a particular type of a binary tree,
+for example, a balanced binary tree or complete binary tree.</p>
+
+<p>The complete binary tree has unique properties.
+Problems which specify the tree as the complete binary tree expect an efficient
+solution based on the tree’s properties.
+I found it is an interesting topic, so I decided to write a post about the complete binary tree.</p>
+
+<p>Well, what is exactly the complete binary tree?
+Wikipedia’s article about <a href="https://en.wikipedia.org/wiki/Binary_tree">Binary Tree</a> explains that:</p>
+
+<pre><code>In a complete binary tree every level, except possibly the last,
+is completely filled, and all nodes in the last level are as far left
+as possible. It can have between 1 and 2^h nodes at the last level h.
+</code></pre>
+
+<p>Given the above definition, in every level, nodes are filled out strictly from left to right.</p>
+
+<pre><code>complete binary tree      not complete binary tree
+    1                              1
+   / \                            / \
+  2   3                          2   3
+ /                                \
+4                                  4
+
+      1                            1
+    /   \                        /  \ 
+  2      3                      2    3
+ / \    /                      /    / \ 
+4   5  6                      4    5   6
+</code></pre>
+
+<p>For the complete binary tree, it’s easy to store the tree in an array.
+For example, the second complete binary tree above can be expressed by
+<code>[1, 2, 3, 4, 5, 6]</code>.
+This would remind a heap data structure. In fact, the heap is the complete binary tree.</p>
+
+<p>Another interesting property is the left and right subtree’s heights.
+The left subtree is always higher or equal to the right subtree.
+When the right subtree exists the left subtree should be completely filled.</p>
+
+<p>For now, we learned the completed binary tree’s properties, it’s time to look at algorithm problems.</p>
+
+<h4 id="counting-nodes-in-the-complete-binary-tree">Counting Nodes in the Complete Binary Tree</h4>
+
+<p><strong>Problem description</strong>: Given a complete binary tree, find how many nodes are in the tree.</p>
+
+<p>A naive solution is obvious – traverse the tree whether level order or pre-order.
+The correct answer will be found.
+However, when the tree type is specified as the complete binary tree, there’s no need to traverse all.
+The solution should use the complete binary tree property that nodes are packed to the left.</p>
+
+<p>This is the problem to compare left and right subtree heights.
+At some level, if the right subtree has the same height as the left subtree, that level is all filled.
+For example, the second complete binary tree above has the same left and right subtree heights at the level of node 2 and 3.
+That means the left subtree is completely filled, so the next step goes to the right subtree to check.
+If the left subtree is higher at some level as described in the first complete binary tree,
+the next step goes left to check.</p>
+
+<p>Below is the code example of counting problem. It takes a bottom up counting style.</p>
+
+<h4 id="code-example-of-node-count">Code Example of Node Count</h4>
+
+<script src="https://gist.github.com/yokolet/64781fb9082954396c34272dd94ae705.js"> </script>
+
+<p>The performance is: time <code>O(log(n))</code>, space <code>O(h)</code>, where n: number of nodes, h: height of the tree.</p>
+
+<h4 id="validating-a-completeness-of-binary-tree">Validating a Completeness of Binary Tree</h4>
+
+<p><strong>Problem description</strong>: Given a binary tree, check if it is a complete binary tree.</p>
+
+<p>Like counting problem, left and right subtree’s heights are a clue to find an answer.
+If the right subtree is higher as in the first not complete binary tree, it is invalid.
+If the left subtree if higher more than one, it is invalid.
+When left min and max heights are not the same, the right min/max should be the same as the left min.</p>
+
+<p>Below is the code example of validation problem. It takes post-order traversal style.</p>
+
+<h4 id="code-example-of-completeness-check">Code Example of Completeness check</h4>
+
+<script src="https://gist.github.com/yokolet/e66a00ad3d523577a515e403d26581a1.js"> </script>
+
+<p>The performance is: time <code>O(n)</code>, space <code>O(h)</code>, where n: number of nodes, h: height of the tree.</p>
+
+<h4 id="designing-a-complete-binary-tree-inserter">Designing a Complete Binary Tree Inserter</h4>
+
+<p><strong>Problem description</strong>: Write a data structure <code>CBTInserter</code> which is initialized by a
+complete binary tree and provides operations below:</p>
+
+<ul>
+  <li><code>CBTInserter(TreeNode root)</code>: initializes the data structure with the root of the complete binary tree</li>
+  <li><code>insert(int v)</code>: inserts a new node with the value <code>v</code> to the tree and returns the value of the parent node. After the insertion, the tree should keep the completeness.</li>
+  <li><code>get_root()</code>: returns the root node of the tree.</li>
+</ul>
+
+<p>This is a problem to use heap-like data structure internally.
+Under a zero based index, left and right children are on the index of <code>2*i+1</code> and <code>2*i+2</code> respectively
+when the parent node is at index <code>i</code>.
+When the child is on the index <code>i</code>, its parent is at index <code>(i-1) / 2</code>.</p>
+
+<p>When the class is initialized, the given tree will be saved in an array using level order traversal.
+When a new node is inserted, the parent’s index is easily found from the array length.
+So the new node can be added to its parent’s left or right child easily.</p>
+
+<h4 id="code-example-of-complete-binary-tree-inserter">Code Example of Complete Binary Tree Inserter</h4>
+
+<script src="https://gist.github.com/yokolet/afa881446150ce323492d31d30738f4d.js"> </script>
+
+<p>The performance is:</p>
+<ul>
+  <li>initialization: time: <code>O(n)</code>, space: <code>O(n)</code></li>
+  <li>insert: time <code>O(1)</code>, space: <code>O(1)</code></li>
+  <li>get_root: time <code>O(1)</code>, space: <code>O(1)</code></li>
+</ul>
+
+<h4 id="ressources">Ressources</h4>
+
+<ul>
+  <li>Wikipedia: <a href="https://en.wikipedia.org/wiki/Binary_tree#Types_of_binary_trees">Types of Binary Tree</a></li>
+  <li><a href="https://www.cs.cmu.edu/~adamchik/15-121/lectures/Binary%20Heaps/heaps.html">Binary Heaps</a></li>
+</ul>
+
+
+</div>
+
+<div class="tags">
+    
+</div>
+
+
+
+
+                </div>
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    <p class="title is-4">Latest Posts</p>
+
+<div class="columns is-multiline">
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/10/30/setting-up-gcp-instance-for-deep-learning.html">Setting Up GCP Instance for Deep Learning</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>This post is going to be very different from what I write here.
+The content is a memo how I create a GCP (Google Cloud Platform) instance for Deep Learning.
+While I study algorithm stuff, I also have been studying Deep Learning.
+In my early days, I tried to train my Deep Learning model only on a laptop.
+My laptop is 2012 model MacBook Pro, so I would say it is reasonably fast.
+However, when it comes to Deep Learning, the training was quite painful on the such machine.
+Often, I ran the training over night to get a disappointed result.
+Still, I didn’t use any of pricey cloud environment
+since it was my personal study unrelated to my day job.
+I wanted to save money.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/10/30/setting-up-gcp-instance-for-deep-learning.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Oct 30, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/09/10/complete-binary-tree.html">Complete Binary Tree</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>Problems which ask a binary tree traverse, add/delete nodes, etc. are popular in algorithm questions.
+The binary trees are often just a binary tree or binary search tree.
+Sometimes, the problem pinpoints a particular type of a binary tree,
+for example, a balanced binary tree or complete binary tree.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/09/10/complete-binary-tree.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Sep 10, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/09/09/catalan-number.html">Catalan number</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>What is <strong>Catalan number</strong> ?
+The Catalan number belongs to the domain of combinatorial mathematics.
+It is a sequence of natural numbers such that:
+<code>1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012, 742900, 2674440, 9694845, 35357670, 129644790, 477638700, 1767263190, ...</code>
+The sequence appears in counting problems.
+Wikipedia has the details about the sequence: <a href="https://en.wikipedia.org/wiki/Catalan_number">Catalan Number</a>.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/09/09/catalan-number.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Sep 9, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

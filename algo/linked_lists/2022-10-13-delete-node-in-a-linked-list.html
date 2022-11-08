@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Delete Node in a Linked List | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Delete Node in a Linked List" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/linked_lists/2022-10-13-delete-node-in-a-linked-list.html" />
+<meta property="og:url" content="http://localhost:4000/algo/linked_lists/2022-10-13-delete-node-in-a-linked-list.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-10-13T17:19:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Delete Node in a Linked List" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-10-13T17:19:00+09:00","datePublished":"2022-10-13T17:19:00+09:00","description":"Blog site mostly for programming topics.","headline":"Delete Node in a Linked List","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/linked_lists/2022-10-13-delete-node-in-a-linked-list.html"},"url":"http://localhost:4000/algo/linked_lists/2022-10-13-delete-node-in-a-linked-list.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Delete Node in a Linked List</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Oct 13, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>If it comes to the linked list problems, deleting a node is a common one.
+Normally, the head of the linked list is given, so the solution in general traverses the list.
+However, this problem doesn’t give us the head, so we are unable to traverse the list.
+This problem tests our idea. Once it is figured out, the solution is fairly easy.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>There is a singly-linked list <code>head</code> and we want to delete a node <code>node</code> in it.
+You are given the node to be deleted <code>node</code>. You will not be given access to the first node of <code>head</code>.
+All the values of the linked list are unique, and it is guaranteed that the given node <code>node</code> is not the last
+node in the linked list.</p>
+
+  <p>Delete the given node. Note that by deleting the node, we do not mean removing it from memory. We mean:</p>
+  <ul>
+    <li>The value of the given node should not exist in the linked list.</li>
+    <li>The number of nodes in the linked list should decrease by one.</li>
+    <li>All the values before node should be in the same order.</li>
+    <li>All the values after node should be in the same order.</li>
+  </ul>
+
+  <p>Constraints:</p>
+  <ul>
+    <li>The number of the nodes in the given list is in the range <code>[2, 1000]</code>.</li>
+    <li><code>-1000 &lt;= Node.val &lt;= 1000</code></li>
+    <li>The value of each node in the list is unique.</li>
+    <li>The node to be deleted is in the list and is not a tail node.</li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/delete-node-in-a-linked-list/">https://leetcode.com/problems/delete-node-in-a-linked-list/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>Example 1
+Input: head = [4,5,1,9], node = 5
+Output: [4,1,9]
+Explanation: You are given the second node with value 5,
+the linked list should become 4 -&gt; 1 -&gt; 9 after calling your function.
+</code></pre>
+
+<pre><code>Example 2
+Input: head = [4,5,1,9], node = 1
+Output: [4,5,9]
+Explanation: You are given the third node with value 1,
+the linked list should become 4 -&gt; 5 -&gt; 9 after calling your function.
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>This problem doesn’t give us the head of the linked list.
+We have just a node to be deleted.
+However, it is not a doubly linked list, so it’s impossible to delete the given node.
+Instead, the next node of the given node can be deleted easily.
+Copy the value of the next node to the given node, then delete the next node.
+The result will be as if the given node is deleted.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-python"># Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class DeleteNodeInALinkedList:
+    def deleteNode(self, node):
+        """
+        :type node: ListNode
+        :rtype: void Do not return anything, modify node in-place instead.
+        """
+        node.val = node.next.val
+        node.next = node.next.next
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: <code>O(1)</code></li>
+  <li>Space: <code>O(1)</code></li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Medium
+</span>
+    
+    <span class="tag  is-primary ">
+    Linked List
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

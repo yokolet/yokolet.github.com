@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Palindromic Substring | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Palindromic Substring" />
+<meta name="author" content="Yoko Harada" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/2017/05/30/palindromic-substring.html" />
+<meta property="og:url" content="http://localhost:4000/2017/05/30/palindromic-substring.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-05-30T00:00:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Palindromic Substring" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Yoko Harada"},"dateModified":"2017-05-30T00:00:00+09:00","datePublished":"2017-05-30T00:00:00+09:00","description":"Blog site mostly for programming topics.","headline":"Palindromic Substring","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2017/05/30/palindromic-substring.html"},"url":"http://localhost:4000/2017/05/30/palindromic-substring.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Palindromic Substring</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-8">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: May 30, 2017</p>
+
+    
+
+    <p>We often see problems related to a palindrome or palindromic something.
+Palindrome is, like “racecar,” a reversed and original are exactly the same string.
+We see really many types of palindrome related problems.
+Sometime, problems are based on palindromic <em>substrings</em>.
+Sometime, those are palindromic <em>subsequences</em>.</p>
+
+<p>The most typical problem is asking the longest palindromic substring or subsequence.
+However, not just the longest, asking partitions is another popular problem.
+As for partition problems, palindromes should be substrings.
+This kind of problems can be solved by a dynamic programming.
+The dynamic programming solution creates a truthy table which will have trues
+when the index i to j is a palindrome.</p>
+
+<p>I’m going to write down three types of palindromic substring related problems:
+the longest, minimum cuts, and printing all palindromic partitions.</p>
+
+<h4 id="problem-description">Problem Description</h4>
+
+<p>Always, a string will be given to this sort of problems, for example, “aabcbd.”
+That’s it for an input.
+Then, problems ask what should be found: the longest, min cut (also partitions), print all palindromic partitions, etc.
+The longest is relatively easy problem since there’s only one the longest palindrome.
+Theoretically, multiple longests are possible.
+But, normally if one longest is found, that’s the answer.
+For example, “aabcbd” is given, the answer is “bcb.”</p>
+
+<p>Min cut is more diffucult. It requires an optimal partitioning.
+Since a length one string is a palindrome, [a | a | b | c | b | d] (5 cuts) is one of the
+partitioning based on palindrome.
+However, it’s obvious 5-cut isn’t the optimal. [aa | bcd | d] (2 cuts) is the answer.</p>
+
+<p>Printing all palindromic partitions is way more difficult.
+Some solutions don’t take a dynamic programming approach, like in the
+“<a href="http://www.geeksforgeeks.org/given-a-string-print-all-possible-palindromic-partition/">Given a string, print all possible palindromic partitions</a>.”
+When a dynamic approach is chosen, the solution will be two steps.</p>
+<ol>
+  <li>create a table to find palindromes.</li>
+  <li>recursively iterate the given string looking at the palindrome table.</li>
+</ol>
+
+<p>The answer for “aabcbd” will be:
+<code>[[a, a, b, c, b, d], [a, a, bcb, d], [aa, b, c, b, d], [aa, bcb, d]]</code></p>
+
+<h4 id="the-idea-to-create-a-truthy-table">The idea to create a truthy table</h4>
+
+<p>The truthy table is a key to solve this kind of problems by a dynamic programming.
+The table saves true/false, whether index i to j is a palindrome or not.
+Values in the table are so-called, “states,” of the dynamic programming.</p>
+
+<p>The table will be created expanding the range one by one, also shifting the
+starting index one by one.
+When filling out the table, a direction is diagonal, from upper left to lower right.</p>
+
+<pre>
+
+   a a b c b d
+   _ _ _ _ _ _
+a |\ \ \ \ \ \
+a |  \ \ \ \ \
+b |    \ \ \ \
+c |      \ \ \
+b |        \ \
+d |          \
+
+</pre>
+
+<p>Going on by diagonal, i j indices will be incremented with an extra index k.
+The k expresses a length of substring.</p>
+
+<pre>
+for (int k = 3; k &lt;= n; k++) {
+    for (int i = 0; i &lt; n - k + 1; i++) {
+        int j = i + k - 1;
+	    table[i][j] = ...
+    }
+}
+</pre>
+
+<p>The way to expand the length and check whether substring is a palindrome or not will be proceeded like this:</p>
+
+<pre>
+
+    a a b c b d       a a b c b d       a a b c b d       a a b c b d       a a b c b d       a a b c b d
+    0 1 2 3 4 5       0 1 2 3 4 5       0 1 2 3 4 5       0 1 2 3 4 5       0 1 2 3 4 5       0 1 2 3 4 5
+    _ _ _ _ _ _       _ _ _ _ _ _       _ _ _ _ _ _       _ _ _ _ _ _       _ _ _ _ _ _       - - - - - -
+a 0|T             a 0|T T           a 0|T T F         a 0|T T F F       a 0|T T F F F     a 0|T T F F F F
+a 1|  T           a 1|  T F         a 1|  T F F       a 1|  T F F F     a 1|  T F F F F   a 1|  T F F F F
+b 2|    T         b 2|    T F       b 2|    T F T     b 2|    T F F F   b 2|    T F T F   b 2|    T F T F
+c 3|      T       c 3|      T F     c 3|      T F F   c 3|      T F F   c 3|      T F F   c 3|      T F F
+b 4|        T     b 4|        T F   b 4|        T F   b 4|        T F   b 4|        T F   b 4|        T F
+ff5|          T   d 5|          T   d 5|          T   d 5|          T   d 5|          T   d 5|          T
+
+</pre>
+
+<p>The logic to check whether the substring from index i to j is a palindrome or not is:</p>
+
+<ol>
+  <li>if characters at index i and j are the same,</li>
+  <li>if a previous state (saved at index i + 1 and j - 1) is true,</li>
+  <li>the position at index i and j will be true.</li>
+</ol>
+
+<h4 id="the-idea-to-find-the-longest">The idea to find the longest</h4>
+
+<p>The table saves whether the substring of index i to j is a palindrome or not.
+Given that, when the value is true, i - j + 1 is the length of palindrome.
+Checking all true positions and compare the length will give me the answer.</p>
+
+<h4 id="the-idea-to-find-minimum-cuts">The idea to find minimum cuts</h4>
+
+<p>The same as the longest problem, minimum cuts sees the table.
+The cuts happens when the last character of the substring doesn’t form the palindrome.
+Otherwise, the boundary should be expanded one by one.</p>
+
+<h4 id="the-idea-to-print-all-palindromic-substrings">The idea to print all palindromic substrings</h4>
+
+<p>Likewise, looking at table, adds palindrome one by one, shifting the starting index.
+In this case, depth first search by recursion will be a good way to find palindromes
+from the rest of the substring.</p>
+
+<h4 id="java-code">Java code</h4>
+
+<p>Below is the Java code to find means anytime.</p>
+
+<script src="https://gist.github.com/yokolet/3e9c879f1ca0a8e3775100bb22bb66fa.js"> </script>
+
+<p>The result is:</p>
+
+<pre>
+longest: aa
+min cuts: 1
+all: [[a, a, b], [aa, b]]
+longest: bcb
+min cuts: 2
+all: [[a, a, b, c, b, d], [a, a, bcb, d], [aa, b, c, b, d], [aa, bcb, d]]
+</pre>
+
+<h4 id="resources">Resources</h4>
+
+<ul>
+  <li><a href="http://www.programcreek.com/2013/12/leetcode-solution-of-longest-palindromic-substring-java/">Longest Palindromic Substring</a></li>
+  <li><a href="http://www.geeksforgeeks.org/dynamic-programming-set-17-palindrome-partitioning/">Palindrome Partitioning</a></li>
+  <li><a href="http://www.geeksforgeeks.org/given-a-string-print-all-possible-palindromic-partition/">Given a string, print all possible palindromic partitions</a></li>
+</ul>
+
+
+</div>
+
+<div class="tags">
+    
+</div>
+
+
+
+
+                </div>
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    <p class="title is-4">Latest Posts</p>
+
+<div class="columns is-multiline">
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/10/30/setting-up-gcp-instance-for-deep-learning.html">Setting Up GCP Instance for Deep Learning</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>This post is going to be very different from what I write here.
+The content is a memo how I create a GCP (Google Cloud Platform) instance for Deep Learning.
+While I study algorithm stuff, I also have been studying Deep Learning.
+In my early days, I tried to train my Deep Learning model only on a laptop.
+My laptop is 2012 model MacBook Pro, so I would say it is reasonably fast.
+However, when it comes to Deep Learning, the training was quite painful on the such machine.
+Often, I ran the training over night to get a disappointed result.
+Still, I didn’t use any of pricey cloud environment
+since it was my personal study unrelated to my day job.
+I wanted to save money.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/10/30/setting-up-gcp-instance-for-deep-learning.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Oct 30, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/09/10/complete-binary-tree.html">Complete Binary Tree</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>Problems which ask a binary tree traverse, add/delete nodes, etc. are popular in algorithm questions.
+The binary trees are often just a binary tree or binary search tree.
+Sometimes, the problem pinpoints a particular type of a binary tree,
+for example, a balanced binary tree or complete binary tree.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/09/10/complete-binary-tree.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Sep 10, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/09/09/catalan-number.html">Catalan number</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>What is <strong>Catalan number</strong> ?
+The Catalan number belongs to the domain of combinatorial mathematics.
+It is a sequence of natural numbers such that:
+<code>1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012, 742900, 2674440, 9694845, 35357670, 129644790, 477638700, 1767263190, ...</code>
+The sequence appears in counting problems.
+Wikipedia has the details about the sequence: <a href="https://en.wikipedia.org/wiki/Catalan_number">Catalan Number</a>.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/09/09/catalan-number.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Sep 9, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

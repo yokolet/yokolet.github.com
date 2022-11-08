@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Minimum Remove to Make Valid Parentheses | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Minimum Remove to Make Valid Parentheses" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/stacks_and_queues/2022-09-07-minimum-remove-to-make-valid-parentheses.html" />
+<meta property="og:url" content="http://localhost:4000/algo/stacks_and_queues/2022-09-07-minimum-remove-to-make-valid-parentheses.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-09-07T17:47:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Minimum Remove to Make Valid Parentheses" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-07T17:47:00+09:00","datePublished":"2022-09-07T17:47:00+09:00","description":"Blog site mostly for programming topics.","headline":"Minimum Remove to Make Valid Parentheses","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/stacks_and_queues/2022-09-07-minimum-remove-to-make-valid-parentheses.html"},"url":"http://localhost:4000/algo/stacks_and_queues/2022-09-07-minimum-remove-to-make-valid-parentheses.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Minimum Remove to Make Valid Parentheses</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Sep 7, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>Parentheses related string problems can be solved by a stack in general.
+The string might include other characters.
+However, focusing parentheses only would be enough in many cases.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>Given a string <code>s</code> of ‘(‘ , ‘)’ and lowercase English characters.
+Your task is to remove the minimum number of parentheses ( ‘(‘ or ‘)’, in any positions )
+so that the resulting parentheses string is valid and return any valid string.</p>
+
+  <p>Formally, a parentheses string is valid if and only if:</p>
+  <ul>
+    <li>It is the empty string, contains only lowercase characters, or</li>
+    <li>It can be written as AB (A concatenated with B), where A and B are valid strings, or</li>
+    <li>It can be written as (A), where A is a valid string.</li>
+  </ul>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= s.length &lt;= 10**5</code></li>
+    <li><code>s[i]</code> is either’(‘ , ‘)’, or lowercase English letter.</li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/minimum-remove-to-make-valid-parentheses/">https://leetcode.com/problems/minimum-remove-to-make-valid-parentheses/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>Example 1:
+Input: s = "lee(t(c)o)de)"
+Output: "lee(t(c)o)de"
+Explanation: "lee(t(co)de)" , "lee(t(c)ode)" would also be accepted.
+</code></pre>
+
+<pre><code>Example 2:
+Input: s = "a)b(c)d"
+Output: "ab(c)d"
+</code></pre>
+
+<pre><code>Example 3:
+Input: s = "))(("
+Output: ""
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>Using the stack, check the validity of parentheses.
+At the same time, save invalid indices in a set.
+The final step is to construct a valid string while omitting invalid indices.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-python">class MinimumRemoveToMakeValidParentheses:
+    def minRemoveToMakeValid(self, s: str) -&gt; str:
+        n, stack, ss = len(s), [], set()
+        for i in range(n):
+            if s[i] == '(':
+                stack.append(i)
+            elif s[i] == ')':
+                if stack:
+                    stack.pop()
+                else:
+                    ss.add(i)
+        ss = ss.union(set(stack))
+        result = []
+        for i in range(n):
+            if i not in ss:
+                result.append(s[i])
+        return ''.join(result)
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: <code>O(n)</code></li>
+  <li>Space: <code>O(n)</code></li>
+</ul>
+
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Medium
+</span>
+    
+    <span class="tag  is-primary ">
+    Stack
+</span>
+    
+    <span class="tag  is-primary ">
+    String
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

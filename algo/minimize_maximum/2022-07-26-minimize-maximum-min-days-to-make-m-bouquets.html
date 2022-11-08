@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Minimize Maximum – Minimum Number of Days to Make m Bouquets | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Minimize Maximum – Minimum Number of Days to Make m Bouquets" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/minimize_maximum/2022-07-26-minimize-maximum-min-days-to-make-m-bouquets.html" />
+<meta property="og:url" content="http://localhost:4000/algo/minimize_maximum/2022-07-26-minimize-maximum-min-days-to-make-m-bouquets.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-07-26T13:52:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Minimize Maximum – Minimum Number of Days to Make m Bouquets" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-07-26T13:52:00+09:00","datePublished":"2022-07-26T13:52:00+09:00","description":"Blog site mostly for programming topics.","headline":"Minimize Maximum – Minimum Number of Days to Make m Bouquets","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/minimize_maximum/2022-07-26-minimize-maximum-min-days-to-make-m-bouquets.html"},"url":"http://localhost:4000/algo/minimize_maximum/2022-07-26-minimize-maximum-min-days-to-make-m-bouquets.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Minimize Maximum -- Minimum Number of Days to Make m Bouquets</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Jul 26, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>This is the eighth minimize-maximum algorithm problem.
+This problem has a variation compared to the basic, splitting array problem.
+However, still, it is similar to the splitting array problem if we look at
+how to count groups.
+Again, the problem is the type of minimize-maximum.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>You are given an integer array <code>bloomDay</code>, an integer <code>m</code> and an integer <code>k</code>.</p>
+
+  <p>You want to make m bouquets.
+To make a bouquet, you need to use k adjacent flowers from the garden.</p>
+
+  <p>The garden consists of n flowers, the i-th flower will bloom in the <code>bloomDay[i]</code> and then can be used in exactly one bouquet.</p>
+
+  <p>Return the minimum number of days you need to wait to be able to make <code>m</code> bouquets from the garden.
+If it is impossible to make m bouquets return -1.</p>
+
+  <p><a href="https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/">https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>example 1:
+Input: bloomDay = [1,10,3,10,2], m = 3, k = 1
+Answer: 3
+Explanation: The optimal minimum days are 3. After day 3, usable flowers are [f,_,f,_,f].
+Those are enough to create 3 bouquets one type each.
+</code></pre>
+<pre><code>example 2:
+Input: bloomDay = [1,10,3,10,2], m = 3, k = 2
+Answer: -1
+Explanation: To make 3 bouquets 2 flowers each, which requires 3 * 2 = 6 flowers.
+From the problem description, the flowers of a single index can be usesd in exactly one bouquet.
+The given arrays has only 5 types, so it's unable to use 6 flowers.
+</code></pre>
+<pre><code>example 3:
+Input: bloomDay = [7,7,7,7,12,7,7], m = 2, k = 3
+Answer: 12
+Explanation: The optimal minimum days are 12. After day 7, usable flowers are [f,f,f,f,_,f,f].
+Two bouquets can be created with 4 and 2 types, which doesn't satisfy the condition of 3 types each.
+After day 12, usable fowers are [f,f,f,f,f,f,f], which is enough to create 3 bouquets of 3 types.
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>Each element of the given array will be used to count groups to be created.
+The element value itself isn’t involved in the counting.
+Instead, it works as a filter and separates groups depends on the day.</p>
+
+<p>When we count the bouquets, first, count the number of consecutive elements.
+Then, dividing the count by k gives us the number of bouquets so far.</p>
+
+<p>When we start the binary search, parameters are as in bellow.
+The smallest value (left) is 1, and the largest (right) is the maximum value in the given array.
+The middle value is set to <code>(left + right) / 2</code> as normal.</p>
+
+<p>Next step is to adjust the left or right values.
+The middle value is used as a filter.
+If the element in the array is less than or equals to the middle value, that element forms a subarray.
+The length of the subarray divided by k is the number of bouquets from this subarray.
+If total number of bouquets is greater than <code>m</code>, 
+the middle value should be smaller to include less elements and create less bouquets.
+If total number of bouquets is less than <code>m</code>,
+the middle value should be bigger to include more element and create more bouquets.
+The left and right value updates follow a common way:  <code>right = mid - 1</code>, <code>left = mid + 1</code>;</p>
+
+<p>When the binary search is over, we can find the answer.
+The answer from the binary search is the left value.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-cpp">#include &lt;vector&gt;
+#include &lt;iostream&gt;
+using namespace std;
+
+class MinimumNumberOfDaysToMakeMBouquets
+{
+private:
+  bool check(vector&lt;int&gt; &amp;bloomDay, int m, int k, int mid)
+  {
+    int count = 0, cur = 0;
+    for (int i = 0; i &lt; bloomDay.size(); ++i)
+    {
+      if (bloomDay[i] &lt;= mid)
+      {
+        ++cur;
+      }
+      else
+      {
+        count += cur / k;
+        cur = 0;
+      }
+    }
+    count += cur / k;
+    return count &gt;= m;
+  }
+
+public:
+  int minDays(vector&lt;int&gt; &amp;bloomDay, int m, int k)
+  {
+    int n = bloomDay.size();
+    if (m * k &gt; n)
+      return -1;
+    int left = 1, right = *max_element(bloomDay.begin(), bloomDay.end());
+    while (left &lt;= right)
+    {
+      int mid = (left + right) / 2;
+      if (check(bloomDay, m, k, mid))
+      {
+        right = mid - 1;
+      }
+      else
+      {
+        left = mid + 1;
+      }
+    }
+    return left;
+  }
+};
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: O(n log(m)) – n: length of the input array, m: maximum value in the input array</li>
+  <li>Space: O(1)</li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Medium
+</span>
+    
+    <span class="tag  is-primary ">
+    Binary Search
+</span>
+    
+    <span class="tag  is-primary ">
+    Array
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

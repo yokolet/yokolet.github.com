@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Cheapest Flights Within K Stops | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Cheapest Flights Within K Stops" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/graphs/2022-10-21-cheapest-flights-within-k-stops.html" />
+<meta property="og:url" content="http://localhost:4000/algo/graphs/2022-10-21-cheapest-flights-within-k-stops.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-10-21T23:08:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Cheapest Flights Within K Stops" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-10-21T23:08:00+09:00","datePublished":"2022-10-21T23:08:00+09:00","description":"Blog site mostly for programming topics.","headline":"Cheapest Flights Within K Stops","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/graphs/2022-10-21-cheapest-flights-within-k-stops.html"},"url":"http://localhost:4000/algo/graphs/2022-10-21-cheapest-flights-within-k-stops.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Cheapest Flights Within K Stops</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Oct 21, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>The problem asks the shortest path based on an edge weight.
+Given that, Dijkstra is a good algorithm to find an answer.
+As for graph traversal, the visited state needs a tweak.
+The solution here uses an array to save visited times.
+If the vertex is visited too many times, further process will be skipped.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>There are <code>n</code> cities connected by some number of flights. You are given an array <code>flights</code> where
+<code>flights[i] = [from[i], to[i], price[i]]</code> indicates that there is a flight from city <code>from[i]</code> to city toi with cost
+<code>price[i]</code>.</p>
+
+  <p>You are also given three integers <code>src</code>, <code>dst</code>, and <code>k</code>, return the cheapest price from <code>src</code> to <code>dst</code> with
+at most <code>k</code> stops. If there is no such route, return -1.</p>
+
+  <p>Constraints:</p>
+  <ul>
+    <li>1 &lt;= n &lt;= 100`</li>
+    <li><code>0 &lt;= flights.length &lt;= (n * (n - 1) / 2)</code></li>
+    <li><code>flights[i].length == 3</code></li>
+    <li><code>0 &lt;= from[i], to[i] &lt; n</code></li>
+    <li><code>from[i] != to[i]</code></li>
+    <li><code>1 &lt;= price[i] &lt;= 10**4</code></li>
+    <li>There will not be any multiple flights between two cities.</li>
+    <li><code>0 &lt;= src, dst, k &lt; n</code></li>
+    <li><code>src != dst</code></li>
+  </ul>
+
+  <p><a href="tps://leetcode.com/problems/cheapest-flights-within-k-stops/">tps://leetcode.com/problems/cheapest-flights-within-k-stops/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>Example 1
+
+Input: n = 4, flights = [[0,1,100],[1,2,100],[2,0,100],[1,3,600],[2,3,200]], src = 0, dst = 3, k = 1
+Output: 700
+Explanation:
+The graph is shown above.
+The optimal path with at most 1 stop from city 0 to 3 is marked in red and has cost 100 + 600 = 700.
+Note that the path through cities [0,1,2,3] is cheaper but is invalid because it uses 2 stops.
+</code></pre>
+
+<pre><code>Exampoe 2
+
+Input: n = 3, flights = [[0,1,100],[1,2,100],[0,2,500]], src = 0, dst = 2, k = 1
+Output: 200
+Explanation:
+The graph is shown above.
+The optimal path with at most 1 stop from city 0 to 2 is marked in red and has cost 100 + 100 = 200.
+</code></pre>
+
+<pre><code>Example 3
+
+Input: n = 3, flights = [[0,1,100],[1,2,100],[0,2,500]], src = 0, dst = 2, k = 0
+Output: 500
+Explanation:
+The graph is shown above.
+The optimal path with no stops from city 0 to 2 is marked in red and has cost 500.
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>The first step is to create a directed graph with edge weights.
+The solution here uses a tuple of (node, weight).
+The visited is not a set, instead an array.
+While traversing, if the visited count exceeds the currently visiting vertex, skip the further process.
+Other than that, the traversal is common one.
+When the popped out vertex is the destination, return the weight.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-python">class CheapestFlightsWithinKStops:
+    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -&gt; int:
+        graph = collections.defaultdict(list)
+        
+        # build a graph
+        for s, d, w in flights:
+            graph[s].append((d, w))
+
+        # traverse a graph
+        visited = [0 for _ in range(n)]
+        queue = [(0, k + 1, src)]    # weight, stops, vertex
+        while queue:
+            cur_w, cur_s, cur_n = heapq.heappop(queue)
+            if cur_n == dst:
+                return cur_w
+            if visited[cur_n] &gt;= cur_s:
+                continue
+            visited[cur_n] = cur_s
+            for next_n, next_w in graph[cur_n]:
+                heapq.heappush(queue, (cur_w + next_w, cur_s - 1, next_n))
+        return -1
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: <code>O(n + e * log(n))</code> – n: number of vertices, e: number of edges</li>
+  <li>Space: <code>O(n + e)</code></li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Medium
+</span>
+    
+    <span class="tag  is-primary ">
+    Heap (Priority Queue)
+</span>
+    
+    <span class="tag  is-primary ">
+    Breadth-First Search
+</span>
+    
+    <span class="tag  is-primary ">
+    Graph
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

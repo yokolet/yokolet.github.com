@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Largest Rectangle in a Histogram | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Largest Rectangle in a Histogram" />
+<meta name="author" content="Yoko Harada" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/2017/05/25/largest-rectangle-in-histogram.html" />
+<meta property="og:url" content="http://localhost:4000/2017/05/25/largest-rectangle-in-histogram.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-05-25T00:00:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Largest Rectangle in a Histogram" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Yoko Harada"},"dateModified":"2017-05-25T00:00:00+09:00","datePublished":"2017-05-25T00:00:00+09:00","description":"Blog site mostly for programming topics.","headline":"Largest Rectangle in a Histogram","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2017/05/25/largest-rectangle-in-histogram.html"},"url":"http://localhost:4000/2017/05/25/largest-rectangle-in-histogram.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Largest Rectangle in a Histogram</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-8">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: May 25, 2017</p>
+
+    
+
+    <p>“Find the largest rectangular area in a histogram” is a famous algorithm
+problem using bars.
+There are some types of problems expressed by bars such as trapping water or skyline.
+Those look like similar since all are plotted on 2D plain multiple bars on.
+However, how to think and solve the problems are not the same.
+What data structure and algorithm can be applied to solve problems effectively is,
+sometime, confusing. For this reason, I’m going to add this topic to my memo.</p>
+
+<h4 id="problem-description">Problem Description</h4>
+
+<p>Given an array of integers which denotes heights of each bar with a width 1,
+find the largest rectangluar area.</p>
+
+<p>For example, the given array is [6, 2, 5, 4, 5, 1, 6], the largest will be
+12 created from index 2 to 4.</p>
+
+<pre>
+  .
+6 . █           █ 
+  . █   █   █   █ 
+  . █   █ █ █   █ 
+  . █   █ █ █   █ 
+  . █ █ █ █ █   █ 
+  . █ █ █ █ █ █ █ 
+0 . . . . . . . .
+    0           6
+
+The largest area is from index 2 to 4.
+  .
+6 . █           █ 
+  . █   █   █   █ 
+       +-----+
+4 . █  |█ █ █|  █ 
+  . █  |█ █ █|  █ 
+  . █ █|█ █ █|  █ 
+  . █ █|█ █ █|█ █ 
+0 . . . . . . . .
+    0   2   4   6
+</pre>
+
+<p>If the given array is [6, 2, 5, 4, 5, 2, 6] (only one different in the sixth element),
+the largest will be 14 from index 0 to 6.</p>
+
+<pre>
+  .
+6 . █           █ 
+  . █   █   █   █ 
+  . █   █ █ █   █ 
+  . █   █ █ █   █ 
+  . █ █ █ █ █ █ █ 
+  . █ █ █ █ █ █ █ 
+0 . . . . . . . .
+    0           6
+
+The largest area is from index 0 to 6.
+
+  .
+6 . █           █ 
+  . █   █   █   █ 
+  . █   █ █ █   █ 
+  . █   █ █ █   █ 
+   +-------------+
+  .|█ █ █ █ █ █ █|
+  .|█ █ █ █ █ █ █|
+0 . . . . . . . .
+    0           6
+</pre>
+
+<p>Easily we can think of exhaustive search O(n^2) solution by iterating all combinations.
+However, this often gets time out results at exhaustive testing.</p>
+
+<h4 id="the-idea">The idea</h4>
+
+<p>This problem can be solved in a linear time using a stack.
+The stack saves indices which gives the highest so far.
+If histogram heights are 1, 2, and 3, the stack saves all three indices of 0, 1, 2.</p>
+
+<p>Once it hits a lower height, a rectagular area will be calculated at that index.
+For the calculation, it needs the first no greater height seen so far compared to the current height.
+The information is saved in the stack.
+Since the stack saves indices of highest so far,
+popping out indices unitl the corresponding height is higher gives the target index.</p>
+
+<p>The target index is the starting index of a subhistogram.
+With starting and current indices, the area will be calculated by multiplying width (difference of indices) and height.
+The ares is the result of the sub problem.</p>
+
+<p>For example, after 3, if 1 comes in, the indices in the stack will be poped out.
+In the end, the stack will have the index 0 only whose height is 1.</p>
+
+<p>Width (4) * Height (1) = 4</p>
+
+<p>Repeating this process to the end of the given array, the maximum area can be found.</p>
+
+<h4 id="java-code">Java code</h4>
+
+<p>Below is the Java code based on the idea explained in the previous section.</p>
+
+<script src="https://gist.github.com/yokolet/9913edf20b07f56eadd44ecc574d3c78.js"> </script>
+
+<p>The performance is: time O(n), space O(n).</p>
+
+<p>The result is:</p>
+
+<pre>
+12
+14
+</pre>
+
+<h4 id="resources">Resources</h4>
+
+<ul>
+  <li><a href="http://www.geeksforgeeks.org/largest-rectangle-under-histogram/">Largest Rectangular Area in a Histogram - Set 2</a></li>
+  <li><a href="https://kartikkukreja.wordpress.com/2016/10/22/problem-of-the-day-largest-rectangle-in-a-histogram/">Problem of the day: Largest rectangle in a histogram</a></li>
+  <li><a href="https://youtu.be/ZmnqCZp9bBs">Maximum Rectangular Area in Histogram (YouTube)</a></li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+</div>
+
+
+
+
+                </div>
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    <p class="title is-4">Latest Posts</p>
+
+<div class="columns is-multiline">
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/10/30/setting-up-gcp-instance-for-deep-learning.html">Setting Up GCP Instance for Deep Learning</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>This post is going to be very different from what I write here.
+The content is a memo how I create a GCP (Google Cloud Platform) instance for Deep Learning.
+While I study algorithm stuff, I also have been studying Deep Learning.
+In my early days, I tried to train my Deep Learning model only on a laptop.
+My laptop is 2012 model MacBook Pro, so I would say it is reasonably fast.
+However, when it comes to Deep Learning, the training was quite painful on the such machine.
+Often, I ran the training over night to get a disappointed result.
+Still, I didn’t use any of pricey cloud environment
+since it was my personal study unrelated to my day job.
+I wanted to save money.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/10/30/setting-up-gcp-instance-for-deep-learning.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Oct 30, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/09/10/complete-binary-tree.html">Complete Binary Tree</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>Problems which ask a binary tree traverse, add/delete nodes, etc. are popular in algorithm questions.
+The binary trees are often just a binary tree or binary search tree.
+Sometimes, the problem pinpoints a particular type of a binary tree,
+for example, a balanced binary tree or complete binary tree.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/09/10/complete-binary-tree.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Sep 10, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/09/09/catalan-number.html">Catalan number</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>What is <strong>Catalan number</strong> ?
+The Catalan number belongs to the domain of combinatorial mathematics.
+It is a sequence of natural numbers such that:
+<code>1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012, 742900, 2674440, 9694845, 35357670, 129644790, 477638700, 1767263190, ...</code>
+The sequence appears in counting problems.
+Wikipedia has the details about the sequence: <a href="https://en.wikipedia.org/wiki/Catalan_number">Catalan Number</a>.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/09/09/catalan-number.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Sep 9, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Sum of Total Strength of Wizards | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Sum of Total Strength of Wizards" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/stacks_and_queues/2022-09-14-sum-of-total-strength-of-wizards.html" />
+<meta property="og:url" content="http://localhost:4000/algo/stacks_and_queues/2022-09-14-sum-of-total-strength-of-wizards.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-09-14T15:28:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Sum of Total Strength of Wizards" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-14T15:28:00+09:00","datePublished":"2022-09-14T15:28:00+09:00","description":"Blog site mostly for programming topics.","headline":"Sum of Total Strength of Wizards","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/stacks_and_queues/2022-09-14-sum-of-total-strength-of-wizards.html"},"url":"http://localhost:4000/algo/stacks_and_queues/2022-09-14-sum-of-total-strength-of-wizards.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Sum of Total Strength of Wizards</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Sep 14, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>This can be solved using monotonic stack and prefix sum.
+However, this is really a hard problem.
+It need from left and right monotonic stacks.
+The prefix sum is a doubly calculated prefix sum.
+The way to summing up prefix sum is not straightforward.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>As the ruler of a kingdom, you have an army of wizards at your command.
+You are given a 0-indexed integer array <code>strength</code>, where <code>strength[i]</code> denotes the strength of the ith wizard.
+For a contiguous group of wizards (i.e. the wizards’ strengths form a subarray of strength),
+the total strength is defined as the product of the following two values:</p>
+  <ul>
+    <li>The strength of the weakest wizard in the group.</li>
+    <li>The total of all the individual strengths of the wizards in the group.</li>
+  </ul>
+
+  <p>Return the sum of the total strengths of all contiguous groups of wizards.
+Since the answer may be very large, return it <code>modulo 10**9 + 7</code>.</p>
+
+  <p>A subarray is a contiguous non-empty sequence of elements within an array.</p>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= strength.length &lt;= 10**5</code></li>
+    <li><code>1 &lt;= strength[i] &lt;= 10**9</code></li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/sum-of-total-strength-of-wizards/">https://leetcode.com/problems/sum-of-total-strength-of-wizards/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>Example 1:
+Input: strength = [1,3,1,2]
+Output: 44
+Explanation:
+subarrays: [1], [1,3], [1,3,1], [1,3,1,2], [3], [3,1], [3,1,2], [1], [1,2], [2]
+min(subarray) * sum(subarray): 1, 4, 5, 7, 9, 4, 6, 1, 3, 4
+total = 44
+</code></pre>
+
+<pre><code>Example 2:
+Input: strength = [5,4,6]
+Output: 213
+Explanation:
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>For the first step, create monotonically increasing stacks from left and right.
+Next step is to calculate prefix sum.
+It is a prefix sum of prefix sum.
+Here, the solution uses Python’s <code>itertools.accumulate</code> function.
+Lastly, total strength is calculated using prefix sum with the range.</p>
+
+<h2 id="solution">Solution</h2>
+<pre><code class="language-python">class SumOfTotalStrengthOfWizards:
+    def totalStrength(self, strength: List[int]) -&gt; int:
+        mod = 10 ** 9 + 7
+        n = len(strength)
+        # next small on the right
+        stack, right = [], [n for _ in range(n)]
+        for i in range(n):
+            while stack and strength[stack[-1]] &gt; strength[i]:
+                right[stack.pop()] = i
+            stack.append(i)
+        # next small on the left
+        stack, left = [], [-1 for _ in range(n)]
+        for i in range(n - 1, -1, -1):
+            while stack and strength[stack[-1]] &gt;= strength[i]:
+                left[stack.pop()] = i
+            stack.append(i)
+        result = 0
+        prefix = list(accumulate(accumulate(strength), initial=0))
+        for i in range(n):
+            l, r = left[i], right[i]
+            l_pre = prefix[i] - prefix[max(l, 0)]
+            r_pre = prefix[r] - prefix[i]
+            result += strength[i] * (r_pre * (i - l) - l_pre * (r - i)) % mod
+        return result % mod
+</code></pre>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: <code>O(n)</code></li>
+  <li>Space: <code>O(n)</code></li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Hard
+</span>
+    
+    <span class="tag  is-primary ">
+    Monotonic Stack
+</span>
+    
+    <span class="tag  is-primary ">
+    Prefix Sum
+</span>
+    
+    <span class="tag  is-primary ">
+    Array
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

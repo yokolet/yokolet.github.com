@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Iterator To Flatten It | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Iterator To Flatten It" />
+<meta name="author" content="Yoko Harada" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/2017/06/15/iterator-to-flatten.html" />
+<meta property="og:url" content="http://localhost:4000/2017/06/15/iterator-to-flatten.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-06-15T00:00:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Iterator To Flatten It" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Yoko Harada"},"dateModified":"2017-06-15T00:00:00+09:00","datePublished":"2017-06-15T00:00:00+09:00","description":"Blog site mostly for programming topics.","headline":"Iterator To Flatten It","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2017/06/15/iterator-to-flatten.html"},"url":"http://localhost:4000/2017/06/15/iterator-to-flatten.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Iterator To Flatten It</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-8">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Jun 15, 2017</p>
+
+    
+
+    <p>Let’s revisit the Iterator pattern.
+“Iterator” is one of design patterns in object-oriented programming (OOP).
+Needless to say, extremely famous Gang of Four (Erich Gamma, Richard Helm, Ralph Johnson and John Vlissides) are creators.
+As in the Wikipedia’s <a href="https://en.wikipedia.org/wiki/Iterator_pattern">Iterator pattern</a>,
+the iterator pattern is used when traversing <em>container</em> without knowing how the container works. It is OOP’s favorite pattern to “decouple” the iterator from container.</p>
+
+<p>What does that actually mean? The iterator defines two methods, <code>hasNext()</code> and <code>next()</code>.
+Repeating these two method, I can traverse all elements in the container.
+For example, Java’s ArrayList are LinkedList examples of the containers.
+These two have different data structures, but I can traverse all elements exactly the same way: <code>hasNext()</code> and <code>nex()</code>.</p>
+
+<p>Since the iterator is a handy feature, many including custom classes provide a way to access their elements by the iterator.
+Probably, this is a reason I see various iterator implementation problems.
+The iterator looks a good topic to leave a memo, so I’m going to write about two iterators here.
+These two will flatten nested structure: 2D vector and nested list.</p>
+
+<h4 id="problem-description---flatten-2d-vector">Problem Description - Flatten 2D Vector</h4>
+
+<p>“Implement an iterator to flatten 2D vector” is the problem.
+It is the iterator, so the implementation should have <code>hasNext()</code> and <code>next()</code> methods.
+Repeating these two methods, all elements in 2D vector should be traversed.
+For example, <code>[[1, 2], [3], [4, 5, 6]]</code> is given, the code:</p>
+
+<pre>
+
+    while (v2DIter.hasNext()) {
+        result.add(v2DIter.next());
+    }
+
+</pre>
+
+<p>should add all elements to the result list.
+When it finishes, the result should be <code>[1, 2, 3, 4, 5, 6]</code>.</p>
+
+<h4 id="the-idea-to-implement-iterator-to-flatten-2d-vector">The idea to implement iterator to flatten 2D vector</h4>
+
+<p>This sort of nested something is often solved by iterator of iterators approach.
+A parent iterator traverses vectors, say <code>[1, 2]</code> or <code>[3]</code>.
+Child iterators traverse individual elements, say <code>1</code>, <code>2</code>, or <code>3</code>.</p>
+
+<p>The most challenging part is when and how to update the child iterator.
+Choices are only two: either <code>hasNext()</code> or <code>next()</code> method must be responsible to update.
+In general, it is reasonable to do in <code>next()</code> method.
+This is because, updating the itereator changes a current element where the iterator points.
+This behavior is something unexptected for <code>hasNext()</code>, but reasonable to <code>next()</code> method.</p>
+
+<h4 id="java-code-for-iterating-2d-vector">Java code for iterating 2D Vector</h4>
+
+<script src="https://gist.github.com/yokolet/21551034731033910bc6ebe216bfee14.js"> </script>
+
+<p>Above prints:</p>
+
+<pre>
+
+1, 2, 3, 4, 5, 6, 
+
+</pre>
+
+<h4 id="problem-description---flatten-nested-list">Problem Description - Flatten Nested List</h4>
+
+<p>“Implement an iterator to flatten nested list” is the problem.
+Like previous problem, the iterator implementation should have <code>hasNext()</code> and <code>next()</code> methods.
+Repeating these two methods, all elements in the nested list should be traversed.
+For example, <code>[[1, 2], 3, [4, [5, 6]]]</code> is given, the code:</p>
+
+<pre>
+
+    while (nestedLIter.hasNext()) {
+        result.add(nestedLIter.next());
+    }
+
+</pre>
+
+<p>should add all elements to the result list.
+When it finishes, the result should be <code>[1, 2, 3, 4, 5, 6]</code>.</p>
+
+<p>This is similar to flatten 2D vector.
+Big difference is inside of an outermost list is not always a list.
+Inner elements may be an integer, list, or nested list.
+This problem is more complicated compared to the previous one.</p>
+
+<p>To express each element in the nested list,
+the interface <code>NestedInteger</code> is provided.</p>
+
+<pre>
+
+    interface NestedInteger {
+        boolean isInteger();
+        Integer getInteger();
+        List&lt;NestedInteger&gt; getList();
+    }
+
+</pre>
+
+<h4 id="the-idea-to-implement-iterator-to-flatten-nested-list">The idea to implement iterator to flatten nested list</h4>
+
+<p>Here again, this sort of nested something can be solved by iterator of iterators approach.
+In this case, iterator of iterafor of iterator of … may be there.
+To keep track the data something like … of … of … of …., a stack would be a good data structure.</p>
+
+<p>If I find the itereator points a list, I will stack it.
+Then, I will pull out an inner iterator.
+If the inner iteartor points another list, I will stack it.
+Then, I will pull out the inner of inner iterator (repeat this as long as needed).
+At some level, pulled out iterator should point an integer.
+This is the value to add to the result.</p>
+
+<p>Likewise, the challenging part is when and how to update the iterators.
+Following the policy, “reasonable to do in <code>next()</code> method,
+the iterators will be updated in <code>next()</code>.
+However, in this case, I saved a current integer value to an instance variable.
+This is because current interator may or may not points a value. It may another itereator.
+Saving a <em>next</em> value makes easy to update the iterators.</p>
+
+<h4 id="java-code-for-iterating-nested-list">Java code for iterating nested list</h4>
+
+<script src="https://gist.github.com/yokolet/e9f1387f213e872d15697d5d13eaedcd.js"> </script>
+
+<h4 id="resources">Resources</h4>
+
+<ul>
+  <li><a href="http://www.programcreek.com/2014/05/leetcode-flatten-nested-list-iterator-java/">Flatten Nested List Iterator</a></li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+</div>
+
+
+
+
+                </div>
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    <p class="title is-4">Latest Posts</p>
+
+<div class="columns is-multiline">
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/10/30/setting-up-gcp-instance-for-deep-learning.html">Setting Up GCP Instance for Deep Learning</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>This post is going to be very different from what I write here.
+The content is a memo how I create a GCP (Google Cloud Platform) instance for Deep Learning.
+While I study algorithm stuff, I also have been studying Deep Learning.
+In my early days, I tried to train my Deep Learning model only on a laptop.
+My laptop is 2012 model MacBook Pro, so I would say it is reasonably fast.
+However, when it comes to Deep Learning, the training was quite painful on the such machine.
+Often, I ran the training over night to get a disappointed result.
+Still, I didn’t use any of pricey cloud environment
+since it was my personal study unrelated to my day job.
+I wanted to save money.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/10/30/setting-up-gcp-instance-for-deep-learning.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Oct 30, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/09/10/complete-binary-tree.html">Complete Binary Tree</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>Problems which ask a binary tree traverse, add/delete nodes, etc. are popular in algorithm questions.
+The binary trees are often just a binary tree or binary search tree.
+Sometimes, the problem pinpoints a particular type of a binary tree,
+for example, a balanced binary tree or complete binary tree.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/09/10/complete-binary-tree.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Sep 10, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/09/09/catalan-number.html">Catalan number</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>What is <strong>Catalan number</strong> ?
+The Catalan number belongs to the domain of combinatorial mathematics.
+It is a sequence of natural numbers such that:
+<code>1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012, 742900, 2674440, 9694845, 35357670, 129644790, 477638700, 1767263190, ...</code>
+The sequence appears in counting problems.
+Wikipedia has the details about the sequence: <a href="https://en.wikipedia.org/wiki/Catalan_number">Catalan Number</a>.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/09/09/catalan-number.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Sep 9, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>
