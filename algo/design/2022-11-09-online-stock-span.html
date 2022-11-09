@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Online Stock Span | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Online Stock Span" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Blog site mostly for programming topics." />
+<meta property="og:description" content="Blog site mostly for programming topics." />
+<link rel="canonical" href="http://localhost:4000/algo/design/2022-11-09-online-stock-span.html" />
+<meta property="og:url" content="http://localhost:4000/algo/design/2022-11-09-online-stock-span.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-11-09T17:08:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Online Stock Span" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-11-09T17:08:00+09:00","datePublished":"2022-11-09T17:08:00+09:00","description":"Blog site mostly for programming topics.","headline":"Online Stock Span","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/design/2022-11-09-online-stock-span.html"},"url":"http://localhost:4000/algo/design/2022-11-09-online-stock-span.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Online Stock Span</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-12">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Nov 9, 2022</p>
+
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>If we trace how the results come out one by one, we can figure out it is a monotonic stack problem.
+However, the values in the stack is not like other monotonic stack problems.
+It will be the pair of current price and span so far.
+By that value pair, stack top span plus one will the the span of the current price.
+When a new price come in, pop out previous lower prices to form the monotonic decreasing stack.</p>
+
+<h2 id="problem-description">Problem Description</h2>
+<blockquote>
+  <p>Design an algorithm that collects daily price quotes for some stock and returns the span of that stock’s price for
+the current day.</p>
+
+  <p>The span of the stock’s price today is defined as the maximum number of consecutive days (starting from today and
+going backward) for which the stock price was less than or equal to today’s price.</p>
+  <ul>
+    <li>For example, if the price of a stock over the next 7 days were <code>[100,80,60,70,60,75,85]</code>, then the stock spans
+would be <code>[1,1,1,2,1,4,6]</code>.</li>
+  </ul>
+
+  <p>Implement the StockSpanner class:</p>
+  <ul>
+    <li><code>StockSpanner()</code> Initializes the object of the class.</li>
+    <li><code>int next(int price)</code> Returns the span of the stock’s price given that today’s price is price.</li>
+  </ul>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= price &lt;= 10**5</code></li>
+    <li>At most 10**4 calls will be made to next.</li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/online-stock-span/">https://leetcode.com/problems/online-stock-span/</a></p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+<pre><code>Example 1
+Input
+["StockSpanner", "next", "next", "next", "next", "next", "next", "next"]
+[[], [100], [80], [60], [70], [60], [75], [85]]
+Output
+[null, 1, 1, 1, 2, 1, 4, 6]
+
+Explanation
+StockSpanner stockSpanner = new StockSpanner();
+stockSpanner.next(100); // return 1
+stockSpanner.next(80);  // return 1
+stockSpanner.next(60);  // return 1
+stockSpanner.next(70);  // return 2
+stockSpanner.next(60);  // return 1
+stockSpanner.next(75);  // return 4, because the last 4 prices (including today's price of 75) were less than or equal to today's price.
+stockSpanner.next(85);  // return 6
+</code></pre>
+
+<h2 id="analysis">Analysis</h2>
+<p>Initialize the stack with a pair of integer max as a price and 0 as a span.
+When a new price comes in, the current span will be the stack top span plus one.
+To form the monotonic decreasing stack, pop out pairs whose price is less than or equals to the current price.
+The span result at that point is the current span minus stack top span.
+For the further process, save the current pair to the stack.</p>
+
+<h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class StockSpanner {
+private:
+    stack&lt;pair&lt;int, int&gt;&gt; stack;
+public:
+    StockSpanner() {
+        stack.push({numeric_limits&lt;int&gt;::max(), 0});
+    }
+    
+    int next(int price) {
+        int cur_span = stack.top().second + 1;
+        while (stack.top().first &lt;= price) {
+            stack.pop();
+        }
+        int span = cur_span - stack.top().second;
+        stack.push({price, cur_span});
+        return span;
+    }
+};
+
+/**
+ * Your StockSpanner object will be instantiated and called as such:
+ * StockSpanner* obj = new StockSpanner();
+ * int param_1 = obj-&gt;next(price);
+ */
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">import java.util.Stack;
+
+class StockSpanner {
+    private Stack&lt;int[]&gt; stack = new Stack();
+
+    public StockSpanner() {
+        stack.push(new int[] {Integer.MAX_VALUE, 0});
+    }
+    
+    public int next(int price) {
+        int cur_span = stack.peek()[1] + 1;
+        while (stack.peek()[0] &lt;= price) {
+            stack.pop();
+        }
+        int span = cur_span - stack.peek()[1];
+        stack.push(new int[] {price, cur_span});
+        return span;
+    }
+}
+
+/**
+ * Your StockSpanner object will be instantiated and called as such:
+ * StockSpanner obj = new StockSpanner();
+ * int param_1 = obj.next(price);
+ */
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">var StockSpanner = function() {
+    this.stack = [[Number.MAX_VALUE, 0]];
+};
+
+/** 
+ * @param {number} price
+ * @return {number}
+ */
+StockSpanner.prototype.next = function(price) {
+    cur_span = this.stack[this.stack.length - 1][1] + 1;
+    while (this.stack[this.stack.length - 1][0] &lt;= price) {
+        this.stack.pop();
+    }
+    span = cur_span - this.stack[this.stack.length - 1][1];
+    this.stack.push([price, cur_span]);
+    return span;
+};
+
+/** 
+ * Your StockSpanner object will be instantiated and called as such:
+ * var obj = new StockSpanner()
+ * var param_1 = obj.next(price)
+ *
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class StockSpanner:
+
+    def __init__(self):
+        self.stack = [(float('inf'), 0)]  # (price, span)
+
+    def next(self, price: int) -&gt; int:
+        cur_span = self.stack[-1][1] + 1
+        while self.stack[-1][0] &lt;= price:
+            self.stack.pop(-1)
+        span = cur_span - self.stack[-1][1]
+        self.stack.append((price, cur_span))
+        return span
+
+
+# Your StockSpanner object will be instantiated and called as such:
+# obj = StockSpanner()
+# param_1 = obj.next(price)
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">class Integer
+    N_BYTES = [42].pack('i').size
+    N_BITS = N_BYTES * 16
+    MAX = 2 ** (N_BITS - 2) - 1
+end
+
+class StockSpanner
+    def initialize()
+        @stack = [[Integer::MAX, 0]]
+    end
+
+=begin
+    :type price: Integer
+    :rtype: Integer
+=end
+    def next(price)
+        cur_span = @stack[-1][1] + 1
+        while @stack[-1][0] &lt;= price
+            @stack.pop
+        end
+        span = cur_span - @stack[-1][1]
+        @stack.push([price, cur_span])
+        span
+    end
+end
+
+# Your StockSpanner object will be instantiated and called as such:
+# obj = StockSpanner.new()
+# param_1 = obj.next(price)
+</code></pre>
+</div>
+    
+  </div>
+</div>
+
+<h2 id="complexities">Complexities</h2>
+<ul>
+  <li>Time: <code>O(n)</code></li>
+  <li>Space: <code>O(n)</code></li>
+</ul>
+
+</div>
+
+<div class="tags">
+    
+    <span class="tag  is-primary ">
+    Medium
+</span>
+    
+    <span class="tag  is-primary ">
+    Monotonic Stack
+</span>
+    
+    <span class="tag  is-primary ">
+    Data Stream
+</span>
+    
+    <span class="tag  is-primary ">
+    Design
+</span>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>
