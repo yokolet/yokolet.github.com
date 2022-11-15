@@ -1,0 +1,35 @@
+.accordion .container {
+    position: relative;
+    margin: 10px 10px;
+}
+
+.accordion .menu-label {
+    position: relative;
+    padding: 10px 0;
+    cursor: pointer;
+}
+
+.accordion .menu-label::before {
+    content: '+';
+    color: black;
+    position: absolute;
+    top: 50%;
+    right: -5px;
+    transform: translateY(-50%);
+}
+
+.accordion .content {
+    position: relative;
+    height: 0;
+    overflow: hidden;
+    transition: 0.5s;
+    font-size: 0.85em;
+}
+
+.accordion .container.is-active .content {
+    height: auto;
+}
+
+.accordion .container.is-active .menu-label::before {
+    content: '-';
+}
