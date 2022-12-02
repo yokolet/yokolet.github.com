@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Maximum Units on a Truck | yokolet’s notelets</title>
+<title>Insert Delete GetRandom O(1) | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Maximum Units on a Truck" />
+<meta property="og:title" content="Insert Delete GetRandom O(1)" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/sorting_and_searching/2022-09-13-maximum-units-on-a-truck.html" />
-<meta property="og:url" content="http://localhost:4000/algo/sorting_and_searching/2022-09-13-maximum-units-on-a-truck.html" />
+<link rel="canonical" href="http://localhost:4000/algo/design/2022-12-01-insert-delete-getrandom-o-1.html" />
+<meta property="og:url" content="http://localhost:4000/algo/design/2022-12-01-insert-delete-getrandom-o-1.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-09-13T14:13:00+09:00" />
+<meta property="article:published_time" content="2022-12-01T20:44:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Maximum Units on a Truck" />
+<meta property="twitter:title" content="Insert Delete GetRandom O(1)" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-13T14:13:00+09:00","datePublished":"2022-09-13T14:13:00+09:00","description":"Blog site mostly for programming topics.","headline":"Maximum Units on a Truck","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/sorting_and_searching/2022-09-13-maximum-units-on-a-truck.html"},"url":"http://localhost:4000/algo/sorting_and_searching/2022-09-13-maximum-units-on-a-truck.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-12-01T20:44:00+09:00","datePublished":"2022-12-01T20:44:00+09:00","description":"Blog site mostly for programming topics.","headline":"Insert Delete GetRandom O(1)","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/design/2022-12-01-insert-delete-getrandom-o-1.html"},"url":"http://localhost:4000/algo/design/2022-12-01-insert-delete-getrandom-o-1.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Maximum Units on a Truck</h1>
+            <h1 class="title is-2">Insert Delete GetRandom O(1)</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -875,7 +875,7 @@
             </ul>
         </div>
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Sorting and searching
             </a>
@@ -992,7 +992,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Design
             </a>
@@ -1311,98 +1311,263 @@
                     
                     <div class="content">
 
-    <p>Published: Sep 13, 2022</p>
+    <p>Published: Dec 1, 2022</p>
 
     <div class="tags">
         
         <span class="tag  is-primary ">
-    Easy
+    Medium
 </span>
         
         <span class="tag  is-primary ">
-    Sorting
+    Design
 </span>
         
         <span class="tag  is-primary ">
-    Greedy
+    Hash Table
+</span>
+        
+        <span class="tag  is-primary ">
+    Array
+</span>
+        
+        <span class="tag  is-primary ">
+    Randomized
 </span>
         
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This problem might look like dynamic programming.
-However, the input array’s order does not  matter.
-Sorting and greedy approach works.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>You are assigned to put some amount of boxes onto one truck.
-You are given a 2D array <code>boxTypes</code>, where <code>boxTypes[i] = [numberOfBoxes(i), numberOfUnitsPerBox(i)]</code>:</p>
+  <p>Implement the <code>RandomizedSet</code> class:</p>
   <ul>
-    <li><code>numberOfBoxes(i)</code> is the number of boxes of type <code>i</code>.</li>
-    <li><code>numberOfUnitsPerBox(i)</code> is the number of units in each box of the type <code>i</code>.</li>
+    <li><code>RandomizedSet()</code> Initializes the <code>RandomizedSet</code> object.</li>
+    <li><code>bool insert(int val)</code> Inserts an item <code>val</code> into the set if not present. Returns <code>true</code>
+  if the item was not present, <code>false</code> otherwise.</li>
+    <li><code>bool remove(int val)</code> Removes an item <code>val</code> from the set if present. Returns <code>true</code> if the
+  item was present, <code>false</code> otherwise.</li>
+    <li><code>int getRandom()</code> Returns a random element from the current set of elements (it’s guaranteed
+  that at least one element exists when this method is called). Each element must have the same
+  probability of being returned.</li>
   </ul>
 
-  <p>You are also given an integer <code>truckSize</code>, which is the maximum number of boxes that can be put on the truck.
-You can choose any boxes to put on the truck as long as the number of boxes does not exceed <code>truckSize</code>.
-Return the maximum total number of units that can be put on the truck.</p>
+  <p>You must implement the functions of the class such that each function works in average <code>O(1)</code> time complexity.</p>
 
   <p>Constraints:</p>
   <ul>
-    <li><code>1 &lt;= boxTypes.length &lt;= 1000</code></li>
-    <li><code>1 &lt;= numberOfBoxes(i), numberOfUnitsPerBox(i) &lt;= 1000</code></li>
-    <li><code>1 &lt;= truckSize &lt;= 10**6</code></li>
+    <li><code>-2**31 &lt;= val &lt;= 2**31 - 1</code></li>
+    <li>At most 2 * 10**5 calls will be made to <code>insert</code>, <code>remove</code>, and <code>getRandom</code>.</li>
+    <li>There will be at least one element in the data structure when <code>getRandom</code> is called.</li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/maximum-units-on-a-truck/">https://leetcode.com/problems/maximum-units-on-a-truck/</a></p>
+  <p><a href="https://leetcode.com/problems/insert-delete-getrandom-o1/">https://leetcode.com/problems/insert-delete-getrandom-o1/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
-<pre><code>Example 1:
-Input: boxTypes = [[1,3],[2,2],[3,1]], truckSize = 4
-Output: 8
-Explanation: There are:
-- 1 box of the first type that contains 3 units.
-- 2 boxes of the second type that contain 2 units each.
-- 3 boxes of the third type that contain 1 unit each.
-You can take all the boxes of the first and second types, and one box of the third type.
-The total number of units will be = (1 * 3) + (2 * 2) + (1 * 1) = 8.
+<pre><code>Exampple 1
+Input
+["RandomizedSet", "insert", "remove", "insert", "getRandom", "remove", "insert", "getRandom"]
+[[], [1], [2], [2], [], [1], [2], []]
+Output
+[null, true, false, true, 2, true, false, 2]
+
+Explanation
+RandomizedSet randomizedSet = new RandomizedSet();
+randomizedSet.insert(1); // Inserts 1 to the set. Returns true as 1 was inserted successfully.
+randomizedSet.remove(2); // Returns false as 2 does not exist in the set.
+randomizedSet.insert(2); // Inserts 2 to the set, returns true. Set now contains [1,2].
+randomizedSet.getRandom(); // getRandom() should return either 1 or 2 randomly.
+randomizedSet.remove(1); // Removes 1 from the set, returns true. Set now contains [2].
+randomizedSet.insert(2); // 2 was already in the set, so return false.
+randomizedSet.getRandom(); // Since 2 is the only number in the set, getRandom() will always return 2.
 </code></pre>
 
-<pre><code>Example 2:
-Input: boxTypes = [[5,10],[2,5],[4,7],[3,9]], truckSize = 10
-Output: 91
-</code></pre>
-
-<h2 id="analysis">Analysis</h2>
-<p>For the first step, sort <code>boxTypes</code> array by units.
-The second step is to go over the sorted <code>boxTypes</code> array.
-Possible number of boxes to put on the truck is minimum of boxes and current truckSize.
-Add up possible number of boxes times current units.
-If the truckSize becomes zero, a loop is over.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>The problem asks O(1) time complexity, so a hash table or set is the data structure to use here.
+Both insert and remove can be done by the hash table (or set) only.
+However, the getRandom method needs index access.
+The index access is not easy to implement by the hash table (or set) for most languages
+which don’t keep keys in ordered manner.
+To make the index access possible, the solution here adds an array as well.
+The hash table maintains a value to array’s index map.
+The array maintains values so far.
+The insert method adds value to both hash table and array.
+The remove method replaces the given value to array’s last element.
+This way, we can implement methods by O(1) time complexity.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class MaximumUnitsOnATruck:
-    def maximumUnits(self, boxTypes: List[List[int]], truckSize: int) -&gt; int:
-        boxTypes.sort(key=lambda x: x[1], reverse=True)
-        amount = 0
-        for b, u in boxTypes:
-            cur = min(b, truckSize)
-            amount += cur * u
-            truckSize -= cur
-            if truckSize == 0:
-                break
-        return amount
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class RandomizedSet {
+private:
+    unordered_map&lt;int, int&gt; valToIdx;
+    vector&lt;int&gt; values;
+
+public:
+    RandomizedSet() {
+        ios::sync_with_stdio(false);
+        cin.tie(0);
+        cout.tie(0);
+    }
+
+    bool insert(int val) {
+        if (valToIdx.find(val) != valToIdx.end()) {
+            return false;
+        }
+        valToIdx.insert({val, values.size()});
+        values.push_back(val);
+        return true;
+    }
+
+    bool remove(int val) {
+        if (valToIdx.find(val) == valToIdx.end()) {
+            return false;
+        }
+        int idx = valToIdx[val];
+        int last = values.back();
+        valToIdx[last] = idx;
+        values[idx] = last;
+        valToIdx.erase(val);
+        values.pop_back();
+        return true;
+    }
+
+    int getRandom() {
+        return values[rand() % values.size()];
+    }
+};
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+var RandomizedSet = function() {
+    this.valToIdx = new Map();
+    this.values = [];
+};
+
+/** 
+ * @param {number} val
+ * @return {boolean}
+ */
+RandomizedSet.prototype.insert = function(val) {
+    if (this.valToIdx.has(val)) {
+        return false;
+    }
+    this.valToIdx.set(val, this.values.length);
+    this.values.push(val);
+    return true;
+};
+
+/** 
+ * @param {number} val
+ * @return {boolean}
+ */
+RandomizedSet.prototype.remove = function(val) {
+    if (!this.valToIdx.has(val)) {
+        return false;
+    }
+    let idx = this.valToIdx.get(val);
+    let last = this.values.at(-1);
+    this.valToIdx.set(last, idx)
+    this.values[idx] = last;
+    this.valToIdx.delete(val);
+    this.values.pop();
+    return true;
+}
+
+/**
+ * @return {number}
+ */
+RandomizedSet.prototype.getRandom = function() {
+    return this.values[Math.floor(Math.random() * this.values.length)];
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">import random
+
+class RandomizedSet:
+
+    def __init__(self):
+        self.valToIdx, self.values = {}, []
+
+
+    def insert(self, val: int) -&gt; bool:
+        if val in self.valToIdx:
+            return False
+        self.valToIdx[val] = len(self.values)
+        self.values.append(val)
+        return True
+
+
+    def remove(self, val: int) -&gt; bool:
+        if val not in self.valToIdx:
+            return False
+        idx, last = self.valToIdx[val], self.values[-1]
+        self.valToIdx[last] = idx
+        self.values[idx] = last
+        del self.valToIdx[val]
+        self.values.pop();
+        return True
+
+
+    def getRandom(self) -&gt; int:
+        return random.choice(self.values)
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(nlong(n))</code></li>
-  <li>Space: <code>O(1)</code></li>
+  <li>Time: <code>O(1)</code></li>
+  <li>Space: <code>O(n)</code></li>
 </ul>
-
 
 </div>
 

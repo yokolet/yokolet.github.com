@@ -547,6 +547,9 @@
 <loc>http://localhost:4000/algo/design/2022-11-09-online-stock-span.html</loc>
 </url>
 <url>
+<loc>http://localhost:4000/algo/design/2022-12-01-insert-delete-getrandom-o-1.html</loc>
+</url>
+<url>
 <loc>http://localhost:4000/tmp/algo_template.html</loc>
 </url>
 <url>
@@ -562,10 +565,10 @@
 <loc>http://localhost:4000/algo/others/</loc>
 </url>
 <url>
-<loc>http://localhost:4000/algo/stacks_and_queues/</loc>
+<loc>http://localhost:4000/algo/backtracking/</loc>
 </url>
 <url>
-<loc>http://localhost:4000/algo/backtracking/</loc>
+<loc>http://localhost:4000/algo/stacks_and_queues/</loc>
 </url>
 <url>
 <loc>http://localhost:4000/algo/minimize_maximum/</loc>
