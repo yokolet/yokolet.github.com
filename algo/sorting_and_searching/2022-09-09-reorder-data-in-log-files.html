@@ -471,6 +471,13 @@
                     </li>
                     
                     <li>
+                        <a href="/algo/strings/2022-12-07-unique-email-addresses"
+                           class="submenu">
+                            Unique Email Addresses
+                        </a>
+                    </li>
+                    
+                    <li>
                         <a href="/algo/strings/2022-09-08-verifying-an-alien-dictionary"
                            class="submenu">
                             Verifying an Alien Dictionary
@@ -668,7 +675,7 @@
                     </li>
                     
                     <li>
-                        <a href="/algo/trees/022-09-30-inorder-successor-in-bst"
+                        <a href="/algo/trees/2022-09-30-inorder-successor-in-bst"
                            class="submenu">
                             Inorder Successor in BST
                         </a>
@@ -706,6 +713,20 @@
                         <a href="/algo/trees/2022-09-14-pseudo-palindromic-paths-in-a-binary-tree"
                            class="submenu">
                             Pseudo-Palindromic Paths in a Binary Tree
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/algo/trees/2022-12-07-range-sum-of-bst"
+                           class="submenu">
+                            Range Sum of BST
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/algo/trees/2022-12-06-two-sum-iv-input-is-a-bst"
+                           class="submenu">
+                            Two Sum IV - Input is a BST
                         </a>
                     </li>
                     
@@ -1401,7 +1422,7 @@ For letter logs, it returns <code>(0, string except id, id)</code> to comply wit
 With this custom comparator, just soring the log gives us the answer.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class Solution:
+<pre><code class="language-python">class ReorderDataInLogFiles:
     def reorderLogFiles(self, logs: List[str]) -&gt; List[str]:
         def comp(log):
             id_, rest = log.split(' ', 1)

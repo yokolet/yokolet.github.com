@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Contains Duplicate II | yokolet’s notelets</title>
+<title>Two Sum IV - Input is a BST | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Contains Duplicate II" />
+<meta property="og:title" content="Two Sum IV - Input is a BST" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/arrays/2022-10-21-contains-duplicate-ii.html" />
-<meta property="og:url" content="http://localhost:4000/algo/arrays/2022-10-21-contains-duplicate-ii.html" />
+<link rel="canonical" href="http://localhost:4000/algo/trees/2022-12-06-two-sum-iv-input-is-a-bst.html" />
+<meta property="og:url" content="http://localhost:4000/algo/trees/2022-12-06-two-sum-iv-input-is-a-bst.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-10-21T13:59:00+09:00" />
+<meta property="article:published_time" content="2022-12-06T21:48:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Contains Duplicate II" />
+<meta property="twitter:title" content="Two Sum IV - Input is a BST" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-10-21T13:59:00+09:00","datePublished":"2022-10-21T13:59:00+09:00","description":"Blog site mostly for programming topics.","headline":"Contains Duplicate II","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/arrays/2022-10-21-contains-duplicate-ii.html"},"url":"http://localhost:4000/algo/arrays/2022-10-21-contains-duplicate-ii.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-12-06T21:48:00+09:00","datePublished":"2022-12-06T21:48:00+09:00","description":"Blog site mostly for programming topics.","headline":"Two Sum IV - Input is a BST","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/trees/2022-12-06-two-sum-iv-input-is-a-bst.html"},"url":"http://localhost:4000/algo/trees/2022-12-06-two-sum-iv-input-is-a-bst.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Contains Duplicate II</h1>
+            <h1 class="title is-2">Two Sum IV - Input is a BST</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -114,7 +114,7 @@
     
     <div class="menu-list">
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Arrays
             </a>
@@ -638,7 +638,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Trees
             </a>
@@ -1339,7 +1339,7 @@
                     
                     <div class="content">
 
-    <p>Published: Oct 21, 2022</p>
+    <p>Published: Dec 6, 2022</p>
 
     <div class="tags">
         
@@ -1352,73 +1352,181 @@
 </span>
         
         <span class="tag  is-primary ">
-    Sliding Window
+    Breadth-First Search
 </span>
         
         <span class="tag  is-primary ">
-    Array
+    Tree
+</span>
+        
+        <span class="tag  is-primary ">
+    Binary Search Tree
 </span>
         
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is not a difficult problem.
-However, making the solution efficient needs a bit of consideration.
-It can be solved by multiple O(n) iterations, but can be done just one O(n) loop.
-When we check all values from index 0 to n, it is ordered.
-What we care about is the last index of the same value only.
-When the same value appears, check the last index.
-If the difference is less than or equals to k, return True.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>Given an integer array <code>nums</code> and an integer <code>k</code>, return <code>true</code> if there are two distinct indices <code>i</code> and <code>j</code> in the
-array such that <code>nums[i] == nums[j]</code> and <code>abs(i - j) &lt;= k</code>.</p>
+  <p>Given the <code>root</code> of a Binary Search Tree and a target number <code>k</code>, return true if there exist
+two elements in the BST such that their sum is equal to the given target.</p>
 
   <p>Constraints:</p>
   <ul>
-    <li><code>1 &lt;= nums.length &lt;= 10**5</code></li>
-    <li><code>-10**9 &lt;= nums[i] &lt;= 10**9</code></li>
-    <li><code>0 &lt;= k &lt;= 10**5</code></li>
+    <li>The number of nodes in the tree is in the range [1, 10**4].</li>
+    <li><code>-10**4 &lt;= Node.val &lt;= 10**4</code></li>
+    <li>root is guaranteed to be a valid binary search tree.</li>
+    <li><code>-10**5 &lt;= k &lt;= 10**5</code></li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/contains-duplicate-ii/">https://leetcode.com/problems/contains-duplicate-ii/</a></p>
+  <p><a href="https://leetcode.com/problems/two-sum-iv-input-is-a-bst/">https://leetcode.com/problems/two-sum-iv-input-is-a-bst/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
 <pre><code>Example 1
-Input: nums = [1,2,3,1], k = 3
+Input: root = [5,3,6,2,4,null,7], k = 9
 Output: true
+Explanation: (5, 4), (3, 6) and (2, 7)
+       5
+     /   \
+    3     6
+  /  \     \
+2     4     7
 </code></pre>
 
 <pre><code>Example 2
-Input: nums = [1,0,1,1], k = 1
-Output: true
-</code></pre>
-
-<pre><code>Example 3
-Input: nums = [1,2,3,1,2,3], k = 2
+Input: root = [5,3,6,2,4,null,7], k = 28
 Output: false
+Explanation: None of pair sums up to 28.
+       5
+     /   \
+    3     6
+  /  \     \
+2     4     7
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>The Hash Table is a good data structure to save the value and its last index pair.
-When the same value appears, it is in the Hash Table.
-So, check the difference between the last and current index.
-If it is less than or equals to k, the answer is True.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>Although the given tree is the binary search tree (BST), its property doesn’t help to find the answer.
+A pair of two numbers can be found anywhere, not always from top to bottom.
+Because of this, every tree node should be checked like a binary tree.</p>
+
+<p>The solution here uses the breadth-first search.
+While traversing the tree, (k - node value)s are saved in the set.
+If the current node’s value is in the set, the combination is found.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class ContainsDuplicate2:
-    def containsNearbyDuplicate(self, nums: List[int], k: int) -&gt; bool:
-        counts = {}
-        for idx, v in enumerate(nums):
-            if v in counts and idx - counts[v] &lt;= k:
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">/**
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class TwoSum4BST {
+public:
+    bool findTarget(TreeNode* root, int k) {
+        if (!root) {
+            return false;
+        }
+        queue&lt;TreeNode*&gt; q({root});
+        set&lt;int&gt; seen;
+        while (!q.empty()) {
+            TreeNode* cur = q.front();
+            q.pop();
+            if (seen.find(cur-&gt;val) != seen.end()) {
+                return true;
+            }
+            seen.insert(k - cur-&gt;val);
+            if (cur-&gt;left) {
+                q.push(cur-&gt;left);
+            }
+            if (cur-&gt;right) {
+                q.push(cur-&gt;right);
+            }
+        }
+        return false;
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python"># class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class TwoSum4BST:
+    def findTarget(self, root: Optional[TreeNode], k: int) -&gt; bool:
+        if not root:
+            return False
+        seen, queue = set(), [root]
+        while queue:
+            cur = queue.pop(0)
+            if cur.val in seen:
                 return True
-            counts[v] = idx
+            seen.add(k - cur.val)
+            if cur.left:
+                queue.append(cur.left)
+            if cur.right:
+                queue.append(cur.right)
         return False
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>

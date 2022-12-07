@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Contains Duplicate II | yokolet’s notelets</title>
+<title>Range Sum of BST | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Contains Duplicate II" />
+<meta property="og:title" content="Range Sum of BST" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/arrays/2022-10-21-contains-duplicate-ii.html" />
-<meta property="og:url" content="http://localhost:4000/algo/arrays/2022-10-21-contains-duplicate-ii.html" />
+<link rel="canonical" href="http://localhost:4000/algo/trees/2022-12-07-range-sum-of-bst.html" />
+<meta property="og:url" content="http://localhost:4000/algo/trees/2022-12-07-range-sum-of-bst.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-10-21T13:59:00+09:00" />
+<meta property="article:published_time" content="2022-12-07T16:20:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Contains Duplicate II" />
+<meta property="twitter:title" content="Range Sum of BST" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-10-21T13:59:00+09:00","datePublished":"2022-10-21T13:59:00+09:00","description":"Blog site mostly for programming topics.","headline":"Contains Duplicate II","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/arrays/2022-10-21-contains-duplicate-ii.html"},"url":"http://localhost:4000/algo/arrays/2022-10-21-contains-duplicate-ii.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-12-07T16:20:00+09:00","datePublished":"2022-12-07T16:20:00+09:00","description":"Blog site mostly for programming topics.","headline":"Range Sum of BST","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/trees/2022-12-07-range-sum-of-bst.html"},"url":"http://localhost:4000/algo/trees/2022-12-07-range-sum-of-bst.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Contains Duplicate II</h1>
+            <h1 class="title is-2">Range Sum of BST</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -114,7 +114,7 @@
     
     <div class="menu-list">
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Arrays
             </a>
@@ -638,7 +638,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Trees
             </a>
@@ -1339,86 +1339,181 @@
                     
                     <div class="content">
 
-    <p>Published: Oct 21, 2022</p>
+    <p>Published: Dec 7, 2022</p>
 
     <div class="tags">
-        
-        <span class="tag  is-primary ">
-    Easy
-</span>
-        
-        <span class="tag  is-primary ">
-    Hash Table
-</span>
-        
-        <span class="tag  is-primary ">
-    Sliding Window
-</span>
-        
-        <span class="tag  is-primary ">
-    Array
-</span>
         
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is not a difficult problem.
-However, making the solution efficient needs a bit of consideration.
-It can be solved by multiple O(n) iterations, but can be done just one O(n) loop.
-When we check all values from index 0 to n, it is ordered.
-What we care about is the last index of the same value only.
-When the same value appears, check the last index.
-If the difference is less than or equals to k, return True.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>Given an integer array <code>nums</code> and an integer <code>k</code>, return <code>true</code> if there are two distinct indices <code>i</code> and <code>j</code> in the
-array such that <code>nums[i] == nums[j]</code> and <code>abs(i - j) &lt;= k</code>.</p>
+  <p>Given the <code>root</code> node of a binary search tree and two integers low and high, return the sum of values of all nodes
+with a value in the inclusive range <code>[low, high]</code>.</p>
 
   <p>Constraints:</p>
   <ul>
-    <li><code>1 &lt;= nums.length &lt;= 10**5</code></li>
-    <li><code>-10**9 &lt;= nums[i] &lt;= 10**9</code></li>
-    <li><code>0 &lt;= k &lt;= 10**5</code></li>
+    <li>The number of nodes in the tree is in the range <code>[1, 2 * 10**4]</code>.</li>
+    <li><code>1 &lt;= Node.val &lt;= 10**5</code></li>
+    <li><code>1 &lt;= low &lt;= high &lt;= 10**5</code></li>
+    <li>All Node.val are unique.</li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/contains-duplicate-ii/">https://leetcode.com/problems/contains-duplicate-ii/</a></p>
+  <p><a href="https://leetcode.com/problems/range-sum-of-bst/">https://leetcode.com/problems/range-sum-of-bst/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
 <pre><code>Example 1
-Input: nums = [1,2,3,1], k = 3
-Output: true
+Input: root = [10,5,15,3,7,null,18], low = 7, high = 15
+Output: 32
+Explanation: Nodes 7, 10, and 15 are in the range [7, 15]. 7 + 10 + 15 = 32.
+      10
+    /    \
+  5       15
+ / \        \
+3   7        18
 </code></pre>
 
 <pre><code>Example 2
-Input: nums = [1,0,1,1], k = 1
-Output: true
+Input: root = [10,5,15,3,7,13,18,1,null,6], low = 6, high = 10
+Output: 23
+Explanation: Nodes 6, 7, and 10 are in the range [6, 10]. 6 + 7 + 10 = 23.
+        10
+      /    \
+    5      15
+   / \    /  \
+  3   7  13  18
+ /   /
+1   6
 </code></pre>
 
-<pre><code>Example 3
-Input: nums = [1,2,3,1,2,3], k = 2
-Output: false
-</code></pre>
-
-<h2 id="analysis">Analysis</h2>
-<p>The Hash Table is a good data structure to save the value and its last index pair.
-When the same value appears, it is in the Hash Table.
-So, check the difference between the last and current index.
-If it is less than or equals to k, the answer is True.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This problem can be solved in multiple ways such that the breadth-first search, depth-first search, post-order or
+in-order traversal.
+The solution here took the breadth-first search approach.
+Since the tree is BST, a direction to go left or right depends on the root value.
+When the root value is between low and high, it goes both directions.
+If the root value is greater than high, it goes to left.
+If the root value is less than low, it goes to right.
+As the problem describes, if the root value is between low and high inclusive, add it up to the total.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class ContainsDuplicate2:
-    def containsNearbyDuplicate(self, nums: List[int], k: int) -&gt; bool:
-        counts = {}
-        for idx, v in enumerate(nums):
-            if v in counts and idx - counts[v] &lt;= k:
-                return True
-            counts[v] = idx
-        return False
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class RangeSumOfBST {
+public:
+    int rangeSumBST(TreeNode* root, int low, int high) {
+        queue&lt;TreeNode*&gt; q({root});
+        int total = 0;
+        while (!q.empty()) {
+            TreeNode *cur = q.front();
+            q.pop();
+            if (low &lt;= cur-&gt;val &amp;&amp; cur-&gt;val &lt;= high) {
+                total += cur-&gt;val;
+                if (cur-&gt;left) {
+                    q.push(cur-&gt;left);
+                }
+                if (cur-&gt;right) {
+                    q.push(cur-&gt;right);
+                }
+            } else if (high &lt; cur-&gt;val &amp;&amp; cur-&gt;left) {
+                q.push(cur-&gt;left);
+            } else if (cur-&gt;val &lt; low &amp;&amp; cur-&gt;right) {
+                q.push(cur-&gt;right);
+            }
+        }
+        return total;
+    }
+};
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python"># Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class RangeSumOfBST:
+    def rangeSumBST(self, root: Optional[TreeNode], low: int, high: int) -&gt; int:
+        queue = [root]
+        total = 0
+        while queue:
+            cur = queue.pop(0)
+            if low &lt;= cur.val &lt;= high:
+                total += cur.val
+                if cur.left:
+                    queue.append(cur.left)
+                if cur.right:
+                    queue.append(cur.right)
+            elif high &lt; cur.val and cur.left:
+                queue.append(cur.left)
+            elif cur.val &lt; low and cur.right:
+                queue.append(cur.right)
+        return total
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>

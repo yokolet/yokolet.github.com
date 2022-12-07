@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Contains Duplicate II | yokolet’s notelets</title>
+<title>Unique Email Addresses | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Contains Duplicate II" />
+<meta property="og:title" content="Unique Email Addresses" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/arrays/2022-10-21-contains-duplicate-ii.html" />
-<meta property="og:url" content="http://localhost:4000/algo/arrays/2022-10-21-contains-duplicate-ii.html" />
+<link rel="canonical" href="http://localhost:4000/algo/strings/2022-12-07-unique-email-addresses.html" />
+<meta property="og:url" content="http://localhost:4000/algo/strings/2022-12-07-unique-email-addresses.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-10-21T13:59:00+09:00" />
+<meta property="article:published_time" content="2022-12-07T23:12:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Contains Duplicate II" />
+<meta property="twitter:title" content="Unique Email Addresses" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-10-21T13:59:00+09:00","datePublished":"2022-10-21T13:59:00+09:00","description":"Blog site mostly for programming topics.","headline":"Contains Duplicate II","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/arrays/2022-10-21-contains-duplicate-ii.html"},"url":"http://localhost:4000/algo/arrays/2022-10-21-contains-duplicate-ii.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-12-07T23:12:00+09:00","datePublished":"2022-12-07T23:12:00+09:00","description":"Blog site mostly for programming topics.","headline":"Unique Email Addresses","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/strings/2022-12-07-unique-email-addresses.html"},"url":"http://localhost:4000/algo/strings/2022-12-07-unique-email-addresses.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Contains Duplicate II</h1>
+            <h1 class="title is-2">Unique Email Addresses</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -114,7 +114,7 @@
     
     <div class="menu-list">
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Arrays
             </a>
@@ -315,7 +315,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Strings
             </a>
@@ -1339,7 +1339,7 @@
                     
                     <div class="content">
 
-    <p>Published: Oct 21, 2022</p>
+    <p>Published: Dec 7, 2022</p>
 
     <div class="tags">
         
@@ -1348,81 +1348,178 @@
 </span>
         
         <span class="tag  is-primary ">
-    Hash Table
+    Set
 </span>
         
         <span class="tag  is-primary ">
-    Sliding Window
-</span>
-        
-        <span class="tag  is-primary ">
-    Array
+    String
 </span>
         
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is not a difficult problem.
-However, making the solution efficient needs a bit of consideration.
-It can be solved by multiple O(n) iterations, but can be done just one O(n) loop.
-When we check all values from index 0 to n, it is ordered.
-What we care about is the last index of the same value only.
-When the same value appears, check the last index.
-If the difference is less than or equals to k, return True.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>Given an integer array <code>nums</code> and an integer <code>k</code>, return <code>true</code> if there are two distinct indices <code>i</code> and <code>j</code> in the
-array such that <code>nums[i] == nums[j]</code> and <code>abs(i - j) &lt;= k</code>.</p>
+  <p>Every valid email consists of a local name and a domain name, separated by the ‘@’ sign. Besides lowercase letters,
+the email may contain one or more ‘.’ or ‘+’.</p>
+  <ul>
+    <li>For example, in “alice@leetcode.com”, “alice” is the local name, and “leetcode.com” is the domain name.</li>
+  </ul>
+
+  <p>If you add periods ‘.’ between some characters in the local name part of an email address, mail sent there will be
+forwarded to the same address without dots in the local name. Note that this rule does not apply to domain names.</p>
+  <ul>
+    <li>For example, “alice.z@leetcode.com” and “alicez@leetcode.com” forward to the same email address.</li>
+  </ul>
+
+  <p>If you add a plus ‘+’ in the local name, everything after the first plus sign will be ignored. This allows certain
+emails to be filtered. Note that this rule does not apply to domain names.</p>
+  <ul>
+    <li>For example, “m.y+name@email.com” will be forwarded to “my@email.com”.</li>
+  </ul>
+
+  <p>It is possible to use both of these rules at the same time.</p>
+
+  <p>Given an array of strings <code>emails</code> where we send one email to each <code>emails[i]</code>, return the number of different
+addresses that actually receive mails.</p>
 
   <p>Constraints:</p>
   <ul>
-    <li><code>1 &lt;= nums.length &lt;= 10**5</code></li>
-    <li><code>-10**9 &lt;= nums[i] &lt;= 10**9</code></li>
-    <li><code>0 &lt;= k &lt;= 10**5</code></li>
+    <li><code>1 &lt;= emails.length &lt;= 100</code></li>
+    <li><code>1 &lt;= emails[i].length &lt;= 100</code></li>
+    <li><code>emails[i]</code> consist of lowercase English letters, ‘+’, ‘.’ and ‘@’.</li>
+    <li>Each <code>emails[i]</code> contains exactly one ‘@’ character.</li>
+    <li>All local and domain names are non-empty.</li>
+    <li>Local names do not start with a ‘+’ character.</li>
+    <li>Domain names end with the “.com” suffix.</li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/contains-duplicate-ii/">https://leetcode.com/problems/contains-duplicate-ii/</a></p>
+  <p><a href="https://leetcode.com/problems/unique-email-addresses/">https://leetcode.com/problems/unique-email-addresses/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
-<pre><code>Example 1
-Input: nums = [1,2,3,1], k = 3
-Output: true
+<pre><code>Exmaple 1
+
+Input: emails = ["test.email+alex@leetcode.com","test.e.mail+bob.cathy@leetcode.com","testemail+david@lee.tcode.com"]
+Output: 2
+Explanation: "testemail@leetcode.com" and "testemail@lee.tcode.com" actually receive mails.
 </code></pre>
 
 <pre><code>Example 2
-Input: nums = [1,0,1,1], k = 1
-Output: true
+Input: emails = ["a@leetcode.com","b@leetcode.com","c@leetcode.com"]
+Output: 3
 </code></pre>
 
-<pre><code>Example 3
-Input: nums = [1,2,3,1,2,3], k = 2
-Output: false
-</code></pre>
-
-<h2 id="analysis">Analysis</h2>
-<p>The Hash Table is a good data structure to save the value and its last index pair.
-When the same value appears, it is in the Hash Table.
-So, check the difference between the last and current index.
-If it is less than or equals to k, the answer is True.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This is a string manipulation problem.
+Only substring before “@” needs some character elimination, but none after “@”.
+Use the set data structure to save unique emails.
+In the end, the size of the set gives us the answer.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class ContainsDuplicate2:
-    def containsNearbyDuplicate(self, nums: List[int], k: int) -&gt; bool:
-        counts = {}
-        for idx, v in enumerate(nums):
-            if v in counts and idx - counts[v] &lt;= k:
-                return True
-            counts[v] = idx
-        return False
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class UniqueEmailAddresses {
+public:
+    int numUniqueEmails(vector&lt;string&gt;&amp; emails) {
+        unordered_set&lt;string&gt; seen;
+        for (string email : emails) {
+            string::size_type idx = email.find('@');
+            string name = email.substr(0, idx), domain = email.substr(idx);
+            string clean_name = "";
+            for (auto c : name) {
+                if (c == '+') {
+                    break;
+                } else if (c == '.') {
+                    continue;
+                } else {
+                    clean_name += c;
+                }
+            }
+            seen.insert(clean_name + domain);
+        }
+        return seen.size();
+    }
+};
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class UniqueEmailAddresses:
+    def numUniqueEmails(self, emails: List[str]) -&gt; int:
+        seen = set()
+        for email in emails:
+            local, domain = email.split("@")
+            name = local.split('+')[0]
+            name = name.replace('.', '')
+            seen.add('@'.join([name, domain]))
+        return len(seen)
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {String[]} emails
+# @return {Integer}
+def num_unique_emails(emails)
+    seen = Set.new
+    emails.each do |email|
+      local, domain = email.split('@')
+      local = local.split("+")[0]
+      local = local.tr(".","")
+      seen.add("#{local}@#{domain}")
+    end
+    seen.size
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(n)</code></li>
+  <li>Time: <code>O(n * m)</code> – n: number of emails, m: length of an email</li>
   <li>Space: <code>O(n)</code></li>
 </ul>
 
