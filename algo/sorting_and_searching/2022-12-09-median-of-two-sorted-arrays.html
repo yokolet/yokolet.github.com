@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Minimum Swaps to Group All 1’s Together | yokolet’s notelets</title>
+<title>Median of Two Sorted Arrays | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Minimum Swaps to Group All 1’s Together" />
+<meta property="og:title" content="Median of Two Sorted Arrays" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/arrays/2022-09-18-minimum-swaps-to-group-all-1-s-together.html" />
-<meta property="og:url" content="http://localhost:4000/algo/arrays/2022-09-18-minimum-swaps-to-group-all-1-s-together.html" />
+<link rel="canonical" href="http://localhost:4000/algo/sorting_and_searching/2022-12-09-median-of-two-sorted-arrays.html" />
+<meta property="og:url" content="http://localhost:4000/algo/sorting_and_searching/2022-12-09-median-of-two-sorted-arrays.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-09-18T12:13:00+09:00" />
+<meta property="article:published_time" content="2022-12-09T17:50:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Minimum Swaps to Group All 1’s Together" />
+<meta property="twitter:title" content="Median of Two Sorted Arrays" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-18T12:13:00+09:00","datePublished":"2022-09-18T12:13:00+09:00","description":"Blog site mostly for programming topics.","headline":"Minimum Swaps to Group All 1’s Together","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/arrays/2022-09-18-minimum-swaps-to-group-all-1-s-together.html"},"url":"http://localhost:4000/algo/arrays/2022-09-18-minimum-swaps-to-group-all-1-s-together.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-12-09T17:50:00+09:00","datePublished":"2022-12-09T17:50:00+09:00","description":"Blog site mostly for programming topics.","headline":"Median of Two Sorted Arrays","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/sorting_and_searching/2022-12-09-median-of-two-sorted-arrays.html"},"url":"http://localhost:4000/algo/sorting_and_searching/2022-12-09-median-of-two-sorted-arrays.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Minimum Swaps to Group All 1's Together</h1>
+            <h1 class="title is-2">Median of Two Sorted Arrays</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -114,7 +114,7 @@
     
     <div class="menu-list">
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Arrays
             </a>
@@ -917,7 +917,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Sorting and searching
             </a>
@@ -1360,16 +1360,16 @@
                     
                     <div class="content">
 
-    <p>Published: Sep 18, 2022</p>
+    <p>Published: Dec 9, 2022</p>
 
     <div class="tags">
         
         <span class="tag  is-primary ">
-    Medium
+    Hard
 </span>
         
         <span class="tag  is-primary ">
-    Sliding Window
+    Binary Search
 </span>
         
         <span class="tag  is-primary ">
@@ -1380,87 +1380,206 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>Some of array related problems ask minimum swaps to rearrange something.
-If the test cases are easy ones, simulation might work.
-However, the simulation is almost always not a good solution of this type.
-If we think the final result after swaps,
-counting in some range using two pointers might be much better solution.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>Given a binary array <code>data</code>, return the minimum number of swaps
-required to group all 1’s present in the array together in any place in the array.</p>
+  <p>Given two sorted arrays <code>nums1</code> and <code>nums2</code> of size <code>m</code> and <code>n</code> respectively, return the median of
+the two sorted arrays.</p>
+
+  <p>The overall run time complexity should be <code>O(log (m+n))</code>.</p>
 
   <p>Constraints:</p>
   <ul>
-    <li><code>1 &lt;= data.length &lt;= 10**5</code></li>
-    <li><code>data[i]</code> is either 0 or 1.</li>
+    <li><code>nums1.length == m</code></li>
+    <li><code>nums2.length == n</code></li>
+    <li><code>0 &lt;= m &lt;= 1000</code></li>
+    <li><code>0 &lt;= n &lt;= 1000</code></li>
+    <li><code>1 &lt;= m + n &lt;= 2000</code></li>
+    <li><code>-10**6 &lt;= nums1[i], nums2[i] &lt;= 10**6</code></li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/minimum-swaps-to-group-all-1s-together/">https://leetcode.com/problems/minimum-swaps-to-group-all-1s-together/</a></p>
+  <p><a href="https://leetcode.com/problems/median-of-two-sorted-arrays/">https://leetcode.com/problems/median-of-two-sorted-arrays/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
 <pre><code>Example 1
-Input: data = [1,0,1,0,1]
-Output: 1
-Explanation: There are 3 ways to group all 1's together:
-[1,1,1,0,0] using 1 swap.
-[0,1,1,1,0] using 2 swaps.
-[0,0,1,1,1] using 1 swap.
-The minimum is 1.
+Input: nums1 = [1,3], nums2 = [2]
+Output: 2.00000
+Explanation: merged array = [1,2,3] and median is 2.
 </code></pre>
 
 <pre><code>Example 2
-Input: data = [0,0,0,1,0]
-Output: 0
-Explanation: Since there is only one 1 in the array, no swaps are needed.
+Input: nums1 = [1,2], nums2 = [3,4]
+Output: 2.50000
+Explanation: merged array = [1,2,3,4] and median is (2 + 3) / 2 = 2.5.
 </code></pre>
 
-<pre><code>Example 3
-Input: data = [1,0,1,0,1,0,0,1,1,0,1]
-Output: 3
-Explanation: One possible solution that uses 3 swaps is [0,0,0,0,0,1,1,1,1,1,1].
-</code></pre>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>An easy solution is: merge two arrays, sort it then return the middle value(s).
+However, the problem requires O(log(m + n)) time complexity, which suggests the binary search approach.
+The binary search indices will be based on the shorter array.
+The solution starts from the shorter array’s index, mid2 = (low + high) // 2,
+and the longer array’s index, mid1 = m + n - mid2. 
+Next, values at four indices below are compared:</p>
+<ul>
+  <li>nums1’s middle 2 indices – l1 (left), r1 (right)</li>
+  <li>nums2’s middle 2 indices – l2 (left), r2 (right)</li>
+</ul>
 
-<h2 id="analysis">Analysis</h2>
-<p>We should put all 1’s in some area of the array.
-It is not necessary at the end or beginning.
-For example the given array is <code>[1, 0, 1, 0, 1]</code>, <code>[0, 1, 1, 1, 0]</code> is one of the final state.
-From index 1 to 3, all 1’s are put together.
-In another word, a sum of index 1 to 3 is 3.
-Given that, by looking at the range sum, we know how many swaps are needed in the range.</p>
-
-<p>The first step is to get a sum of the given array, which is the same as the number of 1’s.
-Also, the sum is the same range all 1’s put together.
-Start the sum from index 0 to sum of the array.
-Use two pointers, left and right, both are incremented by one each iteration.
-Update the current sum, then compare maximum swaps.
-Notice, it is the maximum not minimum.
-In the end, the sum of the array value minus maximum swaps gives us the answer.</p>
+<p>When l1 &gt; r2, the median exists on the left half of nums1.
+So, the high value should be decreased.
+When l2 &gt; r1, the median exists on the right half of nums1.
+So, the low value should be increased.
+Otherwise, the values for median were found. So, calculate and return the median.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class MinimumSwapsToGroupAll1sTogether:
-    def minSwaps(self, data: List[int]) -&gt; int:
-        n = len(data)
-        ones = sum(data)
-        cur = sum(data[0:ones])
-        max_v = cur
-        for right in range(ones, n):
-            left = right - ones
-            cur -= data[left]
-            cur += data[right]
-            max_v = max(max_v, cur)
-        return ones - max_v
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class MedianOfTwoSortedArrays {
+public:
+    double findMedianSortedArrays(vector&lt;int&gt;&amp; nums1, vector&lt;int&gt;&amp; nums2) {
+        int m = nums1.size(), n = nums2.size();
+        if (m &lt; n) {
+            return findMedianSortedArrays(nums2, nums1);
+        }
+        if (n == 0) {
+            return (nums1[(m - 1) / 2] + nums1[m / 2]) / 2.0;
+        }
+        int low = 0, high = n * 2;
+        while (low &lt;= high) {
+            int mid2 = (low + high) / 2;
+            int mid1 = m + n - mid2;
+            int l1 = mid1 == 0 ? INT_MIN : nums1[(mid1 - 1) / 2];
+            int l2 = mid2 == 0 ? INT_MIN : nums2[(mid2 - 1) / 2];
+            int r1 = mid1 == m * 2 ? INT_MAX : nums1[mid1 / 2];
+            int r2 = mid2 == n * 2 ? INT_MAX : nums2[mid2 / 2];
+            if (l1 &gt; r2) {
+                low = mid2 + 1;
+            } else if (l2 &gt; r1) {
+                high = mid2 - 1;
+            } else {
+                return ((l1 &lt; l2 ? l2 : l1) + (r1 &lt; r2 ? r1 : r2)) / 2.0;
+            }
+        }
+        return 0.0;
+    }
+};
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class MedianOfTwoSortedArrays:
+    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -&gt; float:
+        m, n = len(nums1), len(nums2)
+        if m &lt; n:
+          return self.findMedianSortedArrays(nums2, nums1)
+        if n == 0:
+          return (nums1[(m - 1) // 2] + nums1[m // 2]) / 2.0
+        
+        low, high = 0, n * 2
+        while low &lt;= high:
+            mid2 = (low + high) // 2
+            mid1 = m + n - mid2
+            l1 = float('-inf') if mid1 == 0 else nums1[(mid1 - 1) // 2]
+            l2 = float('-inf') if mid2 == 0 else nums2[(mid2 - 1) // 2]
+            r1 = float('inf') if mid1 == m * 2 else nums1[mid1 // 2]
+            r2 = float('inf') if mid2 == n * 2 else nums2[mid2 // 2]
+            if l1 &gt; r2:
+              low = mid2 + 1
+            elif l2 &gt; r1:
+              high = mid2 - 1
+            else:
+              return (max([l1, l2]) + min([r1, r2])) / 2.0
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {Integer[]} nums1
+# @param {Integer[]} nums2
+# @return {Float}
+
+class Integer
+  N_BYTES = [42].pack('i').size
+  N_BITS = N_BYTES * 16
+  MAX = 2 ** (N_BITS - 2) - 1
+  MIN = -MAX - 1
+end
+INT_MIN = Integer::MIN
+INT_MAX = Integer::MAX
+
+def find_median_sorted_arrays(nums1, nums2)
+  m = nums1.length
+  n = nums2.length
+  return find_median_sorted_arrays(nums2, nums1) if m &lt; n
+  return (nums1[(m - 1) / 2].to_f + nums1[m / 2].to_f) / 2 if n == 0
+
+  lo, hi = 0, n * 2
+  while lo &lt;= hi do
+    mid2 = (lo + hi) / 2
+    mid1 = m + n - mid2
+    l1 = (mid1 == 0) ? INT_MIN : nums1[(mid1 - 1) / 2]
+    l2 = (mid2 == 0) ? INT_MIN : nums2[(mid2 - 1) / 2]
+    r1 = (mid1 == m * 2) ? INT_MAX : nums1[(mid1 / 2)]
+    r2 = (mid2 == n * 2) ? INT_MAX : nums2[(mid2 / 2)]
+    if l1 &gt; r2
+      lo = mid2 + 1
+    elsif l2 &gt; r1
+      hi = mid2 - 1
+    else
+      return ([l1, l2].max.to_f + [r1, r2].min.to_f) / 2
+    end
+  end
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(n)</code></li>
+  <li>Time: <code>O(log(m + n))</code> – m, n: lengths of two arrays</li>
   <li>Space: <code>O(1)</code></li>
 </ul>
-
 
 </div>
 

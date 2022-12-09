@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Minimum Swaps to Group All 1’s Together | yokolet’s notelets</title>
+<title>Odd Even Jump | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Minimum Swaps to Group All 1’s Together" />
+<meta property="og:title" content="Odd Even Jump" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/arrays/2022-09-18-minimum-swaps-to-group-all-1-s-together.html" />
-<meta property="og:url" content="http://localhost:4000/algo/arrays/2022-09-18-minimum-swaps-to-group-all-1-s-together.html" />
+<link rel="canonical" href="http://localhost:4000/algo/stacks_and_queues/2022-12-09-odd-even-jump.html" />
+<meta property="og:url" content="http://localhost:4000/algo/stacks_and_queues/2022-12-09-odd-even-jump.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-09-18T12:13:00+09:00" />
+<meta property="article:published_time" content="2022-12-09T13:27:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Minimum Swaps to Group All 1’s Together" />
+<meta property="twitter:title" content="Odd Even Jump" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-18T12:13:00+09:00","datePublished":"2022-09-18T12:13:00+09:00","description":"Blog site mostly for programming topics.","headline":"Minimum Swaps to Group All 1’s Together","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/arrays/2022-09-18-minimum-swaps-to-group-all-1-s-together.html"},"url":"http://localhost:4000/algo/arrays/2022-09-18-minimum-swaps-to-group-all-1-s-together.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-12-09T13:27:00+09:00","datePublished":"2022-12-09T13:27:00+09:00","description":"Blog site mostly for programming topics.","headline":"Odd Even Jump","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/stacks_and_queues/2022-12-09-odd-even-jump.html"},"url":"http://localhost:4000/algo/stacks_and_queues/2022-12-09-odd-even-jump.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Minimum Swaps to Group All 1's Together</h1>
+            <h1 class="title is-2">Odd Even Jump</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -114,7 +114,7 @@
     
     <div class="menu-list">
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Arrays
             </a>
@@ -570,7 +570,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Stacks and Queues
             </a>
@@ -1360,16 +1360,20 @@
                     
                     <div class="content">
 
-    <p>Published: Sep 18, 2022</p>
+    <p>Published: Dec 9, 2022</p>
 
     <div class="tags">
         
         <span class="tag  is-primary ">
-    Medium
+    Hard
 </span>
         
         <span class="tag  is-primary ">
-    Sliding Window
+    Monotonic Stack
+</span>
+        
+        <span class="tag  is-primary ">
+    Sorting
 </span>
         
         <span class="tag  is-primary ">
@@ -1380,87 +1384,233 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>Some of array related problems ask minimum swaps to rearrange something.
-If the test cases are easy ones, simulation might work.
-However, the simulation is almost always not a good solution of this type.
-If we think the final result after swaps,
-counting in some range using two pointers might be much better solution.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>Given a binary array <code>data</code>, return the minimum number of swaps
-required to group all 1’s present in the array together in any place in the array.</p>
+  <p>You are given an integer array <code>arr</code>. From some starting index, you can make a series of jumps. The
+(1st, 3rd, 5th, …) jumps in the series are called odd-numbered jumps, and the (2nd, 4th, 6th, …) jumps
+in the series are called even-numbered jumps. Note that the jumps are numbered, not the indices.</p>
+
+  <p>You may jump forward from index <code>i</code> to index <code>j</code> (with <code>i &lt; j</code>) in the following way:</p>
+  <ul>
+    <li>During odd-numbered jumps (i.e., jumps 1, 3, 5, …), you jump to the index <code>j</code> such that <code>arr[i] &lt;= arr[j]</code> and
+  <code>arr[j]</code> is the smallest possible value. If there are multiple such indices <code>j</code>, you can only jump to the
+  smallest such index <code>j</code>.</li>
+    <li>During even-numbered jumps (i.e., jumps 2, 4, 6, …), you jump to the index <code>j</code> such that <code>arr[i] &gt;= arr[j]</code> and
+  <code>arr[j]</code> is the largest possible value. If there are multiple such indices <code>j</code>, you can only jump to the
+  smallest such index <code>j</code>.</li>
+    <li>It may be the case that for some index <code>i</code>, there are no legal jumps.</li>
+  </ul>
+
+  <p>A starting index is good if, starting from that index, you can reach the end of the array (index arr.length - 1)
+by jumping some number of times (possibly 0 or more than once).
+Return the number of good starting indices.</p>
 
   <p>Constraints:</p>
   <ul>
-    <li><code>1 &lt;= data.length &lt;= 10**5</code></li>
-    <li><code>data[i]</code> is either 0 or 1.</li>
+    <li><code>1 &lt;= arr.length &lt;= 2 * 10**4</code></li>
+    <li><code>0 &lt;= arr[i] &lt; 10**5</code></li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/minimum-swaps-to-group-all-1s-together/">https://leetcode.com/problems/minimum-swaps-to-group-all-1s-together/</a></p>
+  <p><a href="https://leetcode.com/problems/odd-even-jump/">https://leetcode.com/problems/odd-even-jump/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
 <pre><code>Example 1
-Input: data = [1,0,1,0,1]
-Output: 1
-Explanation: There are 3 ways to group all 1's together:
-[1,1,1,0,0] using 1 swap.
-[0,1,1,1,0] using 2 swaps.
-[0,0,1,1,1] using 1 swap.
-The minimum is 1.
+Input: arr = [10,13,12,14,15]
+Output: 2
+Explanation: 
+From starting index i = 0, we can make our 1st jump to i = 2 (since arr[2] is the smallest among arr[1], arr[2], arr[3],
+arr[4] that is greater or equal to arr[0]), then we cannot jump any more.
+From starting index i = 1 and i = 2, we can make our 1st jump to i = 3, then we cannot jump any more.
+From starting index i = 3, we can make our 1st jump to i = 4, so we have reached the end.
+From starting index i = 4, we have reached the end already.
+In total, there are 2 different starting indices i = 3 and i = 4, where we can reach the end with some number of
+jumps.
 </code></pre>
 
 <pre><code>Example 2
-Input: data = [0,0,0,1,0]
-Output: 0
-Explanation: Since there is only one 1 in the array, no swaps are needed.
+Input: arr = [2,3,1,1,4]
+Output: 3
+Explanation: 
+From starting index i = 0, we make jumps to i = 1, i = 2, i = 3:
+During our 1st jump (odd-numbered), we first jump to i = 1 because arr[1] is the smallest value in [arr[1], arr[2],
+arr[3], arr[4]] that is greater than or equal to arr[0].
+During our 2nd jump (even-numbered), we jump from i = 1 to i = 2 because arr[2] is the largest value in [arr[2], arr[3],
+arr[4]] that is less than or equal to arr[1]. arr[3] is also the largest value, but 2 is a smaller index, so we can only
+jump to i = 2 and not i = 3
+During our 3rd jump (odd-numbered), we jump from i = 2 to i = 3 because arr[3] is the smallest value in [arr[3], arr[4]]
+that is greater than or equal to arr[2].
+We can't jump from i = 3 to i = 4, so the starting index i = 0 is not good.
+In a similar manner, we can deduce that:
+From starting index i = 1, we jump to i = 4, so we reach the end.
+From starting index i = 2, we jump to i = 3, and then we can't jump anymore.
+From starting index i = 3, we jump to i = 4, so we reach the end.
+From starting index i = 4, we are already at the end.
+In total, there are 3 different starting indices i = 1, i = 3, and i = 4, where we can reach the end with some
+number of jumps.
 </code></pre>
 
 <pre><code>Example 3
-Input: data = [1,0,1,0,1,0,0,1,1,0,1]
+Input: arr = [5,1,3,4,2]
 Output: 3
-Explanation: One possible solution that uses 3 swaps is [0,0,0,0,0,1,1,1,1,1,1].
+Explanation: We can reach the end from starting indices 1, 2, and 4.
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>We should put all 1’s in some area of the array.
-It is not necessary at the end or beginning.
-For example the given array is <code>[1, 0, 1, 0, 1]</code>, <code>[0, 1, 1, 1, 0]</code> is one of the final state.
-From index 1 to 3, all 1’s are put together.
-In another word, a sum of index 1 to 3 is 3.
-Given that, by looking at the range sum, we know how many swaps are needed in the range.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This problem asks indices of non-decreasing subsequence for the odd numbered jumps and non-increasing subsequences
+for the even numbered jumps.
+In the second example, <code>[2,3,1,1,4]</code>, if the start index is 0, non-decreasing subsequence after index 0 is <code>[3, 4]</code>.
+The smallest index is 1 in the original array. This is the first jump.
+The second jump finds the non-increasing subsequence after index 1. It is <code>[1, 1]</code>.
+The smallest index is 2 in the original array.
+The third jump goes back to find non-decreasing subsequence, which is <code>[1. 4]</code>.
+The smallest index is 3 in the original array.
+The forth jump finds non-increasing subsequence which doesn’t exist.</p>
 
-<p>The first step is to get a sum of the given array, which is the same as the number of 1’s.
-Also, the sum is the same range all 1’s put together.
-Start the sum from index 0 to sum of the array.
-Use two pointers, left and right, both are incremented by one each iteration.
-Update the current sum, then compare maximum swaps.
-Notice, it is the maximum not minimum.
-In the end, the sum of the array value minus maximum swaps gives us the answer.</p>
+<p>One of approaches for this type of problem is monotonically increasing/decreasing stacks, which saves next jumping indices.
+After creating the two monotonic stacks for odd and even jumps, iterate over the array from right to left.
+This is because the problem asks a number of reachable indices to the end (ones).
+Starting from the index n - 2, check the indices are reachable to the last index.
+Since the jumps may or may not have multiple hops, use two auxiliary arrays to save the previous states.</p>
+
+<p>In the end, the number of ones in the odd jumps is the answer.
+The reason of picking up odd jumps only is the first jump is always the odd numbered.
+Apparently, 1 is odd.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class MinimumSwapsToGroupAll1sTogether:
-    def minSwaps(self, data: List[int]) -&gt; int:
-        n = len(data)
-        ones = sum(data)
-        cur = sum(data[0:ones])
-        max_v = cur
-        for right in range(ones, n):
-            left = right - ones
-            cur -= data[left]
-            cur += data[right]
-            max_v = max(max_v, cur)
-        return ones - max_v
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class OddEvenJump {
+public:
+    int oddEvenJumps(vector&lt;int&gt;&amp; arr) {
+        int n = arr.size();
+        vector&lt;pair&lt;int, int&gt; &gt; v2i;
+        for (size_t i = 0; i &lt; n; ++i) {
+            v2i.push_back({arr[i], i});
+        }
+        vector&lt;int&gt; next_odd(n, 0), next_even(n, 0);
+
+        sort(v2i.begin(),
+             v2i.end(),
+             [](pair&lt;int, int&gt; a, pair&lt;int, int&gt; b) {
+            return a.first == b.first ? a.second &lt; b.second : a.first &lt; b.first;
+        });
+        {
+            stack&lt;int&gt; st;
+            for (auto [_, i] : v2i) {
+                while (!st.empty() &amp;&amp; i &gt; st.top()) {
+                    next_odd[st.top()] = i;
+                    st.pop();
+                }
+                st.push(i);
+            }
+        }
+
+        sort(v2i.begin(),
+             v2i.end(),
+             [](pair&lt;int, int&gt; a, pair&lt;int, int&gt; b) {
+            return a.first == b.first ? a.second &lt; b.second : a.first &gt; b.first;
+        });
+        {
+            stack&lt;int&gt; st;
+            for (auto [v, i] : v2i) {
+                while (!st.empty() &amp;&amp; i &gt; st.top()) {
+                    next_even[st.top()] = i;
+                    st.pop();
+                }
+                st.push(i);
+            }
+        }
+
+        vector&lt;int&gt; odds(n, 0), evens(n, 0);
+        odds[n - 1] = 1, evens[n - 1] = 1;
+        for (auto i = n - 2; i &gt;= 0; --i) {
+            odds[i] = evens[next_odd[i]];
+            evens[i] = odds[next_even[i]];
+        }
+        return accumulate(odds.begin(), odds.end(), 0);
+    }
+};
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class OddEvenJump:
+    def oddEvenJumps(self, arr: List[int]) -&gt; int:
+        n = len(arr)
+        next_odd, next_even = [0 for _ in range(n)], [0 for _ in range(n)]
+        stack = []
+        for _, i in sorted([v, i] for i, v in enumerate(arr)):
+            while stack and i &gt; stack[-1]:
+                next_odd[stack.pop()] = i
+            stack.append(i)
+        stack = []
+        for _, i in sorted([-v, i] for i, v in enumerate(arr)):
+            while stack and i &gt; stack[-1]:
+                next_even[stack.pop()] = i
+            stack.append(i)
+        odds, evens = [0 for _ in range(n)], [0 for _ in range(n)]
+        odds[-1], evens[-1] = 1, 1
+        for i in range(n - 2, -1, -1):
+            odds[i] = evens[next_odd[i]]
+            evens[i] = odds[next_even[i]]
+        return sum(odds)
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(n)</code></li>
-  <li>Space: <code>O(1)</code></li>
+  <li>Time: <code>O(n*log(n))</code></li>
+  <li>Space: <code>O(n)</code></li>
 </ul>
-
 
 </div>
 

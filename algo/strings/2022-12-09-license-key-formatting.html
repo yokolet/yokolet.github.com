@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Minimum Swaps to Group All 1’s Together | yokolet’s notelets</title>
+<title>License Key Formatting | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Minimum Swaps to Group All 1’s Together" />
+<meta property="og:title" content="License Key Formatting" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/arrays/2022-09-18-minimum-swaps-to-group-all-1-s-together.html" />
-<meta property="og:url" content="http://localhost:4000/algo/arrays/2022-09-18-minimum-swaps-to-group-all-1-s-together.html" />
+<link rel="canonical" href="http://localhost:4000/algo/strings/2022-12-09-license-key-formatting.html" />
+<meta property="og:url" content="http://localhost:4000/algo/strings/2022-12-09-license-key-formatting.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-09-18T12:13:00+09:00" />
+<meta property="article:published_time" content="2022-12-09T14:11:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Minimum Swaps to Group All 1’s Together" />
+<meta property="twitter:title" content="License Key Formatting" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-18T12:13:00+09:00","datePublished":"2022-09-18T12:13:00+09:00","description":"Blog site mostly for programming topics.","headline":"Minimum Swaps to Group All 1’s Together","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/arrays/2022-09-18-minimum-swaps-to-group-all-1-s-together.html"},"url":"http://localhost:4000/algo/arrays/2022-09-18-minimum-swaps-to-group-all-1-s-together.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-12-09T14:11:00+09:00","datePublished":"2022-12-09T14:11:00+09:00","description":"Blog site mostly for programming topics.","headline":"License Key Formatting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/strings/2022-12-09-license-key-formatting.html"},"url":"http://localhost:4000/algo/strings/2022-12-09-license-key-formatting.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Minimum Swaps to Group All 1's Together</h1>
+            <h1 class="title is-2">License Key Formatting</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -114,7 +114,7 @@
     
     <div class="menu-list">
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Arrays
             </a>
@@ -315,7 +315,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Strings
             </a>
@@ -1360,107 +1360,163 @@
                     
                     <div class="content">
 
-    <p>Published: Sep 18, 2022</p>
+    <p>Published: Dec 9, 2022</p>
 
     <div class="tags">
         
         <span class="tag  is-primary ">
-    Medium
+    Easy
 </span>
         
         <span class="tag  is-primary ">
-    Sliding Window
-</span>
-        
-        <span class="tag  is-primary ">
-    Array
+    String
 </span>
         
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>Some of array related problems ask minimum swaps to rearrange something.
-If the test cases are easy ones, simulation might work.
-However, the simulation is almost always not a good solution of this type.
-If we think the final result after swaps,
-counting in some range using two pointers might be much better solution.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>Given a binary array <code>data</code>, return the minimum number of swaps
-required to group all 1’s present in the array together in any place in the array.</p>
+  <p>You are given a license key represented as a string <code>s</code> that consists of only alphanumeric characters and dashes.
+The string is separated into <code>n + 1</code> groups by <code>n</code> dashes. You are also given an integer <code>k</code>.</p>
+
+  <p>We want to reformat the string s such that each group contains exactly k characters, except for the first group,
+which could be shorter than <code>k</code> but still must contain at least one character. Furthermore, there must be a dash
+inserted between two groups, and you should convert all lowercase letters to uppercase.</p>
+
+  <p>Return the reformatted license key.</p>
 
   <p>Constraints:</p>
   <ul>
-    <li><code>1 &lt;= data.length &lt;= 10**5</code></li>
-    <li><code>data[i]</code> is either 0 or 1.</li>
+    <li><code>1 &lt;= s.length &lt;= 10**5</code></li>
+    <li><code>s</code> consists of English letters, digits, and dashes ‘-‘.</li>
+    <li><code>1 &lt;= k &lt;= 10**4</code></li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/minimum-swaps-to-group-all-1s-together/">https://leetcode.com/problems/minimum-swaps-to-group-all-1s-together/</a></p>
+  <p><a href="https://leetcode.com/problems/license-key-formatting/">https://leetcode.com/problems/license-key-formatting/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
 <pre><code>Example 1
-Input: data = [1,0,1,0,1]
-Output: 1
-Explanation: There are 3 ways to group all 1's together:
-[1,1,1,0,0] using 1 swap.
-[0,1,1,1,0] using 2 swaps.
-[0,0,1,1,1] using 1 swap.
-The minimum is 1.
+Input: s = "5F3Z-2e-9-w", k = 4
+Output: "5F3Z-2E9W"
+Explanation: The string s has been split into two parts, each part has 4 characters.
+Note that the two extra dashes are not needed and can be removed.
 </code></pre>
 
 <pre><code>Example 2
-Input: data = [0,0,0,1,0]
-Output: 0
-Explanation: Since there is only one 1 in the array, no swaps are needed.
+Input: s = "2-5g-3-J", k = 2
+Output: "2-5G-3J"
+Explanation: The string s has been split into three parts, each part has 2 characters except the first part as it could
+be shorter as mentioned above.
 </code></pre>
 
-<pre><code>Example 3
-Input: data = [1,0,1,0,1,0,0,1,1,0,1]
-Output: 3
-Explanation: One possible solution that uses 3 swaps is [0,0,0,0,0,1,1,1,1,1,1].
-</code></pre>
-
-<h2 id="analysis">Analysis</h2>
-<p>We should put all 1’s in some area of the array.
-It is not necessary at the end or beginning.
-For example the given array is <code>[1, 0, 1, 0, 1]</code>, <code>[0, 1, 1, 1, 0]</code> is one of the final state.
-From index 1 to 3, all 1’s are put together.
-In another word, a sum of index 1 to 3 is 3.
-Given that, by looking at the range sum, we know how many swaps are needed in the range.</p>
-
-<p>The first step is to get a sum of the given array, which is the same as the number of 1’s.
-Also, the sum is the same range all 1’s put together.
-Start the sum from index 0 to sum of the array.
-Use two pointers, left and right, both are incremented by one each iteration.
-Update the current sum, then compare maximum swaps.
-Notice, it is the maximum not minimum.
-In the end, the sum of the array value minus maximum swaps gives us the answer.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>The dashes in the input string should be removed. Then, the string is checked from last to first.
+In this solution, the given string is reversed first to make reverse traversal easy.
+Go over the reversed string character by character while counting the number of characters.
+Skip “-“ and add upper case characters to a result string.
+When the count becomes k, add “-“ and initialize the count.
+Once all characters are checked, reverse the result string to make it back.
+The first character may be “-“, so check it and return a substring or entire string.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class MinimumSwapsToGroupAll1sTogether:
-    def minSwaps(self, data: List[int]) -&gt; int:
-        n = len(data)
-        ones = sum(data)
-        cur = sum(data[0:ones])
-        max_v = cur
-        for right in range(ones, n):
-            left = right - ones
-            cur -= data[left]
-            cur += data[right]
-            max_v = max(max_v, cur)
-        return ones - max_v
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class LicenseKeyFormatting {
+public:
+    string licenseKeyFormatting(string s, int k) {
+        reverse(s.begin(), s.end());
+        string result = "";
+        int count = 0;
+        for (auto c : s) {
+            if (c != '-') {
+                result += toupper(c);
+                count++;
+            }
+            if (count == k) {
+                result += '-';
+                count = 0;
+            }
+        }
+        reverse(result.begin(), result.end());
+        return result.front() == '-' ? result.substr(1) : result;
+    }
+};
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class LicenseKeyFormatting:
+    def licenseKeyFormatting(self, s: str, k: int) -&gt; str:
+        s = s[::-1]
+        result, count = '', 0
+        for c in s:
+            if c != '-':
+                result += c.upper()
+                count += 1
+            if count == k:
+                result += '-'
+                count = 0
+        result = result[::-1]
+        return result[1:] if result and result[0] == '-' else result
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
   <li>Time: <code>O(n)</code></li>
   <li>Space: <code>O(1)</code></li>
 </ul>
-
 
 </div>
 
