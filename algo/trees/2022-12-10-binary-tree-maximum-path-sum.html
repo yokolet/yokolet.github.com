@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Pseudo-Palindromic Paths in a Binary Tree | yokolet’s notelets</title>
+<title>Binary Tree Maximum Path Sum | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Pseudo-Palindromic Paths in a Binary Tree" />
+<meta property="og:title" content="Binary Tree Maximum Path Sum" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/trees/2022-09-14-pseudo-palindromic-paths-in-a-binary-tree.html" />
-<meta property="og:url" content="http://localhost:4000/algo/trees/2022-09-14-pseudo-palindromic-paths-in-a-binary-tree.html" />
+<link rel="canonical" href="http://localhost:4000/algo/trees/2022-12-10-binary-tree-maximum-path-sum.html" />
+<meta property="og:url" content="http://localhost:4000/algo/trees/2022-12-10-binary-tree-maximum-path-sum.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-09-14T14:26:00+09:00" />
+<meta property="article:published_time" content="2022-12-10T15:06:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Pseudo-Palindromic Paths in a Binary Tree" />
+<meta property="twitter:title" content="Binary Tree Maximum Path Sum" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-14T14:26:00+09:00","datePublished":"2022-09-14T14:26:00+09:00","description":"Blog site mostly for programming topics.","headline":"Pseudo-Palindromic Paths in a Binary Tree","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/trees/2022-09-14-pseudo-palindromic-paths-in-a-binary-tree.html"},"url":"http://localhost:4000/algo/trees/2022-09-14-pseudo-palindromic-paths-in-a-binary-tree.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-12-10T15:06:00+09:00","datePublished":"2022-12-10T15:06:00+09:00","description":"Blog site mostly for programming topics.","headline":"Binary Tree Maximum Path Sum","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/trees/2022-12-10-binary-tree-maximum-path-sum.html"},"url":"http://localhost:4000/algo/trees/2022-12-10-binary-tree-maximum-path-sum.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Pseudo-Palindromic Paths in a Binary Tree</h1>
+            <h1 class="title is-2">Binary Tree Maximum Path Sum</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -1367,122 +1367,208 @@
                     
                     <div class="content">
 
-    <p>Published: Sep 14, 2022</p>
+    <p>Published: Dec 10, 2022</p>
 
     <div class="tags">
         
         <span class="tag  is-primary ">
-    Medium
+    Hard
 </span>
         
         <span class="tag  is-primary ">
-    Depth-First Search
+    Depth-Frist Search
 </span>
         
         <span class="tag  is-primary ">
     Binary Tree
 </span>
         
-        <span class="tag  is-primary ">
-    Bit Manipulation
-</span>
-        
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is a binary tree’s root to leaf node paths traversal problem.
-The traversal itself is nothing special.
-The key is how to check the pseudo-palindrome-ness.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>Given a binary tree where node values are digits from 1 to 9.
-A path in the binary tree is said to be pseudo-palindromic
-if at least one permutation of the node values in the path is a palindrome.</p>
+  <p>A path in a binary tree is a sequence of nodes where each pair of adjacent nodes in the sequence has an edge
+connecting them. A node can only appear in the sequence at most once. Note that the path does not need to pass
+through the root.</p>
 
-  <p>Return the number of pseudo-palindromic paths going from the root node to leaf nodes.</p>
+  <p>The path sum of a path is the sum of the node’s values in the path.</p>
+
+  <p>Given the <code>root</code> of a binary tree, return the maximum path sum of any non-empty path.</p>
 
   <p>Constraints:</p>
   <ul>
-    <li>The number of nodes in the tree is in the range <code>[1, 10**5]</code>.</li>
-    <li><code>1 &lt;= Node.val &lt;= 9</code></li>
+    <li>The number of nodes in the tree is in the range <code>[1, 3 * 10**4]</code>.</li>
+    <li><code>-1000 &lt;= Node.val &lt;= 1000</code></li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/pseudo-palindromic-paths-in-a-binary-tree/">https://leetcode.com/problems/pseudo-palindromic-paths-in-a-binary-tree/</a></p>
+  <p><a href="https://leetcode.com/problems/binary-tree-maximum-path-sum/">https://leetcode.com/problems/binary-tree-maximum-path-sum/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
-<pre><code>Example 1:
-Input: root = [2,3,1,3,1,null,1]
-Output: 2 
-Explanation:
-   2
-  / \
-  3  1
- / \  \
-3   1  1
-There are three paths going from the root node to leaf nodes: [2,3,3], [2,1,1] and [2,3,1].
-Among these paths only [2,3,3] and [2,1,1] are pseudo-palindromic paths
-since those can be rearranged to palindrome.
+<pre><code>Example 1
+Input: root = [1,2,3]
+Output: 6
+Explanation: The optimal path is 2 -&gt; 1 -&gt; 3 with a path sum of 2 + 1 + 3 = 6.
+   1
+ /   \
+2     3
 </code></pre>
 
-<pre><code>Example 2:
-Input: root = [2,1,1,1,3,null,null,null,null,null,1]
-Output: 1 
-Explanation:
-    2
-   / \
-  1   1
- / \ 
-1   3
-     \
-      1
-[2,1,1] is the only path which can be rearranged to palindrome.
+<pre><code>Example 2
+Input: root = [-10,9,20,null,null,15,7]
+Output: 42
+Explanation: The optimal path is 15 -&gt; 20 -&gt; 7 with a path sum of 15 + 20 + 7 = 42.
+    -10
+  /     \
+9       20
+       /  \
+     15    7
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>The binary tree traversal is ordinary one, starting from root node, going down to leaf nodes.
-When the current root node is not None, update the path parameter.
-When the current root node is a leaf, check pseudo-palindrome-ness and count up.
-Something special of this problem is how to check pseudo-palindrome-ness.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>Do postorder (DFS) traversal and calculate the value, The node value + left subtree value + right subtree value,
+which is the sum at the current root.
+Compare the value with the max value so far.
+When returning the value, considerable paths are: root + left subtree, root + right subtree, or 0 (doesn’t take
+this subtree). Return the max value of those three.</p>
 
-<p>There are some ways to check that.
-Here, a bit manipulation is used.
-The root value is between 1 to 9 inclusive.
-If <code>1</code> is shifted to root.val, we know what root value appeared so far.
-Additionally, take XOR of bit shifted value.
-When the same number appears even times on the path to leaf, that bit will be <code>0</code>.
-When it comes to leaf node, set <code>0</code> to the right most bit by <code>path &amp; (path - 1)</code>.
-That means it checks a power of two and at most one digit has an odd count.</p>
+<p>What needs to be care about is, how to save max value so far. Python solution pass it as a method argument
+and returns it. Ruby solution uses an instance variable. C++ solution passes a reference.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    int traverse(TreeNode *root, int &amp;max_v)
+    {
+        if (!root)
+            return 0;
+        int left = traverse(root-&gt;left, max_v);
+        int right = traverse(root-&gt;right, max_v);
+        max_v = max(max_v, root-&gt;val + left + right);
+        return max(root-&gt;val + max(left, right), 0);
+    }
+    
+    int maxPathSum(TreeNode* root) {
+        int max_v = INT_MIN;
+        traverse(root, max_v);
+        return max_v;
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python"># Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
 #         self.val = val
 #         self.left = left
 #         self.right = right
-class PseudoPalindromicPathsInABinaryTree:
-    def pseudoPalindromicPaths (self, root: Optional[TreeNode]) -&gt; int:
-        def helper(root, path, count):
-            if root:
-                path = path ^ (1 &lt;&lt; root.val)
-                if not root.left and not root.right:
-                    if path &amp; (path - 1) == 0:
-                        count += 1
-                else:
-                    count = helper(root.left, path, count)
-                    count = helper(root.right, path, count)
-            return count
-        return helper(root, 0, 0)
+class Solution:
+    def maxPathSum(self, root: Optional[TreeNode]) -&gt; int:
+      def traverse(root: Optional[TreeNode], max_v: int):
+        if not root:
+          return max_v, 0
+        max_v, left = traverse(root.left, max_v)
+        max_v, right = traverse(root.right, max_v)
+        max_v = max(max_v, root.val + left + right)
+        return max_v, max(root.val + max(left, right), 0)
+
+      max_v = float('-inf')
+      max_v, _ = traverse(root, max_v)
+      return max_v
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># Definition for a binary tree node.
+# class TreeNode
+#     attr_accessor :val, :left, :right
+#     def initialize(val = 0, left = nil, right = nil)
+#         @val = val
+#         @left = left
+#         @right = right
+#     end
+# end
+# @param {TreeNode} root
+# @return {Integer}
+def max_path_sum(root)
+    @max_value = -Float::INFINITY
+    traverse = -&gt; (root) {
+      return 0 if root.nil?
+      l_max = [traverse.call(root.left), 0].max
+      r_max = [traverse.call(root.right), 0].max
+      @max_value = [@max_value, root.val + l_max + r_max].max
+      return [root.val, root.val + [l_max, r_max].max].max
+    }
+    traverse.call(root)
+    @max_value
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(n)</code> – n: number of nodes</li>
-  <li>Space: <code>O(h)</code> – h: tree height</li>
+  <li>Time: <code>O(n)</code></li>
+  <li>Space: <code>O(h)</code> – h: height of the binary tree</li>
 </ul>
 
 </div>
