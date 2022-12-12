@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Find K Closest Elements | yokolet’s notelets</title>
+<title>Find First and Last Position of Element in Sorted Array | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Find K Closest Elements" />
+<meta property="og:title" content="Find First and Last Position of Element in Sorted Array" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/sorting_and_searching/2022-09-29-find-k-closest-elements.html" />
-<meta property="og:url" content="http://localhost:4000/algo/sorting_and_searching/2022-09-29-find-k-closest-elements.html" />
+<link rel="canonical" href="http://localhost:4000/algo/sorting_and_searching/2022-12-12-find-first-and-last-position-of-element-in-sorted-array.html" />
+<meta property="og:url" content="http://localhost:4000/algo/sorting_and_searching/2022-12-12-find-first-and-last-position-of-element-in-sorted-array.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-09-29T11:41:00+09:00" />
+<meta property="article:published_time" content="2022-12-12T17:38:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Find K Closest Elements" />
+<meta property="twitter:title" content="Find First and Last Position of Element in Sorted Array" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-29T11:41:00+09:00","datePublished":"2022-09-29T11:41:00+09:00","description":"Blog site mostly for programming topics.","headline":"Find K Closest Elements","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/sorting_and_searching/2022-09-29-find-k-closest-elements.html"},"url":"http://localhost:4000/algo/sorting_and_searching/2022-09-29-find-k-closest-elements.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-12-12T17:38:00+09:00","datePublished":"2022-12-12T17:38:00+09:00","description":"Blog site mostly for programming topics.","headline":"Find First and Last Position of Element in Sorted Array","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/sorting_and_searching/2022-12-12-find-first-and-last-position-of-element-in-sorted-array.html"},"url":"http://localhost:4000/algo/sorting_and_searching/2022-12-12-find-first-and-last-position-of-element-in-sorted-array.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Find K Closest Elements</h1>
+            <h1 class="title is-2">Find First and Last Position of Element in Sorted Array</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -1381,7 +1381,7 @@
                     
                     <div class="content">
 
-    <p>Published: Sep 29, 2022</p>
+    <p>Published: Dec 12, 2022</p>
 
     <div class="tags">
         
@@ -1393,93 +1393,133 @@
     Binary Search
 </span>
         
-        <span class="tag  is-primary ">
-    Two Pointers
-</span>
-        
-        <span class="tag  is-primary ">
-    Sorting
-</span>
-        
-        <span class="tag  is-primary ">
-    Array
-</span>
-        
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>Since the given array is sorted, the binary search might be a key to solve the problem.
-In fact, finding the closest index of the given value is the first step for one solution.
-From the closest index, expanding left and/or right indices to a necessary range works.
-Another solution would be to sort the given array using a custom comparator.
-This solution is simple, but needs additional sortings.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>Given a sorted integer array <code>arr</code>, two integers k and x, return the k closest
-integers to x in the array. The result should also be sorted in ascending order.</p>
+  <p>Given an array of integers <code>nums</code> sorted in non-decreasing order, find the starting and ending position of a given
+<code>target</code> value.</p>
 
-  <p>An integer <code>a</code> is closer to <code>x</code> than an integer <code>b</code> if:</p>
-  <ul>
-    <li><code>|a - x| &lt; |b - x|</code>, or</li>
-    <li><code>|a - x| == |b - x|</code> and <code>a &lt; b</code></li>
-  </ul>
+  <p>If target is not found in the array, return [-1, -1].</p>
+
+  <p>You must write an algorithm with <code>O(log n)</code> runtime complexity.</p>
 
   <p>Constraints:</p>
   <ul>
-    <li><code>1 &lt;= k &lt;= arr.length</code></li>
-    <li><code>1 &lt;= arr.length &lt;= 10**4</code></li>
-    <li><code>arr</code> is sorted in ascending order.</li>
-    <li><code>-10**4 &lt;= arr[i], x &lt;= 10**4</code></li>
+    <li><code>0 &lt;= nums.length &lt;= 10**5</code></li>
+    <li><code>-10**9 &lt;= nums[i] &lt;= 10**9</code></li>
+    <li><code>nums</code> is a non-decreasing array.</li>
+    <li><code>-10**9 &lt;= target &lt;= 10**9</code></li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/find-k-closest-elements/">https://leetcode.com/problems/find-k-closest-elements/</a></p>
+  <p><a href="https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/">https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
 <pre><code>Example 1
-Input: arr = [1,2,3,4,5], k = 4, x = 3
-Output: [1,2,3,4]
+Input: nums = [5,7,7,8,8,10], target = 8
+Output: [3,4]
 </code></pre>
 
 <pre><code>Example 2
-Input: arr = [1,2,3,4,5], k = 4, x = -1
-Output: [1,2,3,4]
+Input: nums = [5,7,7,8,8,10], target = 6
+Output: [-1,-1]
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>The first step is to find the closest index to the given value x.
-The x may or may not in the given array.
-It might exists beyond the given array’s range.
-Once the closest index is found, expand left and right pointer until the range size becomes k.
-We should be careful not to set left and right beyond the array range.
-Other than that, decrement the left pointer or increment the right pointer based on
-the difference between x and each element.</p>
+<pre><code>Example 3
+Input: nums = [], target = 0
+Output: [-1,-1]
+</code></pre>
+
+<h2 id="how-to-solve">How to Solve</h2>
+<p>The problem asks O(log(n)) time complexity. This means we should use the binary search.
+Python and C++ have convenient binary search features in the standard library.
+When the left bound is found:</p>
+<ul>
+  <li>check the left bound is not the last position since such position means the given array might be empty</li>
+  <li>check the value at left bound is the target, unless the target does not exist in the given array.</li>
+</ul>
+
+<p>If the left bound is good, find the right bound and return the result.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class FindKClosectElements:
-    def findClosestElements(self, arr: List[int], k: int, x: int) -&gt; List[int]:
-        n = len(arr)
-        if n == k:
-            return arr
-        left = bisect.bisect_left(arr, x) - 1
-        right = left + 1
-        while right - left - 1 &lt; k:
-            if left == -1:
-                right += 1
-                continue
-            if right == n or abs(arr[left] - x) &lt;= abs(arr[right] - x):
-                left -= 1
-            else:
-                right += 1
-        return arr[left + 1:right]
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class FindFirstAndLastPositionOfElementInSortedArray {
+public:
+    vector&lt;int&gt; searchRange(vector&lt;int&gt;&amp; nums, int target) {
+        int left = lower_bound(nums.begin(), nums.end(), target) - nums.begin();
+        if (left == nums.size() || nums[left] != target) { return {-1, -1}; }
+        int right = upper_bound(nums.begin(), nums.end(), target) - nums.begin() - 1;
+        return {left, right};
+    }
+};
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class FindFirstAndLastPositionOfElementInSortedArray:
+    def searchRange(self, nums: List[int], target: int) -&gt; List[int]:
+        left = bisect.bisect_left(nums, target)
+        if left == len(nums) or nums[left] != target: return [-1, -1]
+        right = bisect.bisect_right(nums, target) - 1
+        return [left, right]
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(long(n) + k)</code></li>
+  <li>Time: <code>O(log(n))</code></li>
   <li>Space: <code>O(1)</code></li>
 </ul>
 

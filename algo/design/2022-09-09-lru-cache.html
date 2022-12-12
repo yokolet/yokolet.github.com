@@ -839,6 +839,13 @@
                 
                     
                     <li>
+                        <a href="/algo/dynamic_programming/2022-12-12-climbing-stairs"
+                           class="submenu">
+                            Climbing Stairs
+                        </a>
+                    </li>
+                    
+                    <li>
                         <a href="/algo/dynamic_programming/2022-09-14-count-unique-characters-of-all-substrings-of-a-given-string"
                            class="submenu">
                             Count Unique Characters of All Substrings of a Given String
@@ -950,6 +957,13 @@
                         <a href="/algo/sorting_and_searching/2022-10-29-earliest-possible-day-of-full-bloom"
                            class="submenu">
                             Earliest Possible Day of Full Bloom
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/algo/sorting_and_searching/2022-12-12-find-first-and-last-position-of-element-in-sorted-array"
+                           class="submenu">
+                            Find First and Last Position of Element in Sorted Array
                         </a>
                     </li>
                     
@@ -1387,15 +1401,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is well-known LRU (least recently used) cache problem.
-A Class skeleton is provided.
-We should implement initializer and methods.</p>
-
-<p>The solution here uses Python’s OrderedDict, which guarantees the order of
-keys in first come basis.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.</p>
 
@@ -1441,14 +1447,101 @@ lRUCache.get(3);    // return 3
 lRUCache.get(4);    // return 4
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>The cache size and key order are what we should maintain.
-The solution here uses Python’s OrderedDict to maintain the order.
-Everytime the key is referenced, that key moved to the end for both <code>get/put</code> method.
-When the cache size grows up to the specified capacity,
-The least recently used key is deleted.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This is well-known LRU (least recently used) cache problem.
+The cache size and key order are what we should maintain.
+What data structure to save those is the key to solve the problem.
+The data structure should guarantee the order of keys in first come basis.
+The Python solution uses OrderedDict.
+Ruby’s hash table keeps the order of addition, so the Ruby solution uses a Hash simply.
+C++ has a doubly linked list in the standard library.
+The C++ solution uses it along with an unordered map.</p>
+
+<p>Everytime the key is referenced, that key moved to the end (Python and Ruby) or head (C++) for both <code>get/put</code> method.
+When the cache size grows up to the specified capacity, the least recently used key is deleted.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class LRUCache {
+private:
+    int capacity;
+    int n = 0;
+    unordered_map&lt;int, list&lt;pair&lt;int,int&gt;&gt;::iterator&gt; key2list;
+    list&lt;pair&lt;int,int&gt;&gt; cache;
+
+public:
+    LRUCache(int capacity) : capacity(capacity) {}
+
+    int get(int key) {
+        if (key2list.find(key) == key2list.end()) { return -1; }
+        auto value = key2list[key];
+        cache.splice(cache.begin(),cache, value);
+        return key2list[key]-&gt;second;
+    }
+
+    void put(int key, int value) {
+        if (capacity &lt;= 0) { return; }
+        if (key2list.find(key) != key2list.end()) {
+            auto itr = key2list[key];
+            itr-&gt;second = value;
+            cache.splice(cache.begin(), cache, itr);
+            return;
+        } else if (n == capacity) {
+            auto key_to_delete = cache.back().first;
+            key2list.erase(key_to_delete);
+            cache.pop_back();
+            n--;
+        }
+        n++;
+        cache.emplace_front(key,value);
+        key2list[key] = cache.begin();
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class LRUCache:
 
     def __init__(self, capacity: int):
@@ -1468,6 +1561,52 @@ The least recently used key is deleted.</p>
         self.cache[key] = value
         self.cache.move_to_end(key)
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">class LRUCache
+
+=begin
+    :type capacity: Integer
+=end
+    def initialize(capacity)
+        @capacity = capacity
+        @cache = {}
+    end
+
+
+=begin
+    :type key: Integer
+    :rtype: Integer
+=end
+    def get(key)
+        return -1 if !@cache.has_key?(key)
+        value = @cache.delete(key)
+        @cache[key] = value
+        value
+    end
+
+
+=begin
+    :type key: Integer
+    :type value: Integer
+    :rtype: Void
+=end
+    def put(key, value)
+        if @cache.has_key?(key)
+          @cache.delete(key)
+        elsif @cache.size == @capacity
+          @cache.shift
+        end
+        @cache[key] = value
+        nil
+    end
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
