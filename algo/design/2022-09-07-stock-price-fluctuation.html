@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Minimum Window Substring | yokolet’s notelets</title>
+<title>Stock Price Fluctuation | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Minimum Window Substring" />
+<meta property="og:title" content="Stock Price Fluctuation" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/strings/2022-10-24-minimum-window-substring.html" />
-<meta property="og:url" content="http://localhost:4000/algo/strings/2022-10-24-minimum-window-substring.html" />
+<link rel="canonical" href="http://localhost:4000/algo/design/2022-09-07-stock-price-fluctuation.html" />
+<meta property="og:url" content="http://localhost:4000/algo/design/2022-09-07-stock-price-fluctuation.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-10-24T16:18:00+09:00" />
+<meta property="article:published_time" content="2022-09-07T15:42:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Minimum Window Substring" />
+<meta property="twitter:title" content="Stock Price Fluctuation" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-10-24T16:18:00+09:00","datePublished":"2022-10-24T16:18:00+09:00","description":"Blog site mostly for programming topics.","headline":"Minimum Window Substring","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/strings/2022-10-24-minimum-window-substring.html"},"url":"http://localhost:4000/algo/strings/2022-10-24-minimum-window-substring.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-07T15:42:00+09:00","datePublished":"2022-09-07T15:42:00+09:00","description":"Blog site mostly for programming topics.","headline":"Stock Price Fluctuation","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/design/2022-09-07-stock-price-fluctuation.html"},"url":"http://localhost:4000/algo/design/2022-09-07-stock-price-fluctuation.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Minimum Window Substring</h1>
+            <h1 class="title is-2">Stock Price Fluctuation</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -322,7 +322,7 @@
             </ul>
         </div>
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Strings
             </a>
@@ -1076,7 +1076,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Design
             </a>
@@ -1395,16 +1395,20 @@
                     
                     <div class="content">
 
-    <p>Published: Oct 24, 2022</p>
+    <p>Published: Sep 7, 2022</p>
 
     <div class="tags">
         
         <span class="tag  is-primary ">
-    Hard
+    Medium
 </span>
         
         <span class="tag  is-primary ">
-    Sliding Window
+    Data Stream
+</span>
+        
+        <span class="tag  is-primary ">
+    Heap (Priority Queue)
 </span>
         
         <span class="tag  is-primary ">
@@ -1412,105 +1416,221 @@
 </span>
         
         <span class="tag  is-primary ">
-    String
+    Design
 </span>
         
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>As the title says, this is a sliding window problem.
-What makes this problem difficult is, the result substring is not just an anagram of the given pattern.
-There might be extra characters between necessary characters.
-The result substring length might be much longer than the pattern string.
-The solution here uses Hash table to check exactly what characters are in the substring.
-Also, the missing number of characters to form the pattern.
-When the window slides to the right, make it increment for the leftmost character of the window.
-At the same time, start and end indices are updated.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>Given two strings <code>s</code> and <code>t</code> of lengths <code>m</code> and <code>n</code> respectively, return the minimum window substring of <code>s</code>
-such that every character in <code>t</code> (including duplicates) is included in the window. If there is no such substring,
-return the empty string “”.</p>
+  <p>You are given a stream of <code>record</code>s about a particular stock.
+Each record contains a <code>timestamp</code> and the corresponding <code>price</code> of the stock at that timestamp.<br />
+Unfortunately due to the volatile nature of the stock market, the records do not come in order.
+Even worse, some records may be incorrect.
+Another record with the same timestamp may appear later in the stream correcting the price of
+the previous wrong record.</p>
 
-  <p>The testcases will be generated such that the answer is unique.</p>
+  <p>Design an algorithm that:</p>
 
-  <p>A substring is a contiguous sequence of characters within the string.</p>
-
-  <p>Constraints:</p>
   <ul>
-    <li><code>m == s.length</code></li>
-    <li><code>n == t.length</code></li>
-    <li><code>1 &lt;= m, n &lt;= 10**5</code></li>
-    <li><code>s</code> and <code>t</code> consist of uppercase and lowercase English letters.</li>
+    <li>Updates the price of the stock at a particular timestamp,
+correcting the price from any previous records at the timestamp.</li>
+    <li>Finds the latest price of the stock based on the current records.
+The latest price is the price at the latest timestamp recorded.</li>
+    <li>Finds the maximum price the stock has been based on the current records.</li>
+    <li>Finds the minimum price the stock has been based on the current records.</li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/minimum-window-substring/">https://leetcode.com/problems/minimum-window-substring/</a></p>
+  <p>Implement the StockPrice class:</p>
+
+  <ul>
+    <li><code>StockPrice()</code> Initializes the object with no price records.</li>
+    <li><code>void update(int timestamp, int price)</code> Updates the price of the stock at the given timestamp.</li>
+    <li><code>int current()</code> Returns the latest price of the stock.</li>
+    <li><code>int maximum()</code> Returns the maximum price of the stock.</li>
+    <li><code>int minimum()</code> Returns the minimum price of the stock.</li>
+  </ul>
+
+  <p>Constraints:</p>
+
+  <ul>
+    <li><code>1 &lt;= timestamp, price &lt;= 10**9</code>\</li>
+    <li>At most <code>10**5</code> calls will be made in total to <code>update</code>, <code>current</code>, <code>maximum</code>, and <code>minimum</code>.</li>
+    <li><code>current</code>, <code>maximum</code>, and <code>minimum</code> will be called only after <code>update</code> has been called at least once.</li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/stock-price-fluctuation/">https://leetcode.com/problems/stock-price-fluctuation/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
-<pre><code>Example 1
-Input: s = "ADOBECODEBANC", t = "ABC"
-Output: "BANC"
-Explanation: The minimum window substring "BANC" includes 'A', 'B', and 'C' from string t.
+<pre><code>Example 1:
+Input:
+["StockPrice", "update", "update", "current", "maximum", "update", "maximum", "update", "minimum"]
+[[], [1, 10], [2, 5], [], [], [1, 3], [], [4, 2], []]
+Output:
+[null, null, null, 5, 10, null, 5, null, 2]
+
+Explanation:
+StockPrice stockPrice = new StockPrice();
+stockPrice.update(1, 10); // Timestamps are [1] with corresponding prices [10].
+stockPrice.update(2, 5);  // Timestamps are [1,2] with corresponding prices [10,5].
+stockPrice.current();     // return 5, the latest timestamp is 2 with the price being 5.
+stockPrice.maximum();     // return 10, the maximum price is 10 at timestamp 1.
+stockPrice.update(1, 3);  // The previous timestamp 1 had the wrong price, so it is updated to 3.
+                          // Timestamps are [1,2] with corresponding prices [3,5].
+stockPrice.maximum();     // return 5, the maximum price is 5 after the correction.
+stockPrice.update(4, 2);  // Timestamps are [1,2,4] with corresponding prices [3,5,2].
+stockPrice.minimum();     // return 2, the minimum price is 2 at timestamp 4.
 </code></pre>
 
-<pre><code>Example 2
-Input: s = "a", t = "a"
-Output: "a"
-Explanation: The entire string s is the minimum window.
-</code></pre>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This problem is a type of online or streaming algorithm.
+The input data comes from a stream of data and be processed one by one.
+A popular problem of this type is <a href="algo/design/2022-09-24-find-median-from-data-stream">Find Median from Data Stream</a>.
+In this problem, stock prices are coming in one by one from data stream.</p>
 
-<pre><code>Example 3
-Input: s = "a", t = "aa"
-Output: ""
-Explanation: Both 'a's from t must be included in the window.
-Since the largest window of s only has one 'a', return empty string.
-</code></pre>
+<p>The problem asks maximum and/or minimum from the data stream, the heap data structure should be used.
+To answer both maximum and minimum values, we need min and max heaps.
+To support current value reference, we should keep values in a hash table.</p>
 
-<h2 id="analysis">Analysis</h2>
-<p>The solution starts from counting the pattern character and save it to the hash table.
-While sliding the window, if the pattern table has enough characters of the current character,
-missing count is decremented.
-At this point, here’s a tweak – decrement the character in the hash table.
-Python’s collections.Counter is behave like collections.defaultdict(int).
-If the character doesn’t exist in the table, still it can be decremented.
-When the missing becomes zero, all necessary characters are found.
-It’s time to find the start index.
-For this purpose, negative counts in the table is used.
-While the counts in the table is negative, the start index can be shift to the right.
-Again, the counts are incremented as the pointer shifts.
-When the start index is found, update the start and end indicies.
-The answer is the substring from start to end indicies.</p>
+<p>Each method should focus on only necessary operations.
+Heap updates will be done when maximum or minimum methods are called.
+Because of that, the update method keeps old data in max/min heaps.
+The old data will be eliminated when heap pop result mismatches values in the hash table.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class MinimumWindowSubstring:
-    def minWindow(self, s: str, t: str) -&gt; str:
-        needs, missing = collections.Counter(t), len(t)
-        start, end = 0, 0
-        i = 0
-        for j, c in enumerate(s, 1):
-            if needs[c] &gt; 0:
-                missing -= 1
-            needs[c] -= 1
-            if missing == 0:
-                while i &lt; j and needs[s[i]] &lt; 0:
-                    needs[s[i]] += 1
-                    i += 1
-                needs[s[i]] += 1
-                missing += 1
-                if end == 0 or end - start &gt; j - i:
-                    start, end = i, j
-                i += 1
-        return s[start:end]
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class StockPrice {
+private:
+    int cur_id;
+    unordered_map&lt;int, int&gt; id2price;  // id: price
+    priority_queue&lt;pair&lt;int, int&gt;&gt; max_heap; // {price, id}
+    priority_queue&lt;pair&lt;int, int&gt;, vector&lt;pair&lt;int,int&gt;&gt;, greater&lt;pair&lt;int, int&gt;&gt;&gt; min_heap; // {price, id}
+
+public:
+    StockPrice() {}
+
+    void update(int timestamp, int price) {
+        cur_id = max(cur_id, timestamp);
+        id2price[timestamp] = price;
+        max_heap.push({price, timestamp});
+        min_heap.push({price, timestamp});
+    }
+
+    int current() {
+        return id2price[cur_id];
+    }
+
+    int maximum() {
+        while (!max_heap.empty() &amp;&amp; id2price[max_heap.top().second] != max_heap.top().first) {
+            max_heap.pop();
+        }
+        return max_heap.top().first;
+    }
+
+    int minimum() {
+        while (!min_heap.empty() &amp;&amp; id2price[min_heap.top().second] != min_heap.top().first) {
+            min_heap.pop();
+        }
+        return min_heap.top().first;
+    }
+};
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class StockPrice:
+
+    def __init__(self):
+        self.cur_id = -1
+        self.id2price = {}  # id: price
+        self.max_heap = [] # (price, id)
+        self.min_heap = [] # (price, id)
+
+
+    def update(self, timestamp: int, price: int) -&gt; None:
+        self.cur_id = max(self.cur_id, timestamp)
+        self.id2price[timestamp] = price
+        heapq.heappush(self.max_heap, (-price, timestamp))
+        heapq.heappush(self.min_heap, (price, timestamp))
+
+
+    def current(self) -&gt; int:
+        return self.id2price[self.cur_id]
+
+
+    def maximum(self) -&gt; int:
+        p, id = self.max_heap[0]
+        while self.max_heap and self.id2price[id] != -p:
+            heapq.heappop(self.max_heap)
+            p, id = self.max_heap[0]
+        return -p
+
+
+    def minimum(self) -&gt; int:
+        p, id = self.min_heap[0]
+        while self.min_heap and self.id2price[id] != p:
+            heapq.heappop(self.min_heap)
+            p, id = self.min_heap[0]
+        return p
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(m + n)</code> – m: length of s, n: length of t</li>
-  <li>Space: <code>O(m + n)</code></li>
+  <li>Time: update: <code>O(log(n))</code>, current: <code>O(1)</code>,  maximum/minimum: <code>O(n*log(n))</code></li>
+  <li>Space: <code>O(n)</code></li>
 </ul>
 
 </div>

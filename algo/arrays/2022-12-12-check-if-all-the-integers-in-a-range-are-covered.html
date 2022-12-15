@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Minimum Window Substring | yokolet’s notelets</title>
+<title>Check if All the Integers in a Range Are Covered | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Minimum Window Substring" />
+<meta property="og:title" content="Check if All the Integers in a Range Are Covered" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/strings/2022-10-24-minimum-window-substring.html" />
-<meta property="og:url" content="http://localhost:4000/algo/strings/2022-10-24-minimum-window-substring.html" />
+<link rel="canonical" href="http://localhost:4000/algo/arrays/2022-12-12-check-if-all-the-integers-in-a-range-are-covered.html" />
+<meta property="og:url" content="http://localhost:4000/algo/arrays/2022-12-12-check-if-all-the-integers-in-a-range-are-covered.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-10-24T16:18:00+09:00" />
+<meta property="article:published_time" content="2022-12-12T22:36:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Minimum Window Substring" />
+<meta property="twitter:title" content="Check if All the Integers in a Range Are Covered" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-10-24T16:18:00+09:00","datePublished":"2022-10-24T16:18:00+09:00","description":"Blog site mostly for programming topics.","headline":"Minimum Window Substring","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/strings/2022-10-24-minimum-window-substring.html"},"url":"http://localhost:4000/algo/strings/2022-10-24-minimum-window-substring.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-12-12T22:36:00+09:00","datePublished":"2022-12-12T22:36:00+09:00","description":"Blog site mostly for programming topics.","headline":"Check if All the Integers in a Range Are Covered","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/arrays/2022-12-12-check-if-all-the-integers-in-a-range-are-covered.html"},"url":"http://localhost:4000/algo/arrays/2022-12-12-check-if-all-the-integers-in-a-range-are-covered.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Minimum Window Substring</h1>
+            <h1 class="title is-2">Check if All the Integers in a Range Are Covered</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -114,7 +114,7 @@
     
     <div class="menu-list">
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Arrays
             </a>
@@ -322,7 +322,7 @@
             </ul>
         </div>
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Strings
             </a>
@@ -1395,122 +1395,154 @@
                     
                     <div class="content">
 
-    <p>Published: Oct 24, 2022</p>
+    <p>Published: Dec 12, 2022</p>
 
     <div class="tags">
         
         <span class="tag  is-primary ">
-    Hard
+    Easy
 </span>
         
         <span class="tag  is-primary ">
-    Sliding Window
-</span>
-        
-        <span class="tag  is-primary ">
-    Hash Table
-</span>
-        
-        <span class="tag  is-primary ">
-    String
+    Array
 </span>
         
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>As the title says, this is a sliding window problem.
-What makes this problem difficult is, the result substring is not just an anagram of the given pattern.
-There might be extra characters between necessary characters.
-The result substring length might be much longer than the pattern string.
-The solution here uses Hash table to check exactly what characters are in the substring.
-Also, the missing number of characters to form the pattern.
-When the window slides to the right, make it increment for the leftmost character of the window.
-At the same time, start and end indices are updated.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>Given two strings <code>s</code> and <code>t</code> of lengths <code>m</code> and <code>n</code> respectively, return the minimum window substring of <code>s</code>
-such that every character in <code>t</code> (including duplicates) is included in the window. If there is no such substring,
-return the empty string “”.</p>
+  <p>You are given a 2D integer array <code>ranges</code> and two integers <code>left</code> and <code>right</code>. Each <code>ranges[i] = [start[i], end[i]]</code>
+represents an inclusive interval between <code>start[i]</code> and <code>end[i]</code>.</p>
 
-  <p>The testcases will be generated such that the answer is unique.</p>
+  <p>Return <code>true</code> if each integer in the inclusive range <code>[left, right]</code> is covered by at least one interval in ranges.
+Return <code>false</code> otherwise.</p>
 
-  <p>A substring is a contiguous sequence of characters within the string.</p>
+  <p>An integer <code>x</code> is covered by an interval <code>ranges[i] = [start[i], end[i]]</code> if <code>start[i] &lt;= x &lt;= end[i]</code>.</p>
 
   <p>Constraints:</p>
   <ul>
-    <li><code>m == s.length</code></li>
-    <li><code>n == t.length</code></li>
-    <li><code>1 &lt;= m, n &lt;= 10**5</code></li>
-    <li><code>s</code> and <code>t</code> consist of uppercase and lowercase English letters.</li>
+    <li><code>1 &lt;= ranges.length &lt;= 50</code></li>
+    <li><code>1 &lt;= start[i] &lt;= end[i] &lt;= 50</code></li>
+    <li><code>1 &lt;= left &lt;= right &lt;= 50</code></li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/minimum-window-substring/">https://leetcode.com/problems/minimum-window-substring/</a></p>
+  <p><a href="https://leetcode.com/problems/check-if-all-the-integers-in-a-range-are-covered/">https://leetcode.com/problems/check-if-all-the-integers-in-a-range-are-covered/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
 <pre><code>Example 1
-Input: s = "ADOBECODEBANC", t = "ABC"
-Output: "BANC"
-Explanation: The minimum window substring "BANC" includes 'A', 'B', and 'C' from string t.
+Input: ranges = [[1,2],[3,4],[5,6]], left = 2, right = 5
+Output: true
+Explanation: Every integer between 2 and 5 is covered:
+- 2 is covered by the first range.
+- 3 and 4 are covered by the second range.
+- 5 is covered by the third range.
 </code></pre>
 
 <pre><code>Example 2
-Input: s = "a", t = "a"
-Output: "a"
-Explanation: The entire string s is the minimum window.
+Input: ranges = [[1,10],[10,20]], left = 21, right = 21
+Output: false
+Explanation: 21 is not covered by any range.
 </code></pre>
 
-<pre><code>Example 3
-Input: s = "a", t = "aa"
-Output: ""
-Explanation: Both 'a's from t must be included in the window.
-Since the largest window of s only has one 'a', return empty string.
-</code></pre>
-
-<h2 id="analysis">Analysis</h2>
-<p>The solution starts from counting the pattern character and save it to the hash table.
-While sliding the window, if the pattern table has enough characters of the current character,
-missing count is decremented.
-At this point, here’s a tweak – decrement the character in the hash table.
-Python’s collections.Counter is behave like collections.defaultdict(int).
-If the character doesn’t exist in the table, still it can be decremented.
-When the missing becomes zero, all necessary characters are found.
-It’s time to find the start index.
-For this purpose, negative counts in the table is used.
-While the counts in the table is negative, the start index can be shift to the right.
-Again, the counts are incremented as the pointer shifts.
-When the start index is found, update the start and end indicies.
-The answer is the substring from start to end indicies.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>The brute force solution works in this problem considering the constraints.
+Check every value between left and right inclusive whether the value is included in the range.
+If one of the values between left and right is not found in any range, return false.
+If two loops come to the end, all values are found. Return true.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class MinimumWindowSubstring:
-    def minWindow(self, s: str, t: str) -&gt; str:
-        needs, missing = collections.Counter(t), len(t)
-        start, end = 0, 0
-        i = 0
-        for j, c in enumerate(s, 1):
-            if needs[c] &gt; 0:
-                missing -= 1
-            needs[c] -= 1
-            if missing == 0:
-                while i &lt; j and needs[s[i]] &lt; 0:
-                    needs[s[i]] += 1
-                    i += 1
-                needs[s[i]] += 1
-                missing += 1
-                if end == 0 or end - start &gt; j - i:
-                    start, end = i, j
-                i += 1
-        return s[start:end]
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class CheckIfAllTheIntegersInARangeAreCovered {
+public:
+    bool isCovered(vector&lt;vector&lt;int&gt;&gt;&amp; ranges, int left, int right) {
+        for (auto i = left; i &lt;= right; ++i) {
+            bool found = false;
+            for (auto &amp;range : ranges) {
+                int s = range[0], e = range[1];
+                if (s &lt;= i &amp;&amp; i &lt;= e) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) { return false; }
+        }
+        return true;
+    }
+};
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class CheckIfAllTheIntegersInARangeAreCovered:
+    def isCovered(self, ranges: List[List[int]], left: int, right: int) -&gt; bool:
+        for i in range(left, right + 1):
+            found = False
+            for s, e in ranges:
+                if s &lt;= i &lt;= e:
+                    found = True
+                    break
+            if not found:
+                return False
+        return True
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(m + n)</code> – m: length of s, n: length of t</li>
-  <li>Space: <code>O(m + n)</code></li>
+  <li>Time: <code>O(n * m)</code> – n: right - left, m: number of ranges</li>
+  <li>Space: <code>O(1)</code></li>
 </ul>
 
 </div>
