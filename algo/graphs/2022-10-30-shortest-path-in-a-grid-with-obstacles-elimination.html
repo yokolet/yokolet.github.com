@@ -123,6 +123,13 @@
                 
                     
                     <li>
+                        <a href="/algo/arrays/2022-12-17-amount-of-new-area-painted-each-day"
+                           class="submenu">
+                            Amount of New Area Painted Each Day
+                        </a>
+                    </li>
+                    
+                    <li>
                         <a href="/algo/arrays/2022-09-12-bag-of-tokens"
                            class="submenu">
                             Bag of Tokens
@@ -748,6 +755,13 @@
                         <a href="/algo/trees/2022-12-07-range-sum-of-bst"
                            class="submenu">
                             Range Sum of BST
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/algo/trees/2022-12-17-step-by-step-directions-from-a-binary-tree-node-to-another"
+                           class="submenu">
+                            Step-By-Step Directions From a Binary Tree Node to Another
                         </a>
                     </li>
                     
@@ -1419,17 +1433,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>If this problem doesn’t have a condition, “at most k obstacles elimination,”
-it is a typical breadth-first search problem.
-Now, the condition of obstacles elimination has been added.
-Still, the way of solving the problem stays the same.
-Instead of adding (next_row, next_col) to the queue, it adds (next_row next_col, number_of_k_left).
-The number of k left will be decreased by one if the grid is the obstacle, otherwise keep the same value.
-While going over the cells, if the cell is the obstacle and k is 0, the cell won’t be added to the queue.
-This way, we can find the answer.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>You are given an <code>m x n</code> integer matrix grid where each cell is either 0 (empty) or 1 (obstacle). You can move up,
 down, left, or right from and to an empty cell in one step.</p>
@@ -1466,15 +1470,98 @@ Output: -1
 Explanation: We need to eliminate at least two obstacles to find such a walk.
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>If this problem doesn’t have a condition, “at most k obstacles elimination,”
+it is a typical breadth-first search problem.
+Now, the condition of obstacles elimination has been added.
+Still, the way of solving the problem stays the same.
+Instead of adding (next_row, next_col) to the queue, it adds (next_row next_col, number_of_k_left).
+The number of k left will be decreased by one if the grid is the obstacle, otherwise keep the same value.
+While going over the cells, if the cell is the obstacle and k is 0, the cell won’t be added to the queue.
+This way, we can find the answer.</p>
+
 <p>The problem has an extra condition, however, traversing cells stays the same.
 The algorithm is the breadth-first search since the problem asks the shortest path.
 The queue will have the combination of (distance, (next_row, next_col, number_of_k_left)).
-The the cell is the obstacle, the number of k left is decreased by one.
+If the cell is the obstacle, the number of k left is decreased by one.
 Conveniently, the obstacle value is 1, so k - grid[row][col] does the decrement.
 When the popped out row and col is the one of right bottom, return the distance.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class ShortestPathInAGridWithObstaclesElimination {
+public:
+    int shortestPath(vector&lt;vector&lt;int&gt;&gt;&amp; grid, int k) {
+        int rows = grid.size(), cols = grid[0].size();
+        queue&lt;pair&lt;int, tuple&lt;int, int, int&gt;&gt;&gt; q;  // (dist, (row, col, k))
+        q.push({0, make_tuple(0, 0, k)});
+        vector&lt;vector&lt;int&gt;&gt; seen(rows, vector&lt;int&gt;(cols, -1));
+        seen[0][0] = k;
+        vector&lt;pair&lt;int, int&gt;&gt; dirs = { {-1, 0}, {0, -1}, {0, 1}, {1, 0} };
+        while (!q.empty()) {
+            auto [dist, tpl] = q.front();
+            auto [r, c, k] = tpl;
+            q.pop();
+            if (r == rows - 1 &amp;&amp; c == cols - 1) { return dist; }
+            for (auto [dr, dc] : dirs) {
+                int next_r = r + dr, next_c = c + dc;
+                if (next_r &lt; 0 || next_r &gt;= rows || next_c &lt; 0 || next_c &gt;= cols ||
+                    (grid[next_r][next_c] == 1 and k == 0) ||
+                    seen[next_r][next_c] &gt;= k) {
+                    continue;
+                }
+                seen[next_r][next_c] = k;
+                q.push({dist + 1, make_tuple(next_r, next_c, k - grid[next_r][next_c])});
+            }
+        }
+        return -1;
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class ShortestPathInAGridWithObstaclesElimination:
     def shortestPath(self, grid: List[List[int]], k: int) -&gt; int:
         rows, cols = len(grid), len(grid[0])
@@ -1485,8 +1572,8 @@ When the popped out row and col is the one of right bottom, return the distance.
             dist, (r, c, k) = queue.pop(0)
             if (r, c) == (rows - 1, cols - 1):
                 return dist
-            for rr, cc in dirs:
-                next_r, next_c = r + rr, c + cc
+            for dr, dc in dirs:
+                next_r, next_c = r + dr, c + dc
                 if next_r &lt; 0 or next_r &gt;= rows or\
                     next_c &lt; 0 or next_c &gt;= cols or\
                     (grid[next_r][next_c] == 1 and k == 0) or\
@@ -1496,11 +1583,20 @@ When the popped out row and col is the one of right bottom, return the distance.
                 queue.append((dist + 1, (next_r, next_c, k - grid[next_r][next_c])))
         return -1
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(n*k)</code> – n: number of cells in the grid, k: obstacle eliminate limit</li>
-  <li>Space: <code>O(n*k)</code></li>
+  <li>Time: <code>O(n * k)</code> – n: number of cells in the grid, k: obstacle eliminate limit</li>
+  <li>Space: <code>O(n * k)</code></li>
 </ul>
 
 </div>

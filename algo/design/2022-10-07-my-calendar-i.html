@@ -123,6 +123,13 @@
                 
                     
                     <li>
+                        <a href="/algo/arrays/2022-12-17-amount-of-new-area-painted-each-day"
+                           class="submenu">
+                            Amount of New Area Painted Each Day
+                        </a>
+                    </li>
+                    
+                    <li>
                         <a href="/algo/arrays/2022-09-12-bag-of-tokens"
                            class="submenu">
                             Bag of Tokens
@@ -748,6 +755,13 @@
                         <a href="/algo/trees/2022-12-07-range-sum-of-bst"
                            class="submenu">
                             Range Sum of BST
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/algo/trees/2022-12-17-step-by-step-directions-from-a-binary-tree-node-to-another"
+                           class="submenu">
+                            Step-By-Step Directions From a Binary Tree Node to Another
                         </a>
                     </li>
                     
@@ -1415,16 +1429,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This problem is one of my calendar series and easier one.
-The start and end time pair can be saved in a single array.
-In such a case, the array will have values: <code>[start[0], end[0], start[1], end[1], ...]</code>.
-The start times are always on the even indices, while the end times are on odd indices.
-Using Python’s bisect search, the insertion point can be found.
-If the start time insertion point is not on even index, the range overlaps to some of existing events.
-This way, we can check a double booking.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>You are implementing a program to use as your calendar. We can add a new event if adding the event will not
 cause a double booking.
@@ -1465,15 +1470,83 @@ myCalendar.book(20, 30); // return True, The event can be booked, as the first e
                             but not including 20.
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>The solution here uses a single array, which has the values like, <code>[start[0], end[0], start[1], end[1], ...]</code>.
-The even indices are start times, while odd indices are end times.
-When the book method is called, it finds the insertion point by Python’s bisect search.
-If the index for start is not even, the range overlaps.
-If the index for end is not the same as start, the range overlaps.
-If it is not a double booking, insert the start and end at the insertion point.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This problem is one of the calendar series and a relatively easy one.
+The key to solve this problem is a data structure choice.
+It can be solved by saving all start/end pair in an array and checking all those ranges, however it is not efficient.</p>
+
+<p>In this solution, the start and end time pair is saved in a single flat array.
+The array will have values: <code>[start[0], end[0], start[1], end[1], ...]</code>.
+The start times are always on the even indices, while the end times are on odd indices.
+If the start time insertion point is not on even index, the range overlaps to some of existing events.
+If the end time insertion point is not the same as the start time insertion point, the range overlaps also.
+This way, we can check a double booking.
+If it is not a double booking, insert the start and end range at the insertion point.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class MyCalendar {
+private:
+    vector&lt;int&gt; bookings;
+
+public:
+    MyCalendar() {}
+
+    bool book(int start, int end) {
+        vector&lt;int&gt; cur{start, end};
+        int left = upper_bound(bookings.begin(), bookings.end(), start) - bookings.begin();
+        if (left % 2 == 1) { return false; }
+        int right = lower_bound(bookings.begin(), bookings.end(), end) - bookings.begin();
+        if (left != right) { return false; }
+        bookings.insert(bookings.begin() + left, cur.begin(), cur.end());
+        return true;
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class MyCalendar:
 
     def __init__(self):
@@ -1481,8 +1554,6 @@ If it is not a double booking, insert the start and end at the insertion point.<
         
 
     def book(self, start: int, end: int) -&gt; bool:
-        if end &lt;= start:
-            return False
         left = bisect.bisect_right(self.bookings, start)
         if left % 2 == 1:
             return False
@@ -1492,6 +1563,15 @@ If it is not a double booking, insert the start and end at the insertion point.<
         self.bookings[left:left] = [start, end]
         return True
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>

@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Path Sum | yokolet’s notelets</title>
+<title>Step-By-Step Directions From a Binary Tree Node to Another | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Path Sum" />
+<meta property="og:title" content="Step-By-Step Directions From a Binary Tree Node to Another" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/trees/2022-10-04-path-sum.html" />
-<meta property="og:url" content="http://localhost:4000/algo/trees/2022-10-04-path-sum.html" />
+<link rel="canonical" href="http://localhost:4000/algo/trees/2022-12-17-step-by-step-directions-from-a-binary-tree-node-to-another.html" />
+<meta property="og:url" content="http://localhost:4000/algo/trees/2022-12-17-step-by-step-directions-from-a-binary-tree-node-to-another.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-10-04T14:02:00+09:00" />
+<meta property="article:published_time" content="2022-12-17T23:52:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Path Sum" />
+<meta property="twitter:title" content="Step-By-Step Directions From a Binary Tree Node to Another" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-10-04T14:02:00+09:00","datePublished":"2022-10-04T14:02:00+09:00","description":"Blog site mostly for programming topics.","headline":"Path Sum","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/trees/2022-10-04-path-sum.html"},"url":"http://localhost:4000/algo/trees/2022-10-04-path-sum.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-12-17T23:52:00+09:00","datePublished":"2022-12-17T23:52:00+09:00","description":"Blog site mostly for programming topics.","headline":"Step-By-Step Directions From a Binary Tree Node to Another","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/trees/2022-12-17-step-by-step-directions-from-a-binary-tree-node-to-another.html"},"url":"http://localhost:4000/algo/trees/2022-12-17-step-by-step-directions-from-a-binary-tree-node-to-another.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Path Sum</h1>
+            <h1 class="title is-2">Step-By-Step Directions From a Binary Tree Node to Another</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -1409,12 +1409,12 @@
                     
                     <div class="content">
 
-    <p>Published: Oct 4, 2022</p>
+    <p>Published: Dec 17, 2022</p>
 
     <div class="tags">
         
         <span class="tag  is-primary ">
-    Easy
+    Medium
 </span>
         
         <span class="tag  is-primary ">
@@ -1425,93 +1425,202 @@
     Binary Tree
 </span>
         
+        <span class="tag  is-primary ">
+    String
+</span>
+        
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>The pre-order traversal works to find the answer.
-When the depth-first search (recursion) approach is taken,
-we should be careful about the value consistency when the process comes back from deeper stack.
-Other than that, the problem is just a tree traversal.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>Given the <code>root</code> of a binary tree and an integer <code>targetSum</code>, return true
-if the tree has a root-to-leaf path such that adding up all the values along the path
-equals <code>targetSum</code>.</p>
+  <p>You are given the <code>root</code> of a binary tree with <code>n</code> nodes. Each node is uniquely assigned a value from 1 to n.
+You are also given an integer <code>startValue</code> representing the value of the start node <code>s</code>, and a different integer
+<code>destValue</code> representing the value of the destination node <code>t</code>.</p>
 
-  <p>A leaf is a node with no children.</p>
+  <p>Find the shortest path starting from node <code>s</code> and ending at node <code>t</code>. Generate step-by-step directions of such
+path as a string consisting of only the uppercase letters ‘L’, ‘R’, and ‘U’. Each letter indicates a specific
+direction:</p>
+  <ul>
+    <li>‘L’ means to go from a node to its left child node.</li>
+    <li>‘R’ means to go from a node to its right child node.</li>
+    <li>‘U’ means to go from a node to its parent node.</li>
+  </ul>
+
+  <p>Return the step-by-step directions of the shortest path from node <code>s</code> to node <code>t</code>.</p>
 
   <p>Constraints:</p>
   <ul>
-    <li>The number of nodes in the tree is in the range <code>[0, 5000]</code>.</li>
-    <li><code>-1000 &lt;= Node.val &lt;= 1000</code></li>
-    <li><code>-1000 &lt;= targetSum &lt;= 1000</code></li>
+    <li>The number of nodes in the tree is <code>n</code>.</li>
+    <li><code>2 &lt;= n &lt;= 10**5</code></li>
+    <li><code>1 &lt;= Node.val &lt;= n</code></li>
+    <li>All the values in the tree are unique.</li>
+    <li><code>1 &lt;= startValue, destValue &lt;= n</code></li>
+    <li><code>startValue != destValue</code></li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/path-sum/">https://leetcode.com/problems/path-sum/</a></p>
+  <p><a href="https://leetcode.com/problems/step-by-step-directions-from-a-binary-tree-node-to-another/">https://leetcode.com/problems/step-by-step-directions-from-a-binary-tree-node-to-another/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
 <pre><code>Example 1
-Input: root = [5,4,8,11,null,13,4,7,2,null,null,null,1], targetSum = 22
-Output: true
-Explanation:
-          5
-        /   \
-      4      8
-    /      /   \
-  11      13    4
- /  \            \
-7    2            1
-Path: 5 -&gt; 4 -&gt; 11 -&gt; 2
+Input: root = [5,1,2,3,null,6,4], startValue = 3, destValue = 6
+Output: "UURL"
+Explanation: The shortest path is: 3 → 1 → 5 → 2 → 6.
+      5
+    /   \
+   1     2
+ /     /   \
+3     6     4
 </code></pre>
 
 <pre><code>Example 2
-Input: root = [1,2,3], targetSum = 5
-Output: false
-Explanation:
-   1
- /  \
-2    3
+Input: root = [2,1], startValue = 2, destValue = 1
+Output: "L"
+Explanation: The shortest path is: 2 → 1.
+    2
+  /
+1
 </code></pre>
 
-<pre><code>Example 3
-Input: root = [], targetSum = 0
-Output: false
-Explanation: The tree is empty.
-</code></pre>
+<h2 id="how-to-solve">How to Solve</h2>
 
-<h2 id="analysis">Analysis</h2>
-<p>The solution here takes the pre-order traversal approach (depth-first search).
-The first step is to subtract the root value from the given targetSum.
-If the current node is a leaf, check the targetSum becomes zero.
-The left or right subtree returns true if the targetSum exists.</p>
+<p>Since it is a binary tree, there’s no way to go up.
+Using the depth-first search, find two paths from root to start and destination.
+The solution here stacks up ‘L’ or ‘R’ from leaf to top.
+The start and destination paths share some path from the root, then branches to two.
+Create the destination path from the branching point.
+For the start side path, ‘U’ should repeat the length of start path from the branching point.
+This way, we can find the answer.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+private:
+    bool dfs(TreeNode *root, int val, stack&lt;string&gt; &amp;path) {
+        if (root-&gt;val == val) {
+            return true;
+        }
+        if (root-&gt;left &amp;&amp; dfs(root-&gt;left, val, path)) {
+            path.push("L");
+        } else if (root-&gt;right &amp;&amp; dfs(root-&gt;right, val, path)) {
+            path.push("R");
+        }
+        return path.size() &gt; 0;
+    }
+
+public:
+    string getDirections(TreeNode* root, int startValue, int destValue) {
+        stack&lt;string&gt; s, d;
+        dfs(root, startValue, s);
+        dfs(root, destValue, d);
+        while (!s.empty() &amp;&amp; !d.empty() &amp;&amp; s.top() == d.top()) {
+            s.pop();
+            d.pop();
+        }
+        string result = "";
+        while (!d.empty()) {
+            result += d.top();
+            d.pop();
+        }
+        return string(s.size(), 'U') + result;
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python"># Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
 #         self.val = val
 #         self.left = left
 #         self.right = right
-class PathSum:
-    def hasPathSum(self, root: Optional[TreeNode], targetSum: int) -&gt; bool:
-        if not root:
-            return False
-        targetSum -= root.val
-        if not root.left and not root.right:
-            return targetSum == 0
-        left = self.hasPathSum(root.left, targetSum)
-        right = self.hasPathSum(root.right, targetSum)
-        return left or right
+class StepByStepDirectionsFromABinaryTreeNodeToAnother:
+    def getDirections(self, root: Optional[TreeNode], startValue: int, destValue: int) -&gt; str:
+        def dfs(root: TreeNode, val: int, path: List[str]) -&gt; bool:
+            if root.val == val:
+                return True
+            if root.left and dfs(root.left, val, path):
+                path.append('L')
+            elif root.right and dfs(root.right, val, path):
+                path.append('R')
+            return len(path) &gt; 0
+        s, d = [], []
+        dfs(root, startValue, s)
+        dfs(root, destValue, d)
+        while s and d and s[-1] == d[-1]:
+            s.pop()
+            d.pop()
+        return 'U' * len(s) + ''.join(reversed(d))
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(n)</code></li>
-  <li>Space: <code>O(1)</code></li>
+  <li>Time: <code>O(n)</code> – n: number of tree nodes</li>
+  <li>Space: <code>O(h)</code> – h: height of a tree</li>
 </ul>
 
 </div>

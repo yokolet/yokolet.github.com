@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Path Sum | yokolet’s notelets</title>
+<title>Amount of New Area Painted Each Day | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Path Sum" />
+<meta property="og:title" content="Amount of New Area Painted Each Day" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/trees/2022-10-04-path-sum.html" />
-<meta property="og:url" content="http://localhost:4000/algo/trees/2022-10-04-path-sum.html" />
+<link rel="canonical" href="http://localhost:4000/algo/arrays/2022-12-17-amount-of-new-area-painted-each-day.html" />
+<meta property="og:url" content="http://localhost:4000/algo/arrays/2022-12-17-amount-of-new-area-painted-each-day.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-10-04T14:02:00+09:00" />
+<meta property="article:published_time" content="2022-12-17T21:38:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Path Sum" />
+<meta property="twitter:title" content="Amount of New Area Painted Each Day" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-10-04T14:02:00+09:00","datePublished":"2022-10-04T14:02:00+09:00","description":"Blog site mostly for programming topics.","headline":"Path Sum","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/trees/2022-10-04-path-sum.html"},"url":"http://localhost:4000/algo/trees/2022-10-04-path-sum.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-12-17T21:38:00+09:00","datePublished":"2022-12-17T21:38:00+09:00","description":"Blog site mostly for programming topics.","headline":"Amount of New Area Painted Each Day","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/arrays/2022-12-17-amount-of-new-area-painted-each-day.html"},"url":"http://localhost:4000/algo/arrays/2022-12-17-amount-of-new-area-painted-each-day.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Path Sum</h1>
+            <h1 class="title is-2">Amount of New Area Painted Each Day</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -114,7 +114,7 @@
     
     <div class="menu-list">
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Arrays
             </a>
@@ -666,7 +666,7 @@
             </ul>
         </div>
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Trees
             </a>
@@ -1409,109 +1409,207 @@
                     
                     <div class="content">
 
-    <p>Published: Oct 4, 2022</p>
+    <p>Published: Dec 17, 2022</p>
 
     <div class="tags">
         
         <span class="tag  is-primary ">
-    Easy
+    Hard
 </span>
         
         <span class="tag  is-primary ">
-    Depth-First Search
+    Hash Table
 </span>
         
         <span class="tag  is-primary ">
-    Binary Tree
+    Array
 </span>
         
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>The pre-order traversal works to find the answer.
-When the depth-first search (recursion) approach is taken,
-we should be careful about the value consistency when the process comes back from deeper stack.
-Other than that, the problem is just a tree traversal.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>Given the <code>root</code> of a binary tree and an integer <code>targetSum</code>, return true
-if the tree has a root-to-leaf path such that adding up all the values along the path
-equals <code>targetSum</code>.</p>
+  <p>There is a long and thin painting that can be represented by a number line. You are given a 0-indexed 2D integer
+array paint of length <code>n</code>, where <code>paint[i] = [start[i], end[i]]</code>. This means that on the i-th day you need to paint
+the area between <code>start[i]</code> and <code>end[i]</code>.</p>
 
-  <p>A leaf is a node with no children.</p>
+  <p>Painting the same area multiple times will create an uneven painting so you only want to paint each area of the
+painting at most once.</p>
+
+  <p>Return an integer array <code>worklog</code> of length <code>n</code>, where <code>worklog[i]</code> is the amount of new area that you painted on
+the i-th day.</p>
 
   <p>Constraints:</p>
   <ul>
-    <li>The number of nodes in the tree is in the range <code>[0, 5000]</code>.</li>
-    <li><code>-1000 &lt;= Node.val &lt;= 1000</code></li>
-    <li><code>-1000 &lt;= targetSum &lt;= 1000</code></li>
+    <li><code>1 &lt;= paint.length &lt;= 10**5</code></li>
+    <li><code>paint[i].length == 2</code></li>
+    <li><code>0 &lt;= start[i] &lt; end[i] &lt;= 5 * 10**4</code></li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/path-sum/">https://leetcode.com/problems/path-sum/</a></p>
+  <p><a href="https://leetcode.com/problems/amount-of-new-area-painted-each-day/">https://leetcode.com/problems/amount-of-new-area-painted-each-day/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
-<pre><code>Example 1
-Input: root = [5,4,8,11,null,13,4,7,2,null,null,null,1], targetSum = 22
-Output: true
+<pre><code>Exmaple 1
+nput: paint = [[1,4],[4,7],[5,8]]
+Output: [3,3,1]
 Explanation:
-          5
-        /   \
-      4      8
-    /      /   \
-  11      13    4
- /  \            \
-7    2            1
-Path: 5 -&gt; 4 -&gt; 11 -&gt; 2
+On day 0, paint everything between 1 and 4.
+The amount of new area painted on day 0 is 4 - 1 = 3.
+On day 1, paint everything between 4 and 7.
+The amount of new area painted on day 1 is 7 - 4 = 3.
+On day 2, paint everything between 7 and 8.
+Everything between 5 and 7 was already painted on day 1.
+The amount of new area painted on day 2 is 8 - 7 = 1.
 </code></pre>
 
 <pre><code>Example 2
-Input: root = [1,2,3], targetSum = 5
-Output: false
+Input: paint = [[1,4],[5,8],[4,7]]
+Output: [3,3,1]
 Explanation:
-   1
- /  \
-2    3
+On day 0, paint everything between 1 and 4.
+The amount of new area painted on day 0 is 4 - 1 = 3.
+On day 1, paint everything between 5 and 8.
+The amount of new area painted on day 1 is 8 - 5 = 3.
+On day 2, paint everything between 4 and 5.
+Everything between 5 and 7 was already painted on day 1.
+The amount of new area painted on day 2 is 5 - 4 = 1.
 </code></pre>
 
 <pre><code>Example 3
-Input: root = [], targetSum = 0
-Output: false
-Explanation: The tree is empty.
+Input: paint = [[1,5],[2,4]]
+Output: [4,0]
+Explanation:
+On day 0, paint everything between 1 and 5.
+The amount of new area painted on day 0 is 5 - 1 = 4.
+On day 1, paint nothing because everything between 2 and 4 was already painted on day 0.
+The amount of new area painted on day 1 is 0.
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>The solution here takes the pre-order traversal approach (depth-first search).
-The first step is to subtract the root value from the given targetSum.
-If the current node is a leaf, check the targetSum becomes zero.
-The left or right subtree returns true if the targetSum exists.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>As this problem is categorized to the hard, it is a hard problem.
+Easy solution such that all range checks will get the time limit exceeded error.
+The problem requires an effective solution.
+Various approaches are there to solve this problem,
+for example, interval merges, binary search, ordered set, segment tree and more.</p>
+
+<p>Among those, the solution here took the hash table approach.
+If the given start and end range doesn’t exist in the hash table,
+save all values from start to end (end is not included) will be added to the hash table
+with the end as a value.
+If the given start and end range overlaps to the existing range(s),
+update the end value by a bigger one.
+Also, skip the check to the original end value.</p>
+
+<p>In the inner loop, the start value shifts one by one, so the work will grow one by one.
+When the all values between start and end are checked, add the work to the worklog array.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python"># Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
-class PathSum:
-    def hasPathSum(self, root: Optional[TreeNode], targetSum: int) -&gt; bool:
-        if not root:
-            return False
-        targetSum -= root.val
-        if not root.left and not root.right:
-            return targetSum == 0
-        left = self.hasPathSum(root.left, targetSum)
-        right = self.hasPathSum(root.right, targetSum)
-        return left or right
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class AmountOfNewAreaPaintedEachDay {
+public:
+    vector&lt;int&gt; amountPainted(vector&lt;vector&lt;int&gt;&gt;&amp; paint) {
+        unordered_map&lt;int, int&gt; painted;
+        vector&lt;int&gt; worklog;
+        for (size_t i = 0; i &lt; paint.size(); ++i) {
+            int start = paint[i][0], end = paint[i][1];
+            int work = 0;
+            while (start &lt; end) {
+                if (painted.find(start) != painted.end()) {
+                    int prev_end = painted[start];
+                    painted[start] = max(painted[start], end);
+                    start = prev_end;
+                } else {
+                    painted[start] = end;
+                    start++;
+                    work++;
+                }
+            }
+            worklog.push_back(work);
+        }
+        return worklog;
+    }
+};
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class AmountOfNewAreaPaintedEachDay:
+    def amountPainted(self, paint: List[List[int]]) -&gt; List[int]:
+        painted = {}
+        worklog = []
+        for start, end in paint:
+            work = 0
+            while start &lt; end:
+                if start in painted:
+                    prev_end = painted[start]
+                    painted[start] = max(painted[start], end)
+                    start = prev_end
+                else:
+                    painted[start] = end
+                    start += 1
+                    work += 1
+            worklog.append(work)
+        return worklog
+
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(n)</code></li>
-  <li>Space: <code>O(1)</code></li>
+  <li>Time: <code>O(m * n)</code> – m: length of paint, n: range size in the pain array</li>
+  <li>Space: <code>O(m * n)</code></li>
 </ul>
 
 </div>
