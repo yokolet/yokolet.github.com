@@ -703,6 +703,13 @@
                     </li>
                     
                     <li>
+                        <a href="/algo/trees/2022-12-18-find-leaves-of-binary-tree"
+                           class="submenu">
+                            Find Leaves of Binary Tree
+                        </a>
+                    </li>
+                    
+                    <li>
                         <a href="/algo/trees/2022-10-14-increasing-order-search-tree"
                            class="submenu">
                             Increasing Order Search Tree
@@ -1190,6 +1197,13 @@
                     </li>
                     
                     <li>
+                        <a href="/algo/design/2022-12-19-range-module"
+                           class="submenu">
+                            Range Module
+                        </a>
+                    </li>
+                    
+                    <li>
                         <a href="/algo/design/2022-09-07-stock-price-fluctuation"
                            class="submenu">
                             Stock Price Fluctuation
@@ -1429,14 +1443,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This logger problem is given the integer timestamp.
-We don’t need a specific effort about the timestamp.
-How to keep the log needs a bit of idea.
-The problem asks unique messaged based timestamp management.
-Based on that, the solution here saves it in a hash table with the message as a key.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>Design a logger system that receives a stream of messages along with their timestamps. Each unique message
 should only be printed at most every 10 seconds (i.e. a message printed at timestamp <code>t</code> will prevent other
@@ -1480,28 +1487,103 @@ logger.shouldPrintMessage(10, "foo"); // 10 &lt; 11, return false
 logger.shouldPrintMessage(11, "foo"); // 11 &gt;= 11, return true, next allowed timestamp for "foo" is 11 + 10 = 21
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>The log is saved in the hash table, log id as a key and timestamp as a value.
-When the some unique message is accessed, the timestamp value will be updated with plus 10.
-This is when the message should be printed.
-Next time, when the same message is accessed, compare the current and saved timestamps.
-If the saved timestamp is less than the current, the logger should print it.
-This is all for this logger.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>When it comes to a design problem, the choice of a data structure is a key to solve the problem.
+In this case, messages will be given with different timestamps.
+Each message’s timestamp different is what we should focus on.
+Based on that, the hash table is a good data structure to use here.</p>
+
+<p>The next to think about is how to maintain the hash table.
+When a new message comes in, save message and timestamp pair in the hash table.
+When an existing messages comes in, compare the timestamps.
+If the previous timestamp is older more than 10 seconds, replace it with the new timestamp plus 10.
+When the timestamp needs to be updated, the log should be printed.
+That is all for this logger.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class Logger {
+private:
+    unordered_map&lt;string, int&gt; messages;  // message: timestamp
+public:
+    Logger() {}
+
+    bool shouldPrintMessage(int timestamp, string message) {
+        if (messages.find(message) == messages.end() || messages[message] &lt;= timestamp) {
+            messages[message] = timestamp + 10;
+            return true;
+        } else {
+            return false;
+        }
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class Logger:
 
     def __init__(self):
-        self.d = {} # id: timestamp
+        self.messages = {} # message: timestamp
 
 
     def shouldPrintMessage(self, timestamp: int, message: str) -&gt; bool:
-        if message not in self.d or self.d[message] &lt;= timestamp:
-            self.d[message] = timestamp + 10
+        if message not in self.messages or self.messages[message] &lt;= timestamp:
+            self.messages[message] = timestamp + 10
             return True
         else:
             return False
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
