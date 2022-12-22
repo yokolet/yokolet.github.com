@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Best Time to Buy and Sell Stock – Multiple Times | yokolet’s notelets</title>
+<title>Meeting Rooms III | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Best Time to Buy and Sell Stock – Multiple Times" />
+<meta property="og:title" content="Meeting Rooms III" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-multiple-times.html" />
-<meta property="og:url" content="http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-multiple-times.html" />
+<link rel="canonical" href="http://localhost:4000/algo/sorting_and_searching/2022-12-22-meeting-rooms-iii.html" />
+<meta property="og:url" content="http://localhost:4000/algo/sorting_and_searching/2022-12-22-meeting-rooms-iii.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-07-26T16:10:00+09:00" />
+<meta property="article:published_time" content="2022-12-22T17:21:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Best Time to Buy and Sell Stock – Multiple Times" />
+<meta property="twitter:title" content="Meeting Rooms III" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-07-26T16:10:00+09:00","datePublished":"2022-07-26T16:10:00+09:00","description":"Blog site mostly for programming topics.","headline":"Best Time to Buy and Sell Stock – Multiple Times","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-multiple-times.html"},"url":"http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-multiple-times.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-12-22T17:21:00+09:00","datePublished":"2022-12-22T17:21:00+09:00","description":"Blog site mostly for programming topics.","headline":"Meeting Rooms III","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/sorting_and_searching/2022-12-22-meeting-rooms-iii.html"},"url":"http://localhost:4000/algo/sorting_and_searching/2022-12-22-meeting-rooms-iii.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Best Time to Buy and Sell Stock -- Multiple Times</h1>
+            <h1 class="title is-2">Meeting Rooms III</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -966,7 +966,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Sorting and searching
             </a>
@@ -1317,7 +1317,7 @@
             </ul>
         </div>
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Stocks
             </a>
@@ -1451,102 +1451,211 @@
                     
                     <div class="content">
 
-    <p>Published: Jul 26, 2022</p>
+    <p>Published: Dec 22, 2022</p>
 
     <div class="tags">
         
         <span class="tag  is-primary ">
-    Medium
+    Hard
+</span>
+        
+        <span class="tag  is-primary ">
+    Heap (Priority Queue)
 </span>
         
         <span class="tag  is-primary ">
     Array
 </span>
         
-        <span class="tag  is-primary ">
-    DP
-</span>
-        
-        <span class="tag  is-primary ">
-    Greedy
-</span>
-        
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is the second buy-sell-stock problem which has a slight variation to the basic one.
-In this problem, we can buy and sell stock as many times we want.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>You are given an integer array <code>prices</code> where <code>prices[i]</code> is the price of a given stock on the i-th day.</p>
+  <p>You are given an integer <code>n</code>. There are <code>n</code> rooms numbered from <code>0</code> to <code>n - 1</code>.
+You are given a 2D integer array <code>meetings</code> where <code>meetings[i] = [start[i], end[i]]</code> means that a meeting will be
+held during the half-closed time interval <code>[start[i], end[i])</code>. All the values of <code>start[i]</code> are unique.</p>
 
-  <p>On each day, you may decide to buy and/or sell the stock.
-You can only hold at most one share of the stock at any time.
-However, you can buy it then immediately sell it on the same day.</p>
+  <p>Meetings are allocated to rooms in the following manner:</p>
+  <ul>
+    <li>Each meeting will take place in the unused room with the lowest number.</li>
+    <li>If there are no available rooms, the meeting will be delayed until a room becomes free. The delayed meeting should
+ have the same duration as the original meeting.</li>
+    <li>When a room becomes unused, meetings that have an earlier original start time should be given the room.</li>
+  </ul>
 
-  <p>Find and return the maximum profit you can achieve.</p>
+  <p>Return the number of the room that held the most meetings. If there are multiple rooms, return the room with the
+lowest number.</p>
 
-  <p><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/">https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/</a></p>
+  <p>A half-closed interval <code>[a, b)</code> is the interval between <code>a</code> and <code>b</code> including <code>a</code> and not including <code>b</code>.</p>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= n &lt;= 100</code></li>
+    <li><code>1 &lt;= meetings.length &lt;= 10**5</code></li>
+    <li><code>meetings[i].length == 2</code></li>
+    <li><code>0 &lt;= start[i] &lt; end[i] &lt;= 5 * 10**5</code></li>
+    <li>All the values of s<code>tart[i]</code> are unique.</li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/meeting-rooms-iii/">https://leetcode.com/problems/meeting-rooms-iii/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
-<pre><code>example 1:
-Input: prices = [7,1,5,3,6,4]
-Answer: 7
-Explanation: 7 is the best profit which is from:
-buy: index 1, sell: index 2, profit: 4
-buy: index 3, sell: index 4, profit: 3
-</code></pre>
-<pre><code>example 2:
-Input: prices = [1,2,3,4,5]
-Answer: 4
-Explanation: 4 is the best profit which is from buying on the index 0 an selling on the index 4.
-</code></pre>
-<pre><code>example 3:
-Input: prices = [7,6,4,3,1]
-Answer: 0
-Explanation: the array value is ever descreasing. There is no profit available.
+<pre><code>Example 1
+Input: n = 2, meetings = [[0,10],[1,5],[2,7],[3,4]]
+Output: 0
+Explanation:
+- At time 0, both rooms are not being used. The first meeting starts in room 0.
+- At time 1, only room 1 is not being used. The second meeting starts in room 1.
+- At time 2, both rooms are being used. The third meeting is delayed.
+- At time 3, both rooms are being used. The fourth meeting is delayed.
+- At time 5, the meeting in room 1 finishes. The third meeting starts in room 1 for the time period [5,10).
+- At time 10, the meetings in both rooms finish. The fourth meeting starts in room 0 for the time period [10,11).
+Both rooms 0 and 1 held 2 meetings, so we return 0.
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>This is an interesting problem. It looks we should find multiple minimums and compare profits.
-It might easily go to O(n^2), brute force solution.
-However, if we look at the difference of each day, we should add up every day’s profit unless it it not negative.
-This can be done because we can sell and buy at the same day.
-It turns out, the solution is simple.</p>
+<pre><code>Example 2
+Input: n = 3, meetings = [[1,20],[2,10],[3,5],[4,9],[6,8]]
+Output: 1
+Explanation:
+- At time 1, all three rooms are not being used. The first meeting starts in room 0.
+- At time 2, rooms 1 and 2 are not being used. The second meeting starts in room 1.
+- At time 3, only room 2 is not being used. The third meeting starts in room 2.
+- At time 4, all three rooms are being used. The fourth meeting is delayed.
+- At time 5, the meeting in room 2 finishes. The fourth meeting starts in room 2 for the time period [5,10).
+- At time 6, all three rooms are being used. The fifth meeting is delayed.
+- At time 10, the meetings in rooms 1 and 2 finish. The fifth meeting starts in room 1 for the time period [10,12).
+Room 0 held 1 meeting while rooms 1 and 2 each held 2 meetings, so we return 1.
+</code></pre>
+
+<h2 id="how-to-solve">How to Solve</h2>
+<p>Apparently, this is a sorting problem.
+A priority queue (heap) is a good data structure to sort end times along with a room number.
+Also, available room numbers are saved in the priority queue since the smallest room number is used first.
+The solution here starts from sorting the input meetings.
+Pop out previous entries in the min heap while end time is less than the current meeting’s start time.
+At the same time, previously used room number is pushed to the available room queue.
+After that, if a room is still available, the next meeting doesn’t need to wait or to be delayed.
+So, pop out the room and push the end time and room number pair to the min heap.
+If no room is available, the end time should be adjusted.
+Pop out the smallest end time entry from the min heap and use that room number for the next meeting.
+The end time will be the popped out ent time plus current meeting’s duration, end - start.
+Once heap maintenance is over, count up room usage. 
+In the end, the earliest index of maximum values in the result array is the answer.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-cpp">#include &lt;vector&gt;
-#include &lt;iostream&gt;
-using namespace std;
 
-class BestTimeToBuyAndSellStockTwo
-{
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class MeetingRoomsIII {
 public:
-  int maxProfit(vector&lt;int&gt; &amp;prices)
-  {
-    if (prices.empty())
-      return 0;
-    int max_v = 0;
-    for (int i = 1; i &lt;prices.size(); ++i)
-    {
-      if (prices[i] &gt; prices[i - 1])
-      {
-        max_v += prices[i] - prices[i - 1];
-      }
+    int mostBooked(int n, vector&lt;vector&lt;int&gt;&gt;&amp; meetings) {
+        priority_queue&lt;int, vector&lt;int&gt;, greater&lt;int&gt;&gt; available;
+        for (int i = 0; i &lt; n; ++i) {
+            available.push(i);
+        }
+        priority_queue&lt;pair&lt;long long, int&gt;, vector&lt;pair&lt;long long, int&gt;&gt;, greater&lt;pair&lt;long long, int&gt;&gt;&gt; min_heap;
+        vector&lt;int&gt; result(n, 0);
+        sort(meetings.begin(), meetings.end());
+        for (auto &amp;meeting : meetings) {
+            int start = meeting[0], end = meeting[1], room = 0;
+            while (!min_heap.empty() &amp;&amp; min_heap.top().first &lt;= start) {
+                available.push(min_heap.top().second);
+                min_heap.pop();
+            }
+            if (!available.empty()) {
+                room = available.top();
+                available.pop();
+                min_heap.push({end, room});
+            } else {
+                long long endtime = min_heap.top().first;
+                room = min_heap.top().second;
+                min_heap.pop();
+                min_heap.push({endtime + end - start, room});
+            }
+            result[room]++;
+        }
+        return distance(result.begin(), max_element(result.begin(), result.end()));
     }
-    return max_v;
-  }
 };
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class MeetingRoomsIII:
+    def mostBooked(self, n: int, meetings: List[List[int]]) -&gt; int:
+        available = [i for i in range(n)]
+        heapq.heapify(available)
+        min_heap = []
+        result = [0 for _ in range(n)]
+        for start, end in sorted(meetings):
+            while min_heap and min_heap[0][0] &lt;= start:
+                _, room = heapq.heappop(min_heap)
+                heapq.heappush(available, room)
+            if available:
+                room = heapq.heappop(available)
+                heapq.heappush(min_heap, (end, room))
+            else:
+                endtime, room = heapq.heappop(min_heap)
+                heapq.heappush(min_heap, (endtime + end - start, room))
+            result[room] += 1
+        return result.index(max(result))
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: O(n) – n: length of the input array.</li>
-  <li>Space: O(1)</li>
+  <li>Time: <code>O(n * log(n))</code></li>
+  <li>Space: <code>O(n)</code></li>
 </ul>
 
 </div>

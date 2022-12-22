@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Best Time to Buy and Sell Stock – Multiple Times | yokolet’s notelets</title>
+<title>Maximum Number of Visible Points | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Best Time to Buy and Sell Stock – Multiple Times" />
+<meta property="og:title" content="Maximum Number of Visible Points" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-multiple-times.html" />
-<meta property="og:url" content="http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-multiple-times.html" />
+<link rel="canonical" href="http://localhost:4000/algo/others/2022-12-20-maximum-number-of-visible-points.html" />
+<meta property="og:url" content="http://localhost:4000/algo/others/2022-12-20-maximum-number-of-visible-points.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-07-26T16:10:00+09:00" />
+<meta property="article:published_time" content="2022-12-20T15:19:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Best Time to Buy and Sell Stock – Multiple Times" />
+<meta property="twitter:title" content="Maximum Number of Visible Points" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-07-26T16:10:00+09:00","datePublished":"2022-07-26T16:10:00+09:00","description":"Blog site mostly for programming topics.","headline":"Best Time to Buy and Sell Stock – Multiple Times","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-multiple-times.html"},"url":"http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-multiple-times.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-12-20T15:19:00+09:00","datePublished":"2022-12-20T15:19:00+09:00","description":"Blog site mostly for programming topics.","headline":"Maximum Number of Visible Points","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/others/2022-12-20-maximum-number-of-visible-points.html"},"url":"http://localhost:4000/algo/others/2022-12-20-maximum-number-of-visible-points.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Best Time to Buy and Sell Stock -- Multiple Times</h1>
+            <h1 class="title is-2">Maximum Number of Visible Points</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -1235,7 +1235,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Others
             </a>
@@ -1317,7 +1317,7 @@
             </ul>
         </div>
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Stocks
             </a>
@@ -1451,102 +1451,197 @@
                     
                     <div class="content">
 
-    <p>Published: Jul 26, 2022</p>
+    <p>Published: Dec 20, 2022</p>
 
     <div class="tags">
         
         <span class="tag  is-primary ">
-    Medium
+    Hard
+</span>
+        
+        <span class="tag  is-primary ">
+    Geometry
+</span>
+        
+        <span class="tag  is-primary ">
+    Sorting
+</span>
+        
+        <span class="tag  is-primary ">
+    Sliding Window
 </span>
         
         <span class="tag  is-primary ">
     Array
 </span>
         
-        <span class="tag  is-primary ">
-    DP
-</span>
-        
-        <span class="tag  is-primary ">
-    Greedy
-</span>
-        
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is the second buy-sell-stock problem which has a slight variation to the basic one.
-In this problem, we can buy and sell stock as many times we want.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>You are given an integer array <code>prices</code> where <code>prices[i]</code> is the price of a given stock on the i-th day.</p>
+  <p>You are given an array <code>points</code>, an integer <code>angle</code>, and your <code>location</code>, where <code>location = [pos[x], pos[y]]</code>
+and <code>points[i] = [x[i], y[i]]</code> both denote integral coordinates on the X-Y plane.</p>
 
-  <p>On each day, you may decide to buy and/or sell the stock.
-You can only hold at most one share of the stock at any time.
-However, you can buy it then immediately sell it on the same day.</p>
+  <p>Initially, you are facing directly east from your position. You cannot move from your position, but you can rotate.
+In other words, <code>pos[x]</code> and <code>pos[y]</code> cannot be changed. Your field of view in degrees is represented by angle,
+determining how wide you can see from any given view direction. Let <code>d</code> be the amount in degrees that you rotate
+counterclockwise. Then, your field of view is the inclusive range of angles <code>[d - angle/2, d + angle/2]</code>.</p>
 
-  <p>Find and return the maximum profit you can achieve.</p>
+  <p>You can see some set of points if, for each point, the angle formed by the point, your position, and the immediate
+east direction from your position is in your field of view.</p>
 
-  <p><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/">https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/</a></p>
+  <p>There can be multiple points at one coordinate. There may be points at your location, and you can always see these
+points regardless of your rotation. Points do not obstruct your vision to other points.</p>
+
+  <p>Return the maximum number of points you can see.</p>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= points.length &lt;= 10**5</code></li>
+    <li><code>points[i].length == 2</code></li>
+    <li><code>location.length == 2</code></li>
+    <li><code>0 &lt;= angle &lt; 360</code></li>
+    <li><code>0 &lt;= pos[x], pos[y], x[i], y[i] &lt;= 100</code></li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/maximum-number-of-visible-points/">https://leetcode.com/problems/maximum-number-of-visible-points/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
-<pre><code>example 1:
-Input: prices = [7,1,5,3,6,4]
-Answer: 7
-Explanation: 7 is the best profit which is from:
-buy: index 1, sell: index 2, profit: 4
-buy: index 3, sell: index 4, profit: 3
-</code></pre>
-<pre><code>example 2:
-Input: prices = [1,2,3,4,5]
-Answer: 4
-Explanation: 4 is the best profit which is from buying on the index 0 an selling on the index 4.
-</code></pre>
-<pre><code>example 3:
-Input: prices = [7,6,4,3,1]
-Answer: 0
-Explanation: the array value is ever descreasing. There is no profit available.
+<pre><code>Example 1
+Input: points = [[2,1],[2,2],[3,3]], angle = 90, location = [1,1]
+Output: 3
+Explanation: All points can be made visible in your field of view, including [3,3] even though [2,2] is in front and
+in the same line of sight.
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>This is an interesting problem. It looks we should find multiple minimums and compare profits.
-It might easily go to O(n^2), brute force solution.
-However, if we look at the difference of each day, we should add up every day’s profit unless it it not negative.
-This can be done because we can sell and buy at the same day.
-It turns out, the solution is simple.</p>
+<pre><code>Example 2
+Input: points = [[2,1],[2,2],[3,4],[1,1]], angle = 90, location = [1,1]
+Output: 4
+Explanation: All points can be made visible in your field of view, including the one at your location.
+</code></pre>
+
+<pre><code>Example 3
+Input: points = [[1,0],[2,1]], angle = 13, location = [1,1]
+Output: 1
+Explanation: You can only see one of the two points, as shown above.
+</code></pre>
+
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This problem requires trigonometry knowledge.
+To find points within the given angle, each point should be converted to an angle from the given location.
+For this purpose, atan2 function (common function name in many languages) is a good choice.
+The atan2 measures the counterclockwise angle theta in radians from x-axis to a line formed by two points.
+While calculating the angles in radians, angles plus 2 * pi will be added.
+This is because points in 3rd, or 4th quadrants can be checked in 1st or 2nd quadrants.
+Once all angles are calculated, check those are within the given angle and count it.
+Lastly, the points on the given location will be added to the result as the problem describes.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-cpp">#include &lt;vector&gt;
-#include &lt;iostream&gt;
-using namespace std;
 
-class BestTimeToBuyAndSellStockTwo
-{
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class MaximumNumberOfVisiblePoints {
 public:
-  int maxProfit(vector&lt;int&gt; &amp;prices)
-  {
-    if (prices.empty())
-      return 0;
-    int max_v = 0;
-    for (int i = 1; i &lt;prices.size(); ++i)
-    {
-      if (prices[i] &gt; prices[i - 1])
-      {
-        max_v += prices[i] - prices[i - 1];
-      }
+    int visiblePoints(vector&lt;vector&lt;int&gt;&gt;&amp; points, int angle, vector&lt;int&gt;&amp; location) {
+        int x0 = location[0], y0 = location[1];
+        int dups = 0;
+        vector&lt;double&gt; angles;
+        for (auto point : points) {
+            int x = point[0], y = point[1];
+            if (x == x0 &amp;&amp; y == y0) { ++dups; }
+            else {
+                double a = atan2(y - y0, x - x0);
+                double a2 = a + 2.0 * M_PI;
+                angles.push_back(a);
+                angles.push_back(a2);
+            }
+        }
+        sort(angles.begin(), angles.end());
+        double theta = angle * M_PI / 180.0;
+        int max_v = 0, right = 0;
+        for (int left = 0; left &lt; angles.size(); ++left) {
+            while (right &lt; angles.size() &amp;&amp; angles[right] &lt;= angles[left] + theta) {
+                right += 1;
+            }
+            max_v = max(max_v, right - left);
+        }
+        return max_v + dups;
     }
-    return max_v;
-  }
 };
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class MaximumNumberOfVisiblePoints:
+    def visiblePoints(self, points: List[List[int]], angle: int, location: List[int]) -&gt; int:
+        x0, y0 = location
+        dups = len([x for x, y in points if x == x0 and y == y0])
+        angles = sorted([math.atan2(y - y0, x - x0) for x, y in points if x != x0 or y != y0])
+        angles += [(a + 2.0 * math.pi) for a in angles]
+        angle = math.radians(angle)
+        max_v, right = 0, 0
+        for left in range(len(angles)):
+            while right &lt; len(angles) and angles[left] + angle &gt;= angles[right]:
+                right += 1
+            max_v = max(max_v, right - left)
+        return max_v + dups
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: O(n) – n: length of the input array.</li>
-  <li>Space: O(1)</li>
+  <li>Time: <code>O(n * log(n))</code></li>
+  <li>Space: <code>O(n)</code></li>
 </ul>
 
 </div>

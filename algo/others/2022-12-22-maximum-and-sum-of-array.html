@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Best Time to Buy and Sell Stock – Multiple Times | yokolet’s notelets</title>
+<title>Maximum AND Sum of Array | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Best Time to Buy and Sell Stock – Multiple Times" />
+<meta property="og:title" content="Maximum AND Sum of Array" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-multiple-times.html" />
-<meta property="og:url" content="http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-multiple-times.html" />
+<link rel="canonical" href="http://localhost:4000/algo/others/2022-12-22-maximum-and-sum-of-array.html" />
+<meta property="og:url" content="http://localhost:4000/algo/others/2022-12-22-maximum-and-sum-of-array.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-07-26T16:10:00+09:00" />
+<meta property="article:published_time" content="2022-12-22T00:01:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Best Time to Buy and Sell Stock – Multiple Times" />
+<meta property="twitter:title" content="Maximum AND Sum of Array" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-07-26T16:10:00+09:00","datePublished":"2022-07-26T16:10:00+09:00","description":"Blog site mostly for programming topics.","headline":"Best Time to Buy and Sell Stock – Multiple Times","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-multiple-times.html"},"url":"http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-multiple-times.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-12-22T00:01:00+09:00","datePublished":"2022-12-22T00:01:00+09:00","description":"Blog site mostly for programming topics.","headline":"Maximum AND Sum of Array","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/others/2022-12-22-maximum-and-sum-of-array.html"},"url":"http://localhost:4000/algo/others/2022-12-22-maximum-and-sum-of-array.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Best Time to Buy and Sell Stock -- Multiple Times</h1>
+            <h1 class="title is-2">Maximum AND Sum of Array</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -1235,7 +1235,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Others
             </a>
@@ -1317,7 +1317,7 @@
             </ul>
         </div>
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Stocks
             </a>
@@ -1451,102 +1451,183 @@
                     
                     <div class="content">
 
-    <p>Published: Jul 26, 2022</p>
+    <p>Published: Dec 22, 2022</p>
 
     <div class="tags">
         
         <span class="tag  is-primary ">
-    Medium
+    Hard
 </span>
         
         <span class="tag  is-primary ">
-    Array
+    Bit Manipulation
 </span>
         
         <span class="tag  is-primary ">
-    DP
-</span>
-        
-        <span class="tag  is-primary ">
-    Greedy
+    Dynamic Programming
 </span>
         
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is the second buy-sell-stock problem which has a slight variation to the basic one.
-In this problem, we can buy and sell stock as many times we want.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>You are given an integer array <code>prices</code> where <code>prices[i]</code> is the price of a given stock on the i-th day.</p>
+  <p>You are given an integer array <code>nums</code> of length <code>n</code> and an integer <code>numSlots</code> such that <code>2 * numSlots &gt;= n</code>. There
+are <code>numSlots</code> slots numbered from <code>1</code> to <code>numSlots</code>.</p>
 
-  <p>On each day, you may decide to buy and/or sell the stock.
-You can only hold at most one share of the stock at any time.
-However, you can buy it then immediately sell it on the same day.</p>
+  <p>You have to place all <code>n</code> integers into the slots such that each slot contains at most two numbers. The AND sum of
+a given placement is the sum of the bitwise AND of every number with its respective slot number.</p>
+  <ul>
+    <li>For example, the AND sum of placing the numbers <code>[1, 3]</code> into slot 1 and <code>[4, 6]</code> into slot 2 is equal to
+ <code>(1 AND 1) + (3 AND 1) + (4 AND 2) + (6 AND 2) = 1 + 1 + 0 + 2 = 4</code>.</li>
+  </ul>
 
-  <p>Find and return the maximum profit you can achieve.</p>
+  <p>Return the maximum possible AND sum of <code>nums</code> given <code>numSlots</code> slots.</p>
 
-  <p><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/">https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/</a></p>
+  <p>Constraints:</p>
+  <ul>
+    <li><code>n == nums.length</code></li>
+    <li><code>1 &lt;= numSlots &lt;= 9</code></li>
+    <li><code>1 &lt;= n &lt;= 2 * numSlots</code></li>
+    <li><code>1 &lt;= nums[i] &lt;= 15</code></li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/maximum-and-sum-of-array/">https://leetcode.com/problems/maximum-and-sum-of-array/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
-<pre><code>example 1:
-Input: prices = [7,1,5,3,6,4]
-Answer: 7
-Explanation: 7 is the best profit which is from:
-buy: index 1, sell: index 2, profit: 4
-buy: index 3, sell: index 4, profit: 3
-</code></pre>
-<pre><code>example 2:
-Input: prices = [1,2,3,4,5]
-Answer: 4
-Explanation: 4 is the best profit which is from buying on the index 0 an selling on the index 4.
-</code></pre>
-<pre><code>example 3:
-Input: prices = [7,6,4,3,1]
-Answer: 0
-Explanation: the array value is ever descreasing. There is no profit available.
+<pre><code>Example 1
+Input: nums = [1,2,3,4,5,6], numSlots = 3
+Output: 9
+Explanation: One possible placement is [1, 4] into slot 1, [2, 6] into slot 2, and [3, 5] into slot 3. 
+This gives the maximum AND sum of:
+(1 AND 1) + (4 AND 1) + (2 AND 2) + (6 AND 2) + (3 AND 3) + (5 AND 3) = 1 + 0 + 2 + 2 + 3 + 1 = 9.
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>This is an interesting problem. It looks we should find multiple minimums and compare profits.
-It might easily go to O(n^2), brute force solution.
-However, if we look at the difference of each day, we should add up every day’s profit unless it it not negative.
-This can be done because we can sell and buy at the same day.
-It turns out, the solution is simple.</p>
+<pre><code>Exmaple 2
+Input: nums = [1,3,10,4,7,1], numSlots = 9
+Output: 24
+Explanation: One possible placement is [1, 1] into slot 1, [3] into slot 3, [4] into slot 4, [7] into slot 7, and [10]
+into slot 9.
+This gives the maximum AND sum of:
+(1 AND 1) + (1 AND 1) + (3 AND 3) + (4 AND 4) + (7 AND 7) + (10 AND 9) = 1 + 1 + 3 + 4 + 7 + 8 = 24.
+Note that slots 2, 5, 6, and 8 are empty which is permitted.
+</code></pre>
+
+<h2 id="how-to-solve">How to Solve</h2>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-cpp">#include &lt;vector&gt;
-#include &lt;iostream&gt;
-using namespace std;
 
-class BestTimeToBuyAndSellStockTwo
-{
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class MaximumANDSumOfArray {
 public:
-  int maxProfit(vector&lt;int&gt; &amp;prices)
-  {
-    if (prices.empty())
-      return 0;
-    int max_v = 0;
-    for (int i = 1; i &lt;prices.size(); ++i)
-    {
-      if (prices[i] &gt; prices[i - 1])
-      {
-        max_v += prices[i] - prices[i - 1];
-      }
+    int helper(vector&lt;int&gt; &amp;nums, int numSlots, int i,
+               vector&lt;int&gt; &amp;memo, map&lt;pair&lt;int, vector&lt;int&gt;&gt;, int&gt; &amp;seen) {
+        if (i == nums.size()) { return 0; }
+        if (seen.find({i, memo}) != seen.end()) {
+            return seen[{i, memo}];
+        }
+        int result = INT_MIN;
+        for (int j = 0; j &lt; numSlots; ++j) {
+            if (memo[j] &lt; 2) {
+                memo[j]++;
+                int cur = (nums[i] &amp; (j + 1)) + helper(nums, numSlots, i + 1, memo, seen);
+                memo[j]--;
+                result = max(result, cur);
+            }
+        }
+        seen[{i, memo}] = result;
+        return result;
     }
-    return max_v;
-  }
+
+    int maximumANDSum(vector&lt;int&gt;&amp; nums, int numSlots) {
+        vector&lt;int&gt; memo(numSlots, 0);
+        map&lt;pair&lt;int, vector&lt;int&gt;&gt;, int&gt; seen;
+        return helper(nums, numSlots, 0, memo, seen);
+    }
 };
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class MaximumANDSumOfArray:
+    def maximumANDSum(self, nums: List[int], numSlots: int) -&gt; int:
+        memo = [0 for _ in range(numSlots)]
+        seen = {}
+
+        def helper(i):
+            if i == len(nums):
+                return 0
+            key = (i, ''.join([str(x) for x in memo]))
+            if key in seen:
+                return seen[key]
+            result = float('-inf')
+            for j in range(numSlots):
+                if memo[j] &lt; 2:
+                    memo[j] += 1
+                    cur = (nums[i] &amp; (j + 1)) + helper(i + 1)
+                    memo[j] -= 1
+                    result = max(result, cur)
+            seen[key] = result
+            return result
+
+        return helper(0)
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: O(n) – n: length of the input array.</li>
-  <li>Space: O(1)</li>
+  <li>Time: <code>O()</code></li>
+  <li>Space: <code>O()</code></li>
 </ul>
 
 </div>

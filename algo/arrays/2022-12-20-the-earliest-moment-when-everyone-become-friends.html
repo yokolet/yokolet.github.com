@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Best Time to Buy and Sell Stock – Multiple Times | yokolet’s notelets</title>
+<title>The Earliest Moment When Everyone Become Friends | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Best Time to Buy and Sell Stock – Multiple Times" />
+<meta property="og:title" content="The Earliest Moment When Everyone Become Friends" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-multiple-times.html" />
-<meta property="og:url" content="http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-multiple-times.html" />
+<link rel="canonical" href="http://localhost:4000/algo/arrays/2022-12-20-the-earliest-moment-when-everyone-become-friends.html" />
+<meta property="og:url" content="http://localhost:4000/algo/arrays/2022-12-20-the-earliest-moment-when-everyone-become-friends.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-07-26T16:10:00+09:00" />
+<meta property="article:published_time" content="2022-12-20T13:28:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Best Time to Buy and Sell Stock – Multiple Times" />
+<meta property="twitter:title" content="The Earliest Moment When Everyone Become Friends" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-07-26T16:10:00+09:00","datePublished":"2022-07-26T16:10:00+09:00","description":"Blog site mostly for programming topics.","headline":"Best Time to Buy and Sell Stock – Multiple Times","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-multiple-times.html"},"url":"http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-multiple-times.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-12-20T13:28:00+09:00","datePublished":"2022-12-20T13:28:00+09:00","description":"Blog site mostly for programming topics.","headline":"The Earliest Moment When Everyone Become Friends","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/arrays/2022-12-20-the-earliest-moment-when-everyone-become-friends.html"},"url":"http://localhost:4000/algo/arrays/2022-12-20-the-earliest-moment-when-everyone-become-friends.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Best Time to Buy and Sell Stock -- Multiple Times</h1>
+            <h1 class="title is-2">The Earliest Moment When Everyone Become Friends</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -114,7 +114,7 @@
     
     <div class="menu-list">
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Arrays
             </a>
@@ -1317,7 +1317,7 @@
             </ul>
         </div>
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Stocks
             </a>
@@ -1451,7 +1451,7 @@
                     
                     <div class="content">
 
-    <p>Published: Jul 26, 2022</p>
+    <p>Published: Dec 20, 2022</p>
 
     <div class="tags">
         
@@ -1460,93 +1460,193 @@
 </span>
         
         <span class="tag  is-primary ">
+    Union Find
+</span>
+        
+        <span class="tag  is-primary ">
     Array
-</span>
-        
-        <span class="tag  is-primary ">
-    DP
-</span>
-        
-        <span class="tag  is-primary ">
-    Greedy
 </span>
         
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is the second buy-sell-stock problem which has a slight variation to the basic one.
-In this problem, we can buy and sell stock as many times we want.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>You are given an integer array <code>prices</code> where <code>prices[i]</code> is the price of a given stock on the i-th day.</p>
+  <p>There are <code>n</code> people in a social group labeled from <code>0</code> to <code>n - 1</code>. You are given an array logs where
+<code>logs[i] = [timestamp[i], x[i], y[i]]</code> indicates that <code>x[i]</code> and <code>y[i]</code> will be friends at the time <code>timestamp[i]</code>.</p>
 
-  <p>On each day, you may decide to buy and/or sell the stock.
-You can only hold at most one share of the stock at any time.
-However, you can buy it then immediately sell it on the same day.</p>
+  <p>Friendship is symmetric. That means if a is friends with b, then b is friends with a. Also, person a is acquainted
+with a person b if a is friends with b, or a is a friend of someone acquainted with b.</p>
 
-  <p>Find and return the maximum profit you can achieve.</p>
+  <p>Return the earliest time for which every person became acquainted with every other person. If there is no such
+earliest time, return -1.</p>
 
-  <p><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/">https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/</a></p>
+  <p>Constraints:</p>
+  <ul>
+    <li><code>2 &lt;= n &lt;= 100</code></li>
+    <li><code>1 &lt;= logs.length &lt;= 10**4</code></li>
+    <li><code>logs[i].length == 3</code></li>
+    <li><code>0 &lt;= timestampi &lt;= 10**9</code></li>
+    <li><code>0 &lt;= x[i], y[i] &lt;= n - 1</code></li>
+    <li><code>x[i] != y[i]</code></li>
+    <li>All the values <code>timestamp[i]</code> are unique.</li>
+    <li>All the pairs <code>(x[i], y[i])</code> occur at most one time in the input.</li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/the-earliest-moment-when-everyone-become-friends/">https://leetcode.com/problems/the-earliest-moment-when-everyone-become-friends/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
-<pre><code>example 1:
-Input: prices = [7,1,5,3,6,4]
-Answer: 7
-Explanation: 7 is the best profit which is from:
-buy: index 1, sell: index 2, profit: 4
-buy: index 3, sell: index 4, profit: 3
-</code></pre>
-<pre><code>example 2:
-Input: prices = [1,2,3,4,5]
-Answer: 4
-Explanation: 4 is the best profit which is from buying on the index 0 an selling on the index 4.
-</code></pre>
-<pre><code>example 3:
-Input: prices = [7,6,4,3,1]
-Answer: 0
-Explanation: the array value is ever descreasing. There is no profit available.
+<pre><code>Example 1
+Input: logs = [[20190101,0,1],[20190104,3,4],[20190107,2,3],[20190211,1,5],[20190224,2,4],[20190301,0,3],
+              [20190312,1,2],[20190322,4,5]]
+       n = 6
+Output: 20190301
+Explanation:
+20190101: [0, 1], [2], [3], [4], [5]
+20190104: [0, 1], [2], [3, 4], [5]
+20190107: [0, 1], [2, 3, 4], [5]
+20190211: [0, 1, 5], [2, 3, 4]
+20190224: [0, 1, 5], [2, 3, 4]
+20190301: [0, 1, 5, 2, 3, 4]
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>This is an interesting problem. It looks we should find multiple minimums and compare profits.
-It might easily go to O(n^2), brute force solution.
-However, if we look at the difference of each day, we should add up every day’s profit unless it it not negative.
-This can be done because we can sell and buy at the same day.
-It turns out, the solution is simple.</p>
+<pre><code>Example 2
+Input: logs = [[0,2,0],[1,0,1],[3,0,3],[4,1,2],[7,3,1]], n = 4
+Output: 3
+Explanation: At timestamp = 3, all the persons (i.e., 0, 1, 2, and 3) become friends.
+</code></pre>
+
+<h2 id="how-to-solve">How to Solve</h2>
+<p>It’s not difficult to think of the union-find approach for this problem.
+At the beginning, n groups are there.
+As time goes by, groups are merged and merged.
+Eventually, a single group will be formed.
+This is exactly the union-find does.</p>
+
+<p>Ths solution here starts from sorting the given logs by the timestamp.
+After that, the solution uses a typical union-find approach.
+When the number of groups becomes 1, the answer is there.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-cpp">#include &lt;vector&gt;
-#include &lt;iostream&gt;
-using namespace std;
 
-class BestTimeToBuyAndSellStockTwo
-{
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class Solution {
+private:
+    vector&lt;int&gt; groups;
+
 public:
-  int maxProfit(vector&lt;int&gt; &amp;prices)
-  {
-    if (prices.empty())
-      return 0;
-    int max_v = 0;
-    for (int i = 1; i &lt;prices.size(); ++i)
-    {
-      if (prices[i] &gt; prices[i - 1])
-      {
-        max_v += prices[i] - prices[i - 1];
-      }
+    int _find(int a) {
+        while (a != groups[a]) {
+            a = groups[a];
+        }
+        return a;
     }
-    return max_v;
-  }
+
+    int _union(int a, int b, int n) {
+        int ga = _find(a);
+        int gb = _find(b);
+        if (ga != gb) {
+            groups[ga] = gb;
+            n -= 1;
+        }
+        return n;
+    }
+
+    int earliestAcq(vector&lt;vector&lt;int&gt;&gt;&amp; logs, int n) {
+        for (auto i = 0; i &lt; n; ++i) {
+            groups.push_back(i);
+        }
+        sort(logs.begin(), logs.end(), [](const auto &amp;a, const auto &amp;b) {return a[0] &lt; b[0]; });
+        for (vector&lt;int&gt; log : logs) {
+            int t = log[0], a = log[1], b = log[2];
+            n = _union(a, b, n);
+            if (n == 1) { return t; }
+        }
+        return -1;
+    }
 };
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class Solution:
+    def earliestAcq(self, logs: List[List[int]], n: int) -&gt; int:
+        groups = [i for i in range(n)]
+
+        def find(a):
+            while a != groups[a]:
+                a = groups[a]
+            return a
+
+        def union(a, b, n):
+            ga, gb = find(a), find(b)
+            if ga != gb:
+                groups[ga] = gb
+                n -= 1
+            return n
+
+        for t, a, b in sorted(logs, key=lambda x: x[0]):
+            n = union(a, b, n)
+            if n == 1:
+                return t
+        return -1
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: O(n) – n: length of the input array.</li>
-  <li>Space: O(1)</li>
+  <li>Time: <code>O(log(n))</code></li>
+  <li>Space: <code>O(n)</code></li>
 </ul>
 
 </div>
