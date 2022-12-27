@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Maximum Length of a Concatenated String with Unique Characters | yokolet’s notelets</title>
+<title>Filling Bookcase Shelves | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Maximum Length of a Concatenated String with Unique Characters" />
+<meta property="og:title" content="Filling Bookcase Shelves" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/strings/2022-10-24-maximum-length-of-a-concatenated-string-with-unique-characters.html" />
-<meta property="og:url" content="http://localhost:4000/algo/strings/2022-10-24-maximum-length-of-a-concatenated-string-with-unique-characters.html" />
+<link rel="canonical" href="http://localhost:4000/algo/dynamic_programming/2022-12-27-filling-bookcase-shelves.html" />
+<meta property="og:url" content="http://localhost:4000/algo/dynamic_programming/2022-12-27-filling-bookcase-shelves.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-10-24T14:43:00+09:00" />
+<meta property="article:published_time" content="2022-12-27T23:48:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Maximum Length of a Concatenated String with Unique Characters" />
+<meta property="twitter:title" content="Filling Bookcase Shelves" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-10-24T14:43:00+09:00","datePublished":"2022-10-24T14:43:00+09:00","description":"Blog site mostly for programming topics.","headline":"Maximum Length of a Concatenated String with Unique Characters","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/strings/2022-10-24-maximum-length-of-a-concatenated-string-with-unique-characters.html"},"url":"http://localhost:4000/algo/strings/2022-10-24-maximum-length-of-a-concatenated-string-with-unique-characters.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-12-27T23:48:00+09:00","datePublished":"2022-12-27T23:48:00+09:00","description":"Blog site mostly for programming topics.","headline":"Filling Bookcase Shelves","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/dynamic_programming/2022-12-27-filling-bookcase-shelves.html"},"url":"http://localhost:4000/algo/dynamic_programming/2022-12-27-filling-bookcase-shelves.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Maximum Length of a Concatenated String with Unique Characters</h1>
+            <h1 class="title is-2">Filling Bookcase Shelves</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -336,7 +336,7 @@
             </ul>
         </div>
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Strings
             </a>
@@ -886,7 +886,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Dynamic Programming
             </a>
@@ -1479,7 +1479,7 @@
                     
                     <div class="content">
 
-    <p>Published: Oct 24, 2022</p>
+    <p>Published: Dec 27, 2022</p>
 
     <div class="tags">
         
@@ -1488,105 +1488,163 @@
 </span>
         
         <span class="tag  is-primary ">
-    String
-</span>
-        
-        <span class="tag  is-primary ">
-    Bit Manipulation
-</span>
-        
-        <span class="tag  is-primary ">
-    Array
+    Dynamic Programming
 </span>
         
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This problem requires every combination of given array.
-Each string has two conditions whether it is included or not.
-The recursion might be the way to solve this problem.
-Additionally, using set, bit manipulation style approach exists.
-The solution here used the bit manipulation style to check the uniqueness.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>You are given an array of strings <code>arr</code>. A string <code>s</code> is formed by the concatenation of a subsequence of <code>arr</code> that
-has unique characters.</p>
+  <p>You are given an array <code>books</code> where <code>books[i] = [thickness[i], height[i]]</code> indicates the thickness and height of
+the ith book. You are also given an integer shelfWidth.</p>
 
-  <p>Return the maximum possible length of <code>s</code>.</p>
+  <p>We want to place these books in order onto bookcase shelves that have a total width <code>shelfWidth</code>.</p>
 
-  <p>A subsequence is an array that can be derived from another array by deleting some or no elements without changing
-the order of the remaining elements.</p>
+  <p>We choose some of the books to place on this shelf such that the sum of their thickness is less than or equal to
+<code>shelfWidth</code>, then build another level of the shelf of the bookcase so that the total height of the bookcase has
+increased by the maximum height of the books we just put down. We repeat this process until there are no more books
+to place.</p>
+
+  <p>Note that at each step of the above process, the order of the books we place is the same order as the given
+sequence of books.</p>
+  <ul>
+    <li>For example, if we have an ordered list of 5 books, we might place the first and second book onto the first shelf,
+ the third book on the second shelf, and the fourth and fifth book on the last shelf.</li>
+  </ul>
+
+  <p>Return the minimum possible height that the total bookshelf can be after placing shelves in this manner.</p>
 
   <p>Constraints:</p>
   <ul>
-    <li><code>1 &lt;= arr.length &lt;= 16</code></li>
-    <li><code>1 &lt;= arr[i].length &lt;= 26</code></li>
-    <li><code>arr[i]</code> contains only lowercase English letters.</li>
+    <li><code>1 &lt;= books.length &lt;= 1000</code></li>
+    <li><code>1 &lt;= thicknessi &lt;= shelfWidth &lt;= 1000</code></li>
+    <li><code>1 &lt;= heighti &lt;= 1000</code></li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/maximum-length-of-a-concatenated-string-with-unique-characters/">https://leetcode.com/problems/maximum-length-of-a-concatenated-string-with-unique-characters/</a></p>
+  <p><a href="https://leetcode.com/problems/filling-bookcase-shelves/">https://leetcode.com/problems/filling-bookcase-shelves/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
 <pre><code>Example 1
-Input: arr = ["un","iq","ue"]
-Output: 4
-Explanation: All the valid concatenations are:
-- ""
-- "un"
-- "iq"
-- "ue"
-- "uniq" ("un" + "iq")
-- "ique" ("iq" + "ue")
-Maximum length is 4.
+Input: books = [[1,1],[2,3],[2,3],[1,1],[1,1],[1,1],[1,2]], shelf_width = 4
+Output: 6
+Explanation:
+The sum of the heights of the 3 shelves is 1 + 3 + 2 = 6.
+Notice that book number 2 does not have to be on the first shelf.
 </code></pre>
 
 <pre><code>Example 2
-Input: arr = ["cha","r","act","ers"]
-Output: 6
-Explanation: Possible longest valid concatenations are "chaers" ("cha" + "ers") and "acters" ("act" + "ers").
+Input: books = [[1,3],[2,4],[3,2]], shelfWidth = 6
+Output: 4
 </code></pre>
 
-<pre><code>Example 3
-Input: arr = ["abcdefghijklmnopqrstuvwxyz"]
-Output: 26
-Explanation: The only string in arr has all 26 characters.
-</code></pre>
-
-<pre><code>Example 4
-InputL arr = ["a", "abc", "d", "de", "def"]
-Output: 6
-</code></pre>
-
-<h2 id="analysis">Analysis</h2>
-<p>The first step is to create string sets of only unique character set.
-If the string in the given array is “aa,” it will be omitted.
-The next step is character comparison by set operations.
-If the intersection of previous set is empty, take or and append it to the result array.
-In the end, get the maximum length from the result array which is the answer.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This is a knapsack type problem, so the dynamic programming is a good approach.
+The auxiliary array saves the height so far.
+The saved height at index i should be minimum of previous height plus maximum height up to index i.
+This repeats width (thickness) is less than or equal to the given shelfWidth.
+When the loop is over, the answer is in the last index of the auxiliary array.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class MaximumLengthOfAConcatenatedStringWithUniqueCharacters:
-    def maxLength(self, arr: List[str]) -&gt; int:
-        charsets = []
-        for s in arr:
-            u = set(s)
-            if len(u) == len(s): charsets.append(u)
-        result = [set()]
-        for c in charsets:
-            for r in result:
-                if not c &amp; r:
-                    result.append(c | r)
-        return max(len(r) for r in result)
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class FillingBookcaseShelves {
+public:
+    int minHeightShelves(vector&lt;vector&lt;int&gt;&gt;&amp; books, int shelfWidth) {
+        int n = books.size();
+        vector&lt;int&gt; memo(n + 1, 0);
+        for (int i = 1; i &lt; n + 1; ++i) {
+            int width = books[i - 1][0], height = books[i - 1][1];
+            memo[i] = memo[i - 1] + height;
+            for (int j = i - 1; j &gt; 0; --j) {
+                if (books[j - 1][0] + width &lt;= shelfWidth) {
+                    memo[i] = min(memo[i], memo[j - 1] + max(height, books[j - 1][1]));
+                } else {
+                    break;
+                }
+                width += books[j - 1][0];
+                height = max(height, books[j - 1][1]);
+            }  
+        }
+        return memo[n];
+    }
+};
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class FillingBookcaseShelves:
+    def minHeightShelves(self, books: List[List[int]], shelfWidth: int) -&gt; int:
+        n = len(books)
+        memo = [0 for _ in range(n + 1)]
+        for i in range(1, n + 1):
+            width, height = books[i - 1]
+            memo[i] = memo[i - 1] + height
+            for j in range(i - 1, 0, -1):
+                if books[j - 1][0] + width &lt;= shelfWidth:
+                    memo[i] = min(memo[i], memo[j - 1] + max(height, books[j - 1][1]))
+                else:
+                    break
+                width += books[j - 1][0]
+                height = max(height, books[j - 1][1])
+        return memo[n]
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(2^n)</code></li>
-  <li>Space: <code>O(2^n)</code></li>
+  <li>Time: <code>O(n^2)</code></li>
+  <li>Space: <code>O(n)</code></li>
 </ul>
 
 </div>

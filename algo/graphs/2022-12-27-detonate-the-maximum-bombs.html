@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Maximum Length of a Concatenated String with Unique Characters | yokolet’s notelets</title>
+<title>Detonate the Maximum Bombs | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Maximum Length of a Concatenated String with Unique Characters" />
+<meta property="og:title" content="Detonate the Maximum Bombs" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/strings/2022-10-24-maximum-length-of-a-concatenated-string-with-unique-characters.html" />
-<meta property="og:url" content="http://localhost:4000/algo/strings/2022-10-24-maximum-length-of-a-concatenated-string-with-unique-characters.html" />
+<link rel="canonical" href="http://localhost:4000/algo/graphs/2022-12-27-detonate-the-maximum-bombs.html" />
+<meta property="og:url" content="http://localhost:4000/algo/graphs/2022-12-27-detonate-the-maximum-bombs.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-10-24T14:43:00+09:00" />
+<meta property="article:published_time" content="2022-12-27T15:05:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Maximum Length of a Concatenated String with Unique Characters" />
+<meta property="twitter:title" content="Detonate the Maximum Bombs" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-10-24T14:43:00+09:00","datePublished":"2022-10-24T14:43:00+09:00","description":"Blog site mostly for programming topics.","headline":"Maximum Length of a Concatenated String with Unique Characters","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/strings/2022-10-24-maximum-length-of-a-concatenated-string-with-unique-characters.html"},"url":"http://localhost:4000/algo/strings/2022-10-24-maximum-length-of-a-concatenated-string-with-unique-characters.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-12-27T15:05:00+09:00","datePublished":"2022-12-27T15:05:00+09:00","description":"Blog site mostly for programming topics.","headline":"Detonate the Maximum Bombs","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/graphs/2022-12-27-detonate-the-maximum-bombs.html"},"url":"http://localhost:4000/algo/graphs/2022-12-27-detonate-the-maximum-bombs.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Maximum Length of a Concatenated String with Unique Characters</h1>
+            <h1 class="title is-2">Detonate the Maximum Bombs</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -336,7 +336,7 @@
             </ul>
         </div>
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Strings
             </a>
@@ -797,7 +797,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Graphs
             </a>
@@ -1479,7 +1479,7 @@
                     
                     <div class="content">
 
-    <p>Published: Oct 24, 2022</p>
+    <p>Published: Dec 27, 2022</p>
 
     <div class="tags">
         
@@ -1488,105 +1488,214 @@
 </span>
         
         <span class="tag  is-primary ">
-    String
+    Graph
 </span>
         
         <span class="tag  is-primary ">
-    Bit Manipulation
+    Breadth-First Search
 </span>
         
         <span class="tag  is-primary ">
-    Array
+    Geometry
 </span>
         
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This problem requires every combination of given array.
-Each string has two conditions whether it is included or not.
-The recursion might be the way to solve this problem.
-Additionally, using set, bit manipulation style approach exists.
-The solution here used the bit manipulation style to check the uniqueness.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>You are given an array of strings <code>arr</code>. A string <code>s</code> is formed by the concatenation of a subsequence of <code>arr</code> that
-has unique characters.</p>
+  <p>You are given a list of bombs. The range of a bomb is defined as the area where its effect can be felt. This area
+is in the shape of a circle with the center as the location of the bomb.</p>
 
-  <p>Return the maximum possible length of <code>s</code>.</p>
+  <p>The bombs are represented by a 0-indexed 2D integer array <code>bombs</code> where <code>bombs[i] = [x[i], y[i], r[i]]</code>. <code>x[i]</code> and
+<code>y[i]</code> denote the X-coordinate and Y-coordinate of the location of the ith bomb, whereas <code>r[i]</code> denotes the radius
+of its range.</p>
 
-  <p>A subsequence is an array that can be derived from another array by deleting some or no elements without changing
-the order of the remaining elements.</p>
+  <p>You may choose to detonate a single bomb. When a bomb is detonated, it will detonate all bombs that lie in its range.
+These bombs will further detonate the bombs that lie in their ranges.</p>
+
+  <p>Given the list of <code>bombs</code>, return the maximum number of bombs that can be detonated if you are allowed to detonate
+only one bomb.</p>
 
   <p>Constraints:</p>
   <ul>
-    <li><code>1 &lt;= arr.length &lt;= 16</code></li>
-    <li><code>1 &lt;= arr[i].length &lt;= 26</code></li>
-    <li><code>arr[i]</code> contains only lowercase English letters.</li>
+    <li><code>1 &lt;= bombs.length &lt;= 100</code></li>
+    <li><code>bombs[i].length == 3</code></li>
+    <li><code>1 &lt;= x[i], y[i], r[i] &lt;= 10**5</code></li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/maximum-length-of-a-concatenated-string-with-unique-characters/">https://leetcode.com/problems/maximum-length-of-a-concatenated-string-with-unique-characters/</a></p>
+  <p><a href="https://leetcode.com/problems/detonate-the-maximum-bombs/">https://leetcode.com/problems/detonate-the-maximum-bombs/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
 <pre><code>Example 1
-Input: arr = ["un","iq","ue"]
-Output: 4
-Explanation: All the valid concatenations are:
-- ""
-- "un"
-- "iq"
-- "ue"
-- "uniq" ("un" + "iq")
-- "ique" ("iq" + "ue")
-Maximum length is 4.
+Input: bombs = [[2,1,3],[6,1,4]]
+Output: 2
+Explanation:
+The above figure shows the positions and ranges of the 2 bombs.
+If we detonate the left bomb, the right bomb will not be affected.
+But if we detonate the right bomb, both bombs will be detonated.
+So the maximum bombs that can be detonated is max(1, 2) = 2.
 </code></pre>
 
 <pre><code>Example 2
-Input: arr = ["cha","r","act","ers"]
-Output: 6
-Explanation: Possible longest valid concatenations are "chaers" ("cha" + "ers") and "acters" ("act" + "ers").
+Input: bombs = [[1,1,5],[10,10,5]]
+Output: 1
+Explanation:
+Detonating either bomb will not detonate the other bomb, so the maximum number of bombs that can be detonated is 1.
 </code></pre>
 
 <pre><code>Example 3
-Input: arr = ["abcdefghijklmnopqrstuvwxyz"]
-Output: 26
-Explanation: The only string in arr has all 26 characters.
+Input: bombs = [[1,2,3],[2,3,1],[3,4,2],[4,5,3],[5,6,4]]
+Output: 5
+Explanation:
+The best bomb to detonate is bomb 0 because:
+- Bomb 0 detonates bombs 1 and 2. The red circle denotes the range of bomb 0.
+- Bomb 2 detonates bomb 3. The blue circle denotes the range of bomb 2.
+- Bomb 3 detonates bomb 4. The green circle denotes the range of bomb 3.
+Thus all 5 bombs are detonated.
 </code></pre>
 
-<pre><code>Example 4
-InputL arr = ["a", "abc", "d", "de", "def"]
-Output: 6
-</code></pre>
-
-<h2 id="analysis">Analysis</h2>
-<p>The first step is to create string sets of only unique character set.
-If the string in the given array is “aa,” it will be omitted.
-The next step is character comparison by set operations.
-If the intersection of previous set is empty, take or and append it to the result array.
-In the end, get the maximum length from the result array which is the answer.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>It’s easy to think of the solution to count all points within each circle.
+If the radius is r, center is x0, y0, then r^2 &gt;= (x - x0)^2 + (y - y0)^2 is a formula to check other points are
+within this circle or not.
+However, the problem introduced another bar of detonating one by one.
+Because of that, simple counting doesn’t work well.
+To represent the detonating situation, a graph data structure is used here.
+In the graph, each node (center) has adjacent nodes (neighboring centers) if the distance is less than or equals to
+the radius.
+Once the graph is constructed, do the breadth-first search (BFS) starting from each node (index) while counting up.
+The maximum count is the answer.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class MaximumLengthOfAConcatenatedStringWithUniqueCharacters:
-    def maxLength(self, arr: List[str]) -&gt; int:
-        charsets = []
-        for s in arr:
-            u = set(s)
-            if len(u) == len(s): charsets.append(u)
-        result = [set()]
-        for c in charsets:
-            for r in result:
-                if not c &amp; r:
-                    result.append(c | r)
-        return max(len(r) for r in result)
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class DetonateTheMaximumBombs {
+public:
+    int maximumDetonation(vector&lt;vector&lt;int&gt;&gt;&amp; bombs) {
+        auto isNeighbor = [](const vector&lt;int&gt; &amp;a, const vector&lt;int&gt; &amp;b) {
+            long long dx = a[0] - b[0], dy = a[1] - b[1];
+            long long r = a[2];
+            return r * r &gt;= dx * dx + dy * dy;
+        };
+        int n = bombs.size();
+        // build a graph
+        vector&lt;vector&lt;int&gt;&gt; graph(n);
+        for (int i = 0; i &lt; n; ++i) {
+            for (int j = 0; j &lt; n; ++j) {
+                if (i == j) { continue; }
+                if (isNeighbor(bombs[i], bombs[j])) {
+                    graph[i].push_back(j);
+                }
+            }
+        }
+        vector&lt;int&gt; counts(n, 1);
+        // bfs
+        for (int i = 0; i &lt; n; ++i) {
+            queue&lt;int&gt; q({i});
+            unordered_set&lt;int&gt; seen({i});
+            while (!q.empty()) {
+                vector&lt;int&gt; neighbors = graph[q.front()];
+                q.pop();
+                for (int neigh : neighbors) {
+                    if (seen.find(neigh) == seen.end()) {
+                        counts[i]++;
+                        seen.insert(neigh);
+                        q.push(neigh);
+                    }
+                }
+            }
+        }
+        return *max_element(counts.begin(), counts.end());
+    }
+};
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class DetonateTheMaximumBombs:
+    def maximumDetonation(self, bombs: List[List[int]]) -&gt; int:
+        def isNeighbor(a: List[int], b: List[int]) -&gt; bool:
+            dx, dy = a[0] - b[0], a[1] - b[1]
+            return a[2] * a[2] &gt;= dx * dx + dy * dy
+
+        n = len(bombs)
+        # build a graph
+        graph = [[] for _ in range(n)]
+        for i in range(n):
+            for j in range(n):
+                if i == j: continue
+                if isNeighbor(bombs[i], bombs[j]):
+                    graph[i].append(j)
+        counts = [1 for _ in range(n)]
+        # bfs
+        for i in range(n):
+            queue, seen = [i], set({i})
+            while queue:
+                neighbors = graph[queue.pop(0)]
+                for neigh in neighbors:
+                    if neigh not in seen:
+                        counts[i] += 1
+                        seen.add(neigh)
+                        queue.append(neigh)
+        return max(counts)
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(2^n)</code></li>
-  <li>Space: <code>O(2^n)</code></li>
+  <li>Time: <code>O(n * n)</code></li>
+  <li>Space: <code>O(n)</code></li>
 </ul>
 
 </div>

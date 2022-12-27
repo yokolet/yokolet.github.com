@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Maximum Length of a Concatenated String with Unique Characters | yokolet’s notelets</title>
+<title>Number of Good Paths | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Maximum Length of a Concatenated String with Unique Characters" />
+<meta property="og:title" content="Number of Good Paths" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/strings/2022-10-24-maximum-length-of-a-concatenated-string-with-unique-characters.html" />
-<meta property="og:url" content="http://localhost:4000/algo/strings/2022-10-24-maximum-length-of-a-concatenated-string-with-unique-characters.html" />
+<link rel="canonical" href="http://localhost:4000/algo/graphs/2022-12-24-number-of-good-paths.html" />
+<meta property="og:url" content="http://localhost:4000/algo/graphs/2022-12-24-number-of-good-paths.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-10-24T14:43:00+09:00" />
+<meta property="article:published_time" content="2022-12-24T22:42:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Maximum Length of a Concatenated String with Unique Characters" />
+<meta property="twitter:title" content="Number of Good Paths" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-10-24T14:43:00+09:00","datePublished":"2022-10-24T14:43:00+09:00","description":"Blog site mostly for programming topics.","headline":"Maximum Length of a Concatenated String with Unique Characters","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/strings/2022-10-24-maximum-length-of-a-concatenated-string-with-unique-characters.html"},"url":"http://localhost:4000/algo/strings/2022-10-24-maximum-length-of-a-concatenated-string-with-unique-characters.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-12-24T22:42:00+09:00","datePublished":"2022-12-24T22:42:00+09:00","description":"Blog site mostly for programming topics.","headline":"Number of Good Paths","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/graphs/2022-12-24-number-of-good-paths.html"},"url":"http://localhost:4000/algo/graphs/2022-12-24-number-of-good-paths.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Maximum Length of a Concatenated String with Unique Characters</h1>
+            <h1 class="title is-2">Number of Good Paths</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -336,7 +336,7 @@
             </ul>
         </div>
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Strings
             </a>
@@ -797,7 +797,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Graphs
             </a>
@@ -1479,114 +1479,249 @@
                     
                     <div class="content">
 
-    <p>Published: Oct 24, 2022</p>
+    <p>Published: Dec 24, 2022</p>
 
     <div class="tags">
         
         <span class="tag  is-primary ">
-    Medium
+    Hard
 </span>
         
         <span class="tag  is-primary ">
-    String
+    Union Find
 </span>
         
         <span class="tag  is-primary ">
-    Bit Manipulation
-</span>
-        
-        <span class="tag  is-primary ">
-    Array
+    Graph
 </span>
         
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This problem requires every combination of given array.
-Each string has two conditions whether it is included or not.
-The recursion might be the way to solve this problem.
-Additionally, using set, bit manipulation style approach exists.
-The solution here used the bit manipulation style to check the uniqueness.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>You are given an array of strings <code>arr</code>. A string <code>s</code> is formed by the concatenation of a subsequence of <code>arr</code> that
-has unique characters.</p>
+  <p>There is a tree (i.e. a connected, undirected graph with no cycles) consisting of <code>n</code> nodes numbered
+from <code>0</code> to <code>n - 1</code> and exactly <code>n - 1</code> edges.</p>
 
-  <p>Return the maximum possible length of <code>s</code>.</p>
+  <p>You are given a 0-indexed integer array <code>vals</code> of length <code>n</code> where <code>vals[i]</code> denotes the value of the i-th node.
+You are also given a 2D integer array <code>edges</code> where <code>edges[i] = [a[i], b[i]]</code> denotes that there exists
+an undirected edge connecting nodes <code>a[i]</code> and <code>b[i]</code>.</p>
 
-  <p>A subsequence is an array that can be derived from another array by deleting some or no elements without changing
-the order of the remaining elements.</p>
+  <p>A good path is a simple path that satisfies the following conditions:</p>
+  <ul>
+    <li>The starting node and the ending node have the same value.</li>
+    <li>All nodes between the starting node and the ending node have values less than or equal to the starting node
+ (i.e. the starting node’s value should be the maximum value along the path).</li>
+  </ul>
+
+  <p>Return the number of distinct good paths.</p>
+
+  <p>Note that a path and its reverse are counted as the same path. For example, 0 -&gt; 1 is considered to be the same as
+1 -&gt; 0. A single node is also considered as a valid path.</p>
 
   <p>Constraints:</p>
   <ul>
-    <li><code>1 &lt;= arr.length &lt;= 16</code></li>
-    <li><code>1 &lt;= arr[i].length &lt;= 26</code></li>
-    <li><code>arr[i]</code> contains only lowercase English letters.</li>
+    <li><code>n == vals.length</code></li>
+    <li><code>1 &lt;= n &lt;= 3 * 10**4</code></li>
+    <li><code>0 &lt;= vals[i] &lt;= 10**5</code></li>
+    <li><code>edges.length == n - 1</code></li>
+    <li><code>edges[i].length == 2</code></li>
+    <li><code>0 &lt;= a[i], b[i] &lt; n</code></li>
+    <li><code>a[i] != b[i]</code></li>
+    <li>edges represents a valid tree.</li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/maximum-length-of-a-concatenated-string-with-unique-characters/">https://leetcode.com/problems/maximum-length-of-a-concatenated-string-with-unique-characters/</a></p>
+  <p><a href="https://leetcode.com/problems/number-of-good-paths/">https://leetcode.com/problems/number-of-good-paths/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
 <pre><code>Example 1
-Input: arr = ["un","iq","ue"]
-Output: 4
-Explanation: All the valid concatenations are:
-- ""
-- "un"
-- "iq"
-- "ue"
-- "uniq" ("un" + "iq")
-- "ique" ("iq" + "ue")
-Maximum length is 4.
+Input: vals = [1,3,2,1,3], edges = [[0,1],[0,2],[2,3],[2,4]]
+Output: 6
+Explanation: There are 5 good paths consisting of a single node.
+There is 1 additional good path: 1 -&gt; 0 -&gt; 2 -&gt; 4.
+(The reverse path 4 -&gt; 2 -&gt; 0 -&gt; 1 is treated as the same as 1 -&gt; 0 -&gt; 2 -&gt; 4.)
+Note that 0 -&gt; 2 -&gt; 3 is not a good path because vals[2] &gt; vals[0].
 </code></pre>
 
 <pre><code>Example 2
-Input: arr = ["cha","r","act","ers"]
-Output: 6
-Explanation: Possible longest valid concatenations are "chaers" ("cha" + "ers") and "acters" ("act" + "ers").
+Input: vals = [1,1,2,2,3], edges = [[0,1],[1,2],[2,3],[2,4]]
+Output: 7
+Explanation: There are 5 good paths consisting of a single node.
+There are 2 additional good paths: 0 -&gt; 1 and 2 -&gt; 3.
 </code></pre>
 
 <pre><code>Example 3
-Input: arr = ["abcdefghijklmnopqrstuvwxyz"]
-Output: 26
-Explanation: The only string in arr has all 26 characters.
+Input: vals = [1], edges = []
+Output: 1
+Explanation: The tree consists of only one node, so there is one good path.
 </code></pre>
 
-<pre><code>Example 4
-InputL arr = ["a", "abc", "d", "de", "def"]
-Output: 6
-</code></pre>
-
-<h2 id="analysis">Analysis</h2>
-<p>The first step is to create string sets of only unique character set.
-If the string in the given array is “aa,” it will be omitted.
-The next step is character comparison by set operations.
-If the intersection of previous set is empty, take or and append it to the result array.
-In the end, get the maximum length from the result array which is the answer.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This is another very hard problem.
+At a glance, it looks a simple graph traversal: starting from all nodes to the same node values as a destination.
+However, the problem requires very fast algorithm.
+The effective solution is the union find with some optimizations.
+The union find should do path compression by ranks unless it is not fast enough.
+When creating a graph, it should look up node values to add effective nodes only.
+The graph traversal starts from the smallest value to largest value in the given vals.
+While traversing, the union find will be performed.
+When the graph traversal for a single value in vals finishes, count the number of paths.
+The path count is done based on the union find result.
+If the path count is sz, the total paths are sz * (sz - 1) / 2 since it chooses 2 from sz without the order.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class MaximumLengthOfAConcatenatedStringWithUniqueCharacters:
-    def maxLength(self, arr: List[str]) -&gt; int:
-        charsets = []
-        for s in arr:
-            u = set(s)
-            if len(u) == len(s): charsets.append(u)
-        result = [set()]
-        for c in charsets:
-            for r in result:
-                if not c &amp; r:
-                    result.append(c | r)
-        return max(len(r) for r in result)
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class NumberOfGoodPaths {
+private:
+    vector&lt;int&gt; parent, rank;
+    int _find(int a) {
+        while (a != parent[a]) {
+            a = parent[a];
+        }
+        return a;
+    }
+    void _union(int a, int b) {
+        int pa = _find(a), pb = _find(b);
+        if (pa != pb) {
+            if (rank[pa] == rank[pb]) { rank[pa]++; }
+            else if (rank[pa] &lt; rank[pb]) { swap(pa, pb); }
+            parent[pb] = pa;
+        }
+    }
+public:
+    int numberOfGoodPaths(vector&lt;int&gt;&amp; vals, vector&lt;vector&lt;int&gt;&gt;&amp; edges) {
+        int n = vals.size();
+        int result = n;
+        parent.resize(n);
+        rank.resize(n);
+        for (int i = 0; i &lt; n; ++i) {
+            parent[i] = i;
+            rank[i] = 1;
+        }
+        vector&lt;vector&lt;int&gt;&gt; graph(n);
+        for (auto edge: edges) {
+            int u = edge[0], v = edge[1];
+            if (vals[u] &gt;= vals[v]) { graph[u].push_back(v); }
+            if (vals[u] &lt;= vals[v]) { graph[v].push_back(u); }
+        }
+        map&lt;int, vector&lt;int&gt;&gt; val2nodes;
+        for (int i = 0; i &lt; n; ++i) { val2nodes[vals[i]].push_back(i); }
+        for (auto it : val2nodes) {
+            for (int node : it.second) {
+                for (int neigh : graph[node]) {
+                    _union(neigh, node);
+                }
+            }
+            map&lt;int, int&gt; path;
+            for (auto node : it.second) { path[_find(node)]++; }
+            for (auto &amp;[group, sz] : path) {
+                if (sz &gt; 1) { result += (sz * (sz - 1)) / 2; }
+            }
+        }
+        return result;
+    }
+};
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class NumberOfGoodPaths:
+    def numberOfGoodPaths(self, vals: List[int], edges: List[List[int]]) -&gt; int:
+        result = n = len(vals)
+        parent, rank = [i for i in range(n)], [1 for _ in range(n)]
+
+        def _find(a):
+            while a != parent[a]:
+                a = parent[a]
+            return a
+
+        def _union(a, b):
+            pa, pb = _find(a), _find(b)
+            if pa != pb:
+                if rank[pa] == rank[pb]:
+                    rank[pa] += 1
+                elif rank[pa] &lt; rank[pb]:
+                    pa, pb = pb, pa
+                parent[pb] = pa
+
+        graph = defaultdict(list)
+        for u, v in edges:
+            if vals[u] &gt;= vals[v]:
+                graph[u].append(v)
+            if vals[u] &lt;= vals[v]:
+                graph[v].append(u)
+        val2nodes = defaultdict(list)
+        for i in range(n):
+            val2nodes[vals[i]].append(i)
+        for k in sorted(val2nodes):
+            for node in val2nodes[k]:
+                for neigh in graph[node]:
+                    _union(neigh, node)
+            path = defaultdict(int)
+            for node in val2nodes[k]:
+                path[_find(node)] += 1
+            for group, sz in path.items():
+                if sz &gt; 1:
+                    result += (sz * (sz - 1) // 2)
+        return result
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(2^n)</code></li>
-  <li>Space: <code>O(2^n)</code></li>
+  <li>Time: <code>O(n * log(n))</code> – n: number of nodes</li>
+  <li>Space: <code>O(n)</code></li>
 </ul>
 
 </div>
