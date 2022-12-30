@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Continuous Subarray Sum | yokolet’s notelets</title>
+<title>Random Pick with Weight | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Continuous Subarray Sum" />
+<meta property="og:title" content="Random Pick with Weight" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/arrays/2022-10-26-continuous-subarray-sum.html" />
-<meta property="og:url" content="http://localhost:4000/algo/arrays/2022-10-26-continuous-subarray-sum.html" />
+<link rel="canonical" href="http://localhost:4000/algo/design/2022-12-28-random-pick-with-weight.html" />
+<meta property="og:url" content="http://localhost:4000/algo/design/2022-12-28-random-pick-with-weight.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-10-26T21:06:00+09:00" />
+<meta property="article:published_time" content="2022-12-28T17:20:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Continuous Subarray Sum" />
+<meta property="twitter:title" content="Random Pick with Weight" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-10-26T21:06:00+09:00","datePublished":"2022-10-26T21:06:00+09:00","description":"Blog site mostly for programming topics.","headline":"Continuous Subarray Sum","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/arrays/2022-10-26-continuous-subarray-sum.html"},"url":"http://localhost:4000/algo/arrays/2022-10-26-continuous-subarray-sum.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-12-28T17:20:00+09:00","datePublished":"2022-12-28T17:20:00+09:00","description":"Blog site mostly for programming topics.","headline":"Random Pick with Weight","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/design/2022-12-28-random-pick-with-weight.html"},"url":"http://localhost:4000/algo/design/2022-12-28-random-pick-with-weight.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Continuous Subarray Sum</h1>
+            <h1 class="title is-2">Random Pick with Weight</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -114,7 +114,7 @@
     
     <div class="menu-list">
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Arrays
             </a>
@@ -1139,7 +1139,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Design
             </a>
@@ -1493,7 +1493,7 @@
                     
                     <div class="content">
 
-    <p>Published: Oct 26, 2022</p>
+    <p>Published: Dec 28, 2022</p>
 
     <div class="tags">
         
@@ -1502,91 +1502,205 @@
 </span>
         
         <span class="tag  is-primary ">
+    Binary Search
+</span>
+        
+        <span class="tag  is-primary ">
     Prefix Sum
-</span>
-        
-        <span class="tag  is-primary ">
-    Hash Table
-</span>
-        
-        <span class="tag  is-primary ">
-    Array
 </span>
         
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This problem is very similar to <a href="/algo/arrays/2022-10-26-subarray-sum-equals-k">Subarray Sum Equals K</a>.
-Instead of “sum equals k”, it is “sum divisible by k” here.
-However, we can solve this problem in the same way.
-Using an accumulated sum and hash table, go through like a 2-sum.
-The main differences are the hash table keys and values.
-Also, how to identify the answer.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>Given an integer array <code>nums</code> and an integer <code>k</code>, return true if nums has a continuous subarray of size at least
-two whose elements sum up to a multiple of <code>k</code>, or false otherwise.</p>
+  <p>You are given a 0-indexed array of positive integers <code>w</code> where <code>w[i]</code> describes the weight of the i-th index.</p>
 
-  <p>An integer <code>x</code> is a multiple of <code>k</code> if there exists an integer <code>n</code> such that <code>x = n * k</code>. <code>0</code> is always a multiple of <code>k</code>.</p>
+  <p>You need to implement the function <code>pickIndex()</code>, which randomly picks an index in the range <code>[0, w.length - 1]</code>
+(inclusive) and returns it. The probability of picking an index <code>i</code> is <code>w[i] / sum(w)</code>.</p>
+  <ul>
+    <li>For example, if <code>w = [1, 3]</code>, the probability of picking index 0 is 1 / (1 + 3) = 0.25 (i.e., 25%), and the
+ probability of picking index 1 is 3 / (1 + 3) = 0.75 (i.e., 75%).</li>
+  </ul>
 
   <p>Constraints:</p>
   <ul>
-    <li><code>1 &lt;= nums.length &lt;= 10**5</code></li>
-    <li><code>0 &lt;= nums[i] &lt;= 10**9</code></li>
-    <li><code>0 &lt;= sum(nums[i]) &lt;= 2**31 - 1</code></li>
-    <li><code>1 &lt;= k &lt;= 2**31 - 1</code></li>
+    <li><code>1 &lt;= w.length &lt;= 10**4</code></li>
+    <li><code>1 &lt;= w[i] &lt;= 105</code></li>
+    <li><code>pickIndex</code> will be called at most 10**4 times.</li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/continuous-subarray-sum/">https://leetcode.com/problems/continuous-subarray-sum/</a></p>
+  <p><a href="https://leetcode.com/problems/random-pick-with-weight/">https://leetcode.com/problems/random-pick-with-weight/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
 <pre><code>Example 1
-Input: nums = [23,2,4,6,7], k = 6
-Output: true
-Explanation: [2, 4] is a continuous subarray of size 2 whose elements sum up to 6.
+Input
+["Solution","pickIndex"]
+[[[1]],[]]
+Output
+[null,0]
+
+Explanation
+Solution solution = new Solution([1]);
+solution.pickIndex(); // return 0. The only option is to return 0 since there is only one element in w.
 </code></pre>
 
 <pre><code>Example 2
-Input: nums = [23,2,6,4,7], k = 6
-Output: true
-Explanation: [23, 2, 6, 4, 7] is an continuous subarray of size 5 whose elements sum up to 42.
-42 is a multiple of 6 because 42 = 7 * 6 and 7 is an integer.
+Input
+["Solution","pickIndex","pickIndex","pickIndex","pickIndex","pickIndex"]
+[[[1,3]],[],[],[],[],[]]
+Output
+[null,1,1,1,1,0]
 </code></pre>
 
-<pre><code>Example 3
-Input: nums = [23,2,6,4,7], k = 13
-Output: false
-</code></pre>
-
-<h2 id="analysis">Analysis</h2>
-<p>The solution starts from initializing the accumulated sum and hash table.
-The hash table’s key is the accumulated sum modulo k.
-The value is an index.
-Given that, the hash table’s initial values is {0: -1}.
-When going over the given array, calculate the accumulated sum.
-If the accumulated sum modulo k is not in the hash table, save it along with the index.
-Otherwise, check the index difference. If it satisfies the condition, return True.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This problem requires some ideas.
+The prefix sum and binary search are a good approach.
+The prefix sum reflects the difference of each weight.
+Do binary search on the prefix sum to get the index of a randomly generated weight.
+It depends on the languages what values are generated by random function.
+For example, C++ doesn’t need to regularize the given weights, but others need to change values between 0 to 1.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class ContinuousSubarraySum:
-    def checkSubarraySum(self, nums: List[int], k: int) -&gt; bool:
-        acc, memo = 0, {0: -1}
-        for idx, v in enumerate(nums):
-            acc += v
-            if acc % k not in memo:
-                memo[acc % k] = idx
-            elif idx - memo[acc % k] &gt;= 2:
-                return True
-        return False
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class RandomPickWithWeight {
+private:
+    vector&lt;int&gt; weights;
+public:
+    Solution(vector&lt;int&gt;&amp; w) {
+        srand(time(NULL));
+        weights.push_back(w[0]);
+        for (int i = 1; i &lt; w.size(); ++i) {
+            weights.push_back(w[i] + weights.back());
+        }
+    }
+    
+    int pickIndex() {
+        int weight = rand() % weights.back();
+        int left = 0, right = weights.size() - 1;
+        int mid;
+        while (left &lt; right) {
+            mid = (left + right) / 2;
+            if (weight &gt;= weights[mid]) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        return left;
+    }
+};
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class RandomPickWithWeight:
+
+    def __init__(self, w: List[int]):
+        total = sum(w)
+        self.weights = [w[0] / total]
+        for v in w[1:len(w) - 1]:
+            self.weights.append(self.weights[-1] + v / total)
+        self.weights.append(1)
+
+    def pickIndex(self) -&gt; int:
+        weight = random.random()
+        left, right = 0, len(self.weights) - 1
+        while left &lt; right:
+            mid = (left + right) // 2
+            if weight &gt;= self.weights[mid]:
+                left = mid + 1
+            else:
+                right = mid
+        return left
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">class RandomPickWithWeight
+
+=begin
+    :type w: Integer[]
+=end
+    def initialize(w)
+        total = w.sum
+        @weights = [w[0].to_f / total]
+        (1...w.size - 1).each do |i|
+            @weights &lt;&lt; w[i].to_f / total + @weights[-1]
+        end
+        @weights &lt;&lt; 1
+    end
+
+
+=begin
+    :rtype: Integer
+=end
+    def pick_index()
+        weight = rand
+        left, right = 0, @weights.size - 1
+        while left &lt; right
+            mid = (left + right) / 2
+            if weight &gt;= @weights[mid]
+                left = mid + 1
+            else
+                right = mid
+            end
+        end
+        left
+    end
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(n)</code></li>
+  <li>Time: constructor: <code>O(n)</code>, pickIndex: <code>O(log(n))</code></li>
   <li>Space: <code>O(n)</code></li>
 </ul>
 

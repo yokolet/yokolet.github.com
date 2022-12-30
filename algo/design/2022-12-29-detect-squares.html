@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Continuous Subarray Sum | yokolet’s notelets</title>
+<title>Detect Squares | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Continuous Subarray Sum" />
+<meta property="og:title" content="Detect Squares" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/arrays/2022-10-26-continuous-subarray-sum.html" />
-<meta property="og:url" content="http://localhost:4000/algo/arrays/2022-10-26-continuous-subarray-sum.html" />
+<link rel="canonical" href="http://localhost:4000/algo/design/2022-12-29-detect-squares.html" />
+<meta property="og:url" content="http://localhost:4000/algo/design/2022-12-29-detect-squares.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-10-26T21:06:00+09:00" />
+<meta property="article:published_time" content="2022-12-29T17:35:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Continuous Subarray Sum" />
+<meta property="twitter:title" content="Detect Squares" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-10-26T21:06:00+09:00","datePublished":"2022-10-26T21:06:00+09:00","description":"Blog site mostly for programming topics.","headline":"Continuous Subarray Sum","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/arrays/2022-10-26-continuous-subarray-sum.html"},"url":"http://localhost:4000/algo/arrays/2022-10-26-continuous-subarray-sum.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-12-29T17:35:00+09:00","datePublished":"2022-12-29T17:35:00+09:00","description":"Blog site mostly for programming topics.","headline":"Detect Squares","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/design/2022-12-29-detect-squares.html"},"url":"http://localhost:4000/algo/design/2022-12-29-detect-squares.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Continuous Subarray Sum</h1>
+            <h1 class="title is-2">Detect Squares</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -114,7 +114,7 @@
     
     <div class="menu-list">
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Arrays
             </a>
@@ -1139,7 +1139,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Design
             </a>
@@ -1493,7 +1493,7 @@
                     
                     <div class="content">
 
-    <p>Published: Oct 26, 2022</p>
+    <p>Published: Dec 29, 2022</p>
 
     <div class="tags">
         
@@ -1502,92 +1502,194 @@
 </span>
         
         <span class="tag  is-primary ">
-    Prefix Sum
-</span>
-        
-        <span class="tag  is-primary ">
     Hash Table
 </span>
         
         <span class="tag  is-primary ">
-    Array
+    Counting
+</span>
+        
+        <span class="tag  is-primary ">
+    Design
 </span>
         
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This problem is very similar to <a href="/algo/arrays/2022-10-26-subarray-sum-equals-k">Subarray Sum Equals K</a>.
-Instead of “sum equals k”, it is “sum divisible by k” here.
-However, we can solve this problem in the same way.
-Using an accumulated sum and hash table, go through like a 2-sum.
-The main differences are the hash table keys and values.
-Also, how to identify the answer.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>Given an integer array <code>nums</code> and an integer <code>k</code>, return true if nums has a continuous subarray of size at least
-two whose elements sum up to a multiple of <code>k</code>, or false otherwise.</p>
+  <p>You are given a stream of points on the X-Y plane. Design an algorithm that:</p>
+  <ul>
+    <li>Adds new points from the stream into a data structure. Duplicate points are allowed and should be treated as
+ different points.</li>
+    <li>Given a query point, counts the number of ways to choose three points from the data structure such that the three
+ points and the query point form an axis-aligned square with positive area.</li>
+  </ul>
 
-  <p>An integer <code>x</code> is a multiple of <code>k</code> if there exists an integer <code>n</code> such that <code>x = n * k</code>. <code>0</code> is always a multiple of <code>k</code>.</p>
+  <p>An axis-aligned square is a square whose edges are all the same length and are either parallel or perpendicular to
+the x-axis and y-axis.</p>
+
+  <p>Implement the DetectSquares class:</p>
+  <ul>
+    <li><code>DetectSquares()</code> Initializes the object with an empty data structure.</li>
+    <li><code>void add(int[] point)</code> Adds a new point <code>point = [x, y]</code> to the data structure.</li>
+    <li><code>int count(int[] point)</code> Counts the number of ways to form axis-aligned squares with point <code>point = [x, y]</code> as
+ described above.</li>
+  </ul>
 
   <p>Constraints:</p>
   <ul>
-    <li><code>1 &lt;= nums.length &lt;= 10**5</code></li>
-    <li><code>0 &lt;= nums[i] &lt;= 10**9</code></li>
-    <li><code>0 &lt;= sum(nums[i]) &lt;= 2**31 - 1</code></li>
-    <li><code>1 &lt;= k &lt;= 2**31 - 1</code></li>
+    <li><code>point.length == 2</code></li>
+    <li><code>0 &lt;= x, y &lt;= 1000</code></li>
+    <li>At most 3000 calls in total will be made to <code>add</code> and <code>count</code>.</li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/continuous-subarray-sum/">https://leetcode.com/problems/continuous-subarray-sum/</a></p>
+  <p><a href="https://leetcode.com/problems/detect-squares/">https://leetcode.com/problems/detect-squares/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
 <pre><code>Example 1
-Input: nums = [23,2,4,6,7], k = 6
-Output: true
-Explanation: [2, 4] is a continuous subarray of size 2 whose elements sum up to 6.
+Input
+["DetectSquares", "add", "add", "add", "count", "count", "add", "count"]
+[[], [[3, 10]], [[11, 2]], [[3, 2]], [[11, 10]], [[14, 8]], [[11, 2]], [[11, 10]]]
+Output
+[null, null, null, null, 1, 0, null, 2]
+
+Explanation
+DetectSquares detectSquares = new DetectSquares();
+detectSquares.add([3, 10]);
+detectSquares.add([11, 2]);
+detectSquares.add([3, 2]);
+detectSquares.count([11, 10]); // return 1. You can choose:
+                               //   - The first, second, and third points
+detectSquares.count([14, 8]);  // return 0. The query point cannot form a square with any points in the data structure.
+detectSquares.add([11, 2]);    // Adding duplicate points is allowed.
+detectSquares.count([11, 10]); // return 2. You can choose:
+                               //   - The first, second, and third points
+                               //   - The first, third, and fourth points
 </code></pre>
 
-<pre><code>Example 2
-Input: nums = [23,2,6,4,7], k = 6
-Output: true
-Explanation: [23, 2, 6, 4, 7] is an continuous subarray of size 5 whose elements sum up to 42.
-42 is a multiple of 6 because 42 = 7 * 6 and 7 is an integer.
-</code></pre>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This problem requires an effective way of finding sides of squares.
+Given the x, y coordinate, the first step is to find y coordinates whose x coordinate is the same.
+The length of a side is easily calculated by a difference of the y coordinates.
+Whether the supposed 3 points exist or not, multiply the counts of <code>[x0, y], [x0 + side, y0], [x0 + side, y]</code>.
+This will narrow down count to the what we want.
+Then, count for the other side, <code>[x0, y], [x0 - side, y0], [x0 - side, y]</code>.</p>
 
-<pre><code>Example 3
-Input: nums = [23,2,6,4,7], k = 13
-Output: false
-</code></pre>
+<p>The solution here used a single hash table.
+It is a hash table of hash table and saves x to y counts.</p>
 
-<h2 id="analysis">Analysis</h2>
-<p>The solution starts from initializing the accumulated sum and hash table.
-The hash table’s key is the accumulated sum modulo k.
-The value is an index.
-Given that, the hash table’s initial values is {0: -1}.
-When going over the given array, calculate the accumulated sum.
-If the accumulated sum modulo k is not in the hash table, save it along with the index.
-Otherwise, check the index difference. If it satisfies the condition, return True.</p>
+<p>The point here is what the hash table returns when the given key doesn’t exist.
+Python’s collections.defaultdict and collections.Counter return 0 when the value is integer.
+C++’s unordered_map also returns 0 when the value type is integer.
+However, some other languages or data structures need to specify the value when the key doesn’t exist.
+We should be careful about that.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class ContinuousSubarraySum:
-    def checkSubarraySum(self, nums: List[int], k: int) -&gt; bool:
-        acc, memo = 0, {0: -1}
-        for idx, v in enumerate(nums):
-            acc += v
-            if acc % k not in memo:
-                memo[acc % k] = idx
-            elif idx - memo[acc % k] &gt;= 2:
-                return True
-        return False
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class DetectSquares {
+private:
+    unordered_map&lt;int, unordered_map&lt;int, int&gt;&gt; x_coord;
+
+public:
+    DetectSquares() {}
+
+    void add(vector&lt;int&gt; point) {
+        int x = point[0], y = point[1];
+        x_coord[x][y]++;
+    }
+
+    int count(vector&lt;int&gt; point) {
+        int x0 = point[0], y0 = point[1], result = 0;
+        for (auto &amp;[y, cnt] : x_coord[x0]) {
+            if (y == y0) { continue; }
+            int side = y - y0;
+            result += cnt * x_coord[x0 + side][y0] * x_coord[x0 + side][y];
+            result += cnt * x_coord[x0 - side][y0] * x_coord[x0 - side][y];
+        }
+        return result;
+    }
+};
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class DetectSquares:
+
+    def __init__(self):
+        self.x_coord = collections.defaultdict(collections.Counter)
+
+    def add(self, point: List[int]) -&gt; None:
+        x, y = point
+        self.x_coord[x][y] += 1
+
+    def count(self, point: List[int]) -&gt; int:
+        x0, y0 = point
+        result = 0
+        for y in self.x_coord[x0]:
+            if y == y0: continue
+            side = y - y0
+            result += self.x_coord[x0][y] * self.x_coord[x0 + side][y0] * self.x_coord[x0 + side][y]
+            result += self.x_coord[x0][y] * self.x_coord[x0 - side][y0] * self.x_coord[x0 - side][y]
+        return result
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(n)</code></li>
-  <li>Space: <code>O(n)</code></li>
+  <li>Time: add: <code>O(1)</code>, count: <code>O(n)</code> – n: number of unique y coordinates of a single x coordinate</li>
+  <li>Space: <code>O(m)</code> – m: number of unique x coordinates</li>
 </ul>
 
 </div>

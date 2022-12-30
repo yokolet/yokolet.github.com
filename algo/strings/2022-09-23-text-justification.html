@@ -1183,6 +1183,13 @@
                     </li>
                     
                     <li>
+                        <a href="/algo/design/2022-12-29-detect-squares"
+                           class="submenu">
+                            Detect Squares
+                        </a>
+                    </li>
+                    
+                    <li>
                         <a href="/algo/design/2022-09-24-find-median-from-data-stream"
                            class="submenu">
                             Find Median from Data Stream
@@ -1235,6 +1242,13 @@
                         <a href="/algo/design/2022-11-09-online-stock-span"
                            class="submenu">
                             Online Stock Span
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/algo/design/2022-12-28-random-pick-with-weight"
+                           class="submenu">
+                            Random Pick with Weight
                         </a>
                     </li>
                     
@@ -1503,11 +1517,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>Since this problem asks to create a fully justified result, actual simulation should be done.
-When and how to add spaces in-between or right end are the point we should consider.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>Given an array of strings <code>words</code> and a width <code>maxWidth</code>, format the text such that each line has
 exactly <code>maxWidth</code> characters and is fully (left and right) justified.
@@ -1578,13 +1588,110 @@ Output:
 ]
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>Since this problem asks to create a fully justified result, actual simulation should be done.
+When and how to add spaces in-between and right-end are the point we should consider.</p>
+
 <p>The solution here consists of two steps.
 For the first step, it creates words list for each lines.
-The second step calculates and adds spaces between words or right end if it is the last line.
+To create a line array, it sums up:</p>
+<ul>
+  <li>a number of characters so far</li>
+  <li>current word length</li>
+  <li>current array size (before adding current word) for spaces between words</li>
+</ul>
+
+<p>The second step calculates and adds spaces between words or right end if it is the last line.
+Count number of spaces left from a total word length and given maxWidth.
+Then, find how many gaps are there and how many spaces should be put.
+The solution here adds spaces to each word, then concatenate those words to one string.
 The two step approach would be easier to reach to the answer.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class TextJustification {
+public:
+    vector&lt;string&gt; fullJustify(vector&lt;string&gt;&amp; words, int maxWidth) {
+        vector&lt;string&gt; line;
+        vector&lt;vector&lt;string&gt;&gt; lines;
+        int cur = 0;
+        for (string &amp;word : words) {
+            if (cur + word.size() + line.size() &lt;= maxWidth) {
+                line.push_back(word);
+                cur += word.size();
+            } else {
+                lines.push_back(line);
+                line = {word};
+                cur = word.size();
+            }
+        }
+        lines.push_back(line);
+        vector&lt;string&gt; result;
+        auto join = [](string &amp;a, string &amp;b) { return a.empty() ? b : a + b; };
+        for (int i = 0; i &lt; lines.size() - 1; ++i) {
+            vector&lt;string&gt; &amp;ws = lines[i];
+            int spaces = maxWidth;
+            for (auto w : ws) {
+                spaces -= w.size();
+            }
+            int gaps = max(1, (int)ws.size() - 1);
+            auto [cnt, rem] = div(spaces, gaps);
+            for (int j = 0; j &lt; gaps; ++j) {
+                ws[j] += string(cnt, ' ') + (j &lt; rem ? " " : "");
+            }
+            result.push_back(accumulate(ws.begin(), ws.end(), string(), join));
+        }
+        auto join2 = [](string &amp;a, string &amp;b) { return a.empty() ? b : a + " " + b; };
+        result.push_back(accumulate(lines.back().begin(), lines.back().end(), string(), join2));
+        result[result.size() - 1] += string(maxWidth - result.back().size(), ' ');
+        return result;
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class TextJustification:
     def fullJustify(self, words: List[str], maxWidth: int) -&gt; List[str]:
         line, lines, cur = [], [], 0
@@ -1608,6 +1715,15 @@ The two step approach would be easier to reach to the answer.</p>
         lines[-1] = ' '.join(lines[-1]).ljust(maxWidth)
         return lines
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
