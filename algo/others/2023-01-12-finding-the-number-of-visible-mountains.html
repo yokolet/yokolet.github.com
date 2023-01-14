@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Best Time to Buy and Sell Stock – Basic | yokolet’s notelets</title>
+<title>Finding the Number of Visible Mountains | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Best Time to Buy and Sell Stock – Basic" />
+<meta property="og:title" content="Finding the Number of Visible Mountains" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-basic.html" />
-<meta property="og:url" content="http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-basic.html" />
+<link rel="canonical" href="http://localhost:4000/algo/others/2023-01-12-finding-the-number-of-visible-mountains.html" />
+<meta property="og:url" content="http://localhost:4000/algo/others/2023-01-12-finding-the-number-of-visible-mountains.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-07-26T15:50:00+09:00" />
+<meta property="article:published_time" content="2023-01-12T17:44:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Best Time to Buy and Sell Stock – Basic" />
+<meta property="twitter:title" content="Finding the Number of Visible Mountains" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-07-26T15:50:00+09:00","datePublished":"2022-07-26T15:50:00+09:00","description":"Blog site mostly for programming topics.","headline":"Best Time to Buy and Sell Stock – Basic","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-basic.html"},"url":"http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-basic.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2023-01-12T17:44:00+09:00","datePublished":"2023-01-12T17:44:00+09:00","description":"Blog site mostly for programming topics.","headline":"Finding the Number of Visible Mountains","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/others/2023-01-12-finding-the-number-of-visible-mountains.html"},"url":"http://localhost:4000/algo/others/2023-01-12-finding-the-number-of-visible-mountains.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Best Time to Buy and Sell Stock -- Basic</h1>
+            <h1 class="title is-2">Finding the Number of Visible Mountains</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -1291,7 +1291,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Others
             </a>
@@ -1380,7 +1380,7 @@
             </ul>
         </div>
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Stocks
             </a>
@@ -1514,92 +1514,174 @@
                     
                     <div class="content">
 
-    <p>Published: Jul 26, 2022</p>
+    <p>Published: Jan 12, 2023</p>
 
     <div class="tags">
         
         <span class="tag  is-primary ">
-    Easy
+    Medium
 </span>
         
         <span class="tag  is-primary ">
-    Array
+    Math
 </span>
         
         <span class="tag  is-primary ">
-    DP
+    Sorting
 </span>
         
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>The algorithm questions such that best time to buy and sell stock has variations.
-Each has slight different criteria to find the answer.
-This is the first buy-sell-stock problem and very basic easy one.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>You are given an array <code>prices</code> where <code>prices[i]</code> is the price of a given stock on the i-th day.</p>
+  <p>You are given a 0-indexed 2D integer array <code>peaks</code> where <code>peaks[i] = [x[i], y[i]]</code> states that mountain <code>i</code> has a
+peak at coordinates <code>(x[i], y[i])</code>. A mountain can be described as a right-angled isosceles triangle, with its base
+along the x-axis and a right angle at its peak. More formally, the gradients of ascending and descending the
+mountain are 1 and -1 respectively.</p>
 
-  <p>You want to maximize your profit by choosing a single day to buy one stock and choosing a different day
-in the future to sell that stock.</p>
+  <p>A mountain is considered visible if its peak does not lie within another mountain (including the border of other
+mountains).</p>
 
-  <p>Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.</p>
+  <p>Return the number of visible mountains.</p>
 
-  <p><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock/">https://leetcode.com/problems/best-time-to-buy-and-sell-stock/</a></p>
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= peaks.length &lt;= 10**5</code></li>
+    <li><code>peaks[i].length == 2</code></li>
+    <li><code>1 &lt;= x[i], y[i] &lt;= 10**5</code></li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/finding-the-number-of-visible-mountains/">https://leetcode.com/problems/finding-the-number-of-visible-mountains/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
-<pre><code>example 1:
-Input: prices = [7,1,5,3,6,4]
-Answer: 5
-Explanation: 5 is the best profit which is from buying on the index 1 an selling on the index 4.
-</code></pre>
-<pre><code>example 2:
-Input: prices = [7,6,4,3,1]
-Answer: 0
-Explanation: the array value is ever descreasing. There is no profit available.
+<pre><code>Example 1
+Input: peaks = [[2,2],[6,3],[5,4]]
+Output: 2
+Explanation: The diagram above shows the mountains.
+- Mountain 0 is visible since its peak does not lie within another mountain or its sides.
+- Mountain 1 is not visible since its peak lies within the side of mountain 2.
+- Mountain 2 is visible since its peak does not lie within another mountain or its sides.
+There are 2 mountains that are visible.
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>We are allowed to buy and sell only once. The minimum price so far should be updated in each array index.
-If the price at the current index is not the minimum, calculate profit so far.
-Then update grand max profit comparing with the current profit.</p>
+<pre><code>Example 2
+Input: peaks = [[1,3],[1,3]]
+Output: 0
+Explanation: The diagram above shows the mountains (they completely overlap).
+Both mountains are not visible since their peaks lie within each other.
+
+</code></pre>
+
+<h2 id="how-to-solve">How to Solve</h2>
+<p>From the description that the triangle is a right-angled isosceles triangle, two slopes are: y = x + b and y = -x + b
+where b is a y intercept.
+We can easily find two y intercepts as y - x and y + x.
+Positions of triangles are separated, partially overlap, or included.
+For the first step, sort y intercept pairs: (y - x, y + x) in a descending order, which means the triangles are
+arranged from left most to right most.
+Then, check one by one whether the upper y intercept is greater than the current max value.
+However, if the peaks overlap, those should not be counted.
+Update the max value if it is a bigger y intercept.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-cpp">#include &lt;vector&gt;
-#include &lt;iostream&gt;
-using namespace std;
 
-class BestTimeToBuyAndSellStock
-{
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class FindingTheNumberOfVisibleMountains {
 public:
-  int maxProfit(vector&lt;int&gt; &amp;prices)
-  {
-    int min_v = INT_MAX;
-    int max_profit = 0;
-    for (int i = 0; i &lt; prices.size(); ++i)
-    {
-      if (prices[i] &lt; min_v)
-      {
-        min_v = prices[i];
-      }
-      else
-      {
-        max_profit = max(max_profit, prices[i] - min_v);
-      }
+    int visibleMountains(vector&lt;vector&lt;int&gt;&gt;&amp; peaks) {
+        for (int i = 0; i &lt; peaks.size(); ++i) {
+            int x = peaks[i][0], y = peaks[i][1];
+            peaks[i][0] = y - x, peaks[i][1] = y + x;
+        }
+        sort(peaks.begin(), peaks.end(),
+            [](const vector&lt;int&gt; &amp;a, const vector&lt;int&gt; &amp;b) -&gt; bool {
+                return a[0] == b[0] ? a[1] &gt; b[1] : a[0] &gt; b[0];
+            });
+        int result = 0, max_v = 0, n = peaks.size();
+        for (int i = 0; i &lt; n; ++i) {
+            if (peaks[i][1] &gt; max_v) {
+                if (i == n - 1 || peaks[i][0] != peaks[i + 1][0] || peaks[i][1] != peaks[i + 1][1]) {
+                    result++;
+                }
+                max_v = peaks[i][1];
+            }
+        }
+        return result;
     }
-    return max_profit;
-  }
 };
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class FindingTheNumberOfVisibleMountains:
+    def visibleMountains(self, peaks: List[List[int]]) -&gt; int:
+        peaks = [(y - x, y + x) for x, y in peaks]
+        peaks.sort(reverse=True)
+        n, max_v, result = len(peaks), 0, 0
+        for i in range(n):
+            if  peaks[i][1] &gt; max_v:
+                if i == n - 1 or peaks[i] != peaks[i + 1]:
+                    result += 1
+                max_v = peaks[i][1]
+        return result
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: O(n) – n: length of the input array.</li>
-  <li>Space: O(1)</li>
+  <li>Time: <code>O(n * log(n))</code></li>
+  <li>Space: <code>O(1)</code></li>
 </ul>
 
 </div>

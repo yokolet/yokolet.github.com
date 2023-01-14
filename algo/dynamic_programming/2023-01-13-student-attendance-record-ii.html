@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Best Time to Buy and Sell Stock – Basic | yokolet’s notelets</title>
+<title>Student Attendance Record II | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Best Time to Buy and Sell Stock – Basic" />
+<meta property="og:title" content="Student Attendance Record II" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-basic.html" />
-<meta property="og:url" content="http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-basic.html" />
+<link rel="canonical" href="http://localhost:4000/algo/dynamic_programming/2023-01-13-student-attendance-record-ii.html" />
+<meta property="og:url" content="http://localhost:4000/algo/dynamic_programming/2023-01-13-student-attendance-record-ii.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-07-26T15:50:00+09:00" />
+<meta property="article:published_time" content="2023-01-13T22:17:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Best Time to Buy and Sell Stock – Basic" />
+<meta property="twitter:title" content="Student Attendance Record II" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-07-26T15:50:00+09:00","datePublished":"2022-07-26T15:50:00+09:00","description":"Blog site mostly for programming topics.","headline":"Best Time to Buy and Sell Stock – Basic","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-basic.html"},"url":"http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-basic.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2023-01-13T22:17:00+09:00","datePublished":"2023-01-13T22:17:00+09:00","description":"Blog site mostly for programming topics.","headline":"Student Attendance Record II","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/dynamic_programming/2023-01-13-student-attendance-record-ii.html"},"url":"http://localhost:4000/algo/dynamic_programming/2023-01-13-student-attendance-record-ii.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Best Time to Buy and Sell Stock -- Basic</h1>
+            <h1 class="title is-2">Student Attendance Record II</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -893,7 +893,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Dynamic Programming
             </a>
@@ -1380,7 +1380,7 @@
             </ul>
         </div>
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Stocks
             </a>
@@ -1514,92 +1514,195 @@
                     
                     <div class="content">
 
-    <p>Published: Jul 26, 2022</p>
+    <p>Published: Jan 13, 2023</p>
 
     <div class="tags">
         
         <span class="tag  is-primary ">
-    Easy
+    Hard
 </span>
         
         <span class="tag  is-primary ">
-    Array
-</span>
-        
-        <span class="tag  is-primary ">
-    DP
+    Dynamic Programming
 </span>
         
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>The algorithm questions such that best time to buy and sell stock has variations.
-Each has slight different criteria to find the answer.
-This is the first buy-sell-stock problem and very basic easy one.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>You are given an array <code>prices</code> where <code>prices[i]</code> is the price of a given stock on the i-th day.</p>
+  <p>An attendance record for a student can be represented as a string where each character signifies whether the student
+was absent, late, or present on that day. The record only contains the following three characters:</p>
+  <ul>
+    <li>‘A’: Absent.</li>
+    <li>‘L’: Late.</li>
+    <li>‘P’: Present.</li>
+  </ul>
 
-  <p>You want to maximize your profit by choosing a single day to buy one stock and choosing a different day
-in the future to sell that stock.</p>
+  <p>Any student is eligible for an attendance award if they meet both of the following criteria:</p>
+  <ul>
+    <li>The student was absent (‘A’) for strictly fewer than 2 days total.</li>
+    <li>The student was never late (‘L’) for 3 or more consecutive days.</li>
+  </ul>
 
-  <p>Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.</p>
+  <p>Given an integer <code>n</code>, return the number of possible attendance records of length n that make a student eligible for
+an attendance award. The answer may be very large, so return it modulo 10**9 + 7.</p>
 
-  <p><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock/">https://leetcode.com/problems/best-time-to-buy-and-sell-stock/</a></p>
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= n &lt;= 10**5</code></li>
+  </ul>
+
+  <p><a href="https://leetcode.com/problems/student-attendance-record-ii/">https://leetcode.com/problems/student-attendance-record-ii/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
-<pre><code>example 1:
-Input: prices = [7,1,5,3,6,4]
-Answer: 5
-Explanation: 5 is the best profit which is from buying on the index 1 an selling on the index 4.
-</code></pre>
-<pre><code>example 2:
-Input: prices = [7,6,4,3,1]
-Answer: 0
-Explanation: the array value is ever descreasing. There is no profit available.
+<pre><code>Example 1
+Input: n = 2
+Output: 8
+Explanation: There are 8 records with length 2 that are eligible for an award:
+"PP", "AP", "PA", "LP", "PL", "AL", "LA", "LL"
+Only "AA" is not eligible because there are 2 absences (there need to be fewer than 2).
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>We are allowed to buy and sell only once. The minimum price so far should be updated in each array index.
-If the price at the current index is not the minimum, calculate profit so far.
-Then update grand max profit comparing with the current profit.</p>
+<pre><code>Example 2
+Input: n = 1
+Output: 3
+</code></pre>
+
+<pre><code>Example 3
+Input: n = 10101
+Output: 183236316
+</code></pre>
+
+<h2 id="how-to-solve">How to Solve</h2>
+<p>As this problem categorized in Hard, it is truly a hard problem.
+Easy solutions such as BSF or recursion get the Time Limit Exceeded error.
+So, it’s critical to improve the algorithm.</p>
+
+<p>If we look into the problem well, we won’t take long to figure out this is a dynamic programming (DP) problem.
+A result of the given n depends on the result of n - 1 while n - 1 depends on n - 2.
+If we look into the problem further, we will realise the character pattern is not important.
+Looking at the number of patterns is the key to solve this problem.
+Again, if we look into the problem more, we will know it is a variation of famous Fibonacci sequence.</p>
+
+<p>How to count is not straightforward like Fibonacci.
+The pattern counting is divided into two: with one A and without A.
+The initial values are based on n = 1.</p>
+<ul>
+  <li>AnoL: one A and zero L — This is ‘A’. The initial value is 1.</li>
+  <li>A1L: one A and one L — When n = 1, it’s not possible. The initial value = 0.</li>
+  <li>A2L: one A and two Ls — When n = 1, it’s not possible. The initial value = 0.</li>
+  <li>noAnoL: zero A and zero L — This is ‘P’. The initial value is 1.</li>
+  <li>noA1L: zero A and one L — This is ‘L’. The initial value is 1.</li>
+  <li>noA2L: zero A and two Ls — When n = 1, it’s not possible. The initial value = 0.</li>
+</ul>
+
+<p>The next state, n = 2, can be calculated as:</p>
+<ul>
+  <li>AnoL: sum of previous all 6 patterns</li>
+  <li>A1L: previous AnoL</li>
+  <li>A2L: previous A1L</li>
+  <li>noAnoL: sum of previous three noA patterns</li>
+  <li>noA1L: previous noAnoL</li>
+  <li>noA2L: previous noA1L</li>
+</ul>
+
+<p>In the end, sum of all 6 patterns is the answer.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-cpp">#include &lt;vector&gt;
-#include &lt;iostream&gt;
-using namespace std;
 
-class BestTimeToBuyAndSellStock
-{
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class StudentAttendanceRecordTwo {
 public:
-  int maxProfit(vector&lt;int&gt; &amp;prices)
-  {
-    int min_v = INT_MAX;
-    int max_profit = 0;
-    for (int i = 0; i &lt; prices.size(); ++i)
-    {
-      if (prices[i] &lt; min_v)
-      {
-        min_v = prices[i];
-      }
-      else
-      {
-        max_profit = max(max_profit, prices[i] - min_v);
-      }
+    int checkRecord(int n) {
+        int mod = pow(10, 9) + 7;
+        long long int AnoL = 1, A1L = 0, A2L = 0, noAnoL = 1, noA1L = 1, noA2L = 0, tmp;
+        for (int i = 1; i &lt; n; ++i) {
+            tmp = (AnoL + A1L + A2L + noAnoL + noA1L + noA2L) % mod;
+            A2L = A1L;
+            A1L = AnoL;
+            AnoL = tmp;
+            tmp = (noAnoL + noA1L + noA2L) % mod;
+            noA2L = noA1L;
+            noA1L = noAnoL;
+            noAnoL = tmp;
+        }
+        return (AnoL + A1L + A2L + noAnoL + noA1L + noA2L) % mod;
     }
-    return max_profit;
-  }
 };
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class StudentAttendanceRecordTwo:
+    def checkRecord(self, n: int) -&gt; int:
+        mod = 10 ** 9 + 7
+        AnoL, A1L, A2L, noAnoL, noA1L, noA2L = 1, 0, 0, 1, 1, 0
+        for _ in range(1, n):
+            tmp = (AnoL + A1L + A2L + noAnoL + noA1L + noA2L) % mod
+            A1L, A2L = AnoL, A1L
+            AnoL = tmp
+            tmp = (noAnoL + noA1L + noA2L) % mod
+            noA1L, noA2L = noAnoL, noA1L
+            noAnoL = tmp
+        return (AnoL + A1L + A2L + noAnoL + noA1L + noA2L) % mod
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: O(n) – n: length of the input array.</li>
-  <li>Space: O(1)</li>
+  <li>Time: <code>O(n)</code></li>
+  <li>Space: <code>O(1)</code></li>
 </ul>
 
 </div>
