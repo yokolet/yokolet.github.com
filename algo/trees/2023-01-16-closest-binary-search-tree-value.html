@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Range Module | yokolet’s notelets</title>
+<title>Closest Binary Search Tree Value | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Range Module" />
+<meta property="og:title" content="Closest Binary Search Tree Value" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/design/2022-12-19-range-module.html" />
-<meta property="og:url" content="http://localhost:4000/algo/design/2022-12-19-range-module.html" />
+<link rel="canonical" href="http://localhost:4000/algo/trees/2023-01-16-closest-binary-search-tree-value.html" />
+<meta property="og:url" content="http://localhost:4000/algo/trees/2023-01-16-closest-binary-search-tree-value.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-12-19T16:22:00+09:00" />
+<meta property="article:published_time" content="2023-01-16T11:05:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Range Module" />
+<meta property="twitter:title" content="Closest Binary Search Tree Value" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-12-19T16:22:00+09:00","datePublished":"2022-12-19T16:22:00+09:00","description":"Blog site mostly for programming topics.","headline":"Range Module","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/design/2022-12-19-range-module.html"},"url":"http://localhost:4000/algo/design/2022-12-19-range-module.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2023-01-16T11:05:00+09:00","datePublished":"2023-01-16T11:05:00+09:00","description":"Blog site mostly for programming topics.","headline":"Closest Binary Search Tree Value","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/trees/2023-01-16-closest-binary-search-tree-value.html"},"url":"http://localhost:4000/algo/trees/2023-01-16-closest-binary-search-tree-value.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Range Module</h1>
+            <h1 class="title is-2">Closest Binary Search Tree Value</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -687,7 +687,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Trees
             </a>
@@ -1188,7 +1188,7 @@
             </ul>
         </div>
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Design
             </a>
@@ -1549,24 +1549,20 @@
                     
                     <div class="content">
 
-    <p>Published: Dec 19, 2022</p>
+    <p>Published: Jan 16, 2023</p>
 
     <div class="tags">
         
         <span class="tag  is-primary ">
-    Hard
+    Easy
 </span>
         
         <span class="tag  is-primary ">
-    Binary Search
+    Binary Search Tree
 </span>
         
         <span class="tag  is-primary ">
-    Design
-</span>
-        
-        <span class="tag  is-primary ">
-    Array
+    Depth-First Search
 </span>
         
     </div>
@@ -1575,61 +1571,42 @@
 
     <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>A Range Module is a module that tracks ranges of numbers. Design a data structure to track the ranges represented
-as half-open intervals and query about them.</p>
-
-  <p>A half-open interval <code>[left, right)</code> denotes all the real numbers <code>x</code> where <code>left &lt;= x &lt; right</code>.</p>
-
-  <p>Implement the RangeModule class:</p>
-  <ul>
-    <li><code>RangeModule()</code> Initializes the object of the data structure.</li>
-    <li><code>void addRange(int left, int right)</code> Adds the half-open interval <code>[left, right)</code>, tracking every real number in
-  that interval. Adding an interval that partially overlaps with currently tracked numbers should add any numbers
-  in the interval <code>[left, right)</code> that are not already tracked.</li>
-    <li><code>boolean queryRange(int left, int right)</code> Returns true if every real number in the interval <code>[left, right)</code> is
-  currently being tracked, and false otherwise.</li>
-    <li><code>void removeRange(int left, int right)</code> Stops tracking every real number currently being tracked in the half-open
-  interval <code>[left, right)</code>.</li>
-  </ul>
+  <p>Given the <code>root</code> of a binary search tree and a <code>target</code> value, return the value in the BST that is closest to the
+<code>target</code>.</p>
 
   <p>Constraints:</p>
   <ul>
-    <li><code>1 &lt;= left &lt; right &lt;= 10**9</code></li>
-    <li>At most 10**4 calls will be made to addRange, queryRange, and removeRange.</li>
+    <li>The number of nodes in the tree is in the range <code>[1, 10**4]</code>.</li>
+    <li><code>0 &lt;= Node.val &lt;= 10**9</code></li>
+    <li><code>-10**9 &lt;= target &lt;= 10**9</code></li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/range-module/">https://leetcode.com/problems/range-module/</a></p>
+  <p><a href="https://leetcode.com/problems/closest-binary-search-tree-value/">https://leetcode.com/problems/closest-binary-search-tree-value/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
 <pre><code>Example 1
-Input:
-["RangeModule", "addRange", "removeRange", "queryRange", "queryRange", "queryRange"]
-[[], [10, 20], [14, 16], [10, 14], [13, 15], [16, 17]]
-Output:
-[null, null, null, true, false, true]
+Input: root = [4,2,5,1,3], target = 3.714286
+Output: 4
 Explanation:
-RangeModule rangeModule = new RangeModule();
-rangeModule.addRange(10, 20);
-rangeModule.removeRange(14, 16);
-rangeModule.queryRange(10, 14); // return True,(Every number in [10, 14) is being tracked)
-rangeModule.queryRange(13, 15); // return False,(Numbers like 14, 14.03, 14.17 in [13, 15) are not being tracked)
-rangeModule.queryRange(16, 17); // return True, (The number 16 in [16, 17) is still being tracked, despite the remove operation)
+       4
+     /   \
+   2      5
+ /   \
+1     3
+</code></pre>
+
+<pre><code>Example 2
+Input: root = [1], target = 4.428571
+Output: 1
 </code></pre>
 
 <h2 id="how-to-solve">How to Solve</h2>
-<p>This is another range problem like: <a href="/algo/design/2022-10-07-my-calendar-i">My Calendar I</a>.
-What data structure to use and how to maintain input data are the key to solve the problem.
-The solution here took the same approach as the My Calendar I.
-All start and end pairs are saved in a flat array.
-The array will have values: <code>[left[0], right[0], left[1], right[1], ...]</code>.
-The start position is on even indices, while the end position is on odd indicies.
-Using the binary search, the solution finds lower and upper bound indicies for the given left and right values.
-The range might be simply inserted, however, it might be replace left and/or right values.
-If both lower and upper bound indicies are the same, it just an insertion.
-If not, the existing range will be modified.
-For queries, the given left and right should be on the same indicies.
-If not, that means from left to right range crosses more than two ranges.</p>
+<p>The tree traversal can be iterative or recursive.
+It is a binary search tree, so looking the given target value, go deeper left or right.
+The solution here took an iterative approach.
+Stating from root node value, if a difference of current is smaller than previous, update the result value.
+Then go left if the target is smaller than current node value.</p>
 
 <h2 id="solution">Solution</h2>
 
@@ -1664,41 +1641,32 @@ If not, that means from left to right range crosses more than two ranges.</p>
   <div class="container box">
     
       <div class="is-active tab-content" data-content="solution-0">
-<pre><code class="language-cpp">class RangeModule {
-private:
-    vector&lt;int&gt; ranges;
-
+<pre><code class="language-cpp">/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class ClosestBinarySearchTreeValue {
 public:
-    RangeModule() {}
-    
-    void addRange(int left, int right) {
-        int i = lower_bound(ranges.begin(), ranges.end(), left) - ranges.begin();
-        int j = upper_bound(ranges.begin(), ranges.end(), right) - ranges.begin();
-        if (i != j) {
-            ranges.erase(ranges.begin() + i, ranges.begin() + j);
+    int closestValue(TreeNode* root, double target) {
+        int result = root-&gt;val;
+        while (root) {
+            if (abs(root-&gt;val - target) &lt; abs(result - target)) {
+                result = root-&gt;val;
+            }
+            if (root-&gt;val &gt; target) {
+                root = root-&gt;left;
+            } else {
+                root = root-&gt;right;
+            }
         }
-        vector&lt;int&gt; sub;
-        if (i % 2 == 0) { sub.push_back(left); }
-        if (j % 2 == 0) { sub.push_back(right); }
-        ranges.insert(ranges.begin() + i, sub.begin(), sub.end());
-    }
-    
-    bool queryRange(int left, int right) {
-        int i = upper_bound(ranges.begin(), ranges.end(), left) - ranges.begin();
-        int j = lower_bound(ranges.begin(), ranges.end(), right) - ranges.begin();
-        return i == j &amp;&amp; i % 2 == 1;
-    }
-    
-    void removeRange(int left, int right) {
-        int i = lower_bound(ranges.begin(), ranges.end(), left) - ranges.begin();
-        int j = upper_bound(ranges.begin(), ranges.end(), right) - ranges.begin();
-        if (i != j) {
-            ranges.erase(ranges.begin() + i, ranges.begin() + j);
-        }
-        vector&lt;int&gt; sub;
-        if (i % 2 == 1) { sub.push_back(left); }
-        if (j % 2 == 1) { sub.push_back(right); }
-        ranges.insert(ranges.begin() + i, sub.begin(), sub.end());
+        return result;
     }
 };
 </code></pre>
@@ -1715,42 +1683,53 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-3">
-<pre><code class="language-python">class RangeModule:
-
-    def __init__(self):
-        self.range = []
-
-    def addRange(self, left: int, right: int) -&gt; None:
-        i = bisect.bisect_left(self.range, left)
-        j = bisect.bisect_right(self.range, right)
-        sub = []
-        if i % 2 == 0:
-            sub.append(left)
-        if j % 2 == 0:
-            sub.append(right)
-        self.range[i:j] = sub
-
-
-    def queryRange(self, left: int, right: int) -&gt; bool:
-        i = bisect.bisect_right(self.range, left)
-        j = bisect.bisect_left(self.range, right)
-        return i == j and i % 2 == 1
-
-
-    def removeRange(self, left: int, right: int) -&gt; None:
-        i = bisect.bisect_left(self.range, left)
-        j = bisect.bisect_right(self.range, right)
-        sub = []
-        if i % 2 == 1:
-            sub.append(left)
-        if j % 2 == 1:
-            sub.append(right)
-        self.range[i:j] = sub
+<pre><code class="language-python"># Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class ClosestBinarySearchTreeValue:
+    def closestValue(self, root: Optional[TreeNode], target: float) -&gt; int:
+        result = root.val
+        while root:
+            if abs(root.val - target) &lt; abs(result - target):
+                result = root.val
+            if root.val &gt; target:
+                root = root.left
+            else:
+                root = root.right
+        return result
 </code></pre>
 </div>
     
       <div class="tab-content" data-content="solution-4">
-<pre><code class="language-ruby">
+<pre><code class="language-ruby"># Definition for a binary tree node.
+# class TreeNode
+#     attr_accessor :val, :left, :right
+#     def initialize(val = 0, left = nil, right = nil)
+#         @val = val
+#         @left = left
+#         @right = right
+#     end
+# end
+# @param {TreeNode} root
+# @param {Float} target
+# @return {Integer}
+def closest_value(root, target)
+    result = root.val
+    while root do
+        if (root.val - target).abs &lt; (result - target).abs
+            result = root.val
+        end
+        if root.val &gt; target
+            root = root.left
+        else
+            root = root.right
+        end
+    end
+    result
+end
 </code></pre>
 </div>
     
@@ -1759,8 +1738,8 @@ public:
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: addRange/removeRange - <code>O(n + log(n))</code>, queryRange - <code>O(log(n))</code></li>
-  <li>Space: <code>O(n)</code></li>
+  <li>Time: <code>O(log(n))</code></li>
+  <li>Space: <code>O(1)</code></li>
 </ul>
 
 </div>

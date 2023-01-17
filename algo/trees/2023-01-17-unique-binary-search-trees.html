@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Range Module | yokolet’s notelets</title>
+<title>Unique Binary Search Trees | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Range Module" />
+<meta property="og:title" content="Unique Binary Search Trees" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/design/2022-12-19-range-module.html" />
-<meta property="og:url" content="http://localhost:4000/algo/design/2022-12-19-range-module.html" />
+<link rel="canonical" href="http://localhost:4000/algo/trees/2023-01-17-unique-binary-search-trees.html" />
+<meta property="og:url" content="http://localhost:4000/algo/trees/2023-01-17-unique-binary-search-trees.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-12-19T16:22:00+09:00" />
+<meta property="article:published_time" content="2023-01-17T11:34:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Range Module" />
+<meta property="twitter:title" content="Unique Binary Search Trees" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-12-19T16:22:00+09:00","datePublished":"2022-12-19T16:22:00+09:00","description":"Blog site mostly for programming topics.","headline":"Range Module","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/design/2022-12-19-range-module.html"},"url":"http://localhost:4000/algo/design/2022-12-19-range-module.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2023-01-17T11:34:00+09:00","datePublished":"2023-01-17T11:34:00+09:00","description":"Blog site mostly for programming topics.","headline":"Unique Binary Search Trees","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/trees/2023-01-17-unique-binary-search-trees.html"},"url":"http://localhost:4000/algo/trees/2023-01-17-unique-binary-search-trees.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Range Module</h1>
+            <h1 class="title is-2">Unique Binary Search Trees</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -687,7 +687,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Trees
             </a>
@@ -1188,7 +1188,7 @@
             </ul>
         </div>
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Design
             </a>
@@ -1549,24 +1549,24 @@
                     
                     <div class="content">
 
-    <p>Published: Dec 19, 2022</p>
+    <p>Published: Jan 17, 2023</p>
 
     <div class="tags">
         
         <span class="tag  is-primary ">
-    Hard
+    Medium
 </span>
         
         <span class="tag  is-primary ">
-    Binary Search
+    Dynamic Programming
 </span>
         
         <span class="tag  is-primary ">
-    Design
+    Math
 </span>
         
         <span class="tag  is-primary ">
-    Array
+    Binary Search Tree
 </span>
         
     </div>
@@ -1575,61 +1575,51 @@
 
     <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>A Range Module is a module that tracks ranges of numbers. Design a data structure to track the ranges represented
-as half-open intervals and query about them.</p>
-
-  <p>A half-open interval <code>[left, right)</code> denotes all the real numbers <code>x</code> where <code>left &lt;= x &lt; right</code>.</p>
-
-  <p>Implement the RangeModule class:</p>
-  <ul>
-    <li><code>RangeModule()</code> Initializes the object of the data structure.</li>
-    <li><code>void addRange(int left, int right)</code> Adds the half-open interval <code>[left, right)</code>, tracking every real number in
-  that interval. Adding an interval that partially overlaps with currently tracked numbers should add any numbers
-  in the interval <code>[left, right)</code> that are not already tracked.</li>
-    <li><code>boolean queryRange(int left, int right)</code> Returns true if every real number in the interval <code>[left, right)</code> is
-  currently being tracked, and false otherwise.</li>
-    <li><code>void removeRange(int left, int right)</code> Stops tracking every real number currently being tracked in the half-open
-  interval <code>[left, right)</code>.</li>
-  </ul>
+  <p>Given an integer <code>n</code>, return the number of structurally unique BST’s (binary search trees) which has exactly <code>n</code>
+nodes of unique values from 1 to <code>n</code>.</p>
 
   <p>Constraints:</p>
   <ul>
-    <li><code>1 &lt;= left &lt; right &lt;= 10**9</code></li>
-    <li>At most 10**4 calls will be made to addRange, queryRange, and removeRange.</li>
+    <li><code>1 &lt;= n &lt;= 19</code></li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/range-module/">https://leetcode.com/problems/range-module/</a></p>
+  <p><a href="https://leetcode.com/problems/unique-binary-search-trees/">https://leetcode.com/problems/unique-binary-search-trees/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
 <pre><code>Example 1
-Input:
-["RangeModule", "addRange", "removeRange", "queryRange", "queryRange", "queryRange"]
-[[], [10, 20], [14, 16], [10, 14], [13, 15], [16, 17]]
-Output:
-[null, null, null, true, false, true]
-Explanation:
-RangeModule rangeModule = new RangeModule();
-rangeModule.addRange(10, 20);
-rangeModule.removeRange(14, 16);
-rangeModule.queryRange(10, 14); // return True,(Every number in [10, 14) is being tracked)
-rangeModule.queryRange(13, 15); // return False,(Numbers like 14, 14.03, 14.17 in [13, 15) are not being tracked)
-rangeModule.queryRange(16, 17); // return True, (The number 16 in [16, 17) is still being tracked, despite the remove operation)
+Input: n = 3
+Output: 5
+</code></pre>
+
+<pre><code>Exmaple 2
+Input: n = 1
+Output: 1
 </code></pre>
 
 <h2 id="how-to-solve">How to Solve</h2>
-<p>This is another range problem like: <a href="/algo/design/2022-10-07-my-calendar-i">My Calendar I</a>.
-What data structure to use and how to maintain input data are the key to solve the problem.
-The solution here took the same approach as the My Calendar I.
-All start and end pairs are saved in a flat array.
-The array will have values: <code>[left[0], right[0], left[1], right[1], ...]</code>.
-The start position is on even indices, while the end position is on odd indicies.
-Using the binary search, the solution finds lower and upper bound indicies for the given left and right values.
-The range might be simply inserted, however, it might be replace left and/or right values.
-If both lower and upper bound indicies are the same, it just an insertion.
-If not, the existing range will be modified.
-For queries, the given left and right should be on the same indicies.
-If not, that means from left to right range crosses more than two ranges.</p>
+<p>This problem asks the Catalan number.
+The Catalan number is from combinatorial mathematics.
+The sequence of natural numbers are: 1, 1, 2, 5, 14, 42, 132, 249, 1430, 4862, …
+To calculate the Catalan number, we can use a mathematical formula.</p>
+<pre><code>C[0] = 1
+C[n + 1] = (2 * (2n + 1) / n + 2) * C[n]
+</code></pre>
+<p>Looping over the formula from 0 to n will give us the answer.</p>
+
+<p>Aside of the mathematical formula, the problem can be solved by dynamic programming (DP).
+The formula above says the next state is depends on the previous state.
+It means the DP is a good approach.
+The auxiliary array saves the Catalan numbers from 0 to n, which is calculated as:</p>
+<pre><code>C[0] = 1
+C[n + 1] = sum(C[i] * C[n - i]) where i = 0 to n
+</code></pre>
+
+<p>Above relation might be easier to understand compared to the mathematical formula.</p>
+
+<p>The solutions here show both mathematical and DP approaches.</p>
+
+<p>For the Catalan number, see <a href="/2019/09/09/catalan-number.html">Catalan number</a> for details.</p>
 
 <h2 id="solution">Solution</h2>
 
@@ -1664,48 +1654,54 @@ If not, that means from left to right range crosses more than two ranges.</p>
   <div class="container box">
     
       <div class="is-active tab-content" data-content="solution-0">
-<pre><code class="language-cpp">class RangeModule {
-private:
-    vector&lt;int&gt; ranges;
-
+<pre><code class="language-cpp">class UniqueBinarySearchTrees {
 public:
-    RangeModule() {}
-    
-    void addRange(int left, int right) {
-        int i = lower_bound(ranges.begin(), ranges.end(), left) - ranges.begin();
-        int j = upper_bound(ranges.begin(), ranges.end(), right) - ranges.begin();
-        if (i != j) {
-            ranges.erase(ranges.begin() + i, ranges.begin() + j);
+    int numTreesMath(int n) {
+        long C = 1;
+        for (int i = 0; i &lt; n; ++i)
+        {
+          C = C * 2 * (2 * i + 1) / (i + 2);
         }
-        vector&lt;int&gt; sub;
-        if (i % 2 == 0) { sub.push_back(left); }
-        if (j % 2 == 0) { sub.push_back(right); }
-        ranges.insert(ranges.begin() + i, sub.begin(), sub.end());
+        return C;
     }
-    
-    bool queryRange(int left, int right) {
-        int i = upper_bound(ranges.begin(), ranges.end(), left) - ranges.begin();
-        int j = lower_bound(ranges.begin(), ranges.end(), right) - ranges.begin();
-        return i == j &amp;&amp; i % 2 == 1;
-    }
-    
-    void removeRange(int left, int right) {
-        int i = lower_bound(ranges.begin(), ranges.end(), left) - ranges.begin();
-        int j = upper_bound(ranges.begin(), ranges.end(), right) - ranges.begin();
-        if (i != j) {
-            ranges.erase(ranges.begin() + i, ranges.begin() + j);
+
+    int numTreesDP(int n) {
+        vector&lt;long long int&gt; memo(n + 1, 0);
+        memo[0] = 1, memo[1] = 1;
+        for (int i = 2; i &lt;= n; ++i) {
+            for (int j = 0; j &lt; i; ++j) {
+                memo[i] += memo[j] * memo[i - j - 1];
+            }
         }
-        vector&lt;int&gt; sub;
-        if (i % 2 == 1) { sub.push_back(left); }
-        if (j % 2 == 1) { sub.push_back(right); }
-        ranges.insert(ranges.begin() + i, sub.begin(), sub.end());
+        return (int)memo[n];
     }
 };
 </code></pre>
 </div>
     
       <div class="tab-content" data-content="solution-1">
-<pre><code class="language-java">
+<pre><code class="language-java">class UniqueBinarySearchTrees {
+    public int numTreesMaath(int n) {
+        long C = 1;
+        for (int i = 0; i &lt; n; ++i)
+        {
+          C = C * 2 * (2 * i + 1) / (i + 2);
+        }
+        return (int)C;
+    }
+
+    public int numTreesDP(int n) {
+        long[] memo = new long[n+1];
+        memo[0] = memo[1] = 1;
+        for (int i = 2; i &lt;= n; i++) {
+            for (int j = 0; j &lt; i; j++) {
+                memo[i] += memo[j] * memo[i-j-1];
+            }
+        }
+        return (int)memo[n];
+    }
+}
+
 </code></pre>
 </div>
     
@@ -1715,37 +1711,20 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-3">
-<pre><code class="language-python">class RangeModule:
+<pre><code class="language-python">class UniqueBinarySearchTrees:
+    def numTreesMath(self, n: int) -&gt; int:
+        C = 1
+        for i in range(n):
+            C = C * 2 * (2 * i + 1) // (i + 2)
+        return C
 
-    def __init__(self):
-        self.range = []
-
-    def addRange(self, left: int, right: int) -&gt; None:
-        i = bisect.bisect_left(self.range, left)
-        j = bisect.bisect_right(self.range, right)
-        sub = []
-        if i % 2 == 0:
-            sub.append(left)
-        if j % 2 == 0:
-            sub.append(right)
-        self.range[i:j] = sub
-
-
-    def queryRange(self, left: int, right: int) -&gt; bool:
-        i = bisect.bisect_right(self.range, left)
-        j = bisect.bisect_left(self.range, right)
-        return i == j and i % 2 == 1
-
-
-    def removeRange(self, left: int, right: int) -&gt; None:
-        i = bisect.bisect_left(self.range, left)
-        j = bisect.bisect_right(self.range, right)
-        sub = []
-        if i % 2 == 1:
-            sub.append(left)
-        if j % 2 == 1:
-            sub.append(right)
-        self.range[i:j] = sub
+    def numTreesDP(self, n: int) -&gt; int:
+        memo = [0 for _ in range(n + 1)]
+        memo[0], memo[1] = 1, 1
+        for i in range(2, n + 1):
+            for j in range(1, i + 1):
+                memo[i] += memo[j - 1] * memo[i - j]
+        return memo[n]
 </code></pre>
 </div>
     
@@ -1759,8 +1738,18 @@ public:
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: addRange/removeRange - <code>O(n + log(n))</code>, queryRange - <code>O(log(n))</code></li>
-  <li>Space: <code>O(n)</code></li>
+  <li>Math
+    <ul>
+      <li>Time: <code>O(n)</code></li>
+      <li>Space: <code>O(1)</code></li>
+    </ul>
+  </li>
+  <li>DP
+    <ul>
+      <li>Time: <code>O(n^2)</code></li>
+      <li>Space: <code>O(n)</code></li>
+    </ul>
+  </li>
 </ul>
 
 </div>
