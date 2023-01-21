@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Minimum Number of Keypresses | yokolet’s notelets</title>
+<title>Minimum Time Difference | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Minimum Number of Keypresses" />
+<meta property="og:title" content="Minimum Time Difference" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/strings/2022-09-12-minimum-number-of-keypresses.html" />
-<meta property="og:url" content="http://localhost:4000/algo/strings/2022-09-12-minimum-number-of-keypresses.html" />
+<link rel="canonical" href="http://localhost:4000/algo/others/2023-01-20-minimum-time-difference.html" />
+<meta property="og:url" content="http://localhost:4000/algo/others/2023-01-20-minimum-time-difference.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-09-12T17:20:00+09:00" />
+<meta property="article:published_time" content="2023-01-20T16:33:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Minimum Number of Keypresses" />
+<meta property="twitter:title" content="Minimum Time Difference" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-12T17:20:00+09:00","datePublished":"2022-09-12T17:20:00+09:00","description":"Blog site mostly for programming topics.","headline":"Minimum Number of Keypresses","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/strings/2022-09-12-minimum-number-of-keypresses.html"},"url":"http://localhost:4000/algo/strings/2022-09-12-minimum-number-of-keypresses.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2023-01-20T16:33:00+09:00","datePublished":"2023-01-20T16:33:00+09:00","description":"Blog site mostly for programming topics.","headline":"Minimum Time Difference","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/others/2023-01-20-minimum-time-difference.html"},"url":"http://localhost:4000/algo/others/2023-01-20-minimum-time-difference.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Minimum Number of Keypresses</h1>
+            <h1 class="title is-2">Minimum Time Difference</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -336,7 +336,7 @@
             </ul>
         </div>
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Strings
             </a>
@@ -1354,7 +1354,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Others
             </a>
@@ -1584,12 +1584,16 @@
                     
                     <div class="content">
 
-    <p>Published: Sep 12, 2022</p>
+    <p>Published: Jan 20, 2023</p>
 
     <div class="tags">
         
         <span class="tag  is-primary ">
     Medium
+</span>
+        
+        <span class="tag  is-primary ">
+    Math
 </span>
         
         <span class="tag  is-primary ">
@@ -1600,98 +1604,139 @@
     String
 </span>
         
-        <span class="tag  is-primary ">
-    Greedy
-</span>
-        
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>String related problems are sometime often confusing.
-We should read the problem description carefully.
-It might be turned out it is not so difficult like this problem.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>You have a keypad with 9 buttons, numbered from 1 to 9, each mapped to lowercase English letters.
-You can choose which characters each button is matched to as long as:</p>
-  <ul>
-    <li>All 26 lowercase English letters are mapped to.</li>
-    <li>Each character is mapped to by exactly 1 button.</li>
-    <li>Each button maps to at most 3 characters.</li>
-  </ul>
-
-  <p>To type the first character matched to a button, you press the button once.
-To type the second character, you press the button twice, and so on.</p>
-
-  <p>Given a string <code>s</code>, return the minimum number of keypresses needed to type s using your keypad.</p>
-
-  <p>Note that the characters mapped to by each button, and the order they are mapped in cannot be changed.</p>
+  <p>Given a list of 24-hour clock time points in “HH:MM” format, return the minimum minutes difference between any two
+time-points in the list.</p>
 
   <p>Constraints:</p>
   <ul>
-    <li><code>1 &lt;= s.length &lt;= 10**5</code></li>
-    <li><code>s</code> consists of lowercase English letters.</li>
+    <li><code>2 &lt;= timePoints.length &lt;= 2 * 10**4</code></li>
+    <li><code>timePoints[i]</code> is in the format “HH:MM”.</li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/minimum-number-of-keypresses/">https://leetcode.com/problems/minimum-number-of-keypresses/</a></p>
+  <p><a href="https://leetcode.com/problems/minimum-time-difference/">https://leetcode.com/problems/minimum-time-difference/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
-<pre><code>Example 1:
-Input: s = "apple"
-Output: 5
-Explanation: One optimal way to setup your keypad is shown above.
-Type 'a' by pressing button 1 once.
-Type 'p' by pressing button 6 once.
-Type 'p' by pressing button 6 once.
-Type 'l' by pressing button 5 once.
-Type 'e' by pressing button 3 once.
-A total of 5 button presses are needed, so return 5.
+<pre><code>Example 1
+Input: timePoints = ["23:59","00:00"]
+Output: 1
 </code></pre>
 
-<pre><code>Example 2:
-Input: s = "abcdefghijkl"
-Output: 15
-Explanation: One optimal way to setup your keypad is shown above.
-The letters 'a' to 'i' can each be typed by pressing a button once.
-Type 'j' by pressing button 1 twice.
-Type 'k' by pressing button 2 twice.
-Type 'l' by pressing button 3 twice.
-A total of 15 button presses are needed, so return 15.
+<pre><code>Example 2
+Input: timePoints = ["00:00","23:59","00:00"]
+Output: 0
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>In this problem, a frequency of characters matters.
-The most frequently used characters should be put as the first letter.
-The solution starts from counting the characters and sorting based on the frequency.
-The number of characters are at most 26.
-First 9 frequent characters are all 1.
-Then, 10th to 18th characters are 2.
-Lastly characters after 18th are 3.
-Depends on the input string length, those are counted.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>A couple of key points are:</p>
+<ul>
+  <li>convert time in string to minutes</li>
+  <li>handle minimum + 1 day and maximum time</li>
+</ul>
+
+<p>Other than that, nothing is special. Sort the minutes array and compare time difference to next time.
+The problem asks the minimum time difference, so a comparison of two adjacent values is enough after sorting.
+The tricky part is a time might be next day’s time.
+To handle this, the solution here added a time which is the minimum + 24 * 60 minutes.
+When the loop is over, the minimum difference is there.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class MinimumNumberOfKeypresses:
-    def minimumKeypresses(self, s: str) -&gt; int:
-        counter = collections.Counter(s)
-        counter = sorted(counter.items(), key=lambda x: x[1], reverse=True)
-        if len(counter) &lt;= 9:
-            return len(s)
-        else:
-            values = [x[1] for x in counter]
-            if len(counter) &lt;= 18:
-                return sum(values[:9]) + 2 * sum(values[9:])
-            else:
-                return sum(values[:9]) + 2 * sum(values[9:18]) + 3 * sum(values[18:])
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class MinimumTimeDifference {
+public:
+    int findMinDifference(vector&lt;string&gt;&amp; timePoints) {
+        auto timeToMins = [](const string &amp;t) {
+            return stoi(t.substr(0, 2)) * 60 + stoi(t.substr(3, 2));
+        };
+        vector&lt;int&gt; points;
+        for (auto &amp;t : timePoints) {
+            points.push_back(timeToMins(t));
+        }
+        sort(points.begin(), points.end());
+        points.push_back(points[0] + 24 * 60);
+        int min_diff = 24 * 60 + 1;
+        for (int i = 1; i &lt; points.size(); ++i) {
+            min_diff = min(min_diff, points[i] - points[i - 1]);
+        }
+        return min_diff;
+    }
+};
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class MinimumTimeDifference:
+    def findMinDifference(self, timePoints: List[str]) -&gt; int:
+        def timeToMins(t):
+            return int(t[0:2]) * 60 + int(t[3:5])
+        points = sorted([timeToMins(t) for t in timePoints])
+        points.append(points[0] + 24 * 60)
+        min_diff = float('inf')
+        for i in range(1, len(points)):
+            min_diff = min(min_diff, points[i] - points[i - 1])
+        return min_diff
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(1)</code> – all are up to 26, constant</li>
-  <li>Space: <code>O(1)</code></li>
+  <li>Time: <code>O(n * log(n))</code></li>
+  <li>Space: <code>O(n)</code></li>
 </ul>
 
 </div>

@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Minimum Number of Keypresses | yokolet’s notelets</title>
+<title>Find All Possible Recipes from Given Supplies | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Minimum Number of Keypresses" />
+<meta property="og:title" content="Find All Possible Recipes from Given Supplies" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/strings/2022-09-12-minimum-number-of-keypresses.html" />
-<meta property="og:url" content="http://localhost:4000/algo/strings/2022-09-12-minimum-number-of-keypresses.html" />
+<link rel="canonical" href="http://localhost:4000/algo/graphs/2023-01-20-find-all-possible-recipes-from-given-supplies.html" />
+<meta property="og:url" content="http://localhost:4000/algo/graphs/2023-01-20-find-all-possible-recipes-from-given-supplies.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-09-12T17:20:00+09:00" />
+<meta property="article:published_time" content="2023-01-20T11:48:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Minimum Number of Keypresses" />
+<meta property="twitter:title" content="Find All Possible Recipes from Given Supplies" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-12T17:20:00+09:00","datePublished":"2022-09-12T17:20:00+09:00","description":"Blog site mostly for programming topics.","headline":"Minimum Number of Keypresses","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/strings/2022-09-12-minimum-number-of-keypresses.html"},"url":"http://localhost:4000/algo/strings/2022-09-12-minimum-number-of-keypresses.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2023-01-20T11:48:00+09:00","datePublished":"2023-01-20T11:48:00+09:00","description":"Blog site mostly for programming topics.","headline":"Find All Possible Recipes from Given Supplies","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/graphs/2023-01-20-find-all-possible-recipes-from-given-supplies.html"},"url":"http://localhost:4000/algo/graphs/2023-01-20-find-all-possible-recipes-from-given-supplies.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Minimum Number of Keypresses</h1>
+            <h1 class="title is-2">Find All Possible Recipes from Given Supplies</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -336,7 +336,7 @@
             </ul>
         </div>
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Strings
             </a>
@@ -860,7 +860,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Graphs
             </a>
@@ -1584,7 +1584,7 @@
                     
                     <div class="content">
 
-    <p>Published: Sep 12, 2022</p>
+    <p>Published: Jan 20, 2023</p>
 
     <div class="tags">
         
@@ -1593,105 +1593,201 @@
 </span>
         
         <span class="tag  is-primary ">
-    Sorting
+    Topological Sort
 </span>
         
         <span class="tag  is-primary ">
-    String
+    Hash Table
 </span>
         
         <span class="tag  is-primary ">
-    Greedy
+    Graph
 </span>
         
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>String related problems are sometime often confusing.
-We should read the problem description carefully.
-It might be turned out it is not so difficult like this problem.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>You have a keypad with 9 buttons, numbered from 1 to 9, each mapped to lowercase English letters.
-You can choose which characters each button is matched to as long as:</p>
-  <ul>
-    <li>All 26 lowercase English letters are mapped to.</li>
-    <li>Each character is mapped to by exactly 1 button.</li>
-    <li>Each button maps to at most 3 characters.</li>
-  </ul>
+  <p>You have information about <code>n</code> different recipes. You are given a string array <code>recipes</code> and a 2D string array
+<code>ingredients</code>. The i-th recipe has the name <code>recipes[i]</code>, and you can create it if you have all the needed
+ingredients from <code>ingredients[i]</code>. Ingredients to a recipe may need to be created from other recipes, i.e.,
+<code>ingredients[i]</code> may contain a string that is in <code>recipes</code>.</p>
 
-  <p>To type the first character matched to a button, you press the button once.
-To type the second character, you press the button twice, and so on.</p>
+  <p>You are also given a string array <code>supplies</code> containing all the ingredients that you initially have, and you have an
+infinite supply of all of them.</p>
 
-  <p>Given a string <code>s</code>, return the minimum number of keypresses needed to type s using your keypad.</p>
+  <p>Return a list of all the recipes that you can create. You may return the answer in any order.</p>
 
-  <p>Note that the characters mapped to by each button, and the order they are mapped in cannot be changed.</p>
+  <p>Note that two recipes may contain each other in their ingredients.</p>
 
   <p>Constraints:</p>
   <ul>
-    <li><code>1 &lt;= s.length &lt;= 10**5</code></li>
-    <li><code>s</code> consists of lowercase English letters.</li>
+    <li><code>n == recipes.length == ingredients.length</code></li>
+    <li><code>1 &lt;= n &lt;= 100</code></li>
+    <li><code>1 &lt;= ingredients[i].length, supplies.length &lt;= 100</code></li>
+    <li><code>1 &lt;= recipes[i].length, ingredients[i][j].length, supplies[k].length &lt;= 10</code></li>
+    <li><code>recipes[i], ingredients[i][j], and supplies[k]</code> consist only of lowercase English letters.</li>
+    <li>All the values of <code>recipes</code> and <code>supplies</code> combined are unique.</li>
+    <li>Each <code>ingredients[i]</code> does not contain any duplicate values.</li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/minimum-number-of-keypresses/">https://leetcode.com/problems/minimum-number-of-keypresses/</a></p>
+  <p><a href="https://leetcode.com/problems/find-all-possible-recipes-from-given-supplies/">https://leetcode.com/problems/find-all-possible-recipes-from-given-supplies/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
-<pre><code>Example 1:
-Input: s = "apple"
-Output: 5
-Explanation: One optimal way to setup your keypad is shown above.
-Type 'a' by pressing button 1 once.
-Type 'p' by pressing button 6 once.
-Type 'p' by pressing button 6 once.
-Type 'l' by pressing button 5 once.
-Type 'e' by pressing button 3 once.
-A total of 5 button presses are needed, so return 5.
+<pre><code>Example 1
+Input: recipes = ["bread"],
+       ingredients = [["yeast","flour"]], supplies = ["yeast","flour","corn"]
+Output: ["bread"]
+Explanation:
+We can create "bread" since we have the ingredients "yeast" and "flour".
 </code></pre>
 
-<pre><code>Example 2:
-Input: s = "abcdefghijkl"
-Output: 15
-Explanation: One optimal way to setup your keypad is shown above.
-The letters 'a' to 'i' can each be typed by pressing a button once.
-Type 'j' by pressing button 1 twice.
-Type 'k' by pressing button 2 twice.
-Type 'l' by pressing button 3 twice.
-A total of 15 button presses are needed, so return 15.
+<pre><code>Exmaple 2
+Input: recipes = ["bread","sandwich"],
+       ingredients = [["yeast","flour"],["bread","meat"]], supplies = ["yeast","flour","meat"]
+Output: ["bread","sandwich"]
+Explanation:
+We can create "bread" since we have the ingredients "yeast" and "flour".
+We can create "sandwich" since we have the ingredient "meat" and can create the ingredient "bread".
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>In this problem, a frequency of characters matters.
-The most frequently used characters should be put as the first letter.
-The solution starts from counting the characters and sorting based on the frequency.
-The number of characters are at most 26.
-First 9 frequent characters are all 1.
-Then, 10th to 18th characters are 2.
-Lastly characters after 18th are 3.
-Depends on the input string length, those are counted.</p>
+<pre><code>Example 3
+Input: recipes = ["bread","sandwich","burger"],
+       ingredients = [["yeast","flour"],["bread","meat"],["sandwich","meat","bread"]], supplies = ["yeast","flour","meat"]
+Output: ["bread","sandwich","burger"]
+Explanation:
+We can create "bread" since we have the ingredients "yeast" and "flour".
+We can create "sandwich" since we have the ingredient "meat" and can create the ingredient "bread".
+We can create "burger" since we have the ingredient "meat" and can create the ingredients "bread" and "sandwich".
+</code></pre>
+
+<h2 id="how-to-solve">How to Solve</h2>
+<p>The topological sort is a good approach for this problem.
+A graph is created by mapping ingredients to recipes.
+While creating a graph, count indegrees of each recipes.
+Start graph traversal from the indegree 0 nodes.
+To check visited nodes, decrement an indegree count.
+When the indegree count becomes 0, the node should be added to the queue.
+In the end, find the node whose indegree is 0 and the name is one of recipes.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class MinimumNumberOfKeypresses:
-    def minimumKeypresses(self, s: str) -&gt; int:
-        counter = collections.Counter(s)
-        counter = sorted(counter.items(), key=lambda x: x[1], reverse=True)
-        if len(counter) &lt;= 9:
-            return len(s)
-        else:
-            values = [x[1] for x in counter]
-            if len(counter) &lt;= 18:
-                return sum(values[:9]) + 2 * sum(values[9:])
-            else:
-                return sum(values[:9]) + 2 * sum(values[9:18]) + 3 * sum(values[18:])
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class FindAllPossibleRecipesFromGivenSupplies {
+public:
+    vector&lt;string&gt; findAllRecipes(vector&lt;string&gt;&amp; recipes, vector&lt;vector&lt;string&gt;&gt;&amp; ingredients, vector&lt;string&gt;&amp; supplies) {
+        unordered_map&lt;string, set&lt;string&gt;&gt; graph;
+        unordered_map&lt;string, int&gt; indegree;
+        for (size_t i = 0; i &lt; recipes.size(); ++i) {
+            for (string &amp;parent : ingredients[i]) {
+                graph[parent].insert(recipes[i]);
+                indegree[recipes[i]]++;
+            }
+        }
+        queue&lt;string&gt; q;
+        for (auto &amp;sup : supplies) {
+            if (indegree[sup] == 0) {
+                q.push(sup);
+            }
+        }
+        while (!q.empty()) {
+            string cur = q.front();
+            q.pop();
+            for (auto &amp;neigh : graph[cur]) {
+                indegree[neigh]--;
+                if (indegree[neigh] == 0) { q.push(neigh); }
+            }
+        }
+        vector&lt;string&gt; result;
+        for (auto &amp;[key, value] : indegree) {
+            if (value == 0 &amp;&amp; find(recipes.begin(), recipes.end(), key) != recipes.end()) {
+                result.push_back(key);
+            }
+        }
+        return result;
+    }
+};
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class FindAllPossibleRecipesFromGivenSupplies:
+    def findAllRecipes(self, recipes: List[str], ingredients: List[List[str]], supplies: List[str]) -&gt; List[str]:
+        graph = defaultdict(set)
+        indegree = defaultdict(int)
+        for child, parents in zip(recipes, ingredients):
+            for p in parents:
+                graph[p].add(child)
+                indegree[child] += 1
+        queue = []
+        for sup in supplies:
+            if indegree[sup] == 0:
+                queue.append(sup)
+        while queue:
+            cur = queue.pop(0)
+            for neigh in graph[cur]:
+                indegree[neigh] -= 1
+                if indegree[neigh] == 0:
+                    queue.append(neigh)
+        return [k for k, v in indegree.items() if v == 0 and k in recipes]
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(1)</code> – all are up to 26, constant</li>
-  <li>Space: <code>O(1)</code></li>
+  <li>Time: <code>O(m * n)</code></li>
+  <li>Space: <code>O(n)</code></li>
 </ul>
 
 </div>

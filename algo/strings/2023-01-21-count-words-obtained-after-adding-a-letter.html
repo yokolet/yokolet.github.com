@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Minimum Number of Keypresses | yokolet’s notelets</title>
+<title>Count Words Obtained After Adding a Letter | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Minimum Number of Keypresses" />
+<meta property="og:title" content="Count Words Obtained After Adding a Letter" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/strings/2022-09-12-minimum-number-of-keypresses.html" />
-<meta property="og:url" content="http://localhost:4000/algo/strings/2022-09-12-minimum-number-of-keypresses.html" />
+<link rel="canonical" href="http://localhost:4000/algo/strings/2023-01-21-count-words-obtained-after-adding-a-letter.html" />
+<meta property="og:url" content="http://localhost:4000/algo/strings/2023-01-21-count-words-obtained-after-adding-a-letter.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-09-12T17:20:00+09:00" />
+<meta property="article:published_time" content="2023-01-21T23:51:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Minimum Number of Keypresses" />
+<meta property="twitter:title" content="Count Words Obtained After Adding a Letter" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-12T17:20:00+09:00","datePublished":"2022-09-12T17:20:00+09:00","description":"Blog site mostly for programming topics.","headline":"Minimum Number of Keypresses","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/strings/2022-09-12-minimum-number-of-keypresses.html"},"url":"http://localhost:4000/algo/strings/2022-09-12-minimum-number-of-keypresses.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2023-01-21T23:51:00+09:00","datePublished":"2023-01-21T23:51:00+09:00","description":"Blog site mostly for programming topics.","headline":"Count Words Obtained After Adding a Letter","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/strings/2023-01-21-count-words-obtained-after-adding-a-letter.html"},"url":"http://localhost:4000/algo/strings/2023-01-21-count-words-obtained-after-adding-a-letter.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Minimum Number of Keypresses</h1>
+            <h1 class="title is-2">Count Words Obtained After Adding a Letter</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -1584,7 +1584,7 @@
                     
                     <div class="content">
 
-    <p>Published: Sep 12, 2022</p>
+    <p>Published: Jan 21, 2023</p>
 
     <div class="tags">
         
@@ -1600,98 +1600,167 @@
     String
 </span>
         
-        <span class="tag  is-primary ">
-    Greedy
-</span>
-        
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>String related problems are sometime often confusing.
-We should read the problem description carefully.
-It might be turned out it is not so difficult like this problem.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>You have a keypad with 9 buttons, numbered from 1 to 9, each mapped to lowercase English letters.
-You can choose which characters each button is matched to as long as:</p>
+  <p>You are given two 0-indexed arrays of strings <code>startWords</code> and <code>targetWords</code>. Each string consists of lowercase
+English letters only.
+For each string in <code>targetWords</code>, check if it is possible to choose a string from <code>startWords</code> and perform a
+conversion operation on it to be equal to that from <code>targetWords</code>.
+The conversion operation is described in the following two steps:</p>
   <ul>
-    <li>All 26 lowercase English letters are mapped to.</li>
-    <li>Each character is mapped to by exactly 1 button.</li>
-    <li>Each button maps to at most 3 characters.</li>
+    <li>Append any lowercase letter that is not present in the string to its end.
+      <ul>
+        <li>For example, if the string is “abc”, the letters ‘d’, ‘e’, or ‘y’ can be added to it, but not ‘a’. If ‘d’ is
+added, the resulting string will be “abcd”.</li>
+      </ul>
+    </li>
+    <li>Rearrange the letters of the new string in any arbitrary order.
+      <ul>
+        <li>For example, “abcd” can be rearranged to “acbd”, “bacd”, “cbda”, and so on. Note that it can also be rearranged
+to “abcd” itself.</li>
+      </ul>
+    </li>
   </ul>
 
-  <p>To type the first character matched to a button, you press the button once.
-To type the second character, you press the button twice, and so on.</p>
+  <p>Return the number of strings in <code>targetWords</code> that can be obtained by performing the operations on any string of
+<code>startWords</code>.</p>
 
-  <p>Given a string <code>s</code>, return the minimum number of keypresses needed to type s using your keypad.</p>
-
-  <p>Note that the characters mapped to by each button, and the order they are mapped in cannot be changed.</p>
+  <p>Note that you will only be verifying if the string in <code>targetWords</code> can be obtained from a string in startWords by
+performing the operations. The strings in <code>startWords</code> do not actually change during this process.</p>
 
   <p>Constraints:</p>
   <ul>
-    <li><code>1 &lt;= s.length &lt;= 10**5</code></li>
-    <li><code>s</code> consists of lowercase English letters.</li>
+    <li><code>1 &lt;= startWords.length, targetWords.length &lt;= 5 * 10**4</code></li>
+    <li><code>1 &lt;= startWords[i].length, targetWords[j].length &lt;= 26</code></li>
+    <li>Each string of <code>startWords</code> and <code>targetWords</code> consists of lowercase English letters only.</li>
+    <li>No letter occurs more than once in any string of <code>startWords</code> or <code>targetWords</code>.</li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/minimum-number-of-keypresses/">https://leetcode.com/problems/minimum-number-of-keypresses/</a></p>
+  <p><a href="https://leetcode.com/problems/count-words-obtained-after-adding-a-letter/">https://leetcode.com/problems/count-words-obtained-after-adding-a-letter/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
-<pre><code>Example 1:
-Input: s = "apple"
-Output: 5
-Explanation: One optimal way to setup your keypad is shown above.
-Type 'a' by pressing button 1 once.
-Type 'p' by pressing button 6 once.
-Type 'p' by pressing button 6 once.
-Type 'l' by pressing button 5 once.
-Type 'e' by pressing button 3 once.
-A total of 5 button presses are needed, so return 5.
+<pre><code>Exmaple 1
+Input: startWords = ["ant","act","tack"], targetWords = ["tack","act","acti"]
+Output: 2
+Explanation:
+act -&gt; tack and act -&gt; acti
 </code></pre>
 
-<pre><code>Example 2:
-Input: s = "abcdefghijkl"
-Output: 15
-Explanation: One optimal way to setup your keypad is shown above.
-The letters 'a' to 'i' can each be typed by pressing a button once.
-Type 'j' by pressing button 1 twice.
-Type 'k' by pressing button 2 twice.
-Type 'l' by pressing button 3 twice.
-A total of 15 button presses are needed, so return 15.
+<pre><code>Example 2
+Input: startWords = ["ab","a"], targetWords = ["abc","abcd"]
+Output: 1
+Explanation:
+ab -&gt; abc
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>In this problem, a frequency of characters matters.
-The most frequently used characters should be put as the first letter.
-The solution starts from counting the characters and sorting based on the frequency.
-The number of characters are at most 26.
-First 9 frequent characters are all 1.
-Then, 10th to 18th characters are 2.
-Lastly characters after 18th are 3.
-Depends on the input string length, those are counted.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This problem is an anagram comparison.
+Both start and target words should be sorted for comparison.
+The solution here took a string matching approach by creating a one letter shorter word from targets.
+If the matching word is found in start words, count up.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class MinimumNumberOfKeypresses:
-    def minimumKeypresses(self, s: str) -&gt; int:
-        counter = collections.Counter(s)
-        counter = sorted(counter.items(), key=lambda x: x[1], reverse=True)
-        if len(counter) &lt;= 9:
-            return len(s)
-        else:
-            values = [x[1] for x in counter]
-            if len(counter) &lt;= 18:
-                return sum(values[:9]) + 2 * sum(values[9:])
-            else:
-                return sum(values[:9]) + 2 * sum(values[9:18]) + 3 * sum(values[18:])
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class Solution {
+public:
+    int wordCount(vector&lt;string&gt;&amp; startWords, vector&lt;string&gt;&amp; targetWords) {
+        unordered_set&lt;string&gt; starts;
+        for (auto &amp;word : startWords) {
+            sort(word.begin(), word.end());
+            starts.insert(word);
+        }
+        int result = 0;
+        for (auto &amp;word : targetWords) {
+            sort(word.begin(), word.end());
+            for (int i = 0; i &lt; word.size(); ++i) {
+                if (starts.find(word.substr(0, i) + word.substr(i + 1)) != starts.end()) {
+                    result++;
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+};
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class Solution:
+    def wordCount(self, startWords: List[str], targetWords: List[str]) -&gt; int:
+        starts = set()
+        for word in startWords:
+            word = "".join(sorted(word))
+            starts.add(word)
+        result = 0
+        for word in targetWords:
+            word = "".join(sorted(word))
+            for i in range(len(word)):
+                if word[:i] + word[i + 1:] in starts:
+                    result += 1
+                    break
+        return result
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(1)</code> – all are up to 26, constant</li>
-  <li>Space: <code>O(1)</code></li>
+  <li>Time: <code>O(m + n)</code> – m, n: number of start and target words. Sorting is constant since each word has at most 26 characters.</li>
+  <li>Space: <code>O(m)</code></li>
 </ul>
 
 </div>
