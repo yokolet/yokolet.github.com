@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Find Triangular Sum of an Array | yokolet’s notelets</title>
+<title>Sentence Screen Fitting | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Find Triangular Sum of an Array" />
+<meta property="og:title" content="Sentence Screen Fitting" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/others/2022-09-10-find-triangular-sum-of-an-array.html" />
-<meta property="og:url" content="http://localhost:4000/algo/others/2022-09-10-find-triangular-sum-of-an-array.html" />
+<link rel="canonical" href="http://localhost:4000/algo/dynamic_programming/2023-01-25-sentence-screen-fitting.html" />
+<meta property="og:url" content="http://localhost:4000/algo/dynamic_programming/2023-01-25-sentence-screen-fitting.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-09-10T23:16:00+09:00" />
+<meta property="article:published_time" content="2023-01-25T15:43:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Find Triangular Sum of an Array" />
+<meta property="twitter:title" content="Sentence Screen Fitting" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-10T23:16:00+09:00","datePublished":"2022-09-10T23:16:00+09:00","description":"Blog site mostly for programming topics.","headline":"Find Triangular Sum of an Array","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/others/2022-09-10-find-triangular-sum-of-an-array.html"},"url":"http://localhost:4000/algo/others/2022-09-10-find-triangular-sum-of-an-array.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2023-01-25T15:43:00+09:00","datePublished":"2023-01-25T15:43:00+09:00","description":"Blog site mostly for programming topics.","headline":"Sentence Screen Fitting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/dynamic_programming/2023-01-25-sentence-screen-fitting.html"},"url":"http://localhost:4000/algo/dynamic_programming/2023-01-25-sentence-screen-fitting.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Find Triangular Sum of an Array</h1>
+            <h1 class="title is-2">Sentence Screen Fitting</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -963,7 +963,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Dynamic Programming
             </a>
@@ -1382,7 +1382,7 @@
             </ul>
         </div>
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Others
             </a>
@@ -1612,7 +1612,7 @@
                     
                     <div class="content">
 
-    <p>Published: Sep 10, 2022</p>
+    <p>Published: Jan 25, 2023</p>
 
     <div class="tags">
         
@@ -1621,98 +1621,169 @@
 </span>
         
         <span class="tag  is-primary ">
-    Math
+    Dynamic Programming
 </span>
         
         <span class="tag  is-primary ">
-    Array
+    String
 </span>
         
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is a math problem.
-The brute force solution barely passes all tests, however, it is very slow.
-To fins an optimal solution, some mathematical insight is required.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>You are given a 0-indexed integer array <code>nums,</code> where <code>nums[i]</code> is a digit between 0 and 9 (inclusive).
-The triangular sum of <code>nums</code> is the value of the only element present in nums
-after the following process terminates:</p>
-  <ol>
-    <li>Let nums comprise of <code>n</code> elements. If <code>n == 1</code>, end the process.
-Otherwise, create a new 0-indexed integer array <code>newNums</code> of length <code>n - 1</code>.</li>
-    <li>For each index <code>i</code>, where <code>0 &lt;= i &lt; n - 1</code>, assign the value of <code>newNums[i]</code> as <code>(nums[i] + nums[i+1]) % 10</code>,
-where <code>%</code> denotes modulo operator.</li>
-    <li>Replace the array <code>nums</code> with <code>newNums</code>.</li>
-    <li>Repeat the entire process starting from step 1.
-Return the triangular sum of <code>nums</code>.</li>
-  </ol>
+  <p>Given a <code>rows x cols</code> screen and a <code>sentence</code> represented as a list of strings, return the number of times the given
+sentence can be fitted on the screen.</p>
 
-  <p>Constraints:</p>
+  <p>The order of words in the sentence must remain unchanged, and a word cannot be split into two lines. A single space
+must separate two consecutive words in a line.</p>
+
+  <p>Constraints:
+<code>-1 &lt;= sentence.length &lt;= 100</code></p>
   <ul>
-    <li><code>1 &lt;= nums.length &lt;= 1000</code></li>
-    <li><code>0 &lt;= nums[i] &lt;= 9</code></li>
+    <li><code>1 &lt;= sentence[i].length &lt;= 10</code></li>
+    <li><code>sentence[i]</code> consists of lowercase English letters.</li>
+    <li><code>1 &lt;= rows, cols &lt;= 2 * 10**4</code></li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/find-triangular-sum-of-an-array/">https://leetcode.com/problems/find-triangular-sum-of-an-array/</a></p>
+  <p><a href="https://leetcode.com/problems/sentence-screen-fitting/">https://leetcode.com/problems/sentence-screen-fitting/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
-<pre><code>Example 1:
-Input: nums = [1,2,3,4,5]
-Output: 8
-
-1, 2, 3, 4, 5
-3, 5, 7, 9
-8, 2, 6
-0, 8,
-8
+<pre><code>Example 1
+Input: sentence = ["hello","world"], rows = 2, cols = 8
+Output: 1
+Explanation:
+hello___
+world___
 </code></pre>
 
-<pre><code>Example 2:
-Input: nums = [5]
-Output: 5
+<pre><code>Example 2
+Input: sentence = ["a", "bcd", "e"], rows = 3, cols = 6
+Output: 2
+Explanation:
+a_bcd_
+e_a___
+bcd_e_
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<pre><code>Example 3
+Input: sentence = ["i","had","apple","pie"], rows = 4, cols = 5
+Output: 1
+Explanation:
+i_had
+apple
+pie_i
+had__
+</code></pre>
 
-<p>Here, the mathematical, optimal solution and brute force solutions are.
-The mathematical solution is from combination idea:
-each number is multiplied by the number of routes to the top.
-In the solution, this number is “<code>cnk</code>”.
-Additionally, the calculation uses: <code>(a % 10 + b % 10) % 10 = (a + b) % 10</code>.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>The memoization (dynamic programming) is a good approach for this problem.
+The auxiliary array saves the each character position and word end marker of -1.
+Once auxiliary array is created, count how many entire sentence fit in a single row.
+The count goes up to the end of rows * cols, so the answer should be divided by the sentence length.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class FindTriangularSumOfAnArrayMath:
-    def triangularSum(self, nums: List[int]) -&gt; int:
-        n = len(nums)-1
-        total = 0
-        cnk = 1
-        for i in range(len(nums)):
-            total += nums[i] * cnk
-            total %= 10
-            cnk = cnk * (n-i) // (i+1)
-        return total
 
-class FindTriangularSumOfAnArrayBF:
-    def triangularSum(self, nums: List[int]) -&gt; int:
-        n, prev = len(nums), nums
-        for _ in range(n - 1):
-            cur = []
-            for i in range(len(prev) - 1):
-                cur.append((prev[i] + prev[i + 1]) % 10)
-            prev = cur
-        return prev[0]
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class SentenceScreenFitting {
+public:
+    int wordsTyping(vector&lt;string&gt;&amp; sentence, int rows, int cols) {
+        string words = "";
+        for (string &amp;word : sentence) {
+            words += word + ' ';
+        }
+        int start = -1, n = words.size();
+        vector&lt;int&gt; memo(n, 0);
+        for (int i = 0; i &lt; n; ++i) {
+            if (words[i] == ' ') {
+                start = i;
+            }
+            memo[i] = i - start - 1;
+        }
+        int length = 0;
+        for (int r = 0; r &lt; rows; ++r) {
+            length += cols;
+            length -= memo[length % n];
+        }
+        return (length + 1) / n;
+    }
+};
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class SentenceScreenFitting:
+    def wordsTyping(self, sentence: List[str], rows: int, cols: int) -&gt; int:
+        words = ' '.join(sentence) + ' '
+        start, n = -1, len(words)
+        memo = [0 for _ in range(n)]
+        for i in range(n):
+            if words[i] == ' ':
+                start = i
+            memo[i] = i - start - 1
+        length = 0
+        for _ in range(rows):
+            length += cols
+            length -= memo[length % n]
+        return (length + 1) // n
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(n)</code> – math solution, <code>O(n^2)</code> – brute force solution</li>
-  <li>Space: <code>O(1)</code> – math solution, <code>O(n)</code> – brute force solution</li>
+  <li>Time: <code>O(n)</code> – n: number of rows. A sentence and each word have upper bound of 100 and 10 respectively. Those are constant</li>
+  <li>Space: <code>O(1)</code></li>
 </ul>
 
 </div>

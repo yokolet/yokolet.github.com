@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Find Triangular Sum of an Array | yokolet’s notelets</title>
+<title>Snapshot Array | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Find Triangular Sum of an Array" />
+<meta property="og:title" content="Snapshot Array" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/others/2022-09-10-find-triangular-sum-of-an-array.html" />
-<meta property="og:url" content="http://localhost:4000/algo/others/2022-09-10-find-triangular-sum-of-an-array.html" />
+<link rel="canonical" href="http://localhost:4000/algo/design/2023-01-22-snapshot-array.html" />
+<meta property="og:url" content="http://localhost:4000/algo/design/2023-01-22-snapshot-array.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-09-10T23:16:00+09:00" />
+<meta property="article:published_time" content="2023-01-22T21:49:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Find Triangular Sum of an Array" />
+<meta property="twitter:title" content="Snapshot Array" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-10T23:16:00+09:00","datePublished":"2022-09-10T23:16:00+09:00","description":"Blog site mostly for programming topics.","headline":"Find Triangular Sum of an Array","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/others/2022-09-10-find-triangular-sum-of-an-array.html"},"url":"http://localhost:4000/algo/others/2022-09-10-find-triangular-sum-of-an-array.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2023-01-22T21:49:00+09:00","datePublished":"2023-01-22T21:49:00+09:00","description":"Blog site mostly for programming topics.","headline":"Snapshot Array","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/design/2023-01-22-snapshot-array.html"},"url":"http://localhost:4000/algo/design/2023-01-22-snapshot-array.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Find Triangular Sum of an Array</h1>
+            <h1 class="title is-2">Snapshot Array</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -1237,7 +1237,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Design
             </a>
@@ -1382,7 +1382,7 @@
             </ul>
         </div>
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Others
             </a>
@@ -1612,7 +1612,7 @@
                     
                     <div class="content">
 
-    <p>Published: Sep 10, 2022</p>
+    <p>Published: Jan 22, 2023</p>
 
     <div class="tags">
         
@@ -1621,98 +1621,175 @@
 </span>
         
         <span class="tag  is-primary ">
-    Math
+    Hash Table
 </span>
         
         <span class="tag  is-primary ">
-    Array
+    Binary Search
+</span>
+        
+        <span class="tag  is-primary ">
+    Design
 </span>
         
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is a math problem.
-The brute force solution barely passes all tests, however, it is very slow.
-To fins an optimal solution, some mathematical insight is required.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>You are given a 0-indexed integer array <code>nums,</code> where <code>nums[i]</code> is a digit between 0 and 9 (inclusive).
-The triangular sum of <code>nums</code> is the value of the only element present in nums
-after the following process terminates:</p>
-  <ol>
-    <li>Let nums comprise of <code>n</code> elements. If <code>n == 1</code>, end the process.
-Otherwise, create a new 0-indexed integer array <code>newNums</code> of length <code>n - 1</code>.</li>
-    <li>For each index <code>i</code>, where <code>0 &lt;= i &lt; n - 1</code>, assign the value of <code>newNums[i]</code> as <code>(nums[i] + nums[i+1]) % 10</code>,
-where <code>%</code> denotes modulo operator.</li>
-    <li>Replace the array <code>nums</code> with <code>newNums</code>.</li>
-    <li>Repeat the entire process starting from step 1.
-Return the triangular sum of <code>nums</code>.</li>
-  </ol>
+  <p>Implement a SnapshotArray that supports the following interface:</p>
+  <ul>
+    <li><code>SnapshotArray(int length)</code> initializes an array-like data structure with the given length. Initially, each element
+  equals 0.</li>
+    <li><code>void set(index, val)</code> sets the element at the given <code>index</code> to be equal to <code>val</code>.</li>
+    <li><code>int snap()</code> takes a snapshot of the array and returns the <code>snap_id</code>: the total number of times we called <code>snap()</code>
+  minus 1.</li>
+    <li><code>int get(index, snap_id)</code> returns the value at the given <code>index</code>, at the time we took the snapshot with the given
+  <code>snap_id</code></li>
+  </ul>
 
   <p>Constraints:</p>
   <ul>
-    <li><code>1 &lt;= nums.length &lt;= 1000</code></li>
-    <li><code>0 &lt;= nums[i] &lt;= 9</code></li>
+    <li><code>1 &lt;= length &lt;= 5 * 10**4</code></li>
+    <li><code>0 &lt;= index &lt; length</code></li>
+    <li><code>0 &lt;= val &lt;= 10**9</code></li>
+    <li><code>0 &lt;= snap_id &lt;</code> (the total number of times we call snap())</li>
+    <li>At most 5 * 10**4 calls will be made to <code>set</code>, <code>snap</code>, and <code>get</code>.</li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/find-triangular-sum-of-an-array/">https://leetcode.com/problems/find-triangular-sum-of-an-array/</a></p>
+  <p><a href="https://leetcode.com/problems/snapshot-array/">https://leetcode.com/problems/snapshot-array/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
-<pre><code>Example 1:
-Input: nums = [1,2,3,4,5]
-Output: 8
-
-1, 2, 3, 4, 5
-3, 5, 7, 9
-8, 2, 6
-0, 8,
-8
+<pre><code>Example 1
+Input: ["SnapshotArray","set","snap","set","get"]
+[[3],[0,5],[],[0,6],[0,0]]
+Output: [null,null,0,null,5]
+Explanation: 
+SnapshotArray snapshotArr = new SnapshotArray(3); // set the length to be 3
+snapshotArr.set(0,5);  // Set array[0] = 5
+snapshotArr.snap();  // Take a snapshot, return snap_id = 0
+snapshotArr.set(0,6);
+snapshotArr.get(0,0);  // Get the value of array[0] with snap_id = 0, return 5
 </code></pre>
 
-<pre><code>Example 2:
-Input: nums = [5]
-Output: 5
-</code></pre>
-
-<h2 id="analysis">Analysis</h2>
-
-<p>Here, the mathematical, optimal solution and brute force solutions are.
-The mathematical solution is from combination idea:
-each number is multiplied by the number of routes to the top.
-In the solution, this number is “<code>cnk</code>”.
-Additionally, the calculation uses: <code>(a % 10 + b % 10) % 10 = (a + b) % 10</code>.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>The key design for this problem is how to save or not to save each snapshot array.
+One approach is to save snapshot array when the snap method is called.
+The snapshot may or may not use by later get method calls.
+However, it is easier to implement the get method.
+Another approach is to use the binary search.
+In this approach, the snap method just counts up the id.
+When the get method is called, do binary search using ids of the given index.
+The snap_id of get method call may or may not exist.
+Find the upper (right) insertion point among ids of the specific index.
+If it is 0, the ids array is empty. So, return 0.
+If it is not 0, return the value of one index left of the insertion point.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class FindTriangularSumOfAnArrayMath:
-    def triangularSum(self, nums: List[int]) -&gt; int:
-        n = len(nums)-1
-        total = 0
-        cnk = 1
-        for i in range(len(nums)):
-            total += nums[i] * cnk
-            total %= 10
-            cnk = cnk * (n-i) // (i+1)
-        return total
 
-class FindTriangularSumOfAnArrayBF:
-    def triangularSum(self, nums: List[int]) -&gt; int:
-        n, prev = len(nums), nums
-        for _ in range(n - 1):
-            cur = []
-            for i in range(len(prev) - 1):
-                cur.append((prev[i] + prev[i + 1]) % 10)
-            prev = cur
-        return prev[0]
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class SnapshotArray {
+private:
+    vector&lt;map&lt;int, int&gt;&gt; values;
+    int _id = 0;
+public:
+    SnapshotArray(int length) {
+        values.resize(length);
+    }
+
+    void set(int index, int val) {
+        values[index][_id] = val;
+    }
+
+    int snap() {
+        return _id++;
+    }
+
+    int get(int index, int snap_id) {
+        auto it = values[index].upper_bound(snap_id);
+        return it == values[index].begin() ? 0 : prev(it)-&gt;second;
+    }
+};
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class SnapshotArray:
+
+    def __init__(self, length: int):
+        self.values = [{} for _ in range(length)]
+        self._id = 0
+
+    def set(self, index: int, val: int) -&gt; None:
+        self.values[index][self._id] = val
+
+    def snap(self) -&gt; int:
+        self._id += 1
+        return self._id - 1
+
+    def get(self, index: int, snap_id: int) -&gt; int:
+        if snap_id in self.values[index]:
+            return self.values[index][snap_id]
+        ids = sorted([k for k, _ in self.values[index].items()])
+        idx = bisect.bisect_right(ids, snap_id)
+        return 0 if idx == 0 else self.values[index][ids[idx - 1]]
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(n)</code> – math solution, <code>O(n^2)</code> – brute force solution</li>
-  <li>Space: <code>O(1)</code> – math solution, <code>O(n)</code> – brute force solution</li>
+  <li>Time: set: <code>O(1)</code>, snap: <code>O(1)</code>, get: <code>O(n * log(n))</code> – n: number of snap ids in values’ items</li>
+  <li>Space: <code>O(m * n)</code> – m: given length, n: number of snap ids</li>
 </ul>
 
 </div>

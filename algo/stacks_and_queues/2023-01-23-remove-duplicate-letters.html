@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Find Triangular Sum of an Array | yokolet’s notelets</title>
+<title>Remove Duplicate Letters | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Find Triangular Sum of an Array" />
+<meta property="og:title" content="Remove Duplicate Letters" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/others/2022-09-10-find-triangular-sum-of-an-array.html" />
-<meta property="og:url" content="http://localhost:4000/algo/others/2022-09-10-find-triangular-sum-of-an-array.html" />
+<link rel="canonical" href="http://localhost:4000/algo/stacks_and_queues/2023-01-23-remove-duplicate-letters.html" />
+<meta property="og:url" content="http://localhost:4000/algo/stacks_and_queues/2023-01-23-remove-duplicate-letters.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-09-10T23:16:00+09:00" />
+<meta property="article:published_time" content="2023-01-23T23:38:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Find Triangular Sum of an Array" />
+<meta property="twitter:title" content="Remove Duplicate Letters" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-10T23:16:00+09:00","datePublished":"2022-09-10T23:16:00+09:00","description":"Blog site mostly for programming topics.","headline":"Find Triangular Sum of an Array","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/others/2022-09-10-find-triangular-sum-of-an-array.html"},"url":"http://localhost:4000/algo/others/2022-09-10-find-triangular-sum-of-an-array.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2023-01-23T23:38:00+09:00","datePublished":"2023-01-23T23:38:00+09:00","description":"Blog site mostly for programming topics.","headline":"Remove Duplicate Letters","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/stacks_and_queues/2023-01-23-remove-duplicate-letters.html"},"url":"http://localhost:4000/algo/stacks_and_queues/2023-01-23-remove-duplicate-letters.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Find Triangular Sum of an Array</h1>
+            <h1 class="title is-2">Remove Duplicate Letters</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -619,7 +619,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Stacks and Queues
             </a>
@@ -1382,7 +1382,7 @@
             </ul>
         </div>
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Others
             </a>
@@ -1612,7 +1612,7 @@
                     
                     <div class="content">
 
-    <p>Published: Sep 10, 2022</p>
+    <p>Published: Jan 23, 2023</p>
 
     <div class="tags">
         
@@ -1621,98 +1621,167 @@
 </span>
         
         <span class="tag  is-primary ">
-    Math
+    Monotonic Stack
 </span>
         
         <span class="tag  is-primary ">
-    Array
+    Greedy
+</span>
+        
+        <span class="tag  is-primary ">
+    String
 </span>
         
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is a math problem.
-The brute force solution barely passes all tests, however, it is very slow.
-To fins an optimal solution, some mathematical insight is required.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>You are given a 0-indexed integer array <code>nums,</code> where <code>nums[i]</code> is a digit between 0 and 9 (inclusive).
-The triangular sum of <code>nums</code> is the value of the only element present in nums
-after the following process terminates:</p>
-  <ol>
-    <li>Let nums comprise of <code>n</code> elements. If <code>n == 1</code>, end the process.
-Otherwise, create a new 0-indexed integer array <code>newNums</code> of length <code>n - 1</code>.</li>
-    <li>For each index <code>i</code>, where <code>0 &lt;= i &lt; n - 1</code>, assign the value of <code>newNums[i]</code> as <code>(nums[i] + nums[i+1]) % 10</code>,
-where <code>%</code> denotes modulo operator.</li>
-    <li>Replace the array <code>nums</code> with <code>newNums</code>.</li>
-    <li>Repeat the entire process starting from step 1.
-Return the triangular sum of <code>nums</code>.</li>
-  </ol>
+  <p>Given a string <code>s</code>, remove duplicate letters so that every letter appears once and only once. You must make sure your
+result is the smallest in lexicographical order among all possible results.</p>
 
   <p>Constraints:</p>
   <ul>
-    <li><code>1 &lt;= nums.length &lt;= 1000</code></li>
-    <li><code>0 &lt;= nums[i] &lt;= 9</code></li>
+    <li><code>1 &lt;= s.length &lt;= 10**4</code></li>
+    <li><code>s</code> consists of lowercase English letters.</li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/find-triangular-sum-of-an-array/">https://leetcode.com/problems/find-triangular-sum-of-an-array/</a></p>
+  <p><a href="https://leetcode.com/problems/remove-duplicate-letters/">https://leetcode.com/problems/remove-duplicate-letters/</a>
+<a href="https://leetcode.com/problems/smallest-subsequence-of-distinct-characters/">https://leetcode.com/problems/smallest-subsequence-of-distinct-characters/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
-<pre><code>Example 1:
-Input: nums = [1,2,3,4,5]
-Output: 8
-
-1, 2, 3, 4, 5
-3, 5, 7, 9
-8, 2, 6
-0, 8,
-8
+<pre><code>Example 1
+Input: s = "bcabc"
+Output: "abc"
 </code></pre>
 
-<pre><code>Example 2:
-Input: nums = [5]
-Output: 5
+<pre><code>Example 2
+Input: s = "cbacdcbc"
+Output: "acdb"
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<pre><code>Example 3
+Input: s = "bbcaac
+Output: "bac"
+</code></pre>
 
-<p>Here, the mathematical, optimal solution and brute force solutions are.
-The mathematical solution is from combination idea:
-each number is multiplied by the number of routes to the top.
-In the solution, this number is “<code>cnk</code>”.
-Additionally, the calculation uses: <code>(a % 10 + b % 10) % 10 = (a + b) % 10</code>.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>Creating a monotonic increasing stack is a good approach for this problem.
+Since the indices of characters matter, simply sort and eliminate duplicates is not the answer.</p>
+
+<p>If a current character is less than the last character in a stack, only when the last character appears in the
+later index, the last character is popped out from the stack.
+Once a character is put in the stack, the same character should not be added.
+It is checked using seen vector (C++) or set (Python).</p>
+
+<p>In the end, create the answer by concatenating the characters in stack.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class FindTriangularSumOfAnArrayMath:
-    def triangularSum(self, nums: List[int]) -&gt; int:
-        n = len(nums)-1
-        total = 0
-        cnk = 1
-        for i in range(len(nums)):
-            total += nums[i] * cnk
-            total %= 10
-            cnk = cnk * (n-i) // (i+1)
-        return total
 
-class FindTriangularSumOfAnArrayBF:
-    def triangularSum(self, nums: List[int]) -&gt; int:
-        n, prev = len(nums), nums
-        for _ in range(n - 1):
-            cur = []
-            for i in range(len(prev) - 1):
-                cur.append((prev[i] + prev[i + 1]) % 10)
-            prev = cur
-        return prev[0]
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class RemoveDuplicateLetters {
+public:
+    string removeDuplicateLetters(string s) {
+        vector&lt;int&gt; counter(26, 0);
+        for (char &amp;c : s) { counter[c - 'a']++; }
+        vector&lt;bool&gt; seen(26, false);
+        stack&lt;char&gt; ss;
+        for (char &amp;c : s) {
+            int idx = c - 'a';
+            counter[idx]--;
+            if (seen[idx]) { continue; }
+            while (!ss.empty() &amp;&amp; ss.top() &gt; c &amp;&amp; counter[ss.top() - 'a'] &gt; 0) {
+                seen[ss.top() - 'a'] = false;
+                ss.pop();
+            }
+            if (!seen[idx]) {
+                ss.push(c);
+                seen[idx] = true;
+            }
+        }
+        string result = "";
+        while (!ss.empty()) {
+            result = ss.top() + result;
+            ss.pop();
+        }
+        return result;
+    }
+};
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class RemoveDuplicateLetters:
+    def removeDuplicateLetters(self, s: str) -&gt; str:
+        counter = collections.Counter(s)
+        seen, stack = set(), []
+        for c in s:
+            counter[c] -= 1
+            if c in seen:
+                continue
+            while stack and stack[-1] &gt; c and counter[stack[-1]] &gt; 0:
+                seen.remove(stack.pop())
+            if c not in seen:
+                stack.append(c)
+                seen.add(c)
+        return ''.join(stack)
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(n)</code> – math solution, <code>O(n^2)</code> – brute force solution</li>
-  <li>Space: <code>O(1)</code> – math solution, <code>O(n)</code> – brute force solution</li>
+  <li>Time: <code>O(n^2)</code></li>
+  <li>Space: <code>O(1)</code> – counter, seen, and stack will have the size at most 26. constant</li>
 </ul>
 
 </div>

@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Find Triangular Sum of an Array | yokolet’s notelets</title>
+<title>Minimum Swaps To Make Sequences Increasing | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Find Triangular Sum of an Array" />
+<meta property="og:title" content="Minimum Swaps To Make Sequences Increasing" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/others/2022-09-10-find-triangular-sum-of-an-array.html" />
-<meta property="og:url" content="http://localhost:4000/algo/others/2022-09-10-find-triangular-sum-of-an-array.html" />
+<link rel="canonical" href="http://localhost:4000/algo/dynamic_programming/2023-01-25-minimum-swaps-to-make-sequences-increasing.html" />
+<meta property="og:url" content="http://localhost:4000/algo/dynamic_programming/2023-01-25-minimum-swaps-to-make-sequences-increasing.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-09-10T23:16:00+09:00" />
+<meta property="article:published_time" content="2023-01-25T17:29:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Find Triangular Sum of an Array" />
+<meta property="twitter:title" content="Minimum Swaps To Make Sequences Increasing" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-10T23:16:00+09:00","datePublished":"2022-09-10T23:16:00+09:00","description":"Blog site mostly for programming topics.","headline":"Find Triangular Sum of an Array","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/others/2022-09-10-find-triangular-sum-of-an-array.html"},"url":"http://localhost:4000/algo/others/2022-09-10-find-triangular-sum-of-an-array.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2023-01-25T17:29:00+09:00","datePublished":"2023-01-25T17:29:00+09:00","description":"Blog site mostly for programming topics.","headline":"Minimum Swaps To Make Sequences Increasing","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/dynamic_programming/2023-01-25-minimum-swaps-to-make-sequences-increasing.html"},"url":"http://localhost:4000/algo/dynamic_programming/2023-01-25-minimum-swaps-to-make-sequences-increasing.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Find Triangular Sum of an Array</h1>
+            <h1 class="title is-2">Minimum Swaps To Make Sequences Increasing</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -963,7 +963,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Dynamic Programming
             </a>
@@ -1382,7 +1382,7 @@
             </ul>
         </div>
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Others
             </a>
@@ -1612,107 +1612,179 @@
                     
                     <div class="content">
 
-    <p>Published: Sep 10, 2022</p>
+    <p>Published: Jan 25, 2023</p>
 
     <div class="tags">
         
         <span class="tag  is-primary ">
-    Medium
+    Hard
 </span>
         
         <span class="tag  is-primary ">
-    Math
-</span>
-        
-        <span class="tag  is-primary ">
-    Array
+    Dynamic Programming
 </span>
         
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is a math problem.
-The brute force solution barely passes all tests, however, it is very slow.
-To fins an optimal solution, some mathematical insight is required.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>You are given a 0-indexed integer array <code>nums,</code> where <code>nums[i]</code> is a digit between 0 and 9 (inclusive).
-The triangular sum of <code>nums</code> is the value of the only element present in nums
-after the following process terminates:</p>
-  <ol>
-    <li>Let nums comprise of <code>n</code> elements. If <code>n == 1</code>, end the process.
-Otherwise, create a new 0-indexed integer array <code>newNums</code> of length <code>n - 1</code>.</li>
-    <li>For each index <code>i</code>, where <code>0 &lt;= i &lt; n - 1</code>, assign the value of <code>newNums[i]</code> as <code>(nums[i] + nums[i+1]) % 10</code>,
-where <code>%</code> denotes modulo operator.</li>
-    <li>Replace the array <code>nums</code> with <code>newNums</code>.</li>
-    <li>Repeat the entire process starting from step 1.
-Return the triangular sum of <code>nums</code>.</li>
-  </ol>
+  <p>You are given two integer arrays of the same length <code>nums1</code> and <code>nums2</code>. In one operation, you are allowed to swap
+<code>nums1[i]</code> with <code>nums2[i]</code>.</p>
+  <ul>
+    <li>For example, if <code>nums1 = [1,2,3,8]</code>, and <code>nums2 = [5,6,7,4]</code>, you can swap the element at <code>i = 3</code> to obtain
+  <code>nums1 = [1,2,3,4]</code> and <code>nums2 = [5,6,7,8]</code>.</li>
+  </ul>
+
+  <p>Return the minimum number of needed operations to make <code>nums1</code> and <code>nums2</code> strictly increasing. The test cases are
+generated so that the given input always makes it possible.</p>
+
+  <p>An array <code>arr</code> is strictly increasing if and only if <code>arr[0] &lt; arr[1] &lt; arr[2] &lt; ... &lt; arr[arr.length - 1]</code>.</p>
 
   <p>Constraints:</p>
   <ul>
-    <li><code>1 &lt;= nums.length &lt;= 1000</code></li>
-    <li><code>0 &lt;= nums[i] &lt;= 9</code></li>
+    <li><code>2 &lt;= nums1.length &lt;= 10**5</code></li>
+    <li><code>nums2.length == nums1.length</code></li>
+    <li><code>0 &lt;= nums1[i], nums2[i] &lt;= 2 * 10**5</code></li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/find-triangular-sum-of-an-array/">https://leetcode.com/problems/find-triangular-sum-of-an-array/</a></p>
+  <p><a href="https://leetcode.com/problems/minimum-swaps-to-make-sequences-increasing/">https://leetcode.com/problems/minimum-swaps-to-make-sequences-increasing/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
-<pre><code>Example 1:
-Input: nums = [1,2,3,4,5]
-Output: 8
-
-1, 2, 3, 4, 5
-3, 5, 7, 9
-8, 2, 6
-0, 8,
-8
+<pre><code>Example 1
+Input: nums1 = [1,3,5,4], nums2 = [1,2,3,7]
+Output: 1
+Explanation: 
+Swap nums1[3] and nums2[3]. Then the sequences are:
+nums1 = [1, 3, 5, 7] and nums2 = [1, 2, 3, 4]
+which are both strictly increasing.
 </code></pre>
 
-<pre><code>Example 2:
-Input: nums = [5]
-Output: 5
+<pre><code>Example 2
+Input: nums1 = [0,3,5,8,9], nums2 = [2,1,4,6,9]
+Output: 1
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>The approach taken here is a sort of bottom up dynamic programming.
+We should consider two cases and two actions each. In total, four outcomes are there.</p>
+<ul>
+  <li>case 1: nums1[i - 1] &lt; nums1[i] and nums2[i - 1] &lt; nums2[i]
+    <ul>
+      <li>action 1: keep original values: <code>cur_keep = keep</code></li>
+      <li>action 2: swap at i - 1 and keep at i: <code>cur_swap = swap + 1</code></li>
+    </ul>
+  </li>
+  <li>case 2: nums1[i - 1] &lt; nums2[i] and nums2[i - 1] &lt; nums1[i]
+    <ul>
+      <li>action 1: keep original at i - 1 and swap at i: min(cur_keep, swap)</li>
+      <li>action 2: swap at i - 1 and keep original at i: min(cur_swap, keep + 1)</li>
+    </ul>
+  </li>
+</ul>
 
-<p>Here, the mathematical, optimal solution and brute force solutions are.
-The mathematical solution is from combination idea:
-each number is multiplied by the number of routes to the top.
-In the solution, this number is “<code>cnk</code>”.
-Additionally, the calculation uses: <code>(a % 10 + b % 10) % 10 = (a + b) % 10</code>.</p>
+<p>Repeat above one by one to the end.
+The answer is the minimum of two conditions: keep or swap.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class FindTriangularSumOfAnArrayMath:
-    def triangularSum(self, nums: List[int]) -&gt; int:
-        n = len(nums)-1
-        total = 0
-        cnk = 1
-        for i in range(len(nums)):
-            total += nums[i] * cnk
-            total %= 10
-            cnk = cnk * (n-i) // (i+1)
-        return total
 
-class FindTriangularSumOfAnArrayBF:
-    def triangularSum(self, nums: List[int]) -&gt; int:
-        n, prev = len(nums), nums
-        for _ in range(n - 1):
-            cur = []
-            for i in range(len(prev) - 1):
-                cur.append((prev[i] + prev[i + 1]) % 10)
-            prev = cur
-        return prev[0]
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class MinimumSwapsToMakeSequencesIncreasing {
+public:
+    int minSwap(vector&lt;int&gt;&amp; nums1, vector&lt;int&gt;&amp; nums2) {
+        int n = nums1.size();
+        int keep = 0, swap = 1;
+        for (int i = 1; i &lt; n; ++i) {
+            int cur_keep = n, cur_swap = n;
+            if (nums1[i - 1] &lt; nums1[i] &amp;&amp; nums2[i - 1] &lt; nums2[i]) {
+                cur_keep = keep;
+                cur_swap = swap + 1;
+            }
+            if (nums2[i - 1] &lt; nums1[i] &amp;&amp; nums1[i - 1] &lt; nums2[i]) {
+                cur_keep = min(cur_keep, swap);
+                cur_swap = min(cur_swap, keep + 1);
+            }
+            keep = cur_keep;
+            swap = cur_swap;
+        }
+        return min(keep, swap);
+    }
+};
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class MinimumSwapsToMakeSequencesIncreasing:
+    def minSwap(self, nums1: List[int], nums2: List[int]) -&gt; int:
+        n = len(nums1)
+        keep, swap = 0, 1
+        for i in range(1, n):
+            cur_keep, cur_swap = n, n
+            if nums1[i - 1] &lt; nums1[i] and nums2[i - 1] &lt; nums2[i]:
+                cur_keep = keep
+                cur_swap = swap + 1
+            if nums2[i - 1] &lt; nums1[i] and nums1[i - 1] &lt; nums2[i]:
+                cur_keep = min(cur_keep, swap)
+                cur_swap = min(cur_swap, keep + 1)
+            keep, swap = cur_keep, cur_swap
+        return min(keep, swap)
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(n)</code> – math solution, <code>O(n^2)</code> – brute force solution</li>
-  <li>Space: <code>O(1)</code> – math solution, <code>O(n)</code> – brute force solution</li>
+  <li>Time: <code>O(n)</code></li>
+  <li>Space: <code>O(1)</code></li>
 </ul>
 
 </div>
