@@ -305,6 +305,13 @@
                     </li>
                     
                     <li>
+                        <a href="/algo/arrays/2023-01-31-the-latest-time-to-catch-a-bus"
+                           class="submenu">
+                            The Latest Time to Catch a Bus
+                        </a>
+                    </li>
+                    
+                    <li>
                         <a href="/algo/arrays/2022-09-18-trapping-rain-water"
                            class="submenu">
                             Trapping Rain Water
@@ -1344,6 +1351,13 @@
                     </li>
                     
                     <li>
+                        <a href="/algo/design/2023-01-31-peeking-iterator"
+                           class="submenu">
+                            Peeking Iterator
+                        </a>
+                    </li>
+                    
+                    <li>
                         <a href="/algo/design/2022-12-28-random-pick-with-weight"
                            class="submenu">
                             Random Pick with Weight
@@ -1632,13 +1646,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>The key to solve this problem is how to maintain hits’ timestamp.
-Since the timestamp is monotonically increasing – sorted already,
-the binary search to find an answer looks a good approach.
-However, it can be much simple – keep only hits from 300 seconds before.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>Design a hit counter which counts the number of hits received in the past 5 minutes (i.e., the past 300 seconds).</p>
 
@@ -1687,7 +1695,12 @@ hitCounter.getHits(300); // get hits at timestamp 300, return 4.
 hitCounter.getHits(301); // get hits at timestamp 301, return 3.
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>The key to solve this problem is how to maintain hits’ timestamp.
+Since the timestamp is monotonically increasing – sorted already,
+the binary search to find an answer looks a good approach.
+However, it can be much simpler – keep only hits from 300 seconds before.</p>
+
 <p>The solution here creates a queue for timestamps.
 Both, <code>hit</code> and <code>getHits</code> maintains the values in queue.
 If the values are less than or equals to given timestamp - 300,
@@ -1695,6 +1708,97 @@ it deletes all hits before timestamp - 300.
 The method, <code>gitHits</code>, returns the length of the queue. That’s all.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class HitCounter {
+private:
+    queue&lt;int&gt; q;
+
+public:
+    HitCounter() {}
+
+    void hit(int timestamp) {
+        q.push(timestamp);
+        while (q.front() &lt;= timestamp - 300) {
+            q.pop();
+        }
+    }
+
+    int getHits(int timestamp) {
+        while (!q.empty() &amp;&amp; q.front() &lt;= timestamp - 300) {
+            q.pop();
+        }
+        return q.size();
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">var HitCounter = function() {
+    this.queue = []
+};
+
+/**
+ * @param {number} timestamp
+ * @return {void}
+ */
+HitCounter.prototype.hit = function(timestamp) {
+    this.queue.push(timestamp);
+    while (this.queue[0] &lt;= timestamp - 300) {
+        this.queue.shift();
+    }
+};
+
+/**
+ * @param {number} timestamp
+ * @return {number}
+ */
+HitCounter.prototype.getHits = function(timestamp) {
+    while (this.queue[0] &lt;= timestamp - 300) {
+        this.queue.shift();
+    }
+    return this.queue.length;
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class HitCounter:
 
     def __init__(self):
@@ -1710,6 +1814,15 @@ The method, <code>gitHits</code>, returns the length of the queue. That’s all.
             self.queue.pop(0)
         return len(self.queue)
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>

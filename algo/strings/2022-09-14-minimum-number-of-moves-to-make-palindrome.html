@@ -305,6 +305,13 @@
                     </li>
                     
                     <li>
+                        <a href="/algo/arrays/2023-01-31-the-latest-time-to-catch-a-bus"
+                           class="submenu">
+                            The Latest Time to Catch a Bus
+                        </a>
+                    </li>
+                    
+                    <li>
                         <a href="/algo/arrays/2022-09-18-trapping-rain-water"
                            class="submenu">
                             Trapping Rain Water
@@ -1344,6 +1351,13 @@
                     </li>
                     
                     <li>
+                        <a href="/algo/design/2023-01-31-peeking-iterator"
+                           class="submenu">
+                            Peeking Iterator
+                        </a>
+                    </li>
+                    
+                    <li>
                         <a href="/algo/design/2022-12-28-random-pick-with-weight"
                            class="submenu">
                             Random Pick with Weight
@@ -1636,11 +1650,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>The problem title uses the word “move,” but it is a “swap” actually.
-If the problem asks about swap characters, it’s good to think a two pointer solution.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>You are given a string <code>s</code> consisting only of lowercase English letters.
 In one move, you can select any two adjacent characters of s and swap them.</p>
@@ -1672,36 +1682,108 @@ Output: 2
 Explanation: "letelt" -&gt; "letetl" -&gt; "lettel"
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>Start from leftmost and rightmost characters.
-If those don’t match, swap right two characters until the same character to the left is found.
-When it is only one character, the two pointers meet at the same index.
-A single character should go to the center, so swap it to right character at the moment.
-When same two characters are on the different indices, swap the right side.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>The problem title uses the word “move,” but it is a “swap” actually.
+If the problem asks about swap something, think the two pointers approach.</p>
+
+<p>The solution here is a slight deviation of the two pointers.
+One points the rightmost character, while another points the leftmost same character.
+To make the string palindrome, the leftmost-same-character-index times swaps are required.
+At this stage, two characters are assumed to be arranged, so delete those for the next iteration.</p>
+
+<p>The special case is the rightmost character’s same character is also the rightmost.
+It means the only one character exists.
+The only one character should be on the center of the string to make it palindrome.
+In this case, <code>index / 2</code> times swaps are required.</p>
+
+<p>When all characters are eliminated, we get the answer.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class MinimumNumberOfMovesToMakePalindrome:
-    def minMovesToMakePalindrome(self, s: str) -&gt; int:
-        n = len(s)
-        s = list(s)
-        left, right, count = 0, n - 1, 0
-        while left &lt; right:
-            l, r = left, right
-            while s[l] != s[r]:
-                r -= 1
-            if l == r:
-                s[r], s[r + 1] = s[r + 1], s[r]
-                count += 1
-                continue
-            else:
-                while r &lt; right:
-                    s[r], s[r + 1] = s[r + 1], s[r]
-                    r += 1
-                    count += 1
-            left += 1
-            right -= 1
-        return count
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class Solution {
+public:
+    int minMovesToMakePalindrome(string s) {
+        int result = 0;
+        while (s.size()) {
+            int idx = s.find(s.back());
+            if (idx == s.size() - 1) {
+                result += idx / 2;
+            } else {
+                result += idx;
+                s.erase(idx, 1);
+            }
+            s.pop_back();
+        }
+        return result;
+    }
+};
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class Solution:
+    def minMovesToMakePalindrome(self, s: str) -&gt; int:
+        result = 0
+        while len(s):
+            idx, n = s.find(s[-1]), len(s)
+            if idx == n - 1:
+                result += idx // 2
+                s = s[:-1]
+            else:
+                result += idx
+                s = s[0:idx] + s[idx + 1:-1]
+        return result
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>

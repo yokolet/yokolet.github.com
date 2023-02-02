@@ -305,6 +305,13 @@
                     </li>
                     
                     <li>
+                        <a href="/algo/arrays/2023-01-31-the-latest-time-to-catch-a-bus"
+                           class="submenu">
+                            The Latest Time to Catch a Bus
+                        </a>
+                    </li>
+                    
+                    <li>
                         <a href="/algo/arrays/2022-09-18-trapping-rain-water"
                            class="submenu">
                             Trapping Rain Water
@@ -1344,6 +1351,13 @@
                     </li>
                     
                     <li>
+                        <a href="/algo/design/2023-01-31-peeking-iterator"
+                           class="submenu">
+                            Peeking Iterator
+                        </a>
+                    </li>
+                    
+                    <li>
                         <a href="/algo/design/2022-12-28-random-pick-with-weight"
                            class="submenu">
                             Random Pick with Weight
@@ -1628,11 +1642,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-
-<p>At a glance, it looks a sorting problem. However, this is a monotonic stack problem.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>There are <code>n</code> buildings in a line.
 You are given an integer array <code>heights</code> of size <code>n</code> that represents the heights of the buildings in the line.</p>
@@ -1672,15 +1682,75 @@ Output: [3]
 Explanation: Only building 3 has an ocean view.
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<h2 id="how-to-solve">How to Solve</h2>
 
-<p>If we keep monotonically decreasing stack, the solution is not complicated.
+<p>At a glance, it looks a sorting problem, however this is a monotonic stack problem.
+Create a monotonically decreasing stack from the given array to solve this.
 The values in the stack are indices.
-Staring from the value of index 0, keep popping or pushing indices one by one
-to keep monotonically decreasing stack index.
-The stack itself is the answer.</p>
+Staring from index 0, repeat popping or pushing indices one by one to keep monotonically decreasing index stack.
+When all values in the given array is checked, the stack itself will be the answer.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class BuildingWithAnOceanView {
+public:
+    vector&lt;int&gt; findBuildings(vector&lt;int&gt;&amp; heights) {
+        vector&lt;int&gt; indices;
+        indices.push_back(0);
+        for (int i = 1; i &lt; heights.size(); ++i) {
+            while (!indices.empty() &amp;&amp; heights[indices.back()] &lt;= heights[i]) {
+                indices.pop_back();
+            }
+            indices.push_back(i);
+        }
+        return indices;
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class BuildingWithAnOceanView:
     def findBuildings(self, heights: List[int]) -&gt; List[int]:
         if not heights:
@@ -1693,6 +1763,15 @@ The stack itself is the answer.</p>
             stack.append(i)
         return stack
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
