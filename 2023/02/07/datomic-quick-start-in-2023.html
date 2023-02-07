@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/accordion.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Datomic Quick Start in 2023 | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Datomic Quick Start in 2023" />
+<meta name="author" content="Yoko Harada" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="I used to use Datomic, https://www.datomic.com, a lot. Datomic is a unique database. The most attractive feature would be the idea of preserving transactions. Based on the transaction id, Datomic is able to pull out the past data which has been already updated later." />
+<meta property="og:description" content="I used to use Datomic, https://www.datomic.com, a lot. Datomic is a unique database. The most attractive feature would be the idea of preserving transactions. Based on the transaction id, Datomic is able to pull out the past data which has been already updated later." />
+<link rel="canonical" href="http://localhost:4000/2023/02/07/datomic-quick-start-in-2023.html" />
+<meta property="og:url" content="http://localhost:4000/2023/02/07/datomic-quick-start-in-2023.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-02-07T18:03:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Datomic Quick Start in 2023" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Yoko Harada"},"dateModified":"2023-02-07T18:03:00+09:00","datePublished":"2023-02-07T18:03:00+09:00","description":"I used to use Datomic, https://www.datomic.com, a lot. Datomic is a unique database. The most attractive feature would be the idea of preserving transactions. Based on the transaction id, Datomic is able to pull out the past data which has been already updated later.","headline":"Datomic Quick Start in 2023","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/02/07/datomic-quick-start-in-2023.html"},"url":"http://localhost:4000/2023/02/07/datomic-quick-start-in-2023.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Datomic Quick Start in 2023</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-8">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Feb 7, 2023</p>
+
+    <div class="tags">
+        
+    </div>
+
+    
+
+    <p>I used to use Datomic, <a href="https://www.datomic.com">https://www.datomic.com</a>, a lot.
+Datomic is a unique database. The most attractive feature would be the idea of preserving transactions.
+Based on the transaction id, Datomic is able to pull out the past data which has been already updated later.</p>
+
+<p>Other than that Datomic has more unique and remarkable features.
+However, the downside is, it is not so easy to get started.
+Datomic has an excellent documentation on its web site.
+Even though, just getting started requires a bit of hustle since it is for high-end skill-full people.
+Besides, changes were made since I used it last time which is roughly a few years back.</p>
+
+<p>Recently, I had a chance to use Datomic.
+As I mentioned, I experienced some kind of hustle.
+Not to do the same hustle again, I’ll write a memo here about the attempt in early 2023.</p>
+
+<h3 id="get-datomic">Get Datomic</h3>
+
+<p>The first thing to do is absolutely to get Datomic.
+If you haven’t, sign up yourself at <a href="https://my.datomic.com/">https://my.datomic.com/</a>.
+The choice here is the no cost, starter edition here, still, you need to sing up.
+(My memory is not clear, but I might have selected Starter version during the sign up.)
+Once you are successfully registered, the license key will be emailed.
+The license key needs to run Datomic with a transactor. I’ll explain later.</p>
+
+<p>You are now able to download Datomic from the Downloads link at my datomic web site.
+I downloaded the latest version, datomic-pro-1.0.6610.zip, as of early February, 2023.
+The archive name is datomic-pro, however, my license is of “Datomic Pro Starter Edition, “ as I see it at my Account page.
+It looks the archive name doesn’t matter in terms of the type of license.</p>
+
+<h3 id="types-of-datomic">Types of Datomic</h3>
+
+<p>As of now, Datomic has types below:</p>
+
+<ul>
+  <li>Cloud</li>
+  <li>On-Prem
+    <ul>
+      <li>on memory</li>
+      <li>on local storage (disk)</li>
+      <li>on storage service such as PostgreSQL, DynamoDB, Cassandra</li>
+    </ul>
+  </li>
+</ul>
+
+<p>This memo is for a quick start, so on-prem’s memory or local storage is an option.
+The on memory type is easy and runs without a specific setup.
+However, it’s just for a handy test. When a process is terminated, all will be gone.
+Given that, this memo is about on-prem’s local storage type.</p>
+
+<h4 id="set-license-key">Set License Key</h4>
+
+<p>Assuming downloaded Datomic archive has been extracted in somewhere,
+this section explains how to set the license key.</p>
+
+<p>You should have the Datomic license key emailed when you registered yourself at my.datomic.com.
+The email has <code>license-key=[long-long-six-line-or-so-text key]</code> in its body part.
+You may copy paste the email text to the config file.
+You might want to open the attachment to copy/paste.
+Both are the same.</p>
+
+<p>The document you should look at is: <a href="https://docs.datomic.com/on-prem/getting-started/transactor.htm">Run a Transactor</a>.
+As the document says, copy the template config file, config/samples/dev-transactor-template.properties, to
+config/dev-transactor-template.properties.
+Then, open the properties file and paste the license key to the line, <code>license-key=</code>.</p>
+
+<p>This is all for the quick start set up.</p>
+
+<h4 id="run-datomic">Run Datomic</h4>
+
+<p>It’s time to start Datomic.
+If it is an RDBMS like PostgreSQL, people say “start the server.”
+However, as for Datomic, it is “run the transactor.”
+This is because Datomic works as a transactor when storage services are used.
+So, the document you should look at is:
+<a href="https://docs.datomic.com/on-prem/getting-started/transactor.htm">Run a Transactor</a>.</p>
+
+<p>Assuming you are on the top directory of the unzipped Datomic archive,
+hit the command:</p>
+<pre><code class="language-bash">bin/transactor -Ddatomic.printConnectionInfo=true config/dev-transactor-template.properties
+</code></pre>
+
+<p>Now, Datomic started running.
+The local storage, db/datomic.h2.db, should be created.</p>
+
+<h4 id="connect-to-datomic-and-do-things">Connect to Datomic and do things</h4>
+
+<p>Datomic comes with the repl.
+Its usability is not so nice like lein repl, but enough to test things.
+Now what you can do are:</p>
+<ul>
+  <li>create and connect to the database: <a href="https://docs.datomic.com/on-prem/getting-started/connect-to-a-database.html">Connect to a Database</a></li>
+  <li>transact a schema (create a table definition in RDBMS): <a href="https://docs.datomic.com/on-prem/getting-started/transact-schema.html">Transact Schema</a></li>
+  <li>transact data (insert a data in RDBMS): <a href="https://docs.datomic.com/on-prem/getting-started/transact-data.html">Transact Data</a></li>
+  <li>make a query: <a href="https://docs.datomic.com/on-prem/getting-started/query-the-data.html">Query the Data</a></li>
+</ul>
+
+<p>Start the Datomic repl by <code>bin/repl</code>.
+Copy texts from the document above and paste it on Datomic repl.
+All should work.</p>
+
+<h4 id="use-datomic-from-leiningen-project">Use Datomic from Leiningen project</h4>
+
+<p>Datomic’s repl is handy. Everything is set up.
+But, Clojure dev won’t do all on Datomic’s repl.
+In general, Clojure people create and configure a project.</p>
+
+<p>One thing not straightforward is a repository for Datomic client API.
+In many cases, Clojure libraries are hosted on <a href="https://clojars.org">https://clojars.org</a>.
+No authentication is required.
+On the other hand, Datomic client API is hosted on the private repository which needs authentication to download.</p>
+
+<p>If you visit your datomic account page, <a href="https://my.datomic.com/account">https://my.datomic.com/account</a>,
+you will find brief explanation how to use from Leiningen.
+To me, that was not so clear. I had to do some googling to figure out how.</p>
+
+<p>Eventually, I could use Datomic client API in the leiningen project.
+Here’s how I made it.</p>
+
+<h5 id="install-gpg-and-configure-a-key-pair">Install gpg and configure a key pair</h5>
+
+<p>Leiningen uses a GPG encrypted credential to connect private repositories.
+It is explained in the document,
+<a href="https://github.com/technomancy/leiningen/blob/master/doc/DEPLOY.md#authentication">https://github.com/technomancy/leiningen/blob/master/doc/DEPLOY.md#authentication</a>.
+As the document says, gpg should be installed, and a key pair should be configured.
+About installation, another document,
+<a href="https://github.com/technomancy/leiningen/blob/stable/doc/GPG.md">https://github.com/technomancy/leiningen/blob/stable/doc/GPG.md</a>
+is helpful.</p>
+
+<p>Following the document, install the gpg first if not yet installed.
+I’m on OSX, so I hit the command, <code>brew install gnupg</code>.</p>
+
+<p>After a successful installation, create the gpg key pair by <code>gpg --gen-key</code>.
+While creating the key pair, user name, email and passphrase were asked.
+There might be a variation depends on the OS, gnupg version or other.</p>
+
+<p>The document above explains more about how to use gpg command.
+However, once the key pair is created, that’s all.</p>
+
+<h5 id="create-a-credential-file-and-encrypt-it">Create a credential file and encrypt it</h5>
+
+<p>Create <code>~/.lein/credentials.clj</code> file with the content displayed in the my.datomic.com account page.
+It is like:</p>
+
+<pre><code class="language-clojure">{#"my\.datomic\.com" {:username "YOUR EMAIL HERE"
+                      :password "YOUR PASSWORD HERE"}}
+</code></pre>
+
+<p>Copy and paste it in <code>~/.lein/credentials.clj</code> file.</p>
+
+<p>The next step is to encrypt the credential file.
+As the leiningen authentication document describes, hit the command,</p>
+
+<pre><code class="language-bash">gpg --default-recipient-self -e \
+    ~/.lein/credentials.clj &gt; ~/.lein/credentials.clj.gpg
+</code></pre>
+
+<p>Now, the gpg encrypted credential is ready.</p>
+
+<h5 id="edit-projectclj">Edit project.clj</h5>
+
+<p>The last piece is to configure the Datomic private repository in the project.clj file.
+How to setup is written in the my Datomic account page.
+I wrote earlier “I downloaded the latest version, datomic-pro-1.0.6610.zip, as of early February, 2023.”
+So the datomic-pro version is 1.0.6610.</p>
+
+<pre><code class="language-clojure">:repositories {"my.datomic.com" {:url "https://my.datomic.com/repo"
+                                 :creds :gpg}}
+:dependencies [[com.datomic/datomic-pro 1.0.6610]]
+</code></pre>
+
+<h5 id="test-repl">Test Repl</h5>
+
+<p>As you know the command is:</p>
+
+<pre><code class="language-bash">lein repl
+</code></pre>
+
+<p>For the first time, a bunch of libraries in dependency will be downloaded.
+When the leiningen repl is started, try “Connect Datomic and do things” following the Datomic document.
+All should work.</p>
+
+
+</div>
+
+
+
+
+                </div>
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    <p class="title is-4">Latest Posts</p>
+
+<div class="columns is-multiline">
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2023/02/07/datomic-quick-start-in-2023.html">Datomic Quick Start in 2023</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>I used to use Datomic, <a href="https://www.datomic.com">https://www.datomic.com</a>, a lot.
+Datomic is a unique database. The most attractive feature would be the idea of preserving transactions.
+Based on the transaction id, Datomic is able to pull out the past data which has been already updated later.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2023/02/07/datomic-quick-start-in-2023.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Feb 7, 2023</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/10/30/setting-up-gcp-instance-for-deep-learning.html">Setting Up GCP Instance for Deep Learning</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>This post is going to be very different from what I write here.
+The content is a memo how I create a GCP (Google Cloud Platform) instance for Deep Learning.
+While I study algorithm stuff, I also have been studying Deep Learning.
+In my early days, I tried to train my Deep Learning model only on a laptop.
+My laptop is 2012 model MacBook Pro, so I would say it is reasonably fast.
+However, when it comes to Deep Learning, the training was quite painful on the such machine.
+Often, I ran the training over night to get a disappointed result.
+Still, I didn’t use any of pricey cloud environment
+since it was my personal study unrelated to my day job.
+I wanted to save money.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/10/30/setting-up-gcp-instance-for-deep-learning.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Oct 30, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/09/10/complete-binary-tree.html">Complete Binary Tree</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>Problems which ask a binary tree traverse, add/delete nodes, etc. are popular in algorithm questions.
+The binary trees are often just a binary tree or binary search tree.
+Sometimes, the problem pinpoints a particular type of a binary tree,
+for example, a balanced binary tree or complete binary tree.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/09/10/complete-binary-tree.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Sep 10, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="/assets/js/accordion.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

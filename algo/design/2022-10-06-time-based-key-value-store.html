@@ -1650,16 +1650,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>A design problem always requires a consideration on what data structure(s) to save input data.
-This problem needs a key-value store (hash table) since get method needs key access.
-However, even though the same key is used, the get result depends on the timestamp.
-Given that, it needs another hash table to save timestamps.
-Conveniently, the timestamp is given chronologically to set method, which means it is sorted.
-If the array is sorted, the binary search can be used to find the answer.
-In this problem, the same index of timestamps can be used to get a value.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>Design a time-based key-value data structure that can store multiple values for the same key
 at different time stamps and retrieve the key’s value at a certain timestamp.</p>
@@ -1712,15 +1703,87 @@ Output
 [null,null,null,"","high","high","low","low"]
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>The solution here uses two dictionaries to save values and timestamps.
-The index is the same for both values and timestamps.
-When a timestamp is given to get method and whose index is i, the corresponding value’s index is also i.
-The timestamps associated to the key is sorted.
-If the timestamp is given to get method, use the binary search to find the index in timestamps array.
+<h2 id="how-to-solve">How to Solve</h2>
+
+<p>A design problem always requires a consideration on what data structure(s) to save input data.
+This problem needs a key-value store (hash table) since get method needs key access.
+However, even though the same key is used, the get result depends on the timestamp.
+The solution here uses another hash table to save timestamps.
+Given a key for the hash tables, the index is the same for both values and timestamps array.</p>
+
+<p>Conveniently, the timestamp is given chronologically to the set method, which means it is sorted.
+If the array is sorted, the binary search can be used to find the answer.
+When the timestamp is given to get method, use the binary search to find the index in timestamps array.
 The same index in values array is the answer.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class TimeMap {
+private:
+    unordered_map&lt;string, vector&lt;string&gt;&gt; values;
+    unordered_map&lt;string, vector&lt;int&gt;&gt; timestamps;
+    int idx;
+
+public:
+    TimeMap() {}
+
+    void set(string key, string value, int timestamp) {
+        values[key].push_back(value);
+        timestamps[key].push_back(timestamp);
+    }
+
+    string get(string key, int timestamp) {
+        if (timestamps.find(key) == timestamps.end()) { return ""; }
+        if (timestamp &lt; timestamps[key][0]) { return ""; }
+        idx = upper_bound(timestamps[key].begin(), timestamps[key].end(), timestamp) - timestamps[key].begin();
+        return idx &gt; 0 ? values[key][idx - 1] : "";
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class TimeMap:
 
     def __init__(self):
@@ -1742,6 +1805,15 @@ The same index in values array is the answer.</p>
         idx = bisect.bisect_right(ts, timestamp)
         return self.values[key][idx - 1] if idx else ''
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>

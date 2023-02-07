@@ -1,4 +1,182 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-02-02T21:16:57+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Blog site mostly for programming topics.</subtitle><entry><title type="html">Setting Up GCP Instance for Deep Learning</title><link href="http://localhost:4000/2019/10/30/setting-up-gcp-instance-for-deep-learning.html" rel="alternate" type="text/html" title="Setting Up GCP Instance for Deep Learning" /><published>2019-10-30T09:40:00+09:00</published><updated>2019-10-30T09:40:00+09:00</updated><id>http://localhost:4000/2019/10/30/setting-up-gcp-instance-for-deep-learning</id><content type="html" xml:base="http://localhost:4000/2019/10/30/setting-up-gcp-instance-for-deep-learning.html">&lt;p&gt;This post is going to be very different from what I write here.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-02-07T18:17:57+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Blog site mostly for programming topics.</subtitle><entry><title type="html">Datomic Quick Start in 2023</title><link href="http://localhost:4000/2023/02/07/datomic-quick-start-in-2023.html" rel="alternate" type="text/html" title="Datomic Quick Start in 2023" /><published>2023-02-07T18:03:00+09:00</published><updated>2023-02-07T18:03:00+09:00</updated><id>http://localhost:4000/2023/02/07/datomic-quick-start-in-2023</id><content type="html" xml:base="http://localhost:4000/2023/02/07/datomic-quick-start-in-2023.html">&lt;p&gt;I used to use Datomic, &lt;a href=&quot;https://www.datomic.com&quot;&gt;https://www.datomic.com&lt;/a&gt;, a lot.
+Datomic is a unique database. The most attractive feature would be the idea of preserving transactions.
+Based on the transaction id, Datomic is able to pull out the past data which has been already updated later.&lt;/p&gt;
+
+&lt;p&gt;Other than that Datomic has more unique and remarkable features.
+However, the downside is, it is not so easy to get started.
+Datomic has an excellent documentation on its web site.
+Even though, just getting started requires a bit of hustle since it is for high-end skill-full people.
+Besides, changes were made since I used it last time which is roughly a few years back.&lt;/p&gt;
+
+&lt;p&gt;Recently, I had a chance to use Datomic.
+As I mentioned, I experienced some kind of hustle.
+Not to do the same hustle again, I’ll write a memo here about the attempt in early 2023.&lt;/p&gt;
+
+&lt;h3 id=&quot;get-datomic&quot;&gt;Get Datomic&lt;/h3&gt;
+
+&lt;p&gt;The first thing to do is absolutely to get Datomic.
+If you haven’t, sign up yourself at &lt;a href=&quot;https://my.datomic.com/&quot;&gt;https://my.datomic.com/&lt;/a&gt;.
+The choice here is the no cost, starter edition here, still, you need to sing up.
+(My memory is not clear, but I might have selected Starter version during the sign up.)
+Once you are successfully registered, the license key will be emailed.
+The license key needs to run Datomic with a transactor. I’ll explain later.&lt;/p&gt;
+
+&lt;p&gt;You are now able to download Datomic from the Downloads link at my datomic web site.
+I downloaded the latest version, datomic-pro-1.0.6610.zip, as of early February, 2023.
+The archive name is datomic-pro, however, my license is of “Datomic Pro Starter Edition, “ as I see it at my Account page.
+It looks the archive name doesn’t matter in terms of the type of license.&lt;/p&gt;
+
+&lt;h3 id=&quot;types-of-datomic&quot;&gt;Types of Datomic&lt;/h3&gt;
+
+&lt;p&gt;As of now, Datomic has types below:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Cloud&lt;/li&gt;
+  &lt;li&gt;On-Prem
+    &lt;ul&gt;
+      &lt;li&gt;on memory&lt;/li&gt;
+      &lt;li&gt;on local storage (disk)&lt;/li&gt;
+      &lt;li&gt;on storage service such as PostgreSQL, DynamoDB, Cassandra&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This memo is for a quick start, so on-prem’s memory or local storage is an option.
+The on memory type is easy and runs without a specific setup.
+However, it’s just for a handy test. When a process is terminated, all will be gone.
+Given that, this memo is about on-prem’s local storage type.&lt;/p&gt;
+
+&lt;h4 id=&quot;set-license-key&quot;&gt;Set License Key&lt;/h4&gt;
+
+&lt;p&gt;Assuming downloaded Datomic archive has been extracted in somewhere,
+this section explains how to set the license key.&lt;/p&gt;
+
+&lt;p&gt;You should have the Datomic license key emailed when you registered yourself at my.datomic.com.
+The email has &lt;code&gt;license-key=[long-long-six-line-or-so-text key]&lt;/code&gt; in its body part.
+You may copy paste the email text to the config file.
+You might want to open the attachment to copy/paste.
+Both are the same.&lt;/p&gt;
+
+&lt;p&gt;The document you should look at is: &lt;a href=&quot;https://docs.datomic.com/on-prem/getting-started/transactor.htm&quot;&gt;Run a Transactor&lt;/a&gt;.
+As the document says, copy the template config file, config/samples/dev-transactor-template.properties, to
+config/dev-transactor-template.properties.
+Then, open the properties file and paste the license key to the line, &lt;code&gt;license-key=&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;This is all for the quick start set up.&lt;/p&gt;
+
+&lt;h4 id=&quot;run-datomic&quot;&gt;Run Datomic&lt;/h4&gt;
+
+&lt;p&gt;It’s time to start Datomic.
+If it is an RDBMS like PostgreSQL, people say “start the server.”
+However, as for Datomic, it is “run the transactor.”
+This is because Datomic works as a transactor when storage services are used.
+So, the document you should look at is:
+&lt;a href=&quot;https://docs.datomic.com/on-prem/getting-started/transactor.htm&quot;&gt;Run a Transactor&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Assuming you are on the top directory of the unzipped Datomic archive,
+hit the command:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;bin/transactor -Ddatomic.printConnectionInfo=true config/dev-transactor-template.properties
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now, Datomic started running.
+The local storage, db/datomic.h2.db, should be created.&lt;/p&gt;
+
+&lt;h4 id=&quot;connect-to-datomic-and-do-things&quot;&gt;Connect to Datomic and do things&lt;/h4&gt;
+
+&lt;p&gt;Datomic comes with the repl.
+Its usability is not so nice like lein repl, but enough to test things.
+Now what you can do are:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;create and connect to the database: &lt;a href=&quot;https://docs.datomic.com/on-prem/getting-started/connect-to-a-database.html&quot;&gt;Connect to a Database&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;transact a schema (create a table definition in RDBMS): &lt;a href=&quot;https://docs.datomic.com/on-prem/getting-started/transact-schema.html&quot;&gt;Transact Schema&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;transact data (insert a data in RDBMS): &lt;a href=&quot;https://docs.datomic.com/on-prem/getting-started/transact-data.html&quot;&gt;Transact Data&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;make a query: &lt;a href=&quot;https://docs.datomic.com/on-prem/getting-started/query-the-data.html&quot;&gt;Query the Data&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Start the Datomic repl by &lt;code&gt;bin/repl&lt;/code&gt;.
+Copy texts from the document above and paste it on Datomic repl.
+All should work.&lt;/p&gt;
+
+&lt;h4 id=&quot;use-datomic-from-leiningen-project&quot;&gt;Use Datomic from Leiningen project&lt;/h4&gt;
+
+&lt;p&gt;Datomic’s repl is handy. Everything is set up.
+But, Clojure dev won’t do all on Datomic’s repl.
+In general, Clojure people create and configure a project.&lt;/p&gt;
+
+&lt;p&gt;One thing not straightforward is a repository for Datomic client API.
+In many cases, Clojure libraries are hosted on &lt;a href=&quot;https://clojars.org&quot;&gt;https://clojars.org&lt;/a&gt;.
+No authentication is required.
+On the other hand, Datomic client API is hosted on the private repository which needs authentication to download.&lt;/p&gt;
+
+&lt;p&gt;If you visit your datomic account page, &lt;a href=&quot;https://my.datomic.com/account&quot;&gt;https://my.datomic.com/account&lt;/a&gt;,
+you will find brief explanation how to use from Leiningen.
+To me, that was not so clear. I had to do some googling to figure out how.&lt;/p&gt;
+
+&lt;p&gt;Eventually, I could use Datomic client API in the leiningen project.
+Here’s how I made it.&lt;/p&gt;
+
+&lt;h5 id=&quot;install-gpg-and-configure-a-key-pair&quot;&gt;Install gpg and configure a key pair&lt;/h5&gt;
+
+&lt;p&gt;Leiningen uses a GPG encrypted credential to connect private repositories.
+It is explained in the document,
+&lt;a href=&quot;https://github.com/technomancy/leiningen/blob/master/doc/DEPLOY.md#authentication&quot;&gt;https://github.com/technomancy/leiningen/blob/master/doc/DEPLOY.md#authentication&lt;/a&gt;.
+As the document says, gpg should be installed, and a key pair should be configured.
+About installation, another document,
+&lt;a href=&quot;https://github.com/technomancy/leiningen/blob/stable/doc/GPG.md&quot;&gt;https://github.com/technomancy/leiningen/blob/stable/doc/GPG.md&lt;/a&gt;
+is helpful.&lt;/p&gt;
+
+&lt;p&gt;Following the document, install the gpg first if not yet installed.
+I’m on OSX, so I hit the command, &lt;code&gt;brew install gnupg&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;After a successful installation, create the gpg key pair by &lt;code&gt;gpg --gen-key&lt;/code&gt;.
+While creating the key pair, user name, email and passphrase were asked.
+There might be a variation depends on the OS, gnupg version or other.&lt;/p&gt;
+
+&lt;p&gt;The document above explains more about how to use gpg command.
+However, once the key pair is created, that’s all.&lt;/p&gt;
+
+&lt;h5 id=&quot;create-a-credential-file-and-encrypt-it&quot;&gt;Create a credential file and encrypt it&lt;/h5&gt;
+
+&lt;p&gt;Create &lt;code&gt;~/.lein/credentials.clj&lt;/code&gt; file with the content displayed in the my.datomic.com account page.
+It is like:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-clojure&quot;&gt;{#&quot;my\.datomic\.com&quot; {:username &quot;YOUR EMAIL HERE&quot;
+                      :password &quot;YOUR PASSWORD HERE&quot;}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Copy and paste it in &lt;code&gt;~/.lein/credentials.clj&lt;/code&gt; file.&lt;/p&gt;
+
+&lt;p&gt;The next step is to encrypt the credential file.
+As the leiningen authentication document describes, hit the command,&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;gpg --default-recipient-self -e \
+    ~/.lein/credentials.clj &amp;gt; ~/.lein/credentials.clj.gpg
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now, the gpg encrypted credential is ready.&lt;/p&gt;
+
+&lt;h5 id=&quot;edit-projectclj&quot;&gt;Edit project.clj&lt;/h5&gt;
+
+&lt;p&gt;The last piece is to configure the Datomic private repository in the project.clj file.
+How to setup is written in the my Datomic account page.
+I wrote earlier “I downloaded the latest version, datomic-pro-1.0.6610.zip, as of early February, 2023.”
+So the datomic-pro version is 1.0.6610.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-clojure&quot;&gt;:repositories {&quot;my.datomic.com&quot; {:url &quot;https://my.datomic.com/repo&quot;
+                                 :creds :gpg}}
+:dependencies [[com.datomic/datomic-pro 1.0.6610]]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h5 id=&quot;test-repl&quot;&gt;Test Repl&lt;/h5&gt;
+
+&lt;p&gt;As you know the command is:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;lein repl
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For the first time, a bunch of libraries in dependency will be downloaded.
+When the leiningen repl is started, try “Connect Datomic and do things” following the Datomic document.
+All should work.&lt;/p&gt;</content><author><name>Yoko Harada</name></author><summary type="html">I used to use Datomic, https://www.datomic.com, a lot. Datomic is a unique database. The most attractive feature would be the idea of preserving transactions. Based on the transaction id, Datomic is able to pull out the past data which has been already updated later.</summary></entry><entry><title type="html">Setting Up GCP Instance for Deep Learning</title><link href="http://localhost:4000/2019/10/30/setting-up-gcp-instance-for-deep-learning.html" rel="alternate" type="text/html" title="Setting Up GCP Instance for Deep Learning" /><published>2019-10-30T09:40:00+09:00</published><updated>2019-10-30T09:40:00+09:00</updated><id>http://localhost:4000/2019/10/30/setting-up-gcp-instance-for-deep-learning</id><content type="html" xml:base="http://localhost:4000/2019/10/30/setting-up-gcp-instance-for-deep-learning.html">&lt;p&gt;This post is going to be very different from what I write here.
 The content is a memo how I create a GCP (Google Cloud Platform) instance for Deep Learning.
 While I study algorithm stuff, I also have been studying Deep Learning.
 In my early days, I tried to train my Deep Learning model only on a laptop.
@@ -1559,166 +1737,4 @@ ensure the person in the stack is the celeb.&lt;/p&gt;
   &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=3hcaVyX00_4&quot;&gt;Egg Dropping Dynamic Programming (YouTube)&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/the-celebrity-problem/&quot;&gt;The Celebrity Problem&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://www.cs.princeton.edu/courses/archive/spring13/cos423/problem0-1.pdf&quot;&gt;Celebrity Identification Problem&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Yoko Harada</name></author><summary type="html">I’m going to write about two weird algorithm problems. Those seem quite weired at least to me, yet famous as algorithm questions. One is so-called egg dropping, another is finding a celebrity. I see these two problems here and there. From that, I guess those two are famous algorithm questions. But, at least, those two are quite weird. Some call them puzzle. (Yeah, maybe… I was totally puzzled.)</summary></entry><entry><title type="html">Sqrt - Math Without Operator To Do It</title><link href="http://localhost:4000/2017/06/12/sqrt.html" rel="alternate" type="text/html" title="Sqrt - Math Without Operator To Do It" /><published>2017-06-12T00:00:00+09:00</published><updated>2017-06-12T00:00:00+09:00</updated><id>http://localhost:4000/2017/06/12/sqrt</id><content type="html" xml:base="http://localhost:4000/2017/06/12/sqrt.html">&lt;p&gt;In my last post, &lt;a href=&quot;http://yokolet.github.io/2017/06/09/math-without-it.html&quot;&gt;Math Without Operator To Do It&lt;/a&gt;,
-I wrote about division an power implementations.
-There’s one more of this sort worth adding a memo here.
-It is calculating a square root without language provided operators.&lt;/p&gt;
-
-&lt;p&gt;There’s always an intuitive solution, while always effective solutions are.
-I’m going to write multiple solutions.&lt;/p&gt;
-
-&lt;h4 id=&quot;problem-description---integer-square-root-implementation&quot;&gt;Problem Description - Integer Square Root Implementation&lt;/h4&gt;
-
-&lt;p&gt;“Given an integer, find its square root in integer.
-If the square root is not an integer, the answer will be a floor of it”&lt;/p&gt;
-
-&lt;p&gt;For example, given 11, the answer will be 3.
-It is a fairly easy to understand problem.&lt;/p&gt;
-
-&lt;h4 id=&quot;the-idea-to-find-a-square-root---naive-iteration&quot;&gt;The idea to find a square root - naive iteration&lt;/h4&gt;
-
-&lt;p&gt;Since the answer will be only integer,
-I counld instantly think of a naive solution.
-Iterating integer from one to the given number,
-I will hit the integer whose multiple of itself exceeds the given number.
-Then, the answer will be that integer minus one.&lt;/p&gt;
-
-&lt;pre&gt;
-x: given number
-
-for (int i = 2; i &amp;lt; x; i++) {
-    if (i * i &amp;gt; x) {
-        return i - 1;
-    }
-}
-&lt;/pre&gt;
-
-&lt;p&gt;This will return a correct answer, but the problem is its slowness.
-Time complexity is O(n).&lt;/p&gt;
-
-&lt;h4 id=&quot;the-idea-to-find-a-square-root---binary-search&quot;&gt;The idea to find a square root - binary search&lt;/h4&gt;
-
-&lt;p&gt;Again, the answer is the integer.
-Also, the answer is between 2 to the given number.
-All numbers are there in a sorted order.
-This is a perfect condition for a binary search.&lt;/p&gt;
-
-&lt;pre&gt;
-x: given number
-
-while (low &amp;lt;= high) {
-    long mid = (low + high) / 2;
-    long temp = mid * mid;
-	if (temp &amp;lt;= x) {
-        low = mid + 1;
-        result = mid;
-    } else {
-        high = mid - 1;		
-    }
-}
-
-&lt;/pre&gt;
-
-&lt;p&gt;The binary search improves the performance to O(log(n)).
-This should be fast enough.
-However, when the given number is big,
-I got time out error on the code competition website.&lt;/p&gt;
-
-&lt;h4 id=&quot;the-idea-to-find-a-square-root---newton-raphson-method&quot;&gt;The idea to find a square root - Newton-Raphson method&lt;/h4&gt;
-
-&lt;p&gt;This is a really fast, sophisticated solution.
-However, despite of very simple code,
-it took a while for me to understand why such calculation gives the answer.&lt;/p&gt;
-
-&lt;p&gt;The Newton-Raphson methed (NR method) has a mathematical, especially,
-diffential equation backgound.
-Also, NR method is an iterative solution to approximate root.
-The important point here is to find a function which satisfies:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;diffentiable (continuous)&lt;/li&gt;
-  &lt;li&gt;f(x) = 0 for some good value x&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Given such a nice function, if I think of a slope of that,
-it would be:&lt;/p&gt;
-
-&lt;pre&gt;
-
-the slope at point: (x_n, f(x_n)), where y = f(x)
-
-f&apos;(x) = d f(x) / dx
-
-f&apos;(x_n) = (y - f(x_n)) / (x - x_n)
-
-by the definition, y = f(x) = 0,
-
-f&apos;(x_n) = (- f(x_n)) / (x_n+1 - x_n)
-
-x_n+1 = x_n - f(x_n) / f&apos;(x_n)
-
-&lt;/pre&gt;
-
-&lt;p&gt;Now, I got the formula to iterate.
-The question is what is f(x).
-Since I want to find a number &lt;code&gt;x&lt;/code&gt; to the given number &lt;code&gt;a&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;
-
-x = sqrt(a)
-
-x^2 = a
-
-x^2 - a = 0
-
-x^2 - a = 0 = f(x)
-
-f&apos;(x) = 2x
-
-&lt;/pre&gt;
-
-&lt;p&gt;Ok, I got the function, so let’s plugin to the previous formula.&lt;/p&gt;
-
-&lt;pre&gt;
-
-x_n+1 = x_n - (x_n^2 - a) / 2 * x_n
-
-x_n+1 = 1/2 * (2 * x_n - x_n^2 / x_n + a / x_n)
-
-x_n+1 = 1/2 * (2 * x_n - x_n + a / x_n)
-
-x_n+1 = 1/2 * (x_n + a / x_n)
-
-&lt;/pre&gt;
-
-&lt;p&gt;If I iterate above calculation not to exceed the given number,
-I’ll get the integer square root.&lt;/p&gt;
-
-&lt;p&gt;The time complexity of NR method is the same as binary search, O(log(n)).
-However, it quickly converges to the answer.
-This is because the binary search increments the value one by one, while
-NR method effectively cuts down to half.&lt;/p&gt;
-
-&lt;h4 id=&quot;java-code-for-square-root-implementation&quot;&gt;Java code for square root implementation&lt;/h4&gt;
-
-&lt;script src=&quot;https://gist.github.com/yokolet/0a973ce5ef02ae1354fc74c9f92a32c1.js&quot;&gt; &lt;/script&gt;
-
-&lt;p&gt;The result is:&lt;/p&gt;
-
-&lt;pre&gt;
-3
-3
-46339
-46339
-46339
-&lt;/pre&gt;
-
-&lt;h4 id=&quot;resources&quot;&gt;Resources&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/square-root-of-an-integer/&quot;&gt;Square root of an integer&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/program-for-newton-raphson-method/&quot;&gt;Program for Newton Raphson Method&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://mathworld.wolfram.com/NewtonsIteration.html&quot;&gt;Newton’s Iteration&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://mathworld.wolfram.com/NewtonsMethod.html&quot;&gt;Newton’s Methos&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://www.quora.com/What-is-the-Newton-Rapson-method-for-finding-a-square-root-of-an-integer-number-How-does-one-use-it&quot;&gt;What is the Newton-Raphson method for finding a square root of in integer number? How does one use it?&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Yoko Harada</name></author><summary type="html">In my last post, Math Without Operator To Do It, I wrote about division an power implementations. There’s one more of this sort worth adding a memo here. It is calculating a square root without language provided operators.</summary></entry></feed>
+&lt;/ul&gt;</content><author><name>Yoko Harada</name></author><summary type="html">I’m going to write about two weird algorithm problems. Those seem quite weired at least to me, yet famous as algorithm questions. One is so-called egg dropping, another is finding a celebrity. I see these two problems here and there. From that, I guess those two are famous algorithm questions. But, at least, those two are quite weird. Some call them puzzle. (Yeah, maybe… I was totally puzzled.)</summary></entry></feed>
