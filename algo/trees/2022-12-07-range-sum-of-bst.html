@@ -172,6 +172,13 @@
                     </li>
                     
                     <li>
+                        <a href="/algo/arrays/2023-02-09-find-the-difference-of-two-arrays"
+                           class="submenu">
+                            Find the Difference of Two Arrays
+                        </a>
+                    </li>
+                    
+                    <li>
                         <a href="/algo/arrays/2022-09-27-flood-fill"
                            class="submenu">
                             Flood Fill
@@ -1678,12 +1685,13 @@ Explanation: Nodes 6, 7, and 10 are in the range [6, 10]. 6 + 7 + 10 = 23.
 <h2 id="how-to-solve">How to Solve</h2>
 <p>This problem can be solved in multiple ways such that the breadth-first search, depth-first search, post-order or
 in-order traversal.
-The solution here took the breadth-first search approach.
+The solution here took the depth-first search (recursion) approach.
 Since the tree is BST, a direction to go left or right depends on the root value.
-When the root value is between low and high, it goes both directions.
-If the root value is greater than high, it goes to left.
-If the root value is less than low, it goes to right.
-As the problem describes, if the root value is between low and high inclusive, add it up to the total.</p>
+In another word, if the root value is smaller than low, no need to go left any further.
+Same as right subtree, if the root value is greater than high, no need to go right any further.
+Rather than controlling the flow by the root value comparison, the solution here sets null to the left or right node.
+When the recursion go deeper, it returns 0 if the root is null.
+When the root value is between low and high, the root value is added to the result from left and right subtrees.</p>
 
 <h2 id="solution">Solution</h2>
 
@@ -1732,26 +1740,12 @@ As the problem describes, if the root value is between low and high inclusive, a
 class RangeSumOfBST {
 public:
     int rangeSumBST(TreeNode* root, int low, int high) {
-        queue&lt;TreeNode*&gt; q({root});
-        int total = 0;
-        while (!q.empty()) {
-            TreeNode *cur = q.front();
-            q.pop();
-            if (low &lt;= cur-&gt;val &amp;&amp; cur-&gt;val &lt;= high) {
-                total += cur-&gt;val;
-                if (cur-&gt;left) {
-                    q.push(cur-&gt;left);
-                }
-                if (cur-&gt;right) {
-                    q.push(cur-&gt;right);
-                }
-            } else if (high &lt; cur-&gt;val &amp;&amp; cur-&gt;left) {
-                q.push(cur-&gt;left);
-            } else if (cur-&gt;val &lt; low &amp;&amp; cur-&gt;right) {
-                q.push(cur-&gt;right);
-            }
-        }
-        return total;
+        if (!root) return 0;
+        if (root-&gt;val &lt; low) { root-&gt;left = nullptr; }
+        if (root-&gt; val &gt; high) { root-&gt;right = nullptr; }
+        return rangeSumBST(root-&gt;left, low, high) +
+                rangeSumBST(root-&gt;right, low, high) +
+                (low &lt;= root-&gt;val &amp;&amp; root-&gt;val &lt;= high ? root-&gt;val : 0);
     }
 };
 </code></pre>
@@ -1763,7 +1757,28 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-2">
-<pre><code class="language-js">
+<pre><code class="language-js">/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @param {number} low
+ * @param {number} high
+ * @return {number}
+ */
+var rangeSumBST = function(root, low, high) {
+    if (root == null) { return 0; }
+    if (root.val &lt; low) { root.left = null; }
+    if (root.val &gt; high) { root.high = null; }
+    return rangeSumBST(root.left, low, high) +
+            rangeSumBST(root.right, low, high) +
+            (low &lt;= root.val &amp;&amp; root.val &lt;= high ? root.val : 0);
+};
 </code></pre>
 </div>
     
@@ -1776,21 +1791,12 @@ public:
 #         self.right = right
 class RangeSumOfBST:
     def rangeSumBST(self, root: Optional[TreeNode], low: int, high: int) -&gt; int:
-        queue = [root]
-        total = 0
-        while queue:
-            cur = queue.pop(0)
-            if low &lt;= cur.val &lt;= high:
-                total += cur.val
-                if cur.left:
-                    queue.append(cur.left)
-                if cur.right:
-                    queue.append(cur.right)
-            elif high &lt; cur.val and cur.left:
-                queue.append(cur.left)
-            elif cur.val &lt; low and cur.right:
-                queue.append(cur.right)
-        return total
+        if not root: return 0
+        if root.val &lt; low: root.left = None
+        if root.val &gt; high: root.high = None
+        return self.rangeSumBST(root.left, low, high) + \
+                self.rangeSumBST(root.right, low, high) + \
+                (root.val if low &lt;= root.val &lt;= high else 0)
 </code></pre>
 </div>
     
@@ -1805,7 +1811,7 @@ class RangeSumOfBST:
 <h2 id="complexities">Complexities</h2>
 <ul>
   <li>Time: <code>O(n)</code></li>
-  <li>Space: <code>O(n)</code></li>
+  <li>Space: <code>O(h)</code> – h: height of a tree</li>
 </ul>
 
 </div>

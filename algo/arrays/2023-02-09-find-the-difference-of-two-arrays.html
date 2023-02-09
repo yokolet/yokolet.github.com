@@ -22,21 +22,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Number of Provinces | yokolet’s notelets</title>
+<title>Find the Difference of Two Arrays | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Number of Provinces" />
+<meta property="og:title" content="Find the Difference of Two Arrays" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/graphs/2022-09-17-number-of-provinces.html" />
-<meta property="og:url" content="http://localhost:4000/algo/graphs/2022-09-17-number-of-provinces.html" />
+<link rel="canonical" href="http://localhost:4000/algo/arrays/2023-02-09-find-the-difference-of-two-arrays.html" />
+<meta property="og:url" content="http://localhost:4000/algo/arrays/2023-02-09-find-the-difference-of-two-arrays.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-09-17T12:16:00+09:00" />
+<meta property="article:published_time" content="2023-02-09T13:42:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Number of Provinces" />
+<meta property="twitter:title" content="Find the Difference of Two Arrays" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-17T12:16:00+09:00","datePublished":"2022-09-17T12:16:00+09:00","description":"Blog site mostly for programming topics.","headline":"Number of Provinces","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/graphs/2022-09-17-number-of-provinces.html"},"url":"http://localhost:4000/algo/graphs/2022-09-17-number-of-provinces.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2023-02-09T13:42:00+09:00","datePublished":"2023-02-09T13:42:00+09:00","description":"Blog site mostly for programming topics.","headline":"Find the Difference of Two Arrays","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/arrays/2023-02-09-find-the-difference-of-two-arrays.html"},"url":"http://localhost:4000/algo/arrays/2023-02-09-find-the-difference-of-two-arrays.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Number of Provinces</h1>
+            <h1 class="title is-2">Find the Difference of Two Arrays</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -114,7 +114,7 @@
     
     <div class="menu-list">
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Arrays
             </a>
@@ -881,7 +881,7 @@
             </ul>
         </div>
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Graphs
             </a>
@@ -1633,107 +1633,157 @@
                     
                     <div class="content">
 
-    <p>Published: Sep 17, 2022</p>
+    <p>Published: Feb 9, 2023</p>
 
     <div class="tags">
         
         <span class="tag  is-primary ">
-    Medium
+    Easy
 </span>
         
         <span class="tag  is-primary ">
-    Breadth-First Search
-</span>
-        
-        <span class="tag  is-primary ">
-    Depth-First Search
-</span>
-        
-        <span class="tag  is-primary ">
-    Graph
-</span>
-        
-        <span class="tag  is-primary ">
-    Union Find
+    Array
 </span>
         
     </div>
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is a typical graph traversal problem. Either of depth-first search or breadth-first search works.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>There are <code>n</code> cities. Some of them are connected, while some are not.
-If city <code>a</code> is connected directly with city <code>b</code>, and city <code>b</code> is connected directly with city <code>c</code>,
-then city <code>a</code> is connected indirectly with city <code>c</code>.
-A province is a group of directly or indirectly connected cities and
-no other cities outside of the group.</p>
+  <p>Given two 0-indexed integer arrays <code>nums1</code> and <code>nums2</code>, return a list <code>answer</code> of size 2 where:</p>
+  <ul>
+    <li><code>answer[0]</code> is a list of all distinct integers in nums1 which are not present in nums2.</li>
+    <li><code>answer[1]</code> is a list of all distinct integers in nums2 which are not present in nums1.</li>
+  </ul>
 
-  <p>You are given an <code>n x n</code> matrix isConnected where <code>isConnected[i][j] = 1</code> if the ith city and
-the j-th city are directly connected, and <code>isConnected[i][j] = 0</code> otherwise.</p>
-
-  <p>Return the total number of provinces.</p>
+  <p>Note that the integers in the lists may be returned in any order.</p>
 
   <p>Constraints:</p>
   <ul>
-    <li><code>1 &lt;= n &lt;= 200</code></li>
-    <li><code>n == isConnected.length</code></li>
-    <li><code>n == isConnected[i].length</code></li>
-    <li><code>isConnected[i][j]</code> is 1 or 0.</li>
-    <li><code>isConnected[i][i] == 1</code></li>
-    <li><code>isConnected[i][j] == isConnected[j][i]</code></li>
+    <li><code>1 &lt;= nums1.length, nums2.length &lt;= 1000</code></li>
+    <li><code>-1000 &lt;= nums1[i], nums2[i] &lt;= 1000</code></li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/number-of-provinces/">https://leetcode.com/problems/number-of-provinces/</a></p>
+  <p><a href="https://leetcode.com/problems/find-the-difference-of-two-arrays/">https://leetcode.com/problems/find-the-difference-of-two-arrays/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
 <pre><code>Example 1
-Input: isConnected = [[1,1,0],[1,1,0],[0,0,1]]
-Output: 2
+Input: nums1 = [1,2,3], nums2 = [2,4,6]
+Output: [[1,3],[4,6]]
 </code></pre>
 
 <pre><code>Example 2
-Input: isConnected = [[1,0,0],[0,1,0],[0,0,1]]
-Output: 3
+Input: nums1 = [1,2,3,3], nums2 = [1,1,2,2]
+Output: [[3],[]]
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>In this problem, the adjacency matrix is already given.
-We don’t need to construct it.
-Staring from 0, which means row 0, going over all nodes one by one while keeping a visited set.
-When the current row’s column value is 1, two nodes are connected.
-If it is not yet visited, add the node to queue for further connectivity check.
-When one round of BFS ends, a province is found, so count up.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>Nothing is complicated in this problem.
+Start from creating two sets from given two arrays since those arrays have duplicates.
+The next step depends on the language.
+Python has a feature to get sets difference by just a ‘-‘ (minus) operator.
+Other languages don’t have such handy feature, so easy way would be iterate the set one by one while
+checking the presence of values in another set.
+If the value is not present in another set, add it to the result array.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class NumberOfProvinces:
-    def findCircleNum(self, isConnected: List[List[int]]) -&gt; int:
-        n = len(isConnected)
-        count, visited = 0, set()
-        for i in range(n):
-            if i in visited:
-                continue
-            queue = [i]
-            count += 1
-            while queue:
-                cur = queue.pop(0)
-                visited.add(cur)
-                for j in range(n):
-                    if isConnected[cur][j] == 1 and j not in visited:
-                        queue.append(j)
-        return count
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class FindTheDifferenceOfTwoArrays {
+public:
+    vector&lt;vector&lt;int&gt;&gt; findDifference(vector&lt;int&gt;&amp; nums1, vector&lt;int&gt;&amp; nums2) {
+        unordered_set&lt;int&gt; s1(nums1.begin(), nums1.end()), s2(nums2.begin(), nums2.end());
+        vector&lt;vector&lt;int&gt;&gt; result(2, vector&lt;int&gt;{});
+        for (auto v : s1) {
+            if (s2.find(v) == s2.end()) { result[0].push_back(v); }
+        }
+        for (auto v : s2) {
+            if (s1.find(v) == s1.end()) { result[1].push_back(v); }
+        }
+        return result;
+    }
+};
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">**
+ * @param {number[]} nums1
+ * @param {number[]} nums2
+ * @return {number[][]}
+ */
+var findDifference = function(nums1, nums2) {
+  let s1 = new Set(nums1), s2 = new Set(nums2);
+  let result = [[], []];
+  s1.forEach(v =&gt; {
+    if (!s2.has(v)) { result[0].push(v); }
+  })
+  s2.forEach(v =&gt; {
+    if (!s1.has(v)) { result[1].push(v); }
+  })
+  return result;
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class FindTheDifferenceOfTwoArrays:
+    def findDifference(self, nums1: List[int], nums2: List[int]) -&gt; List[List[int]]:
+        s1, s2 = set(nums1), set(nums2)
+        return [list(s1 - s2), list(s2 -s1)]
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
   <li>Time: <code>O(n)</code></li>
   <li>Space: <code>O(n)</code></li>
 </ul>
-
 
 </div>
 

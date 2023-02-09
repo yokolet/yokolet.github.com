@@ -172,6 +172,13 @@
                     </li>
                     
                     <li>
+                        <a href="/algo/arrays/2023-02-09-find-the-difference-of-two-arrays"
+                           class="submenu">
+                            Find the Difference of Two Arrays
+                        </a>
+                    </li>
+                    
+                    <li>
                         <a href="/algo/arrays/2022-09-27-flood-fill"
                            class="submenu">
                             Flood Fill
@@ -1635,19 +1642,15 @@
 </span>
         
         <span class="tag  is-primary ">
+    Dynamic Programming
+</span>
+        
+        <span class="tag  is-primary ">
     Depth-First Search
 </span>
         
         <span class="tag  is-primary ">
     String
-</span>
-        
-        <span class="tag  is-primary ">
-    Dynamic Programming
-</span>
-        
-        <span class="tag  is-primary ">
-    Trie
 </span>
         
         <span class="tag  is-primary ">
@@ -1658,12 +1661,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This might be solved by the dynamic programming.
-Also, the recursion (depth-first search) with prefix and suffix would work.
-In any case, this is hard to solve.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>Given an array of strings <code>words</code> (without duplicates),
 return all the concatenated words in the given list of words.</p>
@@ -1694,31 +1692,166 @@ Input: words = ["cat","dog","catdog"]
 Output: ["catdog"]
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>Divide each word to prefix and suffix.
-The next deeper level checks previous suffix.
-In the end, if suffix is in the given word list, the suffix is a part of concatenated word.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>If it is a string problem and a type of substring comparison,
+it might be solved by the depth-first search (recursion) changing the length of the word.</p>
+
+<p>An easy approach would be to divide a word to prefix and suffix.
+Then, check both prefix and suffix are in the given word list.
+Shift the index and divide the word at a new index, then check.</p>
+
+<p>However, as this problem is categorized in Hard, it is very hard problem.
+It requires an optimization not to get the time limited exceeded error.</p>
+
+<p>The approach here uses depth-first search (dfs, recursion) and memoization.
+Also, the current index is passed to dfs function not to create substrings on memory.
+The memoization is used to check whether the index is already visited or not.
+During the recursion, only prefix part is looked up to the word set.
+The suffix part check will be done in the deeper iteration.
+If thr dfs returns truthy, add the word to the result array.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class Solution {
+private:
+    bool dfs(unordered_set&lt;string&gt; &amp;word_set, vector&lt;int&gt; &amp;memo, string &amp;word, int idx) {
+        if (idx == word.size()) { return 1; }
+        if (memo[idx] != -1) { return memo[idx]; }
+        bool ret = 0;
+        for (int i = 1; i &lt;= word.size() - idx - (idx == 0); ++i) {
+            if (word_set.find(word.substr(idx, i)) != word_set.end()) {
+                ret = dfs(word_set, memo, word, idx + i);
+                if (ret) { break; }
+            }
+        }
+        return memo[idx] = ret;
+    }
+
+public:
+    vector&lt;string&gt; findAllConcatenatedWordsInADict(vector&lt;string&gt;&amp; words) {
+        unordered_set&lt;string&gt; word_set(words.begin(), words.end());
+        vector&lt;string&gt; result;
+        for (string word : words) {
+            vector&lt;int&gt; memo(word.size(), -1);
+            if (dfs(word_set, memo, word, 0)) {
+                result.push_back(word);
+            }
+        }
+        return result;
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {string[]} words
+ * @return {string[]}
+ */
+var findAllConcatenatedWordsInADict = function(words) {
+  let word_set = new Set(words);
+
+  const func = function dfs(memo, word, idx) {
+    let n = word.length;
+    if (idx === n) { return 1; }
+    if (memo[idx] !== -1) { return memo[idx]; }
+    let ret = 0;
+    for (let i = 1; i &lt;= n - idx - (idx == 0); i++) {
+      if (word_set.has(word.substring(idx, idx + i))) {
+        ret = dfs(memo, word, idx + i);
+        if (ret) { break; }
+      }
+    }
+    memo[idx] = ret;
+    return ret;
+  }
+
+  let result = new Array();
+  for (let word of words) {
+    let memo = new Array(word.length).fill(-1);
+    if (func(memo, word, 0)) {
+      result.push(word);
+    }
+  }
+  return result;
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class ConcatenatedWords:
     def findAllConcatenatedWordsInADict(self, words: List[str]) -&gt; List[str]:
         word_set = set(words)
 
-        def dfs(w):
-            n = len(w)
-            for i in range(1, n):
-                prefix, suffix = w[:i], w[i:]
-                if prefix in word_set and (suffix in word_set or dfs(suffix)):
-                    return True
-            return False
-                
-        return [word for word in words if dfs(word)]
+        def dfs(memo, word, idx):
+            n = len(word)
+            if idx == n: return 1
+            if memo[idx] != -1: return memo[idx]
+            ret = 0
+            for i in range(1, n - idx - (idx == 0) + 1):
+                if word[idx:idx + i] in word_set:
+                    ret = dfs(memo, word, idx + i)
+                    if ret: break
+            memo[idx] = ret
+            return ret
+
+        result = []
+        for word in words:
+            memo = [-1 for _ in range(len(word))]
+            if dfs(memo, word, 0):
+                result.append(word)
+        return result
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O()</code></li>
-  <li>Space: <code>O()</code></li>
+  <li>Time: <code>O(n * m)</code> –&gt; <code>O(n)</code> since m: length of the longest word is at most 30.</li>
+  <li>Space: <code>O(m)</code> – for a recursion stack</li>
 </ul>
 
 </div>

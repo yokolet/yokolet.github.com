@@ -172,6 +172,13 @@
                     </li>
                     
                     <li>
+                        <a href="/algo/arrays/2023-02-09-find-the-difference-of-two-arrays"
+                           class="submenu">
+                            Find the Difference of Two Arrays
+                        </a>
+                    </li>
+                    
+                    <li>
                         <a href="/algo/arrays/2022-09-27-flood-fill"
                            class="submenu">
                             Flood Fill
@@ -1706,7 +1713,7 @@ The amount of new area painted on day 1 is 0.
 </code></pre>
 
 <h2 id="how-to-solve">How to Solve</h2>
-<p>As this problem is categorized to the hard, it is a hard problem.
+<p>As this problem is categorized to the hard, it is really a hard problem.
 Easy solution such that all range checks will get the time limit exceeded error.
 The problem requires an effective solution.
 Various approaches are there to solve this problem,
@@ -1714,14 +1721,12 @@ for example, interval merges, binary search, ordered set, segment tree and more.
 
 <p>Among those, the solution here took the hash table approach.
 If the given start and end range doesn’t exist in the hash table,
-save all values from start to end (end is not included) will be added to the hash table
+save all values from start to end (end is not included) as a key to the hash table
 with the end as a value.
 If the given start and end range overlaps to the existing range(s),
-update the end value by a bigger one.
-Also, skip the check to the original end value.</p>
-
-<p>In the inner loop, the start value shifts one by one, so the work will grow one by one.
-When the all values between start and end are checked, add the work to the worklog array.</p>
+update the end value to a bigger one.
+Also, skip the check to the original end value.
+When a single work check is completed, add the work sum to the worklog array.</p>
 
 <h2 id="solution">Solution</h2>
 
@@ -1789,7 +1794,29 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-2">
-<pre><code class="language-js">
+<pre><code class="language-js">/**
+ * @param {number[][]} paint
+ * @return {number[]}
+ */
+var amountPainted = function(paint) {
+  let painted = new Map(), worklog = [];
+  for (let [start, end] of paint) {
+    let work = 0;
+    while (start &lt; end) {
+      if (painted.has(start)) {
+        let prev_end = painted.get(start);
+        painted.set(start, Math.max(prev_end, end));
+        start = prev_end;
+      } else {
+        painted.set(start, end);
+        start++;
+        work++;
+      }
+    }
+    worklog.push(work);
+  }
+  return worklog;
+};
 </code></pre>
 </div>
     

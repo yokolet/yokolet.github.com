@@ -172,6 +172,13 @@
                     </li>
                     
                     <li>
+                        <a href="/algo/arrays/2023-02-09-find-the-difference-of-two-arrays"
+                           class="submenu">
+                            Find the Difference of Two Arrays
+                        </a>
+                    </li>
+                    
+                    <li>
                         <a href="/algo/arrays/2022-09-27-flood-fill"
                            class="submenu">
                             Flood Fill
@@ -1730,7 +1737,20 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-2">
-<pre><code class="language-js">
+<pre><code class="language-js">/**
+ * @param {string[]} words
+ * @param {string} pref
+ * @return {number}
+ */
+var prefixCount = function(words, pref) {
+    let result = 0;
+    for (const w of words) {
+        if (w.startsWith(pref)) {
+            result++;
+        }
+    }
+    return result;
+};
 </code></pre>
 </div>
     
