@@ -1743,7 +1743,7 @@ If thr dfs returns truthy, add the word to the result array.</p>
   <div class="container box">
     
       <div class="is-active tab-content" data-content="solution-0">
-<pre><code class="language-cpp">class Solution {
+<pre><code class="language-cpp">class ConcatenatedWords {
 private:
     bool dfs(unordered_set&lt;string&gt; &amp;word_set, vector&lt;int&gt; &amp;memo, string &amp;word, int idx) {
         if (idx == word.size()) { return 1; }

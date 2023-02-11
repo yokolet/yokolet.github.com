@@ -1762,7 +1762,7 @@ This way, we can find the answer.</p>
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-class Solution {
+class StepByStepDirectionsFromABinaryTreeNodeToAnother {
 private:
     bool dfs(TreeNode *root, int val, stack&lt;string&gt; &amp;path) {
         if (root-&gt;val == val) {

@@ -1743,7 +1743,7 @@ Insert the root value to the array of the level index.</p>
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-class Solution {
+class FindLeavesOfBinaryTree {
 private:
     int traverse(TreeNode *root, vector&lt;vector&lt;int&gt;&gt; &amp;levels) {
         if (!root) { return -1; }

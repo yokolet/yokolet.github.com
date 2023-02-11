@@ -1750,7 +1750,27 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-2">
-<pre><code class="language-js">
+<pre><code class="language-js">/**
+ * @param {number[][]} ranges
+ * @param {number} left
+ * @param {number} right
+ * @return {boolean}
+ */
+var isCovered = function(ranges, left, right) {
+  for (let i = left; i &lt;= right; i++) {
+    let found = false;
+    for (const [s, e] of ranges) {
+      if (s &lt;= i &amp;&amp; i &lt;= e) {
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      return false;
+    }
+  }
+  return true;
+};
 </code></pre>
 </div>
     
@@ -1770,7 +1790,25 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-4">
-<pre><code class="language-ruby">
+<pre><code class="language-ruby"># @param {Integer[][]} ranges
+# @param {Integer} left
+# @param {Integer} right
+# @return {Boolean}
+def is_covered(ranges, left, right)
+    (left..right).each do |i|
+        found = false
+        ranges.each do |s, e|
+            if s &lt;= i &amp;&amp; i &lt;= e
+                found = true
+                break
+            end
+        end
+        if (!found)
+            return false
+        end
+    end
+    return true
+end
 </code></pre>
 </div>
     

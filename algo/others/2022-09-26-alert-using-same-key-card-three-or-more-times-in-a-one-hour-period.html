@@ -1657,13 +1657,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>The problem asks individual’s 3 consecutive time differences.
-Sorting is the first to be done.
-We should focus on 3 consecutive time differences, so the approach would be a sliding window or two pointers.
-In the end, names should be sorted to meet the requirement.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>LeetCode company workers use key-cards to unlock office doors.
 Each time a worker uses their key-card, the security system saves the worker’s name and the time when it was used.
@@ -1705,37 +1699,148 @@ Output: ["bob"]
 Explanation: "bob" used the keycard 3 times in a one-hour period ("21:00","21:20", "21:30").
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>The first step is to sort by name and time.
-Then check each person’s 3 consecutive time records.
-If the first and last time difference is less than or equal to 60, add the name to the list.
-The first of three should be popped out since next three set of time records will be used next time.
-At last, sort the names as the problem requested.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>The problem asks individual’s 3 consecutive time differences.
+The hash table is a good data structure to save name and a list of key times pair.
+Then, sort times of each person and compare.</p>
+
+<p>The comparison will be made for each person’s 3 consecutive time records.
+It means the time of index i and i + 2 should be check whether the difference is less than or equal to 60 minutes.
+If it is bigger, add the name to the result list.
+At last, sort the names in the result list as the problem requires.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class SameKeyCardAlert {
+private:
+    int getMins(string &amp;time) {
+        return stoi(time.substr(0, 2)) * 60 + stoi(time.substr(3));
+    }
+
+public:
+    vector&lt;string&gt; alertNames(vector&lt;string&gt;&amp; keyName, vector&lt;string&gt;&amp; keyTime) {
+        unordered_map&lt;string, vector&lt;int&gt;&gt; workers;
+        vector&lt;string&gt; alerts;
+        for (int i = 0; i &lt; keyName.size(); ++i) {
+            workers[keyName[i]].push_back(getMins(keyTime[i]));
+        }
+        for (auto const &amp;worker : workers) {
+            vector&lt;int&gt; times = worker.second;
+            sort(times.begin(), times.end());
+            for (int idx = 0; idx &lt; times.size() - 2; ++idx) {
+                if (times[idx + 2] - times[idx] &lt;= 60) {
+                    alerts.push_back(worker.first);
+                    break;
+                }
+            }
+        }
+        sort(alerts.begin(), alerts.end());
+        return alerts;
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {string[]} keyName
+ * @param {string[]} keyTime
+ * @return {string[]}
+ */
+var alertNames = function(keyName, keyTime) {
+  const getMin = function(time) {
+    return parseInt(time.substring(0, 2)) * 60 + parseInt(time.substring(3));
+  }
+  let workers = new Map();
+  let alerts = new Array();
+  for (let i = 0; i &lt; keyName.length; i++) {
+    let times = workers.has(keyName[i]) ? workers.get(keyName[i]) : new Array();
+    times.push(getMin(keyTime[i]));
+    workers.set(keyName[i], times);
+  }
+  workers.forEach((times, name) =&gt; {
+    times.sort((a, b) =&gt; { return a - b; });
+    for (let idx = 0; idx &lt; times.length - 2; idx++) {
+      if (times[idx + 2] - times[idx] &lt;= 60) {
+        alerts.push(name);
+        break;
+      }
+    }
+  })
+  alerts.sort();
+  return alerts;
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class SameKeyCardAlert:
     def alertNames(self, keyName: List[str], keyTime: List[str]) -&gt; List[str]:
-        def getMins(t):
-            hour, minute = t.split(':')
+        def getMins(time):
+            hour, minute = time[:2], time[3:]
             return int(hour) * 60 + int(minute)
-        
-        workers, alerts = collections.defaultdict(list), set()
-        for name, time in sorted(zip(keyName, keyTime)):
-            if name in alerts:
-                continue
-            workers[name].append(getMins(time))
-            if len(workers[name]) == 3:
-                prev_t = workers[name].pop(0)
-                if (workers[name][-1] - prev_t) &lt;= 60:
-                    alerts.add(name)
 
-        return sorted(list(alerts))
+        workers, alerts = defaultdict(list), []
+        for name, time in zip(keyName, keyTime):
+            workers[name].append(getMins(time))
+        for name in workers:
+            times = sorted(workers[name])
+            for idx, time in enumerate(times):
+                if idx + 2 &lt; len(times) and times[idx + 2] - time &lt;= 60:
+                    alerts.append(name)
+                    break;
+        return sorted(alerts)
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(n)</code> – n: size of input arrays</li>
-  <li>Space: <code>O(m)</code> – m: number of unique workers</li>
+  <li>Time: <code>O(n + m)</code> – n: size of input arrays, m: number of unique workers</li>
+  <li>Space: <code>O(m)</code></li>
 </ul>
 
 </div>
