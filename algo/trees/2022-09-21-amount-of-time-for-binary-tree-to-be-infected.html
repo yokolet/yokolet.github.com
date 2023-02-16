@@ -644,7 +644,7 @@
                     <li>
                         <a href="/algo/stacks_and_queues/2022-09-08-basic-calculator-ii"
                            class="submenu">
-                            Basic Calculator -- Simple
+                            Basic Calculator II
                         </a>
                     </li>
                     
@@ -1657,11 +1657,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>Among a couple of possible solutions, the easiest would be to create a graph first.
-Then, the problem comes down to a simple graph traversal.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>You are given the <code>root</code> of a binary tree with unique values, and an integer <code>start</code>.
 At minute 0, an infection starts from the node with value start.
@@ -1708,47 +1704,227 @@ Input: root = [1], start = 1
 Output: 0
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>The first step is to create a graph by traversing the binary tree.
+<h2 id="how-to-solve">How to Solve</h2>
+<p>Among a couple of possible solutions, the easiest would be to create a graph first.
+Once the graph is created, the problem comes down to a simple graph traversal.</p>
+
+<p>The solution here starts from creating a graph by traversing the binary tree.
 Since the value is unique, node’s value can be used as a node id.
-Then, traverse the graph from the given start value with time 0.
-This solution uses the breadth-first search.
-When the next node is popped, compare the maximum time.
-Go over adjacent nodes in the graph.
-The node is not yet visited, add it to the queue with incremented time.</p>
+The graph traversal starts from the given start value with time 0.
+Do the breadth-first search like a level order traversal.
+The internal loop processes nodes of the same distance from the start node.
+When the internal loop completes, count up the result.
+In the end, we get the answer.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+
+#include &lt;queue&gt;
+#include &lt;unordered_set&gt;
+#include &lt;unordered_map&gt;
+#include &lt;vector&gt;
+
+using namespace std;
+
+class AmountOfTimeForBinaryTreeToBeInfected {
+private:
+    unordered_map&lt;int, vector&lt;int&gt;&gt; graph;
+    void buildGraph(TreeNode *root) {
+        if (!root) { return; }
+        if (root-&gt;left) {
+            graph[root-&gt;val].push_back(root-&gt;left-&gt;val);
+            graph[root-&gt;left-&gt;val].push_back(root-&gt;val);
+            buildGraph(root-&gt;left);
+        }
+        if (root-&gt;right) {
+            graph[root-&gt;val].push_back(root-&gt;right-&gt;val);
+            graph[root-&gt;right-&gt;val].push_back(root-&gt;val);
+            buildGraph(root-&gt;right);
+        }
+    }
+public:
+    int amountOfTime(TreeNode* root, int start) {
+        buildGraph(root);
+        int result = -1, cur_n, sz;
+        queue&lt;int&gt; q;
+        q.push(start);
+        set&lt;int&gt; seen;
+        seen.insert(start);
+        while (!q.empty()) {
+            sz = q.size();
+            for (int i = 0; i &lt; sz; ++i) {
+                cur_n = q.front();
+                q.pop();
+                for (int next_n : graph[cur_n]) {
+                    if (seen.count(next_n) == 0) {
+                        seen.insert(next_n);
+                        q.push(next_n);
+                    }
+                }
+            }
+            result++;
+        }
+        return result;
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @param {number} start
+ * @return {number}
+ */
+const graph = new Map();
+
+var buildGraph = function(root) {
+  if (!root) { return; }
+  let adj_p = graph.has(root.val) ? graph.get(root.val) : new Array();
+  if (root.left) {
+    let adj_l = graph.has(root.left.val) ? graph.get(root.left.val) : new Array();
+    adj_p.push(root.left.val);
+    adj_l.push(root.val);
+    graph.set(root.left.val, adj_l);
+    buildGraph(root.left);
+  }
+  if (root.right) {
+    let adj_r = graph.has(root.right.val) ? graph.get(root.right.val) : new Array();
+    adj_p.push(root.right.val);
+    adj_r.push(root.val);
+    graph.set(root.right.val, adj_r);
+    buildGraph(root.right);
+  }
+  graph.set(root.val, adj_p);
+}
+
+var amountOfTime = function(root, start) {
+  buildGraph(root);
+  let queue = new Array(); queue.push(start);
+  let seen = new Set(); seen.add(start);
+  let result = -1;
+  while (queue.length &gt; 0) {
+    let sz = queue.length, cur_n;
+    for (let i = 0; i &lt; sz; i++) {
+      cur_n = queue.shift();
+      for (let next_n of graph.get(cur_n)) {
+        if (!seen.has(next_n)) {
+          seen.add(next_n);
+          queue.push(next_n);
+        }
+      }
+    }
+    result++;
+  }
+  return result;
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python"># Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
 #         self.val = val
 #         self.left = left
 #         self.right = right
+
+import collections
+from typing import Optional
+
 class AmountOfTimeForBinaryTreeToBeInfected:
     def amountOfTime(self, root: Optional[TreeNode], start: int) -&gt; int:
-        graph = collections.defaultdict(set)
-        
-        def helper(root, parent):
+        graph = collections.defaultdict(list)
+
+        def buildGraph(root):
             if not root:
                 return
-            if parent:
-                graph[root.val].add(parent.val)
-                graph[parent.val].add(root.val)
-            helper(root.left, root)
-            helper(root.right, root)
-        
-        helper(root, None)
-        queue, seen = [(start, 0)], set()
-        max_v = 0
+            if root.left:
+                graph[root.val].append(root.left.val)
+                graph[root.left.val].append(root.val)
+                buildGraph(root.left)
+            if root.right:
+                graph[root.val].append(root.right.val)
+                graph[root.right.val].append(root.val)
+                buildGraph(root.right)
+
+        buildGraph(root)
+        result = -1
+        queue, seen = [start], {start}
         while queue:
-            v, t = queue.pop(0)
-            seen.add(v)
-            max_v = max(max_v, t)
-            for next_v in graph[v]:
-                if next_v not in seen:
-                    queue.append((next_v, t + 1))
-        return max_v
+            for _ in range(len(queue)):
+                cur_n = queue.pop(0)
+                for next_n in graph[cur_n]:
+                    if next_n not in seen:
+                        seen.add(next_n)
+                        queue.append(next_n)
+            result += 1
+        return result
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>

@@ -644,7 +644,7 @@
                     <li>
                         <a href="/algo/stacks_and_queues/2022-09-08-basic-calculator-ii"
                            class="submenu">
-                            Basic Calculator -- Simple
+                            Basic Calculator II
                         </a>
                     </li>
                     
@@ -1653,14 +1653,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This problem needs much reading.
-Once we can figure out, we’ll find it needs multiple sorts.
-Additionally, creating combinations of three websites is required.
-Python has a built-in function to create the combinations.
-That function is used here.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>You are given two string arrays username and website and an integer array timestamp.
 All the given arrays are of the same length and the tuple
@@ -1717,15 +1710,171 @@ Input: username = ["ua","ua","ua","ub","ub","ub"],
 Output: ["a","b","a"]
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This problem needs much reading.
+The website visit history should be saved in individual user’s list sorted by timestamp.
+Additionally, creating combinations of three websites is required.
+Python has a built-in function to create the combinations, so the function is used for the Python solution.
+For other languages, the solution uses a triple loop.
+However, from the constraints, upper bound is at most 50 x 50 x 50, so it is considered constant.
+Another point to be careful is, website visit count should be done on the unique pattern for each user.
+Suppose userA’s patterns are (a, b, c) and (a, b ,c), and userB’s pattern is (a, b, c).
+For userA, count (a, b, c) once. For userB, count (a, b, c) as one.
+Summing up, the pattern (a, b, c) should be count as 2.
+Additionally, if (a, b, a) and (a, b, c) are tie, the lexicographically smaller (a, b, a) is the answer.</p>
+
 <p>The solution consists of three steps.
 The first step is to create a user based website list sorted by timestamp.
-This should be saved in a hash table.
-The second step is to create three websites combinations from the values of the first  hash table.
-While creating the three website combination, count up that.
-The last step is to find out the most visited 3 websites combination from the second hash table.</p>
+The hash table is a good data structure to save that.
+The second step is to create three websites combinations from the values of the visit history hash table.
+While creating the three website combination, count up unique pattern for the individual user.
+The last step is to find out the most visited 3 websites combination from the second hash table.
+Finally, we will get the answer.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">#include &lt;sstream&gt;
+#include &lt;unordered_map&gt;
+#include &lt;unordered_set&gt;
+#include &lt;vector&gt;
+
+using namespace std;
+
+class AnalyzeUserWebsiteVisitPattern {
+public:
+    vector&lt;string&gt; mostVisitedPattern(vector&lt;string&gt;&amp; username, vector&lt;int&gt;&amp; timestamp, vector&lt;string&gt;&amp; website) {
+        vector&lt;pair&lt;int, int&gt;&gt; t2idx;
+        for (int i = 0; i &lt; timestamp.size(); ++i) {
+            t2idx.push_back({timestamp[i], i});
+        }
+        sort(t2idx.begin(), t2idx.end(),
+             [](const pair&lt;int, int&gt; &amp;a, const pair&lt;int, int&gt; &amp;b) {
+            return a.first &lt; b.first;
+        });
+        unordered_map&lt;string, vector&lt;string&gt;&gt; visits;
+        string u, w, ws;
+        for (auto &amp;[t, idx] : t2idx) {
+            u = username[idx], w = website[idx];
+            visits[u].push_back(w);
+        }
+        unordered_map&lt;string, int&gt; scores;
+        for (auto &amp;[key, value] : visits) {
+            if (value.size() &lt; 3) { continue; }
+            unordered_set&lt;string&gt; ss;
+            for (int i = 0; i &lt; value.size() - 2; ++i) {
+                for (int j = i + 1; j &lt; value.size() - 1; ++j) {
+                    for (int k = j + 1; k &lt; value.size(); ++k) {
+                        ws = value[i] + " " + value[j] + " " + value[k];
+                        if (ss.find(ws) == ss.end()) {
+                            ss.insert(ws);
+                            scores[ws]++;
+                        }
+                    }
+                }
+            }
+        }
+        int max_v = 0;
+        ws = "";
+        for (auto &amp;[key, value] : scores) {
+            if (max_v &lt; value) {
+                max_v = value;
+                ws = key;
+            } else if (max_v == value) {
+                ws = min(ws, key);
+            }
+        }
+        vector&lt;string&gt; result(3);
+        istringstream iss(ws);
+        iss &gt;&gt; result[0] &gt;&gt; result[1] &gt;&gt; result[2];
+        return result;
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {string[]} username
+ * @param {number[]} timestamp
+ * @param {string[]} website
+ * @return {string[]}
+ */
+var mostVisitedPattern = function(username, timestamp, website) {
+  const record = timestamp.map((item, i) =&gt; [timestamp[i], username[i], website[i]])
+    .sort((a, b) =&gt; a[0] - b[0]);
+  const visits = new Map();
+  record.forEach(r =&gt; {
+    if (!visits.has(r[1])) { visits.set(r[1], new Array()) };
+    visits.set(r[1], [...visits.get(r[1]), r[2]]);
+  });
+  const scores = new Map();
+  visits.forEach((value, _) =&gt; {
+    if (value.length &lt; 3) { return; }
+    let ss = new Set();
+    for (let i = 0; i &lt; value.length - 2; i++) {
+      for (let j = i + 1; j &lt; value.length - 1; j++) {
+        for (let k = j + 1; k &lt; value.length; k++) {
+          let ws = value[i] + " " + value[j] + " " + value[k];
+          if (!ss.has(ws)) {
+            ss.add(ws);
+            if (!scores.has(ws)) { scores.set(ws, 0); }
+            scores.set(ws, scores.get(ws) + 1);
+          }
+        }
+      }
+    }
+  })
+  let max_v = 0, ws = "";
+  scores.forEach((value, key) =&gt; {
+    if (max_v &lt; value) {
+      max_v = value;
+      ws = key;
+    } else if (max_v === value) {
+      ws = ws.localeCompare(key) &gt; 0 ? key : ws;
+    }
+  });
+  return ws.split(" ");
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class AnalyzeUserWebsiteVisitPattern:
     def mostVisitedPattern(self, username: List[str], timestamp: List[int], website: List[str]) -&gt; List[str]:
         n = len(username)
@@ -1745,11 +1894,20 @@ The last step is to find out the most visited 3 websites combination from the se
                 pat = min(pat, k)
         return list(pat)
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(n*log(n))</code> – sorting, <code>O(n^3)</code> – combinations</li>
-  <li>Space: <code>O(n+m)</code> – n: number of users, m: number of 3 website combinations</li>
+  <li>Time: <code>O(n * log(n))</code> – n: number of website visit record</li>
+  <li>Space: <code>O(m + k)</code> – m: number of unique users, k: number of three website patterns</li>
 </ul>
 
 </div>

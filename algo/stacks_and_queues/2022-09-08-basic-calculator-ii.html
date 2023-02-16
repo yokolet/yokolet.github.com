@@ -644,7 +644,7 @@
                     <li>
                         <a href="/algo/stacks_and_queues/2022-09-08-basic-calculator-ii"
                            class="submenu">
-                            Basic Calculator -- Simple
+                            Basic Calculator II
                         </a>
                     </li>
                     
@@ -1657,12 +1657,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is the simplest basic calculator problem.
-The given string doesn’t include parentheses, so the precedence handling is straightforward.
-The problem can be solved using a stack which saves values.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>Given a string <code>s</code> which represents an expression, evaluate this expression and return its value.
 The integer division should truncate toward zero.</p>
@@ -1702,20 +1697,134 @@ Input: s = " 3+5 / 2 "
 Output: 5
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>We should handle just 4 types of operators.
-Apparently, those operators need 2 values,
-so the process goes one step behind compared to currently looking at operator.
-It starts from saving current digits in a variable.
-When one of the operator is found, perform previous operator. Its default is <code>+</code>.
-At the very first operator in the string,
-saves the digits in the stack and operator in the variable.
-The second operator pops out the previous value from the stack and apply previous operator.
-The calculation result is pushed to the stack.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This is the simplest problem among the basic calculator series.
+The given string doesn’t include parentheses, so the precedence handling is straightforward.
+Operators are just four which need only two values apparently.
+The calculation goes one step behind to the currently saved operator.</p>
+
+<p>The problem can be solved using a stack which saves values.
+The solution here starts from saving current digits in a variable.
+When one of the operator is found, perform the previous operation.
+Pop out the previous value from the stack and apply previous operator.
+Then, save the calculation result to the stack and update the operator.</p>
 
 <p>In the end, take sum of values in the stack, which is the answer.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">#include &lt;algorithm&gt;
+#include &lt;stack&gt;
+
+using namespace std;
+
+class BasicCalculatorTwo {
+public:
+    int calculate(string s) {
+        s.erase(remove(s.begin(), s.end(), ' '), s.end());
+        stack&lt;int&gt; st;
+        int digits = 0;
+        char op = '+';
+        int x;
+        for (int i = 0; i &lt; s.size(); ++i) {
+            if (isdigit(s[i])) {
+                digits = digits * 10 + (s[i] - '0');
+            }
+            if (!isdigit(s[i]) || i == s.size() - 1) {
+                if (op == '+') {
+                    st.push(digits);
+                } else if (op == '-') {
+                    st.push(-digits);
+                } else if (op == '*') {
+                    x = st.top();
+                    st.pop();
+                    st.push(x * digits);
+                } else {
+                    x = st.top();
+                    st.pop();
+                    st.push(x / digits);
+                }
+                digits = 0, op = s[i];
+            }
+        }
+        int result = 0;
+        while (!st.empty()) {
+            result += st.top();
+            st.pop();
+        }
+        return result;
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {string} s
+ * @return {number}
+ */
+var calculate = function(s) {
+  s = s.replaceAll(" ", "");
+  let op = "+", digits = 0, stack = new Array();
+  for (let i  = 0; i &lt; s.length; i++) {
+    if ('0' &lt;= s[i] &amp;&amp; s[i] &lt;= '9') {
+      digits = digits * 10 + Number(s[i]);
+    }
+    if (s[i] &lt; '0' || '9' &lt; s[i] || i == s.length - 1) {
+      if (op === "+") {
+        stack.push(digits);
+      } else if (op === "-") {
+        stack.push(-digits);
+      } else if (op === "*") {
+        stack.push(stack.pop() * digits);
+      } else {
+        stack.push(Math.trunc(stack.pop() / digits));
+      }
+      digits = 0, op = s[i];
+    }
+  }
+  return stack.reduce((acc, cur) =&gt; acc + cur, 0);
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class BasicCalculatorTwo:
     def calculate(self, s: str) -&gt; int:
         s = s.replace(' ', '')
@@ -1738,13 +1847,21 @@ The calculation result is pushed to the stack.</p>
                 digits, op = '', c
         return sum(stack)
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
   <li>Time: <code>O(n)</code></li>
   <li>Space: <code>O(n)</code></li>
 </ul>
-
 
 </div>
 

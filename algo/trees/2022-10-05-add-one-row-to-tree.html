@@ -644,7 +644,7 @@
                     <li>
                         <a href="/algo/stacks_and_queues/2022-09-08-basic-calculator-ii"
                            class="submenu">
-                            Basic Calculator -- Simple
+                            Basic Calculator II
                         </a>
                     </li>
                     
@@ -1818,7 +1818,39 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-2">
-<pre><code class="language-js">
+<pre><code class="language-js">/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @param {number} val
+ * @param {number} depth
+ * @return {TreeNode}
+ */
+var addOneRow = function(root, val, depth) {
+  if (depth === 1) {
+    return new TreeNode(val, root, null);
+  }
+  let queue = [[root, 1]];
+  let cur = null, left = null, right = null, d = 0;
+  while (queue.length &gt; 0) {
+    [cur, d] = queue.shift();
+    if (d === depth - 1) {
+      left = cur.left, right = cur.right;
+      cur.left = new TreeNode(val, left, null);
+      cur.right = new TreeNode(val, null, right);
+    } else {
+      if (cur.left) { queue.push([cur.left, d + 1]); }
+      if (cur.right) { queue.push([cur.right, d + 1]); }
+    }
+  }
+  return root;
+};
 </code></pre>
 </div>
     
