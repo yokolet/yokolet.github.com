@@ -22,9 +22,9 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Best Time to Buy and Sell Stock – At Most K Transactions | yokolet’s notelets</title>
+<title>Best Time to Buy and Sell Stock IV – At Most K Transactions | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Best Time to Buy and Sell Stock – At Most K Transactions" />
+<meta property="og:title" content="Best Time to Buy and Sell Stock IV – At Most K Transactions" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
@@ -34,9 +34,9 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-07-26T23:09:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Best Time to Buy and Sell Stock – At Most K Transactions" />
+<meta property="twitter:title" content="Best Time to Buy and Sell Stock IV – At Most K Transactions" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-07-26T23:09:00+09:00","datePublished":"2022-07-26T23:09:00+09:00","description":"Blog site mostly for programming topics.","headline":"Best Time to Buy and Sell Stock – At Most K Transactions","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-k-transactions.html"},"url":"http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-k-transactions.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-07-26T23:09:00+09:00","datePublished":"2022-07-26T23:09:00+09:00","description":"Blog site mostly for programming topics.","headline":"Best Time to Buy and Sell Stock IV – At Most K Transactions","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-k-transactions.html"},"url":"http://localhost:4000/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-k-transactions.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Best Time to Buy and Sell Stock -- At Most K Transactions</h1>
+            <h1 class="title is-2">Best Time to Buy and Sell Stock IV -- At Most K Transactions</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -1517,35 +1517,35 @@
                     <li>
                         <a href="/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-two-transactions"
                            class="submenu">
-                            Best Time to Buy and Sell Stock -- Two Transactions
+                            Best Time to Buy and Sell Stock III -- Two Transactions
                         </a>
                     </li>
                     
                     <li>
                         <a href="/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-multiple-times"
                            class="submenu">
-                            Best Time to Buy and Sell Stock -- Multiple Times
+                            Best Time to Buy and Sell Stock II -- Multiple Times
                         </a>
                     </li>
                     
                     <li>
                         <a href="/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-k-transactions"
                            class="submenu">
-                            Best Time to Buy and Sell Stock -- At Most K Transactions
+                            Best Time to Buy and Sell Stock IV -- At Most K Transactions
                         </a>
                     </li>
                     
                     <li>
                         <a href="/algo/stocks/2022-07-27-best-time-to-buy-and-sell-stock-cooldown"
                            class="submenu">
-                            Best Time to Buy and Sell Stock -- with Cooldown
+                            Best Time to Buy and Sell Stock with Cooldown
                         </a>
                     </li>
                     
                     <li>
                         <a href="/algo/stocks/2022-07-27-best-time-to-buy-and-sell-transaction-fee"
                            class="submenu">
-                            Best Time to Buy and Sell Stock -- Transaction Fee
+                            Best Time to Buy and Sell Stock with Transaction Fee
                         </a>
                     </li>
                     
@@ -1653,18 +1653,18 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is the fourth buy-sell-stock problem which has another variation to the basic one.
-In this problem, we can buy and sell stock at most given k times.
-This is not an easy problem.
-It looks just an extension of at most two transactions problem.
-However, bi-directional profit calculation doesn’t work any more.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>You are given an integer array <code>prices</code> where <code>prices[i]</code> is the price of a given stock on the i-th day, and an integer <code>k</code>.</p>
 
   <p>Find the maximum profit you can achieve. You may complete at most <code>k</code> transactions.</p>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= k &lt;= 100</code></li>
+    <li><code>1 &lt;= prices.length &lt;= 1000</code></li>
+    <li><code>0 &lt;= prices[i] &lt;= 1000</code></li>
+  </ul>
 
   <p><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/">https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/</a></p>
 </blockquote>
@@ -1684,7 +1684,13 @@ buy: index 1, sell: index 2, profit: 4
 buy: index 4, sell: index 5, profit: 3
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This is the fourth buy-sell-stock problem which has another variation to the basic one.
+In this problem, we can buy and sell stock at most given k times.
+This is not an easy problem.
+It looks just an extension of at most two transactions problem.
+However, bi-directional profit calculation doesn’t work any more.</p>
+
 <p>In general, this kind of problems can be solved by DP.
 For a memoization, the solution uses a matrix of k + 1 * n (n is a size of prices).
 Starting from smaller k, calculate larger k one by one.
@@ -1696,27 +1702,38 @@ The maximum of previous day’s profit and previous value + today’s price will
 <p>In the end, the answer will be bottom right of the memoization matrix.</p>
 
 <h2 id="solution">Solution</h2>
-<ul>
-  <li>Python</li>
-</ul>
 
-<pre><code class="language-python">class BestTimeToBuyAndSellStockFour:
-    def maxProfit(self, k: int, prices: List[int]) -&gt; int:
-        n = len(prices)
-        if n == 0:
-            return 0
-        memo = [[0 for _ in range(n)] for _ in range(k + 1)]
-        for i in range(1, k + 1):
-            prev = float('-inf')
-            for j in range(1, n):
-                prev = max(prev, memo[i - 1][j - 1] - prices[j - 1])
-                memo[i][j] = max(memo[i][j - 1], prev + prices[j])
-        return memo[k][n - 1]
-</code></pre>
-<ul>
-  <li>C++</li>
-</ul>
-
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
 <pre><code class="language-cpp">#include &lt;vector&gt;
 #include &lt;iostream&gt;
 using namespace std;
@@ -1744,6 +1761,60 @@ public:
   }
 };
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {number} k
+ * @param {number[]} prices
+ * @return {number}
+ */
+var maxProfit = function(k, prices) {
+  const n = prices.length;
+  if (n === 0) { return 0; }
+  const zeros = (m, n) =&gt; [...Array(m)].map(e =&gt; Array(n).fill(0));
+  const memo = zeros(k + 1, n);
+  let prev;
+  for (let i = 1; i &lt;= k; i++) {
+    prev = Number.MIN_SAFE_INTEGER;
+    for (let j = 1; j &lt; n; j++) {
+      prev = Math.max(prev, memo[i - 1][j - 1] - prices[j - 1]);
+      memo[i][j] = Math.max(memo[i][j - 1], prev + prices[j]);
+    }
+  }
+  return memo[k][n - 1];
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class BestTimeToBuyAndSellStockFour:
+    def maxProfit(self, k: int, prices: List[int]) -&gt; int:
+        n = len(prices)
+        if n == 0:
+            return 0
+        memo = [[0 for _ in range(n)] for _ in range(k + 1)]
+        for i in range(1, k + 1):
+            prev = float('-inf')
+            for j in range(1, n):
+                prev = max(prev, memo[i - 1][j - 1] - prices[j - 1])
+                memo[i][j] = max(memo[i][j - 1], prev + prices[j])
+        return memo[k][n - 1]
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>

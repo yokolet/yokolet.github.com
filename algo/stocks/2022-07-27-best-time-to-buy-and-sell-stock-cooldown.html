@@ -22,9 +22,9 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Best Time to Buy and Sell Stock – with Cooldown | yokolet’s notelets</title>
+<title>Best Time to Buy and Sell Stock with Cooldown | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Best Time to Buy and Sell Stock – with Cooldown" />
+<meta property="og:title" content="Best Time to Buy and Sell Stock with Cooldown" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
@@ -34,9 +34,9 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-07-27T21:29:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Best Time to Buy and Sell Stock – with Cooldown" />
+<meta property="twitter:title" content="Best Time to Buy and Sell Stock with Cooldown" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-07-27T21:29:00+09:00","datePublished":"2022-07-27T21:29:00+09:00","description":"Blog site mostly for programming topics.","headline":"Best Time to Buy and Sell Stock – with Cooldown","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/stocks/2022-07-27-best-time-to-buy-and-sell-stock-cooldown.html"},"url":"http://localhost:4000/algo/stocks/2022-07-27-best-time-to-buy-and-sell-stock-cooldown.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-07-27T21:29:00+09:00","datePublished":"2022-07-27T21:29:00+09:00","description":"Blog site mostly for programming topics.","headline":"Best Time to Buy and Sell Stock with Cooldown","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/stocks/2022-07-27-best-time-to-buy-and-sell-stock-cooldown.html"},"url":"http://localhost:4000/algo/stocks/2022-07-27-best-time-to-buy-and-sell-stock-cooldown.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Best Time to Buy and Sell Stock -- with Cooldown</h1>
+            <h1 class="title is-2">Best Time to Buy and Sell Stock with Cooldown</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -1517,35 +1517,35 @@
                     <li>
                         <a href="/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-two-transactions"
                            class="submenu">
-                            Best Time to Buy and Sell Stock -- Two Transactions
+                            Best Time to Buy and Sell Stock III -- Two Transactions
                         </a>
                     </li>
                     
                     <li>
                         <a href="/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-multiple-times"
                            class="submenu">
-                            Best Time to Buy and Sell Stock -- Multiple Times
+                            Best Time to Buy and Sell Stock II -- Multiple Times
                         </a>
                     </li>
                     
                     <li>
                         <a href="/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-k-transactions"
                            class="submenu">
-                            Best Time to Buy and Sell Stock -- At Most K Transactions
+                            Best Time to Buy and Sell Stock IV -- At Most K Transactions
                         </a>
                     </li>
                     
                     <li>
                         <a href="/algo/stocks/2022-07-27-best-time-to-buy-and-sell-stock-cooldown"
                            class="submenu">
-                            Best Time to Buy and Sell Stock -- with Cooldown
+                            Best Time to Buy and Sell Stock with Cooldown
                         </a>
                     </li>
                     
                     <li>
                         <a href="/algo/stocks/2022-07-27-best-time-to-buy-and-sell-transaction-fee"
                            class="submenu">
-                            Best Time to Buy and Sell Stock -- Transaction Fee
+                            Best Time to Buy and Sell Stock with Transaction Fee
                         </a>
                     </li>
                     
@@ -1653,81 +1653,179 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is the fifth buy-sell-stock problem which has a slight variation to the basic one.
-In this problem, we need to hold a day after the stocks are sold.
-Aside of that, we can buy and sell as many times as we want.
-That being said, the problem looks similar to the buy and sell multiple times.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>You are given an array <code>prices</code> where <code>prices[i]</code> is the price of a given stock on the i-th day.</p>
 
   <p>Find the maximum profit you can achieve.
 You may complete as many transactions as you like
 (i.e., buy one and sell one share of the stock multiple times) with the following restrictions:</p>
-
-  <blockquote>
-    <p>After you sell your stock, you cannot buy stock on the next day (i.e., cooldown one day).</p>
-  </blockquote>
+  <ul>
+    <li>After you sell your stock, you cannot buy stock on the next day (i.e., cooldown one day).</li>
+  </ul>
 
   <p>Note: You may not engage in multiple transactions simultaneously
 (i.e., you must sell the stock before you buy again).</p>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= prices.length &lt;= 5000</code></li>
+    <li><code>0 &lt;= prices[i] &lt;= 1000</code></li>
+  </ul>
 
   <p><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/">https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
-<pre><code>example 1:
+<pre><code>Example 1:
 Input: prices = [1,2,3,0,2]
 Answer: 3
 Explanation: 3 is the best profit which is from:
 buy: index 0, sell: index 1, profit: 1
 buy: index 3, sell: index 4, profit: 2
 </code></pre>
-<pre><code>example 2:
+<pre><code>Example 2:
 Input: prices = [1]
 Answer: 0
 Explanation: Stocks must be bought before selling those. There's no way to make profit.
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>The the problem states, we can buy and sell as many time as we want.
-This indicates the profit can be calculated by day-to-day difference.
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This is the fifth buy-sell-stock problem which has a slight variation to the basic one.
+In this problem, we need to hold a day after the stocks are sold.
+Aside of that, we can buy and sell as many times as we want.
+That being said, it looks similar to the buy and sell multiple times problem.
+That indicates the profit can be calculated by day-to-day difference.
 However, we should put the cooldown day before buying next.
-The solution uses the idea of DP: compare buying today or keep previous buy.
+The solution here uses the idea of the dynamic programming such that: compare buying today or keep previous buy.
 Selling stocks is the same as buying. It compares selling today or keep previous sell.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
 <pre><code class="language-cpp">#include &lt;vector&gt;
-#include &lt;iostream&gt;
+
 using namespace std;
 
-class BestTimeToBuyAndSellStockWithCooldown
-{
+class BestTimeToBuyAndSellStockWithCooldown {
 public:
-  int maxProfit(vector&lt;int&gt; &amp;prices)
-  {
-    vector&lt;int&gt; buy(prices.size()), sell(prices.size()), rest(prices.size());
-    buy[0] = -prices[0];
-    for (int i = 1; i &lt; prices.size(); i++)
-    {
-      // Held a previous stock OR buy this stock
-      buy[i] = max(buy[i - 1], sell[i - 1] - prices[i]);
-      // Reset, don't have any stock in hand, available to buy
-      sell[i] = max(sell[i - 1], rest[i - 1]);
-      // Sold, sell the stock
-      rest[i] = buy[i - 1] + prices[i];
+    int maxProfit(vector&lt;int&gt;&amp; prices) {
+        int buy = INT_MIN, sell = 0, prev_buy = 0, prev_sell = 0;
+        for (auto price : prices)
+        {
+          prev_buy = buy;
+          buy = max(prev_buy, prev_sell - price);
+          prev_sell = sell;
+          sell = max(prev_sell, prev_buy + price);
+        }
+        return sell;
     }
-    return max(sell[prices.size() - 1], rest[prices.size() - 1]);
-  }
 };
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">class BestTimeToBuyAndSellStockWithCooldown {
+    public int maxProfit(int[] prices) {
+        int buy = Integer.MIN_VALUE, sell = 0, prev_buy = 0, prev_sell = 0;
+        for (int price : prices) {
+            prev_buy = buy;
+            buy = Math.max(prev_buy, prev_sell - price);
+            prev_sell = sell;
+            sell = Math.max(prev_sell, prev_buy + price);
+        }
+        return sell;
+    }
+}
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {number[]} prices
+ * @return {number}
+ */
+var maxProfit = function(prices) {
+  let buy = Number.MIN_SAFE_INTEGER, sell = 0, prev_buy  = 0, prev_sell = 0;
+  for (let price of prices) {
+    prev_buy = buy
+    buy = Math.max(prev_buy, prev_sell - price)
+    prev_sell = sell
+    sell = Math.max(prev_sell, prev_buy + price)
+  }
+  return sell;
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">from typing import List
+
+class BestTimeToBuyAndSellStockWithCooldown:
+    def maxProfit(self, prices: List[int]) -&gt; int:
+        buy, sell, prev_buy, prev_sell = float('-inf'), 0, 0, 0
+        for price in prices:
+            prev_buy = buy
+            buy = max(prev_buy, prev_sell - price)
+            prev_sell = sell
+            sell = max(prev_sell, prev_buy + price)
+        return sell
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {Integer[]} prices
+# @return {Integer}
+def max_profit(prices)
+    buy = -5 * 10 ** 6 + 1; sell = 0; prev_buy = 0; prev_sell = 0;
+    prices.each do |price|
+        prev_buy = buy
+        buy = [prev_buy, prev_sell - price].max
+        prev_sell = sell
+        sell = [prev_sell, prev_buy + price].max
+    end
+    sell
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
   <li>Time: O(n) – n: length of the input array.</li>
-  <li>Space: O(n)</li>
+  <li>Space: O(1)</li>
 </ul>
 
 </div>

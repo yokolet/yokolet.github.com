@@ -22,9 +22,9 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Best Time to Buy and Sell Stock – Transaction Fee | yokolet’s notelets</title>
+<title>Best Time to Buy and Sell Stock with Transaction Fee | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Best Time to Buy and Sell Stock – Transaction Fee" />
+<meta property="og:title" content="Best Time to Buy and Sell Stock with Transaction Fee" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
@@ -34,9 +34,9 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-07-27T22:34:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Best Time to Buy and Sell Stock – Transaction Fee" />
+<meta property="twitter:title" content="Best Time to Buy and Sell Stock with Transaction Fee" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-07-27T22:34:00+09:00","datePublished":"2022-07-27T22:34:00+09:00","description":"Blog site mostly for programming topics.","headline":"Best Time to Buy and Sell Stock – Transaction Fee","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/stocks/2022-07-27-best-time-to-buy-and-sell-transaction-fee.html"},"url":"http://localhost:4000/algo/stocks/2022-07-27-best-time-to-buy-and-sell-transaction-fee.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-07-27T22:34:00+09:00","datePublished":"2022-07-27T22:34:00+09:00","description":"Blog site mostly for programming topics.","headline":"Best Time to Buy and Sell Stock with Transaction Fee","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/stocks/2022-07-27-best-time-to-buy-and-sell-transaction-fee.html"},"url":"http://localhost:4000/algo/stocks/2022-07-27-best-time-to-buy-and-sell-transaction-fee.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -93,7 +93,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Best Time to Buy and Sell Stock -- Transaction Fee</h1>
+            <h1 class="title is-2">Best Time to Buy and Sell Stock with Transaction Fee</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -1517,35 +1517,35 @@
                     <li>
                         <a href="/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-two-transactions"
                            class="submenu">
-                            Best Time to Buy and Sell Stock -- Two Transactions
+                            Best Time to Buy and Sell Stock III -- Two Transactions
                         </a>
                     </li>
                     
                     <li>
                         <a href="/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-multiple-times"
                            class="submenu">
-                            Best Time to Buy and Sell Stock -- Multiple Times
+                            Best Time to Buy and Sell Stock II -- Multiple Times
                         </a>
                     </li>
                     
                     <li>
                         <a href="/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-k-transactions"
                            class="submenu">
-                            Best Time to Buy and Sell Stock -- At Most K Transactions
+                            Best Time to Buy and Sell Stock IV -- At Most K Transactions
                         </a>
                     </li>
                     
                     <li>
                         <a href="/algo/stocks/2022-07-27-best-time-to-buy-and-sell-stock-cooldown"
                            class="submenu">
-                            Best Time to Buy and Sell Stock -- with Cooldown
+                            Best Time to Buy and Sell Stock with Cooldown
                         </a>
                     </li>
                     
                     <li>
                         <a href="/algo/stocks/2022-07-27-best-time-to-buy-and-sell-transaction-fee"
                            class="submenu">
-                            Best Time to Buy and Sell Stock -- Transaction Fee
+                            Best Time to Buy and Sell Stock with Transaction Fee
                         </a>
                     </li>
                     
@@ -1657,13 +1657,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is the sixth buy-sell-stock problem which has a slight variation to the basic one.
-In this problem, we need to pay a transaction fee everytime everytime we buy ans sell stocks.
-Aside of that, we can buy and sell as many times as we want.
-That being said, the problem looks similar to the buy and sell multiple times.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>You are given an array <code>prices</code> where <code>prices[i]</code> is the price of a given stock on the i-th day,
 and an integer fee representing a transaction fee.</p>
@@ -1674,6 +1668,13 @@ You may complete as many transactions as you like, but you need to pay the trans
   <blockquote>
     <p>Note: You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).</p>
   </blockquote>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= prices.length &lt;= 5 * 10**4</code></li>
+    <li><code>1 &lt;= prices[i] &lt; 5 * 10**4</code></li>
+    <li><code>0 &lt;= fee &lt; 5 * 10**4</code></li>
+  </ul>
 
   <p><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/">https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/</a></p>
 </blockquote>
@@ -1693,7 +1694,12 @@ Explanation: 6 is the best profit which is from:
 buy: index 0, sell: index 4, profit: 10 - 1 - 3 = 6
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This is the sixth buy-sell-stock problem which has a slight variation to the basic one.
+In this problem, we need to pay a transaction fee everytime we buy and sell stocks.
+Aside of that, we can buy and sell as many times as we want.
+That being said, the problem looks similar to the buy and sell multiple times.</p>
+
 <p>The the problem states, we can buy and sell as many time as we want.
 This indicates the profit can be calculated by day-to-day difference.
 However, we should pay the transaction fee to sell stocks.
@@ -1702,6 +1708,38 @@ Also, it compares previous buy and current selling cost.
 The approach is very similar to the buy-sell-stock with cooldown problem.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
 <pre><code class="language-cpp">#include &lt;vector&gt;
 #include &lt;iostream&gt;
 using namespace std;
@@ -1709,21 +1747,89 @@ using namespace std;
 class BestTimeToBuyAndSellStockWithTransactionFee
 {
 public:
-  int maxProfit(vector&lt;int&gt; &amp;prices, int fee)
-  {
-    int n = prices.size();
-    vector&lt;int&gt; buy(n, 0), sell(n, 0);
-    buy[0] = -prices[0];
-    sell[0] = 0;
-    for (int i = 1; i &lt; prices.size(); ++i)
-    {
-      sell[i] = max(sell[i - 1], buy[i - 1] + prices[i] - fee);
-      buy[i] = max(buy[i - 1], sell[i - 1] - prices[i]);
+  int maxProfit(vector&lt;int&gt;&amp; prices, int fee) {
+        int n = prices.size();
+        vector&lt;int&gt; buy(n, 0), sell(n, 0);
+        buy[0] = -prices[0];
+        for (int i = 1; i &lt; n; ++i)
+        {
+          sell[i] = max(sell[i - 1], buy[i - 1] + prices[i] - fee);
+          buy[i] = max(buy[i - 1], sell[i - 1] - prices[i]);
+        }
+        return sell[n - 1];
     }
-    return sell[n - 1];
-  }
 };
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">class BestTimeToBuyAndSellStockWithTransactionFee {
+    public int maxProfit(int[] prices, int fee) {
+        int n = prices.length;
+        int[] buy = new int[n], sell = new int[n];
+        buy[0] = -prices[0];
+        for (int i = 1; i &lt; prices.length; ++i) {
+            sell[i] = Math.max(sell[i - 1], buy[i - 1] + prices[i] - fee);
+            buy[i] = Math.max(buy[i - 1], sell[i - 1] - prices[i]);
+        }
+        return sell[n - 1];
+    }
+}
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {number[]} prices
+ * @param {number} fee
+ * @return {number}
+ */
+var maxProfit = function(prices, fee) {
+    const n = prices.length;
+    const buy = new Array(n).fill(0), sell = new Array(n).fill(0);
+    buy[0] = -prices[0];
+    for (let i = 1; i &lt; n; i++) {
+        sell[i] = Math.max(sell[i - 1], buy[i - 1] + prices[i] - fee);
+        buy[i] = Math.max(buy[i - 1], sell[i - 1] - prices[i]);
+    }
+    return sell[n - 1];
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class BestTimeToBuyAndSellStockWithTransactionFee:
+    def maxProfit(self, prices: List[int], fee: int) -&gt; int:
+        n = len(prices)
+        buy, sell = [0 for _ in range(n)], [0 for _ in range(n)]
+        buy[0] = -prices[0]
+        for i in range(1, n):
+            sell[i] = max(sell[i - 1], buy[i - 1] + prices[i] - fee)
+            buy[i] = max(buy[i - 1], sell[i - 1] - prices[i])
+        return sell[n - 1]
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {Integer[]} prices
+# @param {Integer} fee
+# @return {Integer}
+def max_profit(prices, fee)
+    n = prices.length
+    buy = Array.new(n, 0)
+    sell = Array.new(n, 0)
+    buy[0] = -prices[0]
+    (1...prices.length).each do |i|
+        sell[i] = [sell[i - 1], buy[i - 1] + prices[i] - fee].max
+        buy[i] = [buy[i - 1], sell[i - 1] - prices[i]].max
+    end
+    sell[n - 1]
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>

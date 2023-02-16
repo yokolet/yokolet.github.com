@@ -1517,35 +1517,35 @@
                     <li>
                         <a href="/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-two-transactions"
                            class="submenu">
-                            Best Time to Buy and Sell Stock -- Two Transactions
+                            Best Time to Buy and Sell Stock III -- Two Transactions
                         </a>
                     </li>
                     
                     <li>
                         <a href="/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-multiple-times"
                            class="submenu">
-                            Best Time to Buy and Sell Stock -- Multiple Times
+                            Best Time to Buy and Sell Stock II -- Multiple Times
                         </a>
                     </li>
                     
                     <li>
                         <a href="/algo/stocks/2022-07-26-best-time-to-buy-and-sell-stock-k-transactions"
                            class="submenu">
-                            Best Time to Buy and Sell Stock -- At Most K Transactions
+                            Best Time to Buy and Sell Stock IV -- At Most K Transactions
                         </a>
                     </li>
                     
                     <li>
                         <a href="/algo/stocks/2022-07-27-best-time-to-buy-and-sell-stock-cooldown"
                            class="submenu">
-                            Best Time to Buy and Sell Stock -- with Cooldown
+                            Best Time to Buy and Sell Stock with Cooldown
                         </a>
                     </li>
                     
                     <li>
                         <a href="/algo/stocks/2022-07-27-best-time-to-buy-and-sell-transaction-fee"
                            class="submenu">
-                            Best Time to Buy and Sell Stock -- Transaction Fee
+                            Best Time to Buy and Sell Stock with Transaction Fee
                         </a>
                     </li>
                     
@@ -1653,12 +1653,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>The algorithm questions such that best time to buy and sell stock has variations.
-Each has slight different criteria to find the answer.
-This is the first buy-sell-stock problem and very basic easy one.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>You are given an array <code>prices</code> where <code>prices[i]</code> is the price of a given stock on the i-th day.</p>
 
@@ -1666,6 +1661,12 @@ This is the first buy-sell-stock problem and very basic easy one.</p>
 in the future to sell that stock.</p>
 
   <p>Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.</p>
+
+  <p>Constraints:</p>
+  <ul>
+    <li><code>1 &lt;= prices.length &lt;= 10**5</code></li>
+    <li><code>0 &lt;= prices[i] &lt;= 10**4</code></li>
+  </ul>
 
   <p><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock/">https://leetcode.com/problems/best-time-to-buy-and-sell-stock/</a></p>
 </blockquote>
@@ -1682,12 +1683,49 @@ Answer: 0
 Explanation: the array value is ever descreasing. There is no profit available.
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>We are allowed to buy and sell only once. The minimum price so far should be updated in each array index.
+<h2 id="how-to-solve">How to Solve</h2>
+<p>The problems of the best time to buy and sell stock have variations.
+Each has a slight different criteria to find the answer.
+This is the most basic and easy buy-sell-stock problem.</p>
+
+<p>We are allowed to buy and sell only once.
+The minimum price so far should be updated in each array index if necessary.
 If the price at the current index is not the minimum, calculate profit so far.
-Then update grand max profit comparing with the current profit.</p>
+Then, update the grand max profit comparing with the current profit.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
 <pre><code class="language-cpp">#include &lt;vector&gt;
 #include &lt;iostream&gt;
 using namespace std;
@@ -1714,6 +1752,83 @@ public:
   }
 };
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">class BestTimeToBuyAndSellStock {
+    public int maxProfit(int[] prices) {
+        int min_price = Integer.MAX_VALUE;
+        int max_profit = 0;
+        for (int i = 0; i &lt; prices.length; ++i) {
+            if (min_price &gt; prices[i]) {
+              min_price = prices[i];
+            } else {
+              max_profit = Math.max(max_profit, prices[i] - min_price);
+            }
+        }
+        return max_profit;
+    }
+}
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {number[]} prices
+ * @return {number}
+ */
+var maxProfit = function(prices) {
+    let min_price = Number.MAX_SAFE_INTEGER, max_profit = 0;
+    for (let i = 0; i &lt; prices.length; i++) {
+      if (min_price &gt; prices[i]) {
+        min_price = prices[i];
+      } else {
+        max_profit = Math.max(max_profit, prices[i] - min_price)
+      }
+    }
+    return max_profit;
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">from typing import List
+
+class BestTimeToBuyAndSellStock:
+    def maxProfit(self, prices: List[int]) -&gt; int:
+        max_profit, min_price = 0, float('inf')
+        if not prices:
+            return 0
+        min_price = prices[0]
+        for i in range(1, len(prices)):
+            if prices[i] &lt; min_price:
+                min_price = prices[i]
+            else:
+                max_profit = max(max_profit, prices[i] - min_price)
+        return max_profit
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {Integer[]} prices
+# @return {Integer}
+def max_profit(prices)
+    min_price = 10**4 + 1
+    max_profit = 0
+    prices.each do |price|
+      if min_price &gt; price
+        min_price = price
+      else
+        max_profit = [max_profit, price - min_price].max
+      end
+    end
+    max_profit
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
