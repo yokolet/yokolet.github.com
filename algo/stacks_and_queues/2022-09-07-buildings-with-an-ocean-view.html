@@ -1691,11 +1691,11 @@ Explanation: Only building 3 has an ocean view.
 
 <h2 id="how-to-solve">How to Solve</h2>
 
-<p>At a glance, it looks a sorting problem, however this is a monotonic stack problem.
-Create a monotonically decreasing stack from the given array to solve this.
+<p>At a glance, it looks a sorting problem, however this can be solved by a monotonic stack.
 The values in the stack are indices.
+Create a monotonically decreasing stack from the given array since the ocean is on the right, back of the given array.
 Staring from index 0, repeat popping or pushing indices one by one to keep monotonically decreasing index stack.
-When all values in the given array is checked, the stack itself will be the answer.</p>
+When all values in the given array is checked, the stack itself is the answer.</p>
 
 <h2 id="solution">Solution</h2>
 
@@ -1730,11 +1730,14 @@ When all values in the given array is checked, the stack itself will be the answ
   <div class="container box">
     
       <div class="is-active tab-content" data-content="solution-0">
-<pre><code class="language-cpp">class BuildingWithAnOceanView {
+<pre><code class="language-cpp">#include &lt;vector&gt;
+
+using namespace std;
+
+class BuildingWithAnOceanView {
 public:
     vector&lt;int&gt; findBuildings(vector&lt;int&gt;&amp; heights) {
-        vector&lt;int&gt; indices;
-        indices.push_back(0);
+        vector&lt;int&gt; indices{0};
         for (int i = 1; i &lt; heights.size(); ++i) {
             while (!indices.empty() &amp;&amp; heights[indices.back()] &lt;= heights[i]) {
                 indices.pop_back();
@@ -1748,20 +1751,50 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-1">
-<pre><code class="language-java">
+<pre><code class="language-java">import java.util.ArrayList;
+import java.util.List;
+
+class BuildingWithAnOceanView {
+    public int[] findBuildings(int[] heights) {
+        List&lt;Integer&gt; indices = new ArrayList&lt;Integer&gt;();
+        indices.add(0);
+        for (int i = 1; i &lt; heights.length; ++i) {
+            while (!indices.isEmpty() &amp;&amp; heights[indices.get(indices.size() - 1)] &lt;= heights[i]) {
+                indices.remove(indices.size() - 1);
+            }
+            indices.add(i);
+        }
+        int[] result = new int[indices.size()];
+        for (int i = 0; i &lt; indices.size(); ++i) { result[i] = indices.get(i); }
+        return result;
+    }
+}
 </code></pre>
 </div>
     
       <div class="tab-content" data-content="solution-2">
-<pre><code class="language-js">
+<pre><code class="language-js">/**
+ * @param {number[]} heights
+ * @return {number[]}
+ */
+var findBuildings = function(heights) {
+  const indices = [0];
+  for (let i = 1; i &lt; heights.length; i++) {
+    while (indices.length &gt; 0 &amp;&amp; heights[indices.slice(-1)] &lt;= heights[i]) {
+      indices.pop();
+    }
+    indices.push(i);
+  }
+  return indices;
+};
 </code></pre>
 </div>
     
       <div class="tab-content" data-content="solution-3">
-<pre><code class="language-python">class BuildingWithAnOceanView:
+<pre><code class="language-python">from typing import List
+
+class BuildingWithAnOceanView:
     def findBuildings(self, heights: List[int]) -&gt; List[int]:
-        if not heights:
-            return []
         n, stack = len(heights), []
         stack.append(0)
         for i in range(1, n):
@@ -1773,7 +1806,18 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-4">
-<pre><code class="language-ruby">
+<pre><code class="language-ruby"># @param {Integer[]} heights
+# @return {Integer[]}
+def find_buildings(heights)
+    indices = [0]
+    (1...heights.size).each do |i|
+        while !indices.empty? &amp;&amp; heights[indices[-1]] &lt;= heights[i]
+            indices.pop
+        end
+        indices &lt;&lt; i
+    end
+    return indices
+end
 </code></pre>
 </div>
     

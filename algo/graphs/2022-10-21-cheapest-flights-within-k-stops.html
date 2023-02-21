@@ -1642,10 +1642,6 @@
 </span>
         
         <span class="tag  is-primary ">
-    Heap (Priority Queue)
-</span>
-        
-        <span class="tag  is-primary ">
     Breadth-First Search
 </span>
         
@@ -1657,14 +1653,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>The problem asks the shortest path based on an edge weight.
-Given that, Dijkstra is a good algorithm to find an answer.
-As for graph traversal, the visited state needs a tweak.
-The solution here uses an array to save visited times.
-If the vertex is visited too many times, further process will be skipped.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>There are <code>n</code> cities connected by some number of flights. You are given an array <code>flights</code> where
 <code>flights[i] = [from[i], to[i], price[i]]</code> indicates that there is a flight from city <code>from[i]</code> to city toi with cost
@@ -1686,7 +1675,7 @@ at most <code>k</code> stops. If there is no such route, return -1.</p>
     <li><code>src != dst</code></li>
   </ul>
 
-  <p><a href="tps://leetcode.com/problems/cheapest-flights-within-k-stops/">tps://leetcode.com/problems/cheapest-flights-within-k-stops/</a></p>
+  <p><a href="https://leetcode.com/problems/cheapest-flights-within-k-stops/">https://leetcode.com/problems/cheapest-flights-within-k-stops/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
@@ -1718,41 +1707,216 @@ The graph is shown above.
 The optimal path with no stops from city 0 to 2 is marked in red and has cost 500.
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>The problem asks the shortest path based on an edge weight.
+Given that, Dijkstra or Bellman Ford might come up as a solution.
+However, simple breadth first search (BFS) also works.
+The solution here uses an array to save a total weights of the visited node.</p>
+
 <p>The first step is to create a directed graph with edge weights.
-The solution here uses a tuple of (node, weight).
-The visited is not a set, instead an array.
-While traversing, if the visited count exceeds the currently visiting vertex, skip the further process.
-Other than that, the traversal is common one.
-When the popped out vertex is the destination, return the weight.</p>
+The solution here uses a tuple or array of (node, weight).
+Once the graph is created, do the graph traversal by BFS.
+The visited state is saved in a queue instead of typical set data structure.
+This is to handle at most k stops condition.
+While traversing, if the visited count exceeds the currently visiting node, skip the further process.
+When the popped out node is the destination, return the weight.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class CheapestFlightsWithinKStops:
-    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -&gt; int:
-        graph = collections.defaultdict(list)
-        
-        # build a graph
-        for s, d, w in flights:
-            graph[s].append((d, w))
 
-        # traverse a graph
-        visited = [0 for _ in range(n)]
-        queue = [(0, k + 1, src)]    # weight, stops, vertex
-        while queue:
-            cur_w, cur_s, cur_n = heapq.heappop(queue)
-            if cur_n == dst:
-                return cur_w
-            if visited[cur_n] &gt;= cur_s:
-                continue
-            visited[cur_n] = cur_s
-            for next_n, next_w in graph[cur_n]:
-                heapq.heappush(queue, (cur_w + next_w, cur_s - 1, next_n))
-        return -1
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">#include &lt;queue&gt;
+#include &lt;vector&gt;
+
+using namespace std;
+
+class CheapestFlightsWithinKStops {
+public:
+    int findCheapestPrice(int n, vector&lt;vector&lt;int&gt;&gt;&amp; flights, int src, int dst, int k) {
+        vector&lt;vector&lt;pair&lt;int, int&gt;&gt;&gt; graph(n);
+        for (auto flight: flights) {
+            int s = flight[0], d = flight[1], w = flight[2];
+            graph[s].push_back({d, w});
+        }
+        vector&lt;int&gt; weights(n, INT_MAX);
+        weights[src] = 0;
+        queue&lt;vector&lt;int&gt;&gt; q;
+        q.push({0, 0, src});  // weight, stops, node
+        while (!q.empty()) {
+            vector&lt;int&gt; cur = q.front();
+            q.pop();
+            int cur_w = cur[0], cur_s = cur[1], cur_n = cur[2];
+            if (cur_s &gt; k) { continue; }
+            for (auto &amp;[next_n, next_w] : graph[cur_n]) {
+                if (cur_w + next_w &lt; weights[next_n] &amp;&amp; cur_s &lt;= k) {
+                    weights[next_n] = cur_w + next_w;
+                    q.push({weights[next_n], cur_s + 1, next_n});
+                }
+            }
+        }
+        return weights[dst] == INT_MAX ? -1 : weights[dst];
+    }
+};
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">import java.util.*;
+
+class CheapestFlightsWithinKStops {
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+        List&lt;List&lt;List&lt;Integer&gt;&gt;&gt; graph = new ArrayList&lt;&gt;();
+        for (int i = 0; i &lt; n; ++i) { graph.add(new ArrayList&lt;&gt;()); }
+        for (int i = 0; i &lt; flights.length; ++i) {
+            int s = flights[i][0], d = flights[i][1], w = flights[i][2];
+            graph.get(s).add(new ArrayList&lt;&gt;());
+        }
+        int[] weights = new int[n];
+        Arrays.fill(weights, Integer.MAX_VALUE);
+        weights[src] = 0;
+        Queue&lt;int[]&gt; queue = new LinkedList&lt;&gt;();
+        queue.add(new int[]{0, 0, src});
+        while (!queue.isEmpty()) {
+            int[] cur = queue.poll();
+            int cur_w = cur[0], cur_s = cur[1], cur_n = cur[2];
+            if (cur_s &gt; k) { continue; }
+            List&lt;List&lt;Integer&gt;&gt; adjs = graph.get(cur_n);
+            for (int i = 0; i &lt; adjs.size(); ++i) {
+                int next_n = adjs.get(i).get(0), next_w = adjs.get(i).get(1);
+                if (cur_w + next_w &lt; weights[next_n] &amp;&amp; cur_s &lt;= k) {
+                    weights[next_n] = cur_w + next_w;
+                    queue.add(new int[]{weights[next_n], cur_s + 1, next_n});
+                }
+            }
+        }
+        return weights[dst] == Integer.MAX_VALUE ? -1 : weights[dst];
+    }
+}
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {number} n
+ * @param {number[][]} flights
+ * @param {number} src
+ * @param {number} dst
+ * @param {number} k
+ * @return {number}
+ */
+var findCheapestPrice = function(n, flights, src, dst, k) {
+  const graph = [...Array(n)].map(_ =&gt; []);
+  for (const [s, d, w] of flights) {
+    graph[s].push([d, w]);
+  }
+  const weights = Array(n).fill(Infinity);
+  weights[src] = 0;
+  const queue = [[0, 0, src]];     // weight, stops, node
+  while (queue.length &gt; 0) {
+    const [cur_w, cur_s, cur_n] = queue.shift();
+    if (cur_s &gt; k) { continue; }
+    for (const [next_n, next_w] of graph[cur_n]) {
+      if ((cur_w + next_w) &lt; weights[next_n] &amp;&amp; cur_s &lt;= k) {
+        weights[next_n] = cur_w + next_w;
+        queue.push([weights[next_n], cur_s + 1, next_n]);
+      }
+    }
+  }
+  return weights[dst] === Infinity ? -1 : weights[dst];
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">from typing import List
+
+class CheapestFlightsWithinKStops:
+    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -&gt; int:
+        graph = [[] for _ in range(n)]
+        for s, d, w in flights:
+            graph[s].append([d, w])
+        weights = [float('inf') for _ in range(n)];
+        weights[src] = 0
+        queue = [[0, 0, src]]
+        while queue:
+            cur_w, cur_s, cur_n = queue.pop(0)
+            if cur_s &gt; k:
+                continue
+            for next_n, next_w in graph[cur_n]:
+                if cur_w + next_w &lt; weights[next_n] and cur_s &lt;= k:
+                    weights[next_n] = cur_w + next_w
+                    queue.append([weights[next_n], cur_s + 1, next_n])
+        return -1 if weights[dst] == float('inf') else weights[dst]
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {Integer} n
+# @param {Integer[][]} flights
+# @param {Integer} src
+# @param {Integer} dst
+# @param {Integer} k
+# @return {Integer}
+def find_cheapest_price(n, flights, src, dst, k)
+  graph = Array.new(n){Array.new}
+  flights.each do |s, d, w|
+    graph[s] &lt;&lt; [d, w]
+  end
+  weights = Array.new(n, Float::INFINITY)
+  weights[src] = 0
+  queue = [[0, 0, src]]
+  while !queue.empty?
+    cur_w, cur_s, cur_n = queue.shift
+    if cur_s &gt; k
+      next
+    end
+    graph[cur_n].each do |next_n, next_w|
+      if cur_w + next_w &lt; weights[next_n] &amp;&amp; cur_s &lt;= k
+        weights[next_n] = cur_w + next_w
+        queue &lt;&lt; [weights[next_n], cur_s + 1, next_n]
+      end
+    end
+  end
+  return weights[dst] == Float::INFINITY ? -1 : weights[dst]
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(n + e * log(n))</code> – n: number of vertices, e: number of edges</li>
+  <li>Time: <code>O(n + e * k)</code> – n: number of vertices, e: number of edges, k: given k</li>
   <li>Space: <code>O(n + e)</code></li>
 </ul>
 

@@ -1736,29 +1736,28 @@ and returns it. Ruby solution uses an instance variable. C++ solution passes a r
   <div class="container box">
     
       <div class="is-active tab-content" data-content="solution-0">
-<pre><code class="language-cpp">/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
+<pre><code class="language-cpp">using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
 class BinaryTreeMaximumPathSum {
-public:
-    int traverse(TreeNode *root, int &amp;max_v)
-    {
-        if (!root)
-            return 0;
-        int left = traverse(root-&gt;left, max_v);
-        int right = traverse(root-&gt;right, max_v);
+private:
+    int traverse(TreeNode *root, int &amp;max_v) {
+        if (!root) { return 0; }
+        int left = max(traverse(root-&gt;left, max_v), 0);
+        int right = max(traverse(root-&gt;right, max_v), 0);
         max_v = max(max_v, root-&gt;val + left + right);
-        return max(root-&gt;val + max(left, right), 0);
+        return root-&gt;val + max(left, right);
     }
-    
+
+public:
     int maxPathSum(TreeNode* root) {
         int max_v = INT_MIN;
         traverse(root, max_v);
@@ -1769,12 +1768,62 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-1">
-<pre><code class="language-java">
+<pre><code class="language-java">/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    private int max_v = Integer.MIN_VALUE;
+    private int traverse(TreeNode root) {
+        if (root == null) { return 0; }
+        int left = Math.max(traverse(root.left), 0);
+        int right = Math.max(traverse(root.right), 0);
+        max_v = Math.max(max_v, root.val + left + right);
+        return root.val + Math.max(left, right);
+    }
+
+    public int maxPathSum(TreeNode root) {
+        traverse(root);
+        return max_v;
+    }
+}
 </code></pre>
 </div>
     
       <div class="tab-content" data-content="solution-2">
-<pre><code class="language-js">
+<pre><code class="language-js">function TreeNode(val, left, right) {
+  this.val = (val===undefined ? 0 : val)
+  this.left = (left===undefined ? null : left)
+  this.right = (right===undefined ? null : right)
+}
+
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var maxPathSum = function(root) {
+  let max_v = Number.MIN_SAFE_INTEGER;
+  const traverse = (root) =&gt; {
+    if (root === null) { return 0; }
+    const left = Math.max(traverse(root.left), 0);
+    const right = Math.max(traverse(root.right), 0);
+    max_v = Math.max(max_v, root.val + left + right);
+    return root.val + Math.max(left, right)
+  };
+  traverse(root);
+  return max_v;
+};
 </code></pre>
 </div>
     
@@ -1785,19 +1834,18 @@ public:
 #         self.val = val
 #         self.left = left
 #         self.right = right
+from typing import Optional
+
 class BinaryTreeMaximumPathSum:
     def maxPathSum(self, root: Optional[TreeNode]) -&gt; int:
-      def traverse(root: Optional[TreeNode], max_v: int):
-        if not root:
-          return max_v, 0
-        max_v, left = traverse(root.left, max_v)
-        max_v, right = traverse(root.right, max_v)
-        max_v = max(max_v, root.val + left + right)
-        return max_v, max(root.val + max(left, right), 0)
-
-      max_v = float('-inf')
-      max_v, _ = traverse(root, max_v)
-      return max_v
+        def traverse(root: Optional[TreeNode], max_v: int) -&gt; (int, int):
+            if not root: return max_v, 0
+            max_v, left = traverse(root.left, max_v)
+            max_v, right = traverse(root.right, max_v)
+            max_v = max(max_v, root.val + left + right)
+            return max_v, max(root.val + max(left, right), 0)
+        max_v, _ = traverse(root, float('-inf'))
+        return max_v
 </code></pre>
 </div>
     

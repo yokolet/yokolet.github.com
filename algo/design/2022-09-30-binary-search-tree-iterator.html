@@ -1657,13 +1657,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>The idea is the same as BST’s inorder traversal.
-However, it needs additional data structure to save parent nodes since there’s no way to traverse back to the root.
-Other than that, the next bigger value in BST is the node’s leftmost in right subtree if the node has right child.
-If the node is the left child, the parent is the successor. Otherwise, no successor.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>Implement the <code>BSTIterator</code> class that represents an iterator over the in-order traversal of a binary search tree (BST):</p>
   <ul>
@@ -1705,13 +1699,179 @@ Output
 [null, 3, 7, true, 9, true, 15, true, 20, false]
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>The solution uses a stack to save parents since the binary tree doesn’t have a way to go back to its parent.
+<h2 id="how-to-solve">How to Solve</h2>
+<p>The problem asks the binary search tree (BST) inorder traversal.
+However, it needs additional data structure to save parent nodes since there’s no way to traverse back to the root.
+Other than that, the next bigger value in BST is the one of the leftmost node in a right subtree if the node has right child.
+If the node doesn’t have the right subtree and is a left child, the parent is the successor.
+Otherwise, no successor exists.</p>
+
+<p>The solution here uses a stack to save parents to go back to its parent.
 Also, the solution defines an utility method, find_next. This method finds the successor.
-The next method implementation uses find_next utility method starting from a current node’s right child.
+The next method’s implementation uses find_next utility starting from a current node’s right child.
 The hasNext method checks the stack size which represents a number of parents of left child.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">#include &lt;stack&gt;
+
+using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
+class BSTIterator {
+private:
+    stack&lt;TreeNode*&gt; st;
+    void findNext(TreeNode *root) {
+        while (root) {
+            st.push(root);
+            root = root-&gt;left;
+        }
+    }
+
+public:
+    BSTIterator(TreeNode* root) {
+        findNext(root);
+    }
+
+    int next() {
+        TreeNode *cur = st.top();
+        st.pop();
+        if (cur-&gt;right) { findNext(cur-&gt;right); }
+        return cur-&gt;val;
+    }
+
+    bool hasNext() {
+        return !st.empty();
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class BSTIterator {
+    private Stack&lt;TreeNode&gt; stack = new Stack&lt;TreeNode&gt;();
+
+    private void findNext(TreeNode root) {
+        while (root != null) {
+            stack.push(root);
+            root = root.left;
+        }
+    }
+
+    public BSTIterator(TreeNode root) {
+        findNext(root);
+    }
+
+    public int next() {
+        TreeNode cur = stack.pop();
+        if (cur.right != null) { findNext(cur.right); }
+        return cur.val;
+    }
+
+    public boolean hasNext() {
+        return !stack.isEmpty();
+    }
+}
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ */
+var BSTIterator = function(root) {
+  this.stack = [];
+  this.findNext(root);
+};
+
+BSTIterator.prototype.findNext = function(root) {
+  while (root) {
+    this.stack.push(root);
+    root = root.left;
+  }
+};
+
+/**
+ * @return {number}
+ */
+BSTIterator.prototype.next = function() {
+  let cur = this.stack.pop();
+  if (cur.right) { this.findNext(cur.right); }
+  return cur.val;
+};
+
+/**
+ * @return {boolean}
+ */
+BSTIterator.prototype.hasNext = function() {
+  return this.stack.length &gt; 0;
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python"># Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
@@ -1738,6 +1898,60 @@ class BSTIterator:
     def hasNext(self) -&gt; bool:
         return self.stack
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># Definition for a binary tree node.
+# class TreeNode
+#     attr_accessor :val, :left, :right
+#     def initialize(val)
+#         @val = val
+#         @left, @right = nil, nil
+#     end
+# end
+
+class BSTIterator
+
+=begin
+    :type root: TreeNode
+=end
+    def initialize(root)
+        @stack = []
+        while root
+          @stack &lt;&lt; root
+          root = root.left
+        end
+    end
+
+=begin
+    @return the next smallest number
+    :rtype: Integer
+=end
+    def next()
+        if has_next
+          node = @stack.pop
+          cur = node.right
+          while !cur.nil?
+            @stack &lt;&lt; cur
+            cur = cur.left
+          end
+          return node.val
+        end
+    end
+
+=begin
+    @return whether we have a next smallest number
+    :rtype: Boolean
+=end
+    def has_next()
+        @stack.size &gt; 0
+    end
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
