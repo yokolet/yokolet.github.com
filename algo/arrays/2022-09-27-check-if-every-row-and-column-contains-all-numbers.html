@@ -1653,11 +1653,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>The problem is about n x n matrix and 1 to n (inclusive) values.
-Using a set data structure, check cells of each row and columns doesn’t duplicate.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>An <code>n x n</code> matrix is valid if every row and every column contains all the integers from 1 to n (inclusive).</p>
 
@@ -1684,30 +1680,184 @@ Input: matrix = [[1,1,1],[1,2,3],[1,2,3]]
 Output: false
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>The problem is about n x n matrix and 1 to n (inclusive) values.
+Using a set data structure, check the cell value of each row and column doesn’t appear more than once.</p>
+
 <p>The solution uses a set for horizontal and array of sets for vertical.
 When a row is scanned, it checks the horizontal set.
 When all rows are scanned, it checks the array of vertical sets.
 If all are length n, return True.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class CheckAllNumbers:
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class CheckIfEveryRowAndColumnContainsAllNumbers {
+public:
+    bool checkValid(vector&lt;vector&lt;int&gt;&gt;&amp; matrix) {
+        int n = matrix.size();
+        // check rows
+        for (int r = 0; r &lt; n; ++r) {
+            vector&lt;int&gt; counts(n + 1, 0);
+            for (int c = 0; c &lt; n; ++c) {
+                if (counts[matrix[r][c]] &gt; 0) { return false; }
+                counts[matrix[r][c]]++;
+            }
+        }
+        // check cols
+        for (int c = 0; c &lt; n; ++c) {
+            vector&lt;int&gt; counts(n + 1, 0);
+            for (int r = 0; r &lt; n; ++r) {
+                if (counts[matrix[r][c]] &gt; 0) { return false; }
+                counts[matrix[r][c]]++;
+            }
+        }
+        return true;
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">class CheckIfEveryRowAndColumnContainsAllNumbers {
+    public boolean checkValid(int[][] matrix) {
+        int n = matrix.length;
+        // check rows
+        for (int r = 0; r &lt; n; ++r) {
+            int[] counts = new int[n + 1];
+            for (int c = 0; c &lt; n; ++c) {
+                if (counts[matrix[r][c]] &gt; 0) { return false; }
+                counts[matrix[r][c]]++;
+            }
+        }
+        // check cols
+        for (int c = 0; c &lt; n; ++c) {
+            int[] counts = new int[n + 1];
+            for (int r = 0; r &lt; n; ++r) {
+                if (counts[matrix[r][c]] &gt; 0) { return false; }
+                counts[matrix[r][c]]++;
+            }
+        }
+        return true;
+    }
+}
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {number[][]} matrix
+ * @return {boolean}
+ */
+var checkValid = function(matrix) {
+    const n = matrix.length;
+    // check rows
+    for (let r = 0; r &lt; n; r++) {
+        let counts = new Array(n + 1);
+        counts.fill(0);
+        for (let c = 0; c &lt; n; c++) {
+            if (counts[matrix[r][c]] &gt; 0) { return false; }
+            counts[matrix[r][c]]++;
+        }
+    }
+    //check cols
+    for (let c = 0; c &lt; n; c++) {
+        let counts = new Array(n + 1);
+        counts.fill(0);
+        for (let r = 0; r &lt; n; r++) {
+            if (counts[matrix[r][c]] &gt; 0) { return false; }
+            counts[matrix[r][c]]++;
+        }
+    }
+    return true;
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">class CheckIfEveryRowAndColumnContainsAllNumbers:
     def checkValid(self, matrix: List[List[int]]) -&gt; bool:
         n = len(matrix)
-        vertical = [set() for _ in range(n)]
-        for i in range(n):
-            horizontal = set()
-            for j in range(n):
-                cur = matrix[i][j]
-                horizontal.add(cur)
-                vertical[j].add(cur)
-            if len(horizontal) != n:
-                return False
-        for i in range(n):
-            if len(vertical[i]) != n:
-                return False
+        # check rows
+        for r in range(n):
+            counts = [0 for _ in range(n + 1)]
+            for c in range(n):
+                if counts[matrix[r][c]] &gt; 0:
+                    return False
+                counts[matrix[r][c]] += 1
+        # check cols
+        for c in range(n):
+            counts = [0 for _ in range(n + 1)]
+            for r in range(n):
+                if counts[matrix[r][c]] &gt; 0:
+                    return False
+                counts[matrix[r][c]] += 1
         return True
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {Integer[][]} matrix
+# @return {Boolean}
+def check_valid(matrix)
+    n = matrix.size
+    # check rows
+    (0...n).each do |r|
+        counts = Array.new(n + 1, 0)
+        (0...n).each do |c|
+            if counts[matrix[r][c]] &gt; 0
+                return false
+            end
+            counts[matrix[r][c]] += 1
+        end
+    end
+    # check cols
+    (0...n).each do |c|
+        counts = Array.new(n + 1, 0)
+        (0...n).each do |r|
+            if counts[matrix[r][c]] &gt; 0
+                return false
+            end
+            counts[matrix[r][c]] += 1
+        end
+    end
+    return true
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>

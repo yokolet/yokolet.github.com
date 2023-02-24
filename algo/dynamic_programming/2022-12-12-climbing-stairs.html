@@ -1743,12 +1743,36 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-1">
-<pre><code class="language-java">
+<pre><code class="language-java">class ClimbingStairs {
+    public int climbStairs(int n) {
+        if (n &lt;= 2) { return n; }
+        int prevprev = 1, prev = 2, cur = 0;
+        for (int i = 2; i &lt; n; ++i) {
+            cur = prevprev + prev;
+            prevprev = prev;
+            prev= cur;
+        }
+        return cur;
+    }
+}
 </code></pre>
 </div>
     
       <div class="tab-content" data-content="solution-2">
-<pre><code class="language-js">
+<pre><code class="language-js">/**
+ * @param {number} n
+ * @return {number}
+ */
+var climbStairs = function(n) {
+    if (n &lt;= 2) { return n; }
+    let prevprev = 1, prev = 2, cur = 0;
+    for (let i = 2; i &lt; n; i++) {
+        cur = prevprev + prev;
+        prevprev = prev;
+        prev = cur;
+    }
+    return cur;
+};
 </code></pre>
 </div>
     
@@ -1768,7 +1792,20 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-4">
-<pre><code class="language-ruby">
+<pre><code class="language-ruby"># @param {Integer} n
+# @return {Integer}
+def climb_stairs(n)
+    if n &lt;= 2
+        return n
+    end
+    prevprev, prev, cur = 1, 2, 0
+    (2...n).each do |_|
+        cur = prevprev + prev
+        prevprev = prev
+        prev = cur
+    end
+    return cur
+end
 </code></pre>
 </div>
     

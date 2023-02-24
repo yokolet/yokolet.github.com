@@ -1657,13 +1657,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>The idea of this problem is not difficult.
-The previous result gets bit-shifted by the bits of current number, then add the current number.
-However, the problem mentions <code>modulo 10**9 + 7</code>, which alerts we need to do something more.
-There are a couple of approaches such as converting to string problem or bitwise operation.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>Given an integer <code>n</code>, return the decimal value of the binary string formed by concatenating
 the binary representations of <code>1</code> to <code>n</code> in order, <code>modulo 10**9 + 7</code>.</p>
@@ -1695,19 +1689,121 @@ Input: n = 12
 Output: 505379714
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>The solution here uses bitwise operation.
-There are to keys to solve this problem effectively.
-One is to know how many bit shift is necessary.
-Bit shift size changes when x &amp; (x - 1) = 0.
+<h2 id="how-to-solve">How to Solve</h2>
+<p>The idea of this problem is not so difficult.
+The previous result gets bit-shifted by the bits of current number, then add the current number to that.
+However, the problem mentions <code>modulo 10**9 + 7</code>, which alerts we need to do something more.
+There are a couple of approaches such as converting to string problem or bitwise operation.</p>
+
+<p>The solution here uses bitwise operations.
+The solution has two keys to solve the problem effectively.
+One is to determine how many bits should be shifted.
+The bit shift size changes when x &amp; (x - 1) = 0.
 For example, 11 to 100, 111 to 1000, 1111 to 10000, …
 Given that, when x &amp; (x - 1) = 0, shift size is incremented.
-Another is the addition.
+Another key is the addition.
 All bits for current value i are zero since the previous value is shifted to left for the bit size of the current value.
 In this case, OR operator works as the addition.
 This way, we get the answer.</p>
 
+<p>JavaScript needs a bit of different calculation.
+Bitwise operations used in other languages don’t work because the number of bits of numeric is short for this calculation.</p>
+
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">#include &lt;numeric&gt;
+
+using namespace std;
+
+class ConcatenationOfConsecutiveBinaryNumbers {
+public:
+    int concatenatedBinary(int n) {
+        const int mod = pow(10, 9) + 7;
+        int shift = 0;
+        long long int result = 0;
+        for (int i = 1; i &lt;= n; ++i) {
+            if ((i &amp; (i - 1)) == 0) {
+                shift++;
+            }
+            result = ((result &lt;&lt; shift) | i) % mod;
+        }
+        return result;
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">class ConcatenationOfConsecutiveBinaryNumbers {
+    public int concatenatedBinary(int n) {
+        int mod = (int)Math.pow(10, 9) + 7;
+        int shift = 0;
+        long result = 0;
+        for (int i = 1; i &lt;= n; ++i) {
+            if ((i &amp; (i - 1)) == 0) {
+                shift++;
+            }
+            result = ((result &lt;&lt; shift) | i) % mod;
+        }
+        return (int)result;
+    }
+}
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {number} n
+ * @return {number}
+ */
+var concatenatedBinary = function(n) {
+  const mod = Math.pow(10, 9) + 7;
+  let shift = 0, result = 0;
+  for (let i = 1; i &lt;= n; i++) {
+    if ((i &amp; (i - 1)) === 0) {
+      shift += 1;
+    }
+    result *= (1 &lt;&lt; shift);
+    result += i;
+    result %= mod;
+  }
+  return result;
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class ConcatenationOfConsecutiveBinaryNumbers:
     def concatenatedBinary(self, n: int) -&gt; int:
         mod = 10 ** 9 + 7
@@ -1718,6 +1814,27 @@ This way, we get the answer.</p>
             result = (result &lt;&lt; shift | i) % mod
         return result
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {Integer} n
+# @return {Integer}
+def concatenated_binary(n)
+  mod = 10.pow(9) + 7
+  shift, result = 0, 0
+  (1..n).each do |i|
+    if (i &amp; (i - 1)) == 0
+      shift += 1
+    end
+    result = ((result &lt;&lt; shift) | i) % mod
+  end
+  result
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>

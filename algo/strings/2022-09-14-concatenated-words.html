@@ -1775,7 +1775,35 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-1">
-<pre><code class="language-java">
+<pre><code class="language-java">class ConcatenatedWords {
+    private int dfs(Set&lt;String&gt; word_set, int[] memo, String word, int idx) {
+        if (idx == word.length()) { return 1; }
+        if (memo[idx] != -1) { return memo[idx]; }
+        int ret = 0;
+        for (int i = 1; i &lt;= word.length() - idx - (idx == 0 ? 1 : 0); ++i) {
+            if (word_set.contains(word.substring(idx, idx + i))) {
+                ret = dfs(word_set, memo, word, idx + i);
+                if (ret == 1) { break; }
+            }
+        }
+        memo[idx] = ret;
+        return ret;
+    }
+
+    public List&lt;String&gt; findAllConcatenatedWordsInADict(String[] words) {
+        Set&lt;String&gt; word_set = new HashSet&lt;&gt;();
+        for (String w : words) { word_set.add(w); }
+        List&lt;String&gt; result = new ArrayList&lt;&gt;();
+        for (String word : words) {
+            int[] memo = new int[word.length()];
+            for (int i = 0; i &lt; word.length(); ++i) { memo[i] = -1; }
+            if (dfs(word_set, memo, word, 0) == 1) {
+                result.add(word);
+            }
+        }
+        return result;
+    }
+}
 </code></pre>
 </div>
     
@@ -1841,7 +1869,43 @@ var findAllConcatenatedWordsInADict = function(words) {
 </div>
     
       <div class="tab-content" data-content="solution-4">
-<pre><code class="language-ruby">
+<pre><code class="language-ruby">require 'set'
+
+# @param {String[]} words
+# @return {String[]}
+def find_all_concatenated_words_in_a_dict(words)
+  word_set = Set.new(words)
+
+  dfs = lambda do |memo, word, idx|
+    n = word.length
+    if idx == n
+      return 1
+    end
+    if memo[idx] != -1
+      return memo[idx]
+    end
+    ret = 0
+    (1...(n - idx - (idx == 0 ? 1 : 0) + 1)).each do |i|
+      if word_set.include?(word[idx...idx + i])
+        ret = dfs.call(memo, word, idx + i)
+        if ret == 1
+          break
+        end
+      end
+    end
+    memo[idx] = ret
+    ret
+  end
+
+  result = []
+  words.each do |word|
+    memo = Array.new(word.length).fill(-1)
+    if dfs.call(memo, word, 0) == 1
+      result &lt;&lt; word
+    end
+  end
+  result
+end
 </code></pre>
 </div>
     

@@ -1745,7 +1745,22 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-1">
-<pre><code class="language-java">
+<pre><code class="language-java">class CheckIfAllTheIntegersInARangeAreCovered {
+    public boolean isCovered(int[][] ranges, int left, int right) {
+        for (int i = left; i &lt;= right; ++i) {
+            boolean found = false;
+            for (int[] range : ranges) {
+                int s = range[0], e = range[1];
+                if (s &lt;= i &amp;&amp; i &lt;= e) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) { return false; }
+        }
+        return true;
+    }
+}
 </code></pre>
 </div>
     
