@@ -1657,16 +1657,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is not a difficult problem.
-However, making the solution efficient needs a bit of consideration.
-It can be solved by multiple O(n) iterations, but can be done just one O(n) loop.
-When we check all values from index 0 to n, it is ordered.
-What we care about is the last index of the same value only.
-When the same value appears, check the last index.
-If the difference is less than or equals to k, return True.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>Given an integer array <code>nums</code> and an integer <code>k</code>, return <code>true</code> if there are two distinct indices <code>i</code> and <code>j</code> in the
 array such that <code>nums[i] == nums[j]</code> and <code>abs(i - j) &lt;= k</code>.</p>
@@ -1697,13 +1688,110 @@ Input: nums = [1,2,3,1,2,3], k = 2
 Output: false
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This is not a difficult problem.
+Multiple O(n) iterations would be the easiest, brute force approach.
+However, making the solution efficient, say, O(n), needs a bit of considerations.
+While we check all values from index 0 to n, what we care about is the last index of the same value only.
+When the same value appears, check the last index.
+If the difference is less than or equals to k, return True.</p>
+
 <p>The Hash Table is a good data structure to save the value and its last index pair.
-When the same value appears, it is in the Hash Table.
-So, check the difference between the last and current index.
-If it is less than or equals to k, the answer is True.</p>
+If the same value is in the Hash Table, check the difference between the last and current index.
+Return true if the difference is less than or equals to k.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">#include &lt;unordered_map&gt;
+#include &lt;vector&gt;
+
+using namespace std;
+
+class ContainsDuplicate2 {
+public:
+    bool containsNearbyDuplicate(vector&lt;int&gt;&amp; nums, int k) {
+        unordered_map&lt;int, int&gt; counts;
+        for (int i = 0; i &lt; nums.size(); ++i) {
+            if (counts.find(nums[i]) != counts.end() &amp;&amp; i - counts[nums[i]] &lt;= k) {
+                return true;
+            }
+            counts[nums[i]] = i;
+        }
+        return false;
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">import java.util.*;
+
+class ContainsDuplicate2 {
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+        Map&lt;Integer, Integer&gt; counts = new HashMap&lt;&gt;();
+        for (int i = 0; i &lt; nums.length; ++i) {
+            if (counts.containsKey(nums[i]) &amp;&amp; i - counts.get(nums[i]) &lt;= k) {
+                return true;
+            }
+            counts.put(nums[i], i);
+        }
+        return false;
+    }
+}
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {boolean}
+ */
+var containsNearbyDuplicate = function(nums, k) {
+  const counts = new Map();
+  for (let i = 0; i &lt; nums.length; i++) {
+    if (counts.has(nums[i]) &amp;&amp; i - counts.get(nums[i]) &lt;= k) {
+      return true;
+    }
+    counts.set(nums[i], i);
+  }
+  return false;
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class ContainsDuplicate2:
     def containsNearbyDuplicate(self, nums: List[int], k: int) -&gt; bool:
         counts = {}
@@ -1713,6 +1801,27 @@ If it is less than or equals to k, the answer is True.</p>
             counts[v] = idx
         return False
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {Integer[]} nums
+# @param {Integer} k
+# @return {Boolean}
+def contains_nearby_duplicate(nums, k)
+  counts = {}
+  (0...nums.size).each do |i|
+    if counts.has_key?(nums[i]) &amp;&amp; i - counts[nums[i]] &lt;= k
+      return true
+    end
+    counts[nums[i]] = i
+  end
+  false
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>

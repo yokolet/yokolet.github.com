@@ -1657,15 +1657,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This problem is very similar to <a href="/algo/arrays/2022-10-26-subarray-sum-equals-k">Subarray Sum Equals K</a>.
-Instead of “sum equals k”, it is “sum divisible by k” here.
-However, we can solve this problem in the same way.
-Using an accumulated sum and hash table, go through like a 2-sum.
-The main differences are the hash table keys and values.
-Also, how to identify the answer.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>Given an integer array <code>nums</code> and an integer <code>k</code>, return true if nums has a continuous subarray of size at least
 two whose elements sum up to a multiple of <code>k</code>, or false otherwise.</p>
@@ -1702,7 +1694,14 @@ Input: nums = [23,2,6,4,7], k = 13
 Output: false
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This problem is very similar to <a href="/algo/arrays/2022-10-26-subarray-sum-equals-k">Subarray Sum Equals K</a>.
+Instead of “sum equals k”, it is “sum divisible by k” here.
+However, we can solve this problem in the same way.
+Using an accumulated sum and hash table, go through like a 2-sum.
+The main differences are the hash table keys and values.
+Also, how to identify the answer.</p>
+
 <p>The solution starts from initializing the accumulated sum and hash table.
 The hash table’s key is the accumulated sum modulo k.
 The value is an index.
@@ -1712,7 +1711,111 @@ If the accumulated sum modulo k is not in the hash table, save it along with the
 Otherwise, check the index difference. If it satisfies the condition, return True.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-python">class ContinuousSubarraySum:
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">#include &lt;unordered_map&gt;
+#include &lt;vector&gt;
+
+using namespace std;
+
+class ContinuousSubarraySum {
+public:
+    bool checkSubarraySum(vector&lt;int&gt;&amp; nums, int k) {
+        int acc = 0;
+        unordered_map&lt;int, int&gt; memo;
+        memo[0] = -1;
+        for (int i = 0; i &lt; nums.size(); ++i) {
+            acc += nums[i];
+            if (memo.find(acc % k) == memo.end()) {
+                memo[acc % k] = i;
+            } else if (i - memo[acc % k] &gt;= 2) {
+                return true;
+            }
+        }
+        return false;
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">import java.util.*;
+
+class ContinuousSubarraySum {
+    public boolean checkSubarraySum(int[] nums, int k) {
+        int acc = 0;
+        Map&lt;Integer, Integer&gt; memo = new HashMap&lt;&gt;();
+        memo.put(0, -1);
+        for (int i = 0; i &lt; nums.length; ++i) {
+          acc += nums[i];
+          if (!memo.containsKey(acc % k)) {
+            memo.put(acc % k, i);
+          } else if (i - memo.get(acc % k) &gt;= 2) {
+            return true;
+          }
+        }
+        return false;
+    }
+}
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {boolean}
+ */
+var checkSubarraySum = function(nums, k) {
+    let acc = 0, memo = new Map();
+    memo.set(0, -1);
+    for (let i = 0; i &lt; nums.length; i++) {
+      acc += nums[i];
+      if (!memo.has(acc % k)) {
+        memo.set(acc % k, i);
+      } else if (i - memo.get(acc % k) &gt;= 2) {
+        return true;
+      }
+    }
+    return false;
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">from typing import List
+
+class ContinuousSubarraySum:
     def checkSubarraySum(self, nums: List[int], k: int) -&gt; bool:
         acc, memo = 0, {0: -1}
         for idx, v in enumerate(nums):
@@ -1723,6 +1826,29 @@ Otherwise, check the index difference. If it satisfies the condition, return Tru
                 return True
         return False
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {Integer[]} nums
+# @param {Integer} k
+# @return {Boolean}
+def check_subarray_sum(nums, k)
+    acc, memo = 0, {0 =&gt; -1}
+    (0...nums.size).each do |i|
+      acc += nums[i]
+      if !memo.has_key?(acc % k)
+        memo[acc % k] = i
+      elsif i - memo[acc % k] &gt;= 2
+        return true
+      end
+    end
+    false
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
