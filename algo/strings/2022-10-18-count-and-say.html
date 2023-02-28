@@ -1562,16 +1562,9 @@
                 
                     
                     <li>
-                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-splitting-array"
+                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-cutting-ribbons"
                            class="submenu">
-                            Splitting Array
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-shipping-packages-in-d-days"
-                           class="submenu">
-                            Shipping Packages in D Days
+                            Cutting Ribbons
                         </a>
                     </li>
                     
@@ -1583,9 +1576,9 @@
                     </li>
                     
                     <li>
-                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-balls-in-a-bag"
+                        <a href="/algo/minimize_maximum/2022-07-25-minimize-maximum-koko-eating-bananas"
                            class="submenu">
-                            Minimum Limit of Balls in a Bag
+                            Koko Eating Bananas
                         </a>
                     </li>
                     
@@ -1597,16 +1590,9 @@
                     </li>
                     
                     <li>
-                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-cutting-ribbons"
+                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-balls-in-a-bag"
                            class="submenu">
-                            Cutting Ribbons
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="/algo/minimize_maximum/2022-07-25-minimize-maximum-koko-eating-bananas"
-                           class="submenu">
-                            Koko Eating Bananas
+                            Minimum Limit of Balls in a Bag
                         </a>
                     </li>
                     
@@ -1614,6 +1600,20 @@
                         <a href="/algo/minimize_maximum/2022-07-26-minimize-maximum-min-days-to-make-m-bouquets"
                            class="submenu">
                             Minimum Number of Days to Make m Bouquets
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-shipping-packages-in-d-days"
+                           class="submenu">
+                            Shipping Packages in D Days
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-splitting-array"
+                           class="submenu">
+                            Splitting Array
                         </a>
                     </li>
                     
@@ -1761,7 +1761,27 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-1">
-<pre><code class="language-java">
+<pre><code class="language-java">class Solution {
+    public String countAndSay(int n) {
+        String result = "1";
+        for (int k = 0; k &lt; n - 1; ++k) {
+            char prev = 0;
+            String cur = "";
+            int cnt = 0;
+            for (int i = 0; i &lt; result.length(); ++i) {
+                if (prev != 0 &amp;&amp; prev != result.charAt(i)) {
+                    cur += (Integer.toString(cnt) + prev);
+                    cnt = 0;
+                }
+                prev = result.charAt(i);
+                cnt++;
+            }
+            cur += (Integer.toString(cnt) + prev);
+            result = cur;
+        }
+        return result;
+    }
+}
 </code></pre>
 </div>
     
@@ -1809,7 +1829,25 @@ var countAndSay = function(n) {
 </div>
     
       <div class="tab-content" data-content="solution-4">
-<pre><code class="language-ruby">
+<pre><code class="language-ruby"># @param {Integer} n
+# @return {String}
+def count_and_say(n)
+  result = "1"
+  (0...n - 1).each do|k|
+    prev, cur, cnt = "", "", 0
+    (0...result.size).each do |i|
+      if !prev.empty? &amp;&amp; prev != result[i]
+        cur += cnt.to_s + prev
+        cnt = 0
+      end
+      prev = result[i]
+      cnt += 1
+    end
+    cur += cnt.to_s + prev
+    result = cur
+  end
+  result
+end
 </code></pre>
 </div>
     

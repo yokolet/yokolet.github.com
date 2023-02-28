@@ -1562,16 +1562,9 @@
                 
                     
                     <li>
-                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-splitting-array"
+                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-cutting-ribbons"
                            class="submenu">
-                            Splitting Array
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-shipping-packages-in-d-days"
-                           class="submenu">
-                            Shipping Packages in D Days
+                            Cutting Ribbons
                         </a>
                     </li>
                     
@@ -1583,9 +1576,9 @@
                     </li>
                     
                     <li>
-                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-balls-in-a-bag"
+                        <a href="/algo/minimize_maximum/2022-07-25-minimize-maximum-koko-eating-bananas"
                            class="submenu">
-                            Minimum Limit of Balls in a Bag
+                            Koko Eating Bananas
                         </a>
                     </li>
                     
@@ -1597,16 +1590,9 @@
                     </li>
                     
                     <li>
-                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-cutting-ribbons"
+                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-balls-in-a-bag"
                            class="submenu">
-                            Cutting Ribbons
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="/algo/minimize_maximum/2022-07-25-minimize-maximum-koko-eating-bananas"
-                           class="submenu">
-                            Koko Eating Bananas
+                            Minimum Limit of Balls in a Bag
                         </a>
                     </li>
                     
@@ -1614,6 +1600,20 @@
                         <a href="/algo/minimize_maximum/2022-07-26-minimize-maximum-min-days-to-make-m-bouquets"
                            class="submenu">
                             Minimum Number of Days to Make m Bouquets
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-shipping-packages-in-d-days"
+                           class="submenu">
+                            Shipping Packages in D Days
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-splitting-array"
+                           class="submenu">
+                            Splitting Array
                         </a>
                     </li>
                     
@@ -1657,13 +1657,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>Using hash table, find a repeating character style problems are there.
-This is the same type.
-However, this problem asks about all substrings, so how to count the result is not easy.
-Within non-repeating characters range, we should count substrings.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>Let’s define a function <code>countUniqueChars(s)</code> that returns the number of unique characters on <code>s</code>.</p>
   <ul>
@@ -1702,31 +1696,162 @@ Input: s = "LEETCODE"
 Output: 92
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>Start from a hash table which will keep tracking each letter’s start and end indices so far.
-While going over the given string, add up a count based on
-the current letter’s previous start and end indices.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>In general, a solution of this type is to save the index of last occurrence.
+The character and indices pair might be saved in a hash table.
+But, also, the pair can be saved using array or vector since keys are A to Z only.
+We can convert upper case alphabet character to integer from 0 to 25, which can be used as the index.</p>
+
+<p>Something this problem requires more is that all substrings should be counted.
+Given that, values in the array should be start and end indices of the character.
+The number of substrings between start and end indicies is calculated as:
+(current index - last occurrence index) * (last occurrence index - previous occurrence index).
+Then, update the character’s index pair for the upcoming occurrence.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">#include &lt;vector&gt;
+
+using namespace std;
+
+class CountUniqueCharactersOfAllSubstringsOfAGivenString {
+public:
+    int uniqueLetterString(string s) {
+        int n = s.size(), result = 0;
+        vector&lt;pair&lt;int, int&gt;&gt; memo(26, make_pair(-1, -1));
+        for (int i = 0; i &lt; n; ++i) {
+            int c = s[i] - 'A';
+            result += (i - memo[c].second) * (memo[c].second - memo[c].first);
+            memo[c] = {memo[c].second, i};
+        }
+        for (int i = 0; i &lt; 26; ++i) {
+            result += (n - memo[i].second) * (memo[i].second - memo[i].first);
+        }
+        return result;
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">class CountUniqueCharactersOfAllSubstringsOfAGivenString {
+    public int uniqueLetterString(String s) {
+        int n = s.length(), result = 0;
+        int[][] memo = new int[26][2];
+        for (int i = 0; i &lt; 26; ++i) {
+            memo[i] = new int[]{-1, -1};
+        }
+        for (int i = 0; i &lt; n; ++i) {
+            int c = s.charAt(i) - 'A';
+            result += (i - memo[c][1]) * (memo[c][1] - memo[c][0]);
+            memo[c][0] = memo[c][1];
+            memo[c][1] = i;
+        }
+        for (int i = 0; i &lt; 26; ++i) {
+            result += (n - memo[i][1]) * (memo[i][1] - memo[i][0]);
+        }
+        return result;
+    }
+}
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {string} s
+ * @return {number}
+ */
+var uniqueLetterString = function(s) {
+  const n = s.length, base = "A".charCodeAt(0);
+  const memo = Array.from(Array(26), () =&gt; {
+    return [-1, -1];
+  });
+  let result = 0;
+  for (let i = 0; i &lt; n; ++i) {
+    let c = s.charCodeAt(i) - base;
+    result += (i - memo[c][1]) * (memo[c][1] - memo[c][0]);
+    memo[c] = [memo[c][1], i]
+  }
+  for (let i = 0; i &lt; 26; i++) {
+    result += (n - memo[i][1]) * (memo[i][1] - memo[i][0]);
+  }
+  return result;
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class CountUniqueCharactersOfAllSubstringsOfAGivenString:
     def uniqueLetterString(self, s: str) -&gt; int:
-        n = len(s)
-        memo = {c: (-1, -1) for c in ascii_uppercase}
-        result = 0
-        for idx, c in enumerate(s):
-            i, j = memo[c]
-            result += (j - i) * (idx - j)
-            memo[c] = (j, idx)
-        for c in memo:
-            i, j = memo[c]
-            result += (n - j) * (j - i)
+        n, result = len(s), 0
+        memo = [[-1, -1] for _ in range(26)]
+        for i in range(n):
+            c = ord(s[i]) - ord('A')
+            result += (i - memo[c][1]) * (memo[c][1] - memo[c][0])
+            memo[c] = [memo[c][1], i]
+        for i in range(26):
+            result += (n - memo[i][1]) * (memo[i][1] - memo[i][0])
         return result
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {String} s
+# @return {Integer}
+def unique_letter_string(s)
+  n, base, result = s.size, "A".ord, 0
+  memo = Array.new(26) { [-1, -1] }
+  (0...n).each do |i|
+    c = s[i].ord - base
+    result += (i - memo[c][1]) * (memo[c][1] - memo[c][0])
+    memo[c] = [memo[c][1], i]
+  end
+  (0...26).each do |i|
+    result += (n - memo[i][1]) * (memo[i][1] - memo[i][0])
+  end
+  result
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
   <li>Time: <code>O(n)</code></li>
-  <li>Space: <code>O(1)</code></li>
+  <li>Space: <code>O(1)</code> – at most 26, so constant</li>
 </ul>
 
 </div>

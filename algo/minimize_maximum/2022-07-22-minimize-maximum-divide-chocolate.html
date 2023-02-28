@@ -1562,16 +1562,9 @@
                 
                     
                     <li>
-                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-splitting-array"
+                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-cutting-ribbons"
                            class="submenu">
-                            Splitting Array
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-shipping-packages-in-d-days"
-                           class="submenu">
-                            Shipping Packages in D Days
+                            Cutting Ribbons
                         </a>
                     </li>
                     
@@ -1583,9 +1576,9 @@
                     </li>
                     
                     <li>
-                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-balls-in-a-bag"
+                        <a href="/algo/minimize_maximum/2022-07-25-minimize-maximum-koko-eating-bananas"
                            class="submenu">
-                            Minimum Limit of Balls in a Bag
+                            Koko Eating Bananas
                         </a>
                     </li>
                     
@@ -1597,16 +1590,9 @@
                     </li>
                     
                     <li>
-                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-cutting-ribbons"
+                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-balls-in-a-bag"
                            class="submenu">
-                            Cutting Ribbons
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="/algo/minimize_maximum/2022-07-25-minimize-maximum-koko-eating-bananas"
-                           class="submenu">
-                            Koko Eating Bananas
+                            Minimum Limit of Balls in a Bag
                         </a>
                     </li>
                     
@@ -1614,6 +1600,20 @@
                         <a href="/algo/minimize_maximum/2022-07-26-minimize-maximum-min-days-to-make-m-bouquets"
                            class="submenu">
                             Minimum Number of Days to Make m Bouquets
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-shipping-packages-in-d-days"
+                           class="submenu">
+                            Shipping Packages in D Days
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-splitting-array"
+                           class="submenu">
+                            Splitting Array
                         </a>
                     </li>
                     
@@ -1653,12 +1653,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is the third minimize-maximum algorithm problem.
-This problem has an apparent variation compared to the splitting array problem.
-However, here again, if we carefully read the description, the problem is about the type of minimize-maximum.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>You have one chocolate bar that consists of some chunks. Each chunk has its own sweetness given by the array sweetness.</p>
 
@@ -1692,16 +1687,20 @@ Explanation: sweetness subarrays after k cuts (k + 1 groups):: [[1,2,2],[1,2,2],
 5 is the minimized largest sum when the array is splitted into 3 groups
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This is one of minimize-maximum algorithm problems.
+This problem has an apparent variation compared to the basic problem of splitting array.
+At a glance, the problem looks something else.
+However, if we carefully read the description, we realize the problem is the type of minimize-maximum.</p>
 
 <p>The given sweetness array should be divided into groups (k cuts + 1) based on a certain criteria.
 In this case, the criteria is the subarray sum.
-However, unlike splitting array problem, the middle value calculation, left/right value updates and
-some more parameter handling are not the same.
+However, unlike splitting array problem, the middle value calculation, a way of updating left/right values and
+some more parameter handling are different.
 The optimal subarray sum lies between the smallest value in the array (left) and total sum of the array (right).
 The iteration starts off from the middle of those left and right values.
 The middle value is set <code>(left + right + 1) / 2</code> since the criteria should be set where it exceeds the exact middle value.
-Based on this middle value, the array will be split comparing the sum so far and the middle value.
+The array will be split base on the comparison between the sum so far and the middle value.
 When the subarray sum becomes bigger than the middle value, it forms the group.
 In the end, some number of subarrays will be created.</p>
 
@@ -1710,62 +1709,213 @@ If the number of subarrays is less than the specified value, the middle value sh
 If the number of subarrays is greater than the specified value, the middle value should be greater to create less subarrays.
 Here’s another variation. When the left value is updated, it will have the middle value instead of middle + 1.</p>
 
-<p>When the binary search is over, we can find the answer.</p>
+<p>When the binary search is over, we will get the answer.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-cpp">#include &lt;vector&gt;
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">#include &lt;numeric&gt;
+#include &lt;vector&gt;
 using namespace std;
 
-class DivideChocolate
-{
+class DivideChocolate {
 private:
-  bool check(vector&lt;int&gt; &amp;sweetness, int k, int mid)
-  {
-    int count = 0, cur = 0;
-    for (int i = 0; i &lt; sweetness.size(); ++i)
-    {
-      cur += sweetness[i];
-      if (cur &gt;= mid)
-      {
-        cur = 0;
-        ++count;
-      }
+    bool check(vector&lt;int&gt; &amp;sweetness, int k, int mid) {
+        int count = 0, cur = 0;
+        for (int i = 0; i &lt; sweetness.size(); ++i) {
+            cur += sweetness[i];
+            if (cur &gt;= mid) {
+                cur = 0;
+                ++count;
+            }
+        }
+        if (cur &gt;= mid) // for the uncounted last bits
+            ++count;
+        return count &lt; k + 1;
     }
-    if (cur &gt;= mid) // for the uncounted last bits
-      ++count;
-    if (count &lt; k + 1)
-      return true;
-    else
-      return false;
-  }
 
 public:
-  int maximizeSweetness(vector&lt;int&gt; &amp;sweetness, int k)
-  {
-    int n = sweetness.size();
-    int min_elm = INT_MAX, sum = 0;
-    for (int i = 0; i &lt; n; ++i)
-    {
-      min_elm = min(min_elm, sweetness[i]);
-      sum += sweetness[i];
+    int maximizeSweetness(vector&lt;int&gt;&amp; sweetness, int k) {
+        int left = *min_element(sweetness.begin(), sweetness.end());
+        int right = accumulate(sweetness.begin(), sweetness.end(), 0);
+        while (left &lt; right) {
+            int mid = (left + right + 1) / 2;
+            if (check(sweetness, k, mid)) {
+                right = mid - 1;
+            } else {
+                left = mid;
+            }
+        }
+        return left;
     }
-    int left = min_elm, right = sum;
-    while (left &lt; right)
-    {
-      int mid = (left + right + 1) / 2;  // plus one is important
-      if (check(sweetness, k, mid))
-      {
-        right = mid - 1;
-      }
-      else
-      {
-        left = mid;
-      }
-    }
-    return left;
-  }
 };
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">import java.util.Arrays;
+
+public class DivideChocolate {
+    private boolean check(int[] sweetness, int k, int mid) {
+        int count = 0, cur = 0;
+        for (int v : sweetness) {
+            cur += v;
+            if (cur &gt;= mid) {
+                cur = 0;
+                ++count;
+            }
+        }
+        if (cur &gt;= mid) {
+            ++count;
+        }
+        return count &lt; k + 1;
+    }
+    public int maximizeSweetness(int[] sweetness, int k) {
+        int left = Arrays.stream(sweetness).min().getAsInt();
+        int right = Arrays.stream(sweetness).sum();
+        while (left &lt; right) {
+            int mid = (left + right + 1) / 2;
+            if (check(sweetness, k, mid)) {
+                right = mid - 1;
+            } else {
+                left = mid;
+            }
+        }
+        return left;
+    }
+}
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {number[]} sweetness
+ * @param {number} k
+ * @return {number}
+ */
+var maximizeSweetness = function(sweetness, k) {
+  const check = (mid) =&gt; {
+    let count = 0, cur = 0;
+    for (const v of sweetness) {
+      cur += v;
+      if (cur &gt;= mid) {
+        cur = 0;
+        count += 1;
+      }
+    }
+    if (cur &gt;= mid) {
+      count += 1;
+    }
+    return count &lt; k + 1;
+  }
+  let left = Math.min(...sweetness)
+  let right = sweetness.reduce((acc, v) =&gt; acc + v, 0);
+  while (left &lt; right) {
+    let mid = Math.floor((left + right + 1) / 2);
+    if (check(mid)) {
+      right = mid - 1;
+    } else {
+      left = mid;
+    }
+  }
+  return left;
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">from typing import List
+
+class DivideChocolate:
+    def maximizeSweetness(self, sweetness: List[int], k: int) -&gt; int:
+        def check(mid):
+            count, cur = 0, 0
+            for v in sweetness:
+                cur += v
+                if cur &gt;= mid:
+                    cur = 0
+                    count += 1
+            if cur &gt;= mid:
+                count += 1
+            return count &lt; k + 1
+
+        left, right = min(sweetness), sum(sweetness)
+        while left &lt; right:
+            mid = (left + right + 1) // 2
+            if check(mid):
+                right = mid - 1
+            else:
+                left = mid
+        return left
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {Integer[]} sweetness
+# @param {Integer} k
+# @return {Integer}
+def maximize_sweetness(sweetness, k)
+  check = lambda do |mid|
+    count, cur = 0, 0
+    sweetness.each do |v|
+      cur += v
+      if cur &gt;= mid
+        cur = 0
+        count += 1
+      end
+    end
+    if cur &gt;= mid
+      count += 1
+    end
+    count &lt; k + 1
+  end
+
+  left, right = sweetness.min, sweetness.sum
+  while left &lt; right
+    mid = (left + right + 1) / 2
+    if check.call(mid)
+      right = mid - 1
+    else
+      left = mid
+    end
+  end
+  left
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>

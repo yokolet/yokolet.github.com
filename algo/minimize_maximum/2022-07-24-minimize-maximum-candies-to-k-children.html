@@ -1562,16 +1562,9 @@
                 
                     
                     <li>
-                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-splitting-array"
+                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-cutting-ribbons"
                            class="submenu">
-                            Splitting Array
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-shipping-packages-in-d-days"
-                           class="submenu">
-                            Shipping Packages in D Days
+                            Cutting Ribbons
                         </a>
                     </li>
                     
@@ -1583,9 +1576,9 @@
                     </li>
                     
                     <li>
-                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-balls-in-a-bag"
+                        <a href="/algo/minimize_maximum/2022-07-25-minimize-maximum-koko-eating-bananas"
                            class="submenu">
-                            Minimum Limit of Balls in a Bag
+                            Koko Eating Bananas
                         </a>
                     </li>
                     
@@ -1597,16 +1590,9 @@
                     </li>
                     
                     <li>
-                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-cutting-ribbons"
+                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-balls-in-a-bag"
                            class="submenu">
-                            Cutting Ribbons
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="/algo/minimize_maximum/2022-07-25-minimize-maximum-koko-eating-bananas"
-                           class="submenu">
-                            Koko Eating Bananas
+                            Minimum Limit of Balls in a Bag
                         </a>
                     </li>
                     
@@ -1614,6 +1600,20 @@
                         <a href="/algo/minimize_maximum/2022-07-26-minimize-maximum-min-days-to-make-m-bouquets"
                            class="submenu">
                             Minimum Number of Days to Make m Bouquets
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-shipping-packages-in-d-days"
+                           class="submenu">
+                            Shipping Packages in D Days
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-splitting-array"
+                           class="submenu">
+                            Splitting Array
                         </a>
                     </li>
                     
@@ -1653,14 +1653,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is the fifth minimize-maximum algorithm problem.
-This problem has a variation compared to the basic, splitting array problem.
-If we look around other minimize maximum problems, it is very close to the cutting ribbons problem.
-The problem might be more straightforward compared to the cutting ribbons.
-Again, the problem is the type of minimize-maximum.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>You are given a 0-indexed integer array candies.
 Each element in the array denotes a pile of candies of size candies[i].
@@ -1688,61 +1681,199 @@ Answer: 0
 Explanation: sum of all candies are 7. Even the shortest count of 1 won't make 11 groups.
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This is one of minimize-maximum algorithm problems.
+This problem has a variation compared to the basic problem of splitting array.
+If we look around other minimize maximum problems, it is very close to the cutting ribbons problem.
+The problem might be more straightforward compared to the cutting ribbons.</p>
+
 <p>Each element of the given candies array should be divided into smaller piles based on a certain criteria.
 The criteria is a number of candies in each piles.</p>
 
 <p>So, we will count how many candy piles are created based on the number of candies in each pile (middle value).
-The smallest value (left) can be 1, and the largest (right) will be the maximum value in the given array.
-The middle value is set to <code>(left + right) / 2</code> as normal.</p>
+The smallest value (left) is 1, and the largest (right) will be the maximum value in the given array.
+The middle value is set to <code>(left + right) / 2</code> like a normal binary search.</p>
 
 <p>Next step is to adjust the left or right values.
 If the number of piles is less than the specified value, the middle value should be smaller to create more piles.
 If the number of piles is greater than the specified value, the middle value should be greater to create less piles.
-The left and right value updatea follow a common way:  <code>right = mid - 1</code>, <code>left = mid + 1</code>;</p>
+The left and right values are updated by <code>right = mid - 1</code> and <code>left = mid + 1</code>.</p>
 
-<p>When the binary search is over, we can find the answer.
+<p>When the binary search is over, we will get the answer.
 Here, we should be careful. The answer from the binary search is the right value.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
 <pre><code class="language-cpp">#include &lt;vector&gt;
-#include &lt;iostream&gt;
+
 using namespace std;
 
-class MaximumCandiesAllocatedToKChildren
-{
+class MaximumCandiesAllocatedToKChildren {
 private:
-  bool check(vector&lt;int&gt; &amp;candies, long long k, long long mid)
-  {
-    long long count = 0;
-    for (int i = 0; i &lt; candies.size(); ++i)
-    {
-      count += candies[i] / mid;
+    bool check(vector&lt;int&gt; &amp;candies, long long k, int mid) {
+        long long count = 0;
+        for (auto v : candies) {
+            count += v / mid;
+        }
+        return count &lt; k;
+    }
+
+public:
+    int maximumCandies(vector&lt;int&gt;&amp; candies, long long k) {
+        int mid, left = 1, right = *max_element(candies.begin(), candies.end());
+        while (left &lt;= right) {
+            mid = (left + right) / 2;
+            if (check(candies, k, mid)) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return right;
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">import java.util.Arrays;
+
+public class MaximumCandiesAllocatedToKChildren {
+    private boolean check(int[] candies, long k, int mid) {
+        long count = 0;
+        for (int v : candies) {
+            count += v / mid;
+        }
+        return count &lt; k;
+    }
+
+    public int maximumCandies(int[] candies, long k) {
+        int mid, left = 1, right = Arrays.stream(candies).max().getAsInt();
+        while (left &lt;= right) {
+            mid = (left + right) / 2;
+            if (check(candies, k, mid)) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return right;
+    }
+}
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {number[]} candies
+ * @param {number} k
+ * @return {number}
+ */
+var maximumCandies = function(candies, k) {
+  const check = (mid) =&gt; {
+    let count = 0;
+    for (let v of candies) {
+      count += Math.floor(v / mid);
     }
     return count &lt; k;
   }
 
-public:
-  int maximumCandies(vector&lt;int&gt; &amp;candies, long long k)
-  {
-    int n = candies.size();
-    int left = 1, right = *max_element(candies.begin(), candies.end());
-    while (left &lt;= right)
-    {
-      long long mid = (left + right) / 2;
-      if (check(candies, k, mid))
-      {
-        right = mid - 1;
-      }
-      else
-      {
-        left = mid + 1;
-      }
+  let left = 1, right = Math.max(...candies)
+  while (left &lt;= right) {
+    let mid = Math.floor((left + right) / 2);
+    if (check(mid)) {
+      right = mid - 1;
+    } else {
+      left = mid + 1;
     }
-    return right;
   }
+  return right;
 };
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">from typing import List
+
+class MaximumCandiesAllocatedToKChildren:
+    def maximumCandies(self, candies: List[int], k: int) -&gt; int:
+        def check(mid):
+            count = 0
+            for v in candies:
+                count += v // mid
+            return count &lt; k
+
+        left, right = 1, max(candies)
+        while left &lt;= right:
+            mid = (left + right) // 2
+            if check(mid):
+                right = mid - 1
+            else:
+                left = mid + 1
+        return right
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {Integer[]} candies
+# @param {Integer} k
+# @return {Integer}
+def maximum_candies(candies, k)
+  check = lambda do |mid|
+    count = 0
+    candies.each do |v|
+      count += v / mid
+    end
+    count &lt; k
+  end
+
+  left, right = 1, candies.max
+  while left &lt;= right
+    mid = (left + right) / 2
+    if check.call(mid)
+      right = mid - 1
+    else
+      left = mid + 1
+    end
+  end
+  right
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>

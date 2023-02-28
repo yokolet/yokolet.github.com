@@ -1562,16 +1562,9 @@
                 
                     
                     <li>
-                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-splitting-array"
+                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-cutting-ribbons"
                            class="submenu">
-                            Splitting Array
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-shipping-packages-in-d-days"
-                           class="submenu">
-                            Shipping Packages in D Days
+                            Cutting Ribbons
                         </a>
                     </li>
                     
@@ -1583,9 +1576,9 @@
                     </li>
                     
                     <li>
-                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-balls-in-a-bag"
+                        <a href="/algo/minimize_maximum/2022-07-25-minimize-maximum-koko-eating-bananas"
                            class="submenu">
-                            Minimum Limit of Balls in a Bag
+                            Koko Eating Bananas
                         </a>
                     </li>
                     
@@ -1597,16 +1590,9 @@
                     </li>
                     
                     <li>
-                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-cutting-ribbons"
+                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-balls-in-a-bag"
                            class="submenu">
-                            Cutting Ribbons
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="/algo/minimize_maximum/2022-07-25-minimize-maximum-koko-eating-bananas"
-                           class="submenu">
-                            Koko Eating Bananas
+                            Minimum Limit of Balls in a Bag
                         </a>
                     </li>
                     
@@ -1614,6 +1600,20 @@
                         <a href="/algo/minimize_maximum/2022-07-26-minimize-maximum-min-days-to-make-m-bouquets"
                            class="submenu">
                             Minimum Number of Days to Make m Bouquets
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-shipping-packages-in-d-days"
+                           class="submenu">
+                            Shipping Packages in D Days
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-splitting-array"
+                           class="submenu">
+                            Splitting Array
                         </a>
                     </li>
                     
@@ -1649,13 +1649,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>If it comes to the linked list problems, deleting a node is a common one.
-Normally, the head of the linked list is given, so the solution in general traverses the list.
-However, this problem doesn’t give us the head, so we are unable to traverse the list.
-This problem tests our idea. Once it is figured out, the solution is fairly easy.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>There is a singly-linked list <code>head</code> and we want to delete a node <code>node</code> in it.
 You are given the node to be deleted <code>node</code>. You will not be given access to the first node of <code>head</code>.
@@ -1696,15 +1690,105 @@ Explanation: You are given the third node with value 1,
 the linked list should become 4 -&gt; 5 -&gt; 9 after calling your function.
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>This problem doesn’t give us the head of the linked list.
-We have just a node to be deleted.
-However, it is not a doubly linked list, so it’s impossible to delete the given node.
-Instead, the next node of the given node can be deleted easily.
-Copy the value of the next node to the given node, then delete the next node.
-The result will be as if the given node is deleted.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>If it comes to the linked list problems, deleting a node is a common one.
+Normally, the head of the linked list is given, so the solution in general traverses the list.
+However, this problem doesn’t give us the head, so we are unable to traverse the list.
+This problem tests our idea. Once it is figured out, the solution is fairly easy.</p>
+
+<p>Copy the value of the next node to the given node, then change the next to next of next.
+In fact, the solution deletes the next of the given node.
+However, the result is as if the given node is deleted.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class DeleteNodeInALinkedList {
+public:
+    void deleteNode(ListNode* node) {
+        node-&gt;val = node-&gt;next-&gt;val;
+        node-&gt;next = node-&gt;next-&gt;next;
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public void deleteNode(ListNode node) {
+        node.val = node.next.val;
+        node.next = node.next.next;
+    }
+}
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+/**
+ * @param {ListNode} node
+ * @return {void} Do not return anything, modify node in-place instead.
+ */
+var deleteNode = function(node) {
+    node.val = node.next.val;
+    node.next = node.next.next;
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python"># Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, x):
@@ -1720,6 +1804,29 @@ class DeleteNodeInALinkedList:
         node.val = node.next.val
         node.next = node.next.next
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># Definition for singly-linked list.
+# class ListNode
+#     attr_accessor :val, :next
+#     def initialize(val)
+#         @val = val
+#         @next = nil
+#     end
+# end
+
+# @param {ListNode} node
+# @return {Void} Do not return anything, modify node in-place instead.
+def delete_node(node)
+    node.val = node.next.val
+    node.next = node.next.next
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>

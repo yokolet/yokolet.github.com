@@ -1562,16 +1562,9 @@
                 
                     
                     <li>
-                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-splitting-array"
+                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-cutting-ribbons"
                            class="submenu">
-                            Splitting Array
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-shipping-packages-in-d-days"
-                           class="submenu">
-                            Shipping Packages in D Days
+                            Cutting Ribbons
                         </a>
                     </li>
                     
@@ -1583,9 +1576,9 @@
                     </li>
                     
                     <li>
-                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-balls-in-a-bag"
+                        <a href="/algo/minimize_maximum/2022-07-25-minimize-maximum-koko-eating-bananas"
                            class="submenu">
-                            Minimum Limit of Balls in a Bag
+                            Koko Eating Bananas
                         </a>
                     </li>
                     
@@ -1597,16 +1590,9 @@
                     </li>
                     
                     <li>
-                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-cutting-ribbons"
+                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-balls-in-a-bag"
                            class="submenu">
-                            Cutting Ribbons
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="/algo/minimize_maximum/2022-07-25-minimize-maximum-koko-eating-bananas"
-                           class="submenu">
-                            Koko Eating Bananas
+                            Minimum Limit of Balls in a Bag
                         </a>
                     </li>
                     
@@ -1614,6 +1600,20 @@
                         <a href="/algo/minimize_maximum/2022-07-26-minimize-maximum-min-days-to-make-m-bouquets"
                            class="submenu">
                             Minimum Number of Days to Make m Bouquets
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-shipping-packages-in-d-days"
+                           class="submenu">
+                            Shipping Packages in D Days
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-splitting-array"
+                           class="submenu">
+                            Splitting Array
                         </a>
                     </li>
                     
@@ -1653,14 +1653,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is the fourth minimize-maximum algorithm problem.
-This problem has a variation compared to the basic, splitting array problem.
-If we look around other minimize maximum problems, it is very close to the divide chocolate problem.
-Even though this has another variation, we can solve using the same manner.
-Again, the problem is the type of minimize-maximum.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>You are given an integer array ribbons, where <code>ribbons[i]</code> represents the length of the i-th ribbon, and an integer k.
 You may cut any of the ribbons into any number of segments of positive integer lengths, or perform no cuts at all.</p>
@@ -1702,7 +1695,12 @@ Answer: 0
 Explanation: sum of all ribbons are 21. Even the shortest length of 1 won't make 22 ribbons.
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This is one of minimize-maximum algorithm problems.
+This problem has a variation compared to the basic, splitting array, problem.
+If we look around other minimize maximum problems, it is very close to the divide chocolate problem.
+Even though this has further variation, we can solve using the same approach.</p>
+
 <p>Each element of the given ribbons array should be divided into smaller lengths based on a certain criteria.
 The criteria is a total number of divided ribbons.
 It can be found by counting the number of ribbons in subarrays.</p>
@@ -1723,7 +1721,42 @@ When it is updated, the left will have the middle value instead of middle + 1.</
 <p>When the binary search is over, we can find the answer.</p>
 
 <h2 id="solution">Solution</h2>
-<pre><code class="language-cpp">class CuttingRibbons
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">#include &lt;vector&gt;
+using namespace std;
+
+class CuttingRibbons
 {
 private:
   bool check(vector&lt;int&gt; &amp;ribbons, int k, int mid)
@@ -1738,12 +1771,10 @@ private:
 public:
   int maxLength(vector&lt;int&gt; &amp;ribbons, int k)
   {
-    int n = ribbons.size();
     int left = 0, right = 100010;  // this is big enough to get a correct answer
     while (left &lt; right)
     {
       int mid = (left + right + 1) / 2;
-      int count = 0;
       if (check(ribbons, k, mid))
       {
         right = mid - 1;
@@ -1757,6 +1788,114 @@ public:
   }
  };
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">class CuttingRibbons {
+    private boolean check(int[] ribbons, int k, int mid) {
+        int count = 0;
+        for (int i = 0; i &lt; ribbons.length; ++i) {
+            count += ribbons[i] / mid;
+        }
+        return count &lt; k;
+    }
+
+    public int maxLength(int[] ribbons, int k) {
+        int left = 0, right = 100010;
+        while (left &lt; right) {
+            int mid = (left + right + 1) / 2;
+            if (check(ribbons, k, mid)) {
+                right = mid - 1;
+            } else {
+                left = mid;
+            }
+        }
+        return left;
+    }
+}
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {number[]} ribbons
+ * @param {number} k
+ * @return {number}
+ */
+var maxLength = function(ribbons, k) {
+  const check = (mid) =&gt; {
+    let count = 0;
+    for (let i = 0; i &lt; ribbons.length; i++) {
+      count += Math.floor(ribbons[i] / mid);
+    }
+    return count &lt; k;
+  };
+
+  let left = 0, right = 100010, mid;
+  while (left &lt; right) {
+    mid = Math.floor((left + right + 1) / 2);
+    if (check(mid)) {
+      right = mid - 1;
+    } else {
+      left = mid;
+    }
+  }
+  return left;
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">from typing import List
+
+class CuttingRibbons:
+    def maxLength(self, ribbons: List[int], k: int) -&gt; int:
+        def check(mid):
+            count = 0
+            for v in ribbons:
+                count += v // mid
+            return count &lt; k
+
+        left, right = 0, 100010
+        while left &lt; right:
+            mid = (left + right + 1) // 2
+            count = 0
+            if check(mid):
+                right = mid - 1
+            else:
+                left = mid
+        return left
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {Integer[]} ribbons
+# @param {Integer} k
+# @return {Integer}
+def max_length(ribbons, k)
+  check = lambda do |mid|
+    count = 0
+    ribbons.each do |v|
+      count += v / mid
+    end
+    count &lt; k
+  end
+  left, right = 0, 100010
+  while left &lt; right
+    mid = (left + right + 1) / 2
+    if check.call(mid)
+      right = mid - 1
+    else
+      left = mid
+    end
+  end
+  left
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>

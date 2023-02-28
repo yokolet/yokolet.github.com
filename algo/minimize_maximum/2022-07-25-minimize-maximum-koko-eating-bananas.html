@@ -1562,16 +1562,9 @@
                 
                     
                     <li>
-                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-splitting-array"
+                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-cutting-ribbons"
                            class="submenu">
-                            Splitting Array
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-shipping-packages-in-d-days"
-                           class="submenu">
-                            Shipping Packages in D Days
+                            Cutting Ribbons
                         </a>
                     </li>
                     
@@ -1583,9 +1576,9 @@
                     </li>
                     
                     <li>
-                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-balls-in-a-bag"
+                        <a href="/algo/minimize_maximum/2022-07-25-minimize-maximum-koko-eating-bananas"
                            class="submenu">
-                            Minimum Limit of Balls in a Bag
+                            Koko Eating Bananas
                         </a>
                     </li>
                     
@@ -1597,16 +1590,9 @@
                     </li>
                     
                     <li>
-                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-cutting-ribbons"
+                        <a href="/algo/minimize_maximum/2022-07-24-minimize-maximum-balls-in-a-bag"
                            class="submenu">
-                            Cutting Ribbons
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="/algo/minimize_maximum/2022-07-25-minimize-maximum-koko-eating-bananas"
-                           class="submenu">
-                            Koko Eating Bananas
+                            Minimum Limit of Balls in a Bag
                         </a>
                     </li>
                     
@@ -1614,6 +1600,20 @@
                         <a href="/algo/minimize_maximum/2022-07-26-minimize-maximum-min-days-to-make-m-bouquets"
                            class="submenu">
                             Minimum Number of Days to Make m Bouquets
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-shipping-packages-in-d-days"
+                           class="submenu">
+                            Shipping Packages in D Days
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/algo/minimize_maximum/2022-07-22-minimize-maximum-splitting-array"
+                           class="submenu">
+                            Splitting Array
                         </a>
                     </li>
                     
@@ -1653,15 +1653,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is the seventh minimize-maximum algorithm problem.
-This problem has a variation compared to the basic, splitting array problem.
-If we look around other minimize maximum problems, it is very close to the balls in a bag problem.
-The problem looks almost the same idea as the balls in a bag problem.
-A difference is, the problem doesn’t split elements in the given array.
-Again, the problem is the type of minimize-maximum.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>Koko loves to eat bananas. There are <code>n</code> piles of bananas, the i-th pile has <code>piles[i]</code> bananas.
 The guards have gone and will come back in <code>h</code> hours.</p>
@@ -1701,14 +1693,19 @@ Explanation: The optimal minimum eating speed is 23. At this speed, it will take
 Summing up the each hours, 2 + 1 + 1 + 1 + 1 = 6. All bananas can be eaten before a guard comes back in 6 hours.
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>Each element of the given piles array will be used to calculate eating speed based on a certain criteria.
-The criteria is middle value of the array.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This is one of minimize-maximum algorithm problems.
+This problem has a variation compared to the basic problem of splitting array.
+If we look around other minimize maximum problems, it is very close to the balls in a bag problem.
+The problem looks almost the same idea as the balls in a bag problem.
+A difference is, the problem here doesn’t split elements in the given array.</p>
 
-<p>So, we will count necessary hours to consume each elements when consume speed is the middle value.
+<p>In this problem, each element of the given piles array will be used to calculate eating speed based on a certain criteria.
+The criteria is the middle value of the array.
+So, we will count necessary hours to consume each elements when consume speed is the middle value.
 If a division leaves a reminder, it needs plus one hour for the pile.
 The smallest value (left) can be 1, and the largest (right) will be the maximum value in the given array.
-The middle value is set to <code>(left + right) / 2</code> as normal.</p>
+The middle value is set to <code>(left + right) / 2</code> as normal binary search.</p>
 
 <p>Next step is to adjust the left or right values.
 If the total hours to consume bananas is less than the specified value,
@@ -1717,13 +1714,44 @@ If the total hours to consume bananas is greater than the specified value,
 the middle value should be greater to use less hours.
 The left and right value updates follow a common way:  <code>right = mid - 1</code>, <code>left = mid + 1</code>;</p>
 
-<p>When the binary search is over, we can find the answer.
-The answer from the binary search is the left value.</p>
+<p>When the binary search is over, we will get the answer.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
 <pre><code class="language-cpp">#include &lt;vector&gt;
 #include &lt;numeric&gt;
-#include &lt;iostream&gt;
+
 using namespace std;
 
 class KokoEatingBananas
@@ -1731,7 +1759,7 @@ class KokoEatingBananas
 private:
   bool check(vector&lt;int&gt; &amp;piles, int h, int mid)
   {
-    int count = 0;
+    long count = 0;
     for (int i = 0; i &lt; piles.size(); ++i)
     {
       count += ceil((double)piles[i] / mid);
@@ -1760,6 +1788,117 @@ public:
   }
 };
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">import java.util.Arrays;
+
+class KokoEatingBananas {
+    private boolean check(int[] piles, int h, int mid) {
+        long count = 0;
+        for (int v : piles) {
+            count += (long)Math.ceil((double)v / mid);
+        }
+        return count &lt;= h;
+    }
+
+    public int minEatingSpeed(int[] piles, int h) {
+        int left = 1, right = Arrays.stream(piles).max().getAsInt();
+        while (left &lt;= right) {
+            int mid = (left + right) / 2;
+            if (check(piles, h, mid)) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return left;
+    }
+}
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {number[]} piles
+ * @param {number} h
+ * @return {number}
+ */
+var minEatingSpeed = function(piles, h) {
+  const check = (mid) =&gt; {
+    let count = 0;
+    for (let v of piles) {
+      count += Math.ceil(v / mid);
+    }
+    return count &lt;= h;
+  }
+
+  let left = 1, right = Math.max(...piles);
+  while (left &lt;= right) {
+    let mid = Math.floor((left + right) / 2);
+    if (check(mid)) {
+      right = mid - 1;
+    } else {
+      left = mid + 1;
+    }
+  }
+  return left;
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">from math import ceil
+from typing import List
+
+class KokoEatingBananas:
+    def minEatingSpeed(self, piles: List[int], h: int) -&gt; int:
+        def check(mid):
+            count = 0
+            for v in piles:
+                count += ceil(v / mid)
+            return count &lt;= h
+
+        left, right = 1, max(piles)
+        while left &lt;= right:
+            mid = (left + right) // 2
+            if (check(mid)):
+                right = mid - 1
+            else:
+                left = mid + 1
+        return left
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {Integer[]} piles
+# @param {Integer} h
+# @return {Integer}
+def min_eating_speed(piles, h)
+  check = lambda do |mid|
+    count = 0
+    piles.each do |v|
+      count += (v.to_f / mid).ceil
+    end
+    count &lt;= h
+  end
+
+  left, right = 1, piles.max
+  while left &lt;= right
+    mid = (left + right) / 2
+    if check.call(mid)
+      right = mid - 1
+    else
+      left = mid + 1
+    end
+  end
+  left
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
