@@ -1667,9 +1667,6 @@ Several hits may arrive roughly at the same time.</p>
     <li><code>void hit(int timestamp)</code> Records a hit that happened at timestamp (in seconds). Several hits may happen at the same timestamp.</li>
     <li><code>int getHits(int timestamp)</code> Returns the number of hits in the past 5 minutes from timestamp (i.e., the past 300 seconds).</li>
   </ul>
-</blockquote>
-
-<blockquote>
 
   <p>Constraints:</p>
   <ul>
@@ -1677,9 +1674,7 @@ Several hits may arrive roughly at the same time.</p>
     <li>All the calls are being made to the system in chronological order (i.e., <code>timestamp</code> is monotonically increasing).</li>
     <li>At most 300 calls will be made to <code>hit</code> and <code>getHits</code>.</li>
   </ul>
-</blockquote>
 
-<blockquote>
   <p><a href="https://leetcode.com/problems/design-hit-counter/">https://leetcode.com/problems/design-hit-counter/</a></p>
 </blockquote>
 
@@ -1772,7 +1767,27 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-1">
-<pre><code class="language-java">
+<pre><code class="language-java">import java.util.ArrayDeque;
+import java.util.Queue;
+
+public class HitCounter {
+    private Queue&lt;Integer&gt; q = new ArrayDeque&lt;&gt;();
+    public HitCounter() {}
+
+    public void hit(int timestamp) {
+        q.add(timestamp);
+        while (q.peek() &lt;= timestamp - 300) {
+            q.poll();
+        }
+    }
+
+    public int getHits(int timestamp) {
+        while (!q.isEmpty() &amp;&amp; q.peek() &lt;= timestamp - 300) {
+            q.poll();
+        }
+        return q.size();
+    }
+}
 </code></pre>
 </div>
     
@@ -1824,7 +1839,37 @@ HitCounter.prototype.getHits = function(timestamp) {
 </div>
     
       <div class="tab-content" data-content="solution-4">
-<pre><code class="language-ruby">
+<pre><code class="language-ruby">class HitCounter
+  def initialize()
+    @q = Array.new
+  end
+
+
+=begin
+    :type timestamp: Integer
+    :rtype: Void
+=end
+  def hit(timestamp)
+    @q &lt;&lt; timestamp
+    while @q[0] &lt;= timestamp - 300
+      @q.shift
+    end
+  end
+
+
+=begin
+    :type timestamp: Integer
+    :rtype: Integer
+=end
+  def get_hits(timestamp)
+    while !@q.empty? &amp;&amp; @q[0] &lt;= timestamp - 300
+      @q.shift
+    end
+    @q.size
+  end
+
+
+end
 </code></pre>
 </div>
     
@@ -1833,8 +1878,8 @@ HitCounter.prototype.getHits = function(timestamp) {
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(1)</code></li>
-  <li>Space: <code>O(n)</code></li>
+  <li>Time: <code>O(n)</code> – n: number of 300 or more older timestamps</li>
+  <li>Space: <code>O(m)</code> – m: number of timestamps in a queue</li>
 </ul>
 
 </div>

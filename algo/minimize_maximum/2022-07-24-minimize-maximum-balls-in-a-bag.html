@@ -1653,15 +1653,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is the sixth minimize-maximum algorithm problem.
-This problem has a variation compared to the basic, splitting array problem.
-If we look around other minimize maximum problems, it is very close to the candies allocation to k children problem.
-The problem might be as straightforward as the candies problem.
-A difference is, the problem gives a number of operations rather than the number of groups to be created.
-Again, the problem is the type of minimize-maximum.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>You are given an integer array nums where the i-th bag contains <code>nums[i]</code> balls.
 You are also given an integer <code>maxOperations</code>.</p>
@@ -1699,64 +1691,215 @@ Explanation: nums array goes: [7,17] -&gt; [7,7,10] -&gt; [7,7,3,7] by 2 operati
 7 is the minimized largest penalty when the array elements are splitted.
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This is one of minimize-maximum algorithm problems.
+This problem has a variation compared to the basic problem of splitting array.
+If we look around other minimize maximum problems, it is very close to the candies allocation to k children problem.
+The problem might be as straightforward as the candies problem.
+A difference is, the problem gives a number of operations rather than the number of groups to be created.</p>
+
 <p>Each element of the given nums array should be divided into smaller number of pair based on a certain criteria.
 The criteria is middle value of the array.</p>
 
-<p>So, we will count how many elements can be divided in to two based on the middle value.
+<p>So, we will count how many elements can be divided in two based on the middle value.
 The smallest value (left) can be 1, and the largest (right) will be the maximum value in the given array.
-The middle value is set to <code>(left + right) / 2</code> as normal.</p>
+The middle value is set to <code>(left + right) / 2</code> as common binary search does.</p>
 
 <p>Next step is to adjust the left or right values.
 If the number of operations is less than the specified value, the middle value should be smaller to do more operations.
 If the number of operations is greater than the specified value, the middle value should be greater to do less operations.
 The left and right value updates follow a common way:  <code>right = mid - 1</code>, <code>left = mid + 1</code>;</p>
 
-<p>When the binary search is over, we can find the answer.
+<p>When the binary search is over, we will get the answer.
 The answer from the binary search is the left value.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
 <pre><code class="language-cpp">#include &lt;vector&gt;
 #include &lt;numeric&gt;
-#include &lt;iostream&gt;
+
 using namespace std;
 
-class MinimumLimitOfBallsInABag
-{
-private:
-  bool check(vector&lt;int&gt; &amp;nums, int maxOperations, int mid)
-  {
-    int count = 0;
-    for (int i = 0; i &lt; nums.size(); ++i)
-      {
-        if (nums[i] &gt;= mid)
-        {
-          count += ceil((double)nums[i] / mid) - 1;
-        }
-      }
-      return count &lt;= maxOperations;
-  }
+class MinimumLimitOfBallsInABag {
 public:
-  int minimumSize(vector&lt;int&gt; &amp;nums, int maxOperations)
-  {
-    int n = nums.size();
-    int left = 1, right = *max_element(nums.begin(), nums.end());
-    while (left &lt;= right)
-    {
-      int mid = (left + right) / 2;
-      if (check(nums, maxOperations, mid))
+    bool check(vector&lt;int&gt; &amp;nums, int maxOperations, int mid)
       {
-        right = mid - 1;
+        int count = 0;
+        for (int i = 0; i &lt; nums.size(); ++i)
+          {
+            if (nums[i] &gt;= mid)
+            {
+              count += ceil((double)nums[i] / mid) - 1;
+            }
+          }
+          return count &lt;= maxOperations;
       }
-      else
-      {
-        left = mid + 1;
-      }
+
+    int minimumSize(vector&lt;int&gt;&amp; nums, int maxOperations) {
+        int left = 1, right = *max_element(nums.begin(), nums.end());
+        while (left &lt;= right)
+        {
+          int mid = (left + right) / 2;
+          if (check(nums, maxOperations, mid))
+          {
+            right = mid - 1;
+          }
+          else
+          {
+            left = mid + 1;
+          }
+        }
+        return left;
     }
-    return left;
-  }
 };
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">import java.util.Arrays;
+
+public class MinimumLimitOfBallsInABag {
+    private boolean check(int[] nums, int maxOperations, int mid) {
+        int count = 0;
+        for (int v : nums) {
+            if (v &gt;= mid) {
+                count += Math.ceil((double)v / mid) - 1;
+            }
+        }
+        return count &lt;= maxOperations;
+    }
+    public int minimumSize(int[] nums, int maxOperations) {
+        int left = 1, right = Arrays.stream(nums).max().getAsInt();
+        while (left &lt;= right) {
+            int mid = (left + right) / 2;
+            if (check(nums, maxOperations, mid)) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return left;
+    }
+}
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {number[]} nums
+ * @param {number} maxOperations
+ * @return {number}
+ */
+var minimumSize = function(nums, maxOperations) {
+  const check = (mid) =&gt; {
+    let count = 0;
+    for (let v of nums) {
+      count += Math.ceil(v / mid) - 1
+    }
+    return count &lt;= maxOperations;
+  }
+
+  let left = 1, right = Math.max(...nums);
+  while (left &lt;= right) {
+    let mid = Math.floor((left + right) / 2);
+    if (check(mid)) {
+      right = mid - 1;
+    } else {
+      left = mid + 1;
+    }
+  }
+  return left;
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">from math import ceil
+from typing import List
+
+
+class MinimumLimitOfBallsInABag:
+    def minimumSize(self, nums: List[int], maxOperations: int) -&gt; int:
+        def check(mid):
+            count = 0
+            for v in nums:
+                if v &gt;= mid:
+                    count += ceil(v / mid) - 1
+            return count &lt;= maxOperations
+
+        left, right = 1, max(nums)
+        while left &lt;= right:
+            mid = (left + right) // 2
+            if check(mid):
+                right = mid - 1
+            else:
+                left = mid + 1
+        return left
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {Integer[]} nums
+# @param {Integer} max_operations
+# @return {Integer}
+def minimum_size(nums, max_operations)
+  check = lambda do |mid|
+    count = 0
+    nums.each do |v|
+      if v &gt;= mid
+        count += (v.to_f / mid).ceil - 1
+      end
+    end
+    count &lt;= max_operations
+  end
+
+  left, right = 1, nums.max
+  while left &lt;= right
+    mid = (left + right) / 2
+    if check.call(mid)
+      right = mid - 1
+    else
+      left = mid + 1
+    end
+  end
+  left
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>

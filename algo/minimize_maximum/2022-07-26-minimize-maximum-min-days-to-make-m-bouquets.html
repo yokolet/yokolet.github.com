@@ -1653,14 +1653,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is the eighth minimize-maximum algorithm problem.
-This problem has a variation compared to the basic, splitting array problem.
-However, still, it is similar to the splitting array problem if we look at
-how to count groups.
-Again, the problem is the type of minimize-maximum.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>You are given an integer array <code>bloomDay</code>, an integer <code>m</code> and an integer <code>k</code>.</p>
 
@@ -1697,7 +1690,11 @@ Two bouquets can be created with 4 and 2 types, which doesn't satisfy the condit
 After day 12, usable fowers are [f,f,f,f,f,f,f], which is enough to create 3 bouquets of 3 types.
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This is one of minimize-maximum algorithm problems.
+This problem has a variation compared to the basic problem of splitting array.
+However, still, it is similar to the splitting array problem if we look at how to count groups.</p>
+
 <p>Each element of the given array will be used to count groups to be created.
 The element value itself isn’t involved in the counting.
 Instead, it works as a filter and separates groups depends on the day.</p>
@@ -1719,59 +1716,220 @@ If total number of bouquets is less than <code>m</code>,
 the middle value should be bigger to include more element and create more bouquets.
 The left and right value updates follow a common way:  <code>right = mid - 1</code>, <code>left = mid + 1</code>;</p>
 
-<p>When the binary search is over, we can find the answer.
+<p>When the binary search is over, we will get the answer.
 The answer from the binary search is the left value.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
 <pre><code class="language-cpp">#include &lt;vector&gt;
-#include &lt;iostream&gt;
+
 using namespace std;
 
-class MinimumNumberOfDaysToMakeMBouquets
-{
+class MinimumNumberOfDaysToMakeMBouquets {
 private:
-  bool check(vector&lt;int&gt; &amp;bloomDay, int m, int k, int mid)
-  {
-    int count = 0, cur = 0;
-    for (int i = 0; i &lt; bloomDay.size(); ++i)
-    {
-      if (bloomDay[i] &lt;= mid)
-      {
-        ++cur;
-      }
-      else
-      {
+    bool check(vector&lt;int&gt; &amp;bloomDay, int m, int k, int mid) {
+        int count = 0, cur = 0;
+        for (int v : bloomDay) {
+            if (v &lt;= mid) {
+                ++cur;
+            } else {
+                count += cur / k;
+                cur = 0;
+            }
+        }
         count += cur / k;
+        return count &gt;= m;
+    }
+
+public:
+    int minDays(vector&lt;int&gt; &amp;bloomDay, int m, int k) {
+        if ((long long)m * (long long)k &gt; bloomDay.size()) { return -1; }
+        int left = 1, right = *max_element(bloomDay.begin(), bloomDay.end());
+        while (left &lt;= right) {
+            int mid = (left + right) / 2;
+            if (check(bloomDay, m, k, mid)) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return left;
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">import java.util.Arrays;
+
+public class MinimumNumberOfDaysToMakeMBouquets {
+    private boolean check(int[] bloomDay, int m, int k, int mid) {
+        int count = 0, cur = 0;
+        for (int v : bloomDay) {
+            if (v &lt;= mid) {
+                cur++;
+            } else {
+                count += cur / k;
+                cur = 0;
+            }
+        }
+        count += cur / k;
+        return count &gt;= m;
+    }
+
+    public int minDays(int[] bloomDay, int m, int k) {
+        if ((long)m * k &gt; bloomDay.length) { return -1; }
+        int left = 1, right = Arrays.stream(bloomDay).max().getAsInt();
+        while (left &lt;= right) {
+            int mid = (left + right) / 2;
+            if (check(bloomDay, m, k, mid)) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return left;
+    }
+}
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {number[]} bloomDay
+ * @param {number} m
+ * @param {number} k
+ * @return {number}
+ */
+var minDays = function(bloomDay, m, k) {
+  const check = (mid) =&gt; {
+    let count = 0, cur = 0;
+    for (let v of bloomDay) {
+      if (v &lt;= mid) {
+        cur += 1;
+      } else {
+        count += Math.floor(cur / k);
         cur = 0;
       }
     }
-    count += cur / k;
+    count += Math.floor(cur / k);
     return count &gt;= m;
   }
 
-public:
-  int minDays(vector&lt;int&gt; &amp;bloomDay, int m, int k)
-  {
-    int n = bloomDay.size();
-    if (m * k &gt; n)
-      return -1;
-    int left = 1, right = *max_element(bloomDay.begin(), bloomDay.end());
-    while (left &lt;= right)
-    {
-      int mid = (left + right) / 2;
-      if (check(bloomDay, m, k, mid))
-      {
-        right = mid - 1;
-      }
-      else
-      {
-        left = mid + 1;
-      }
+  if (m * k &gt; bloomDay.length) { return -1; }
+  let left = 1, right = Math.max(...bloomDay);
+  while (left &lt;= right) {
+    let mid = Math.floor((left + right) / 2);
+    if (check(mid)) {
+      right = mid - 1;
+    } else {
+      left = mid + 1;
     }
-    return left;
   }
+  return left;
 };
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
+<pre><code class="language-python">from typing import List
+
+class MinimumNumberOfDaysToMakeMBouquets:
+    def minDays(self, bloomDay: List[int], m: int, k: int) -&gt; int:
+        def check(mid):
+            count, cur = 0, 0
+            for v in bloomDay:
+                if v &lt;= mid:
+                    cur += 1
+                else:
+                    count += cur // k
+                    cur = 0
+            count += cur // k
+            return count &gt;= m
+
+        if m * k &gt; len(bloomDay):
+            return -1
+        left, right = 1, max(bloomDay)
+        while left &lt;= right:
+            mid = (left + right) // 2
+            if check(mid):
+                right = mid - 1
+            else:
+                left = mid + 1
+        return left
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {Integer[]} bloom_day
+# @param {Integer} m
+# @param {Integer} k
+# @return {Integer}
+def min_days(bloom_day, m, k)
+  check = lambda do |mid|
+    count, cur = 0, 0
+    bloom_day.each do |v|
+      if v &lt;= mid
+        cur += 1
+      else
+        count += cur / k
+        cur = 0
+      end
+    end
+    count += cur / k
+    count &gt;= m
+  end
+
+  if m * k &gt; bloom_day.size
+    return -1
+  end
+  left, right = 1, bloom_day.max
+  while left &lt;= right
+    mid = (left + right) / 2
+    if check.call(mid)
+      right = mid - 1
+    else
+      left = mid + 1
+    end
+  end
+  left
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
