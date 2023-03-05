@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/accordion.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Rails App Creation with Options | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Rails App Creation with Options" />
+<meta name="author" content="Yoko Harada" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="The easiest way to create a Ruby on Rails app is absolutely to hit the command:" />
+<meta property="og:description" content="The easiest way to create a Ruby on Rails app is absolutely to hit the command:" />
+<link rel="canonical" href="http://localhost:4000/2023/03/05/rails-app-creation-with-options.html" />
+<meta property="og:url" content="http://localhost:4000/2023/03/05/rails-app-creation-with-options.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-03-05T15:50:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Rails App Creation with Options" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Yoko Harada"},"dateModified":"2023-03-05T15:50:00+09:00","datePublished":"2023-03-05T15:50:00+09:00","description":"The easiest way to create a Ruby on Rails app is absolutely to hit the command:","headline":"Rails App Creation with Options","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/03/05/rails-app-creation-with-options.html"},"url":"http://localhost:4000/2023/03/05/rails-app-creation-with-options.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Rails App Creation with Options</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-8">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Mar 5, 2023</p>
+
+    <div class="tags">
+        
+    </div>
+
+    
+
+    <p>The easiest way to create a Ruby on Rails app is absolutely to hit the command:</p>
+
+<pre><code class="language-bash">rails new [APP_NAME]
+</code></pre>
+
+<p>Above generates files to develop an entry level app to high end complicated app.
+It’s pretty handy.</p>
+
+<p>However, that one-size-fits-all like command does too much often.
+Basically, Ruby on Rails is a gorgeous web framework which provides every feature these days’ web application needs.
+In reality, people might want to create a few pages with a database backend.
+Other people might want to create just an API server.
+To answer such various needs, Ruby on Rails has a lot of options to create an app — really a lot!</p>
+
+<p>We can see all options by hitting the command below outside of a rails app directory.</p>
+
+<pre><code class="language-bash">rails -h
+# or 
+rails --help
+</code></pre>
+
+<p>You’ll see a bunch of options showing up with descriptions.
+The problem is, those descriptions are not always clear enough.
+Besides, options change as Ruby on Rails version goes up.</p>
+
+<p>To start using Rails 7, I did some googling to figure out what all those options are about.
+This is a memo what I learned from my research.</p>
+
+<h3 id="list-of-options">List of options</h3>
+
+<p>Here’s an excerpt of <code>rails new</code> options of Ruby on Rails 7.
+The list doesn’t have all.
+I focused on something not clear enough.
+The description column is what <code>rails --help</code> command prints out.
+The additional info columns is what I added with my understanding.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>option</th>
+      <th>short</th>
+      <th>description</th>
+      <th>additional info</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>–skip-namespace</td>
+      <td> </td>
+      <td>Skip namespace (affects only isolated engines)</td>
+      <td>When a rails engine is created by rails new plugin command, the option has a meaning.</td>
+    </tr>
+    <tr>
+      <td>–skip-collision-check</td>
+      <td> </td>
+      <td>Skip collision check</td>
+      <td>When rails generate command modifies existing controller/model/view, the option has a meaning.</td>
+    </tr>
+    <tr>
+      <td>–skip-git</td>
+      <td>-G</td>
+      <td>Skip .gitignore file</td>
+      <td>The option skips creating .git, .gitignore and .gitattributes files.</td>
+    </tr>
+    <tr>
+      <td>–skip-keeps</td>
+      <td> </td>
+      <td>Skip source control .keep files</td>
+      <td>The .keep file is for git to track empty directories. The option skips creating .keep file.</td>
+    </tr>
+    <tr>
+      <td>–skip-action-mailer</td>
+      <td>-M</td>
+      <td>Skip Action Mailer files</td>
+      <td>The Action Mailer is used to send email from Rails app. The option skips the feature.</td>
+    </tr>
+    <tr>
+      <td>–skip-action-mailbox</td>
+      <td> </td>
+      <td>Skip Action Mailbox gem</td>
+      <td>The Action Mailbox routes incoming email to a controller. The option skips the feature.</td>
+    </tr>
+    <tr>
+      <td>–skip-action-text</td>
+      <td> </td>
+      <td>Skip Action Text gem</td>
+      <td>The Action Text handles a rich text content. The option skips the feature.</td>
+    </tr>
+    <tr>
+      <td>–skip-active-record</td>
+      <td>-O</td>
+      <td>Skip Active Record files</td>
+      <td>The Active Record provides models to interact with applications’ database</td>
+    </tr>
+    <tr>
+      <td>–skip-active-job</td>
+      <td> </td>
+      <td>Skip Active Job</td>
+      <td>The Active Job is a framework for a background job. The option skips the feature.</td>
+    </tr>
+    <tr>
+      <td>–skip-active-storage</td>
+      <td> </td>
+      <td>Skip Active Storage files</td>
+      <td>The Active Storage provides a feature to upload files to cloud storages such as AWS S3.</td>
+    </tr>
+    <tr>
+      <td>–skip-action-cable</td>
+      <td>-C</td>
+      <td>Skip Action Cable files</td>
+      <td>The Action Cable integrates the websockets. The option skips the feature.</td>
+    </tr>
+    <tr>
+      <td>–skip-asset-pipeline</td>
+      <td>-A</td>
+      <td>Indicates when to generate skip asset pipeline</td>
+      <td>The asset pipeline concatenates and minifies Javascript and CSS and is provided by sprockets. The option skips the feature.</td>
+    </tr>
+    <tr>
+      <td>–skip-javascript</td>
+      <td>-J</td>
+      <td>Skip JavaScript files</td>
+      <td>The option skips creating app/javascript directory. It’s useful when front-end app is separated from Rails.</td>
+    </tr>
+    <tr>
+      <td>–skip-hotwire</td>
+      <td> </td>
+      <td>Skip Hotwire integration</td>
+      <td>Hotwire is a default front-end framework for Rails and is a combination of Stimulus and Turbo. The option skips the feature.</td>
+    </tr>
+    <tr>
+      <td>–skip-jbuilder</td>
+      <td> </td>
+      <td>Skip jbuilder gem</td>
+      <td>Jbuilder is a JSON builder and provides a DSL to declare JSON structures.</td>
+    </tr>
+    <tr>
+      <td>–skip-test</td>
+      <td>-T</td>
+      <td>Skip test files</td>
+      <td>The option skips to generate unit test files. When RSpec will be used, specify this option.</td>
+    </tr>
+    <tr>
+      <td>–skip-system-test</td>
+      <td> </td>
+      <td>Skip system test files</td>
+      <td>The option skips to generate system test files which allow to test JavaScript functionalities.</td>
+    </tr>
+    <tr>
+      <td>–skip-bootsnap</td>
+      <td> </td>
+      <td>Skip bootsnap gem</td>
+      <td>The option skips bootsnap which optimizes and caches expensive computations for Ruby and Active Support.</td>
+    </tr>
+    <tr>
+      <td>–skip-bundle</td>
+      <td>-B</td>
+      <td>Don’t run bundle install</td>
+      <td>The option skips to run bundle install when the Rails app is created.</td>
+    </tr>
+    <tr>
+      <td>–template=TEMPLATE</td>
+      <td>-m</td>
+      <td>Path to some application template (can be a filesystem path or URL)</td>
+      <td>The TEMPLATE file configures gems to integrate in Rails’ Gemfile.</td>
+    </tr>
+    <tr>
+      <td>–rc=RC</td>
+      <td> </td>
+      <td>Path to file containing extra configuration options for rails command</td>
+      <td>The RC file is ~/.railsrc which has a list of options to run rails new command.</td>
+    </tr>
+    <tr>
+      <td>–javascript=JAVASCRIPT</td>
+      <td>-j</td>
+      <td>Choose JavaScript approach [options: importmap (default), webpack, esbuild, rollup]</td>
+      <td>The option specifies how to handle and bundle JavaScript files.</td>
+    </tr>
+    <tr>
+      <td>–css=CSS</td>
+      <td>-c</td>
+      <td>Choose CSS processor [options: tailwind, bootstrap, bulma, postcss, sass. check https://github.com/rails/cssbundling-rails</td>
+      <td>The option specifies a CSS framework.</td>
+    </tr>
+    <tr>
+      <td>–asset-pipeline=ASSET_PIPELINE</td>
+      <td>-a</td>
+      <td>Choose your asset pipeline [options: sprockets (default), propshaft]</td>
+      <td>The option specifies an asset pipeline library, legacy Sprockets or newer Propshaft.</td>
+    </tr>
+    <tr>
+      <td>–database=DATABASE</td>
+      <td>-d</td>
+      <td>Preconfigure for selected database (options: mysql/postgresql/sqlite3/oracle/sqlserver/jdbcmysql/jdbcsqlite3/jdbcpostgresql/jdbc)</td>
+      <td>The option specifies a database. Options start from jdbc are for JRuby.</td>
+    </tr>
+    <tr>
+      <td>–api</td>
+      <td> </td>
+      <td>Preconfigure smaller stack for API only apps</td>
+      <td>The option skips to create app/assets and etc directories which won’t be used in API only app.</td>
+    </tr>
+    <tr>
+      <td>–minimal</td>
+      <td> </td>
+      <td>Preconfigure a minimal rails app</td>
+      <td>The option creates a minimal Rails app with active record and a few more features.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="front-end-options">Front-end Options</h3>
+
+<p>Among <code>rails new</code> options, front-end related might draw your eyes.
+Those are:</p>
+<ul>
+  <li>–skip-asset-pipeline</li>
+  <li>–skip-javascript</li>
+  <li>–skip-hotwire</li>
+  <li>–javascript=JAVASCRIPT</li>
+  <li>–css=CSS</li>
+  <li>–asset-pipeline=ASSET_PIPELINE</li>
+</ul>
+
+<p>One thing I should mention is that the <code>--webpack</code> option is not there.
+That’s because Webpacker has been retired as described in the GitHub repo <a href="https://github.com/rails/webpacker">https://github.com/rails/webpacker</a>.
+The feasible replacement of Webpacker would be importmap or esbuild, which can be specified by the <code>--javascript=JAVASCRIPT</code> option.
+Both importmap and esbuild are for a rick client such as React.
+The importmap is specifically for Rails freed from npm or yarn, while esbuild is a tool of JavaScript world.</p>
+
+<p>Another option I should mention is <code>--skip-hotwire</code>. To specify this option or not, we should understand what is Hotwire.
+Hotwire was introduced in Ruby on Rails 7, and is a default front-end framework.
+Not like React, Hotwire is a server-rendered type framework.
+Hotwire avoids odds related to a rich client such as bundling, the first loading time, JavaScript framework chaos or other.
+Whether you will stick to the JavaScript world to develop front-end code or not, it’s your choice.</p>
+
+<p>One more options to look at is <code>--asset-pipeline=ASSET_PIPELINE</code>. The asset pipeline got a choice of Propshaft.
+Propshaft is a kind of simplified Sprockets and workd with jsbundling-rails ans cssbundling-rails gems.
+Its GitHub repo, <a href="https://github.com/rails/propshaft">https://github.com/rails/propshaft</a>, explains details.</p>
+
+<h3 id="options-for-simplicity">Options for Simplicity</h3>
+
+<p>You might think Ruby on Rails is too gorgeous to do just this, so better look at other frameworks.
+In such a case, two options might help:</p>
+<ul>
+  <li>–api</li>
+  <li>–minimal</li>
+</ul>
+
+<p>To develop an API server which doesn’t need any front-end stuff, <code>--api</code> option works.
+When the option is given, <code>rails new</code> command strips out many features and creates a much smaller stack with necessities for an API server.</p>
+
+<p>The <code>--minimal</code> option is interesting.
+When the option is specified, <code>rails new</code> command creates a bare minimal web app stack.
+It has features of database access, assets access, and just a couple more.</p>
+
+<h3 id="dry-options">DRY Options</h3>
+
+<p>OKey, we learned <code>rails new</code> options, so now, it’s time to create a Rails app.
+Well, let’s specify this option, that option, those options and …
+You might end up with typing long, long line to create the app.
+When you hit return key, you might find a typo in one of options.
+It might be a case that you repeat creating Rails apps for multiple projects with the same set of options.</p>
+
+<p>Yes, Rails provides DRY, don’t repeat yourself, way:</p>
+<ul>
+  <li>–rc=RC</li>
+  <li>–template=TEMPLATE</li>
+</ul>
+
+<p>The rc file is, like a .bashrc or .zshrc, ~/.railsrc by default.
+If the location is not under the home directory and/or has a different file name, use <code>--rc=RC</code> option to point it.
+The format of rc file is a list of options one in each line. For example,</p>
+
+<pre><code>--api
+-d postgresql
+</code></pre>
+
+<p>Adding extra gem might repeat in multiple projects, for example, rspec-rails gem.
+For a DRY way, <code>--template=TEMPLATE</code> option is there.
+Create a template file, <code>template.rb</code>, in general. The file name can be any, though.
+Then, specify the template file using –template option.
+The format is similar to Gemfile. For example:</p>
+
+<pre><code class="language-ruby">gem_group :development, :test do
+  gem 'rspec-rails', '~&gt; 6.0', '&gt;= 6.0.1'
+end
+</code></pre>
+
+<p>So, now, <code>.railsrc</code> file looks like below:</p>
+
+<pre><code>--api
+-d postgresql
+-T
+-m /path/to/template.rb
+</code></pre>
+
+<p>Once, all are ready, hit <code>rails new app_name</code> command.
+The Rails app with the desired configurations will be created.</p>
+
+</div>
+
+
+
+
+                </div>
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    <p class="title is-4">Latest Posts</p>
+
+<div class="columns is-multiline">
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2023/03/05/rails-app-creation-with-options.html">Rails App Creation with Options</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>The easiest way to create a Ruby on Rails app is absolutely to hit the command:</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2023/03/05/rails-app-creation-with-options.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Mar 5, 2023</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2023/02/07/datomic-quick-start-in-2023.html">Datomic Quick Start in 2023</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>I used to use Datomic, <a href="https://www.datomic.com">https://www.datomic.com</a>, a lot.
+Datomic is a unique database. The most attractive feature would be the idea of preserving transactions.
+Based on the transaction id, Datomic is able to pull out the past data which has been already updated later.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2023/02/07/datomic-quick-start-in-2023.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Feb 7, 2023</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2019/10/30/setting-up-gcp-instance-for-deep-learning.html">Setting Up GCP Instance for Deep Learning</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>This post is going to be very different from what I write here.
+The content is a memo how I create a GCP (Google Cloud Platform) instance for Deep Learning.
+While I study algorithm stuff, I also have been studying Deep Learning.
+In my early days, I tried to train my Deep Learning model only on a laptop.
+My laptop is 2012 model MacBook Pro, so I would say it is reasonably fast.
+However, when it comes to Deep Learning, the training was quite painful on the such machine.
+Often, I ran the training over night to get a disappointed result.
+Still, I didn’t use any of pricey cloud environment
+since it was my personal study unrelated to my day job.
+I wanted to save money.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2019/10/30/setting-up-gcp-instance-for-deep-learning.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Oct 30, 2019</p>
+    </footer>
+</div>
+    </div>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="/assets/js/accordion.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

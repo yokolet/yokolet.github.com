@@ -1,4 +1,302 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-03-02T16:46:29+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Blog site mostly for programming topics.</subtitle><entry><title type="html">Datomic Quick Start in 2023</title><link href="http://localhost:4000/2023/02/07/datomic-quick-start-in-2023.html" rel="alternate" type="text/html" title="Datomic Quick Start in 2023" /><published>2023-02-07T18:03:00+09:00</published><updated>2023-02-07T18:03:00+09:00</updated><id>http://localhost:4000/2023/02/07/datomic-quick-start-in-2023</id><content type="html" xml:base="http://localhost:4000/2023/02/07/datomic-quick-start-in-2023.html">&lt;p&gt;I used to use Datomic, &lt;a href=&quot;https://www.datomic.com&quot;&gt;https://www.datomic.com&lt;/a&gt;, a lot.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-03-05T15:50:59+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Blog site mostly for programming topics.</subtitle><entry><title type="html">Rails App Creation with Options</title><link href="http://localhost:4000/2023/03/05/rails-app-creation-with-options.html" rel="alternate" type="text/html" title="Rails App Creation with Options" /><published>2023-03-05T15:50:00+09:00</published><updated>2023-03-05T15:50:00+09:00</updated><id>http://localhost:4000/2023/03/05/rails-app-creation-with-options</id><content type="html" xml:base="http://localhost:4000/2023/03/05/rails-app-creation-with-options.html">&lt;p&gt;The easiest way to create a Ruby on Rails app is absolutely to hit the command:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;rails new [APP_NAME]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Above generates files to develop an entry level app to high end complicated app.
+It’s pretty handy.&lt;/p&gt;
+
+&lt;p&gt;However, that one-size-fits-all like command does too much often.
+Basically, Ruby on Rails is a gorgeous web framework which provides every feature these days’ web application needs.
+In reality, people might want to create a few pages with a database backend.
+Other people might want to create just an API server.
+To answer such various needs, Ruby on Rails has a lot of options to create an app — really a lot!&lt;/p&gt;
+
+&lt;p&gt;We can see all options by hitting the command below outside of a rails app directory.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;rails -h
+# or 
+rails --help
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You’ll see a bunch of options showing up with descriptions.
+The problem is, those descriptions are not always clear enough.
+Besides, options change as Ruby on Rails version goes up.&lt;/p&gt;
+
+&lt;p&gt;To start using Rails 7, I did some googling to figure out what all those options are about.
+This is a memo what I learned from my research.&lt;/p&gt;
+
+&lt;h3 id=&quot;list-of-options&quot;&gt;List of options&lt;/h3&gt;
+
+&lt;p&gt;Here’s an excerpt of &lt;code&gt;rails new&lt;/code&gt; options of Ruby on Rails 7.
+The list doesn’t have all.
+I focused on something not clear enough.
+The description column is what &lt;code&gt;rails --help&lt;/code&gt; command prints out.
+The additional info columns is what I added with my understanding.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;option&lt;/th&gt;
+      &lt;th&gt;short&lt;/th&gt;
+      &lt;th&gt;description&lt;/th&gt;
+      &lt;th&gt;additional info&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–skip-namespace&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;Skip namespace (affects only isolated engines)&lt;/td&gt;
+      &lt;td&gt;When a rails engine is created by rails new plugin command, the option has a meaning.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–skip-collision-check&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;Skip collision check&lt;/td&gt;
+      &lt;td&gt;When rails generate command modifies existing controller/model/view, the option has a meaning.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–skip-git&lt;/td&gt;
+      &lt;td&gt;-G&lt;/td&gt;
+      &lt;td&gt;Skip .gitignore file&lt;/td&gt;
+      &lt;td&gt;The option skips creating .git, .gitignore and .gitattributes files.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–skip-keeps&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;Skip source control .keep files&lt;/td&gt;
+      &lt;td&gt;The .keep file is for git to track empty directories. The option skips creating .keep file.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–skip-action-mailer&lt;/td&gt;
+      &lt;td&gt;-M&lt;/td&gt;
+      &lt;td&gt;Skip Action Mailer files&lt;/td&gt;
+      &lt;td&gt;The Action Mailer is used to send email from Rails app. The option skips the feature.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–skip-action-mailbox&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;Skip Action Mailbox gem&lt;/td&gt;
+      &lt;td&gt;The Action Mailbox routes incoming email to a controller. The option skips the feature.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–skip-action-text&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;Skip Action Text gem&lt;/td&gt;
+      &lt;td&gt;The Action Text handles a rich text content. The option skips the feature.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–skip-active-record&lt;/td&gt;
+      &lt;td&gt;-O&lt;/td&gt;
+      &lt;td&gt;Skip Active Record files&lt;/td&gt;
+      &lt;td&gt;The Active Record provides models to interact with applications’ database&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–skip-active-job&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;Skip Active Job&lt;/td&gt;
+      &lt;td&gt;The Active Job is a framework for a background job. The option skips the feature.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–skip-active-storage&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;Skip Active Storage files&lt;/td&gt;
+      &lt;td&gt;The Active Storage provides a feature to upload files to cloud storages such as AWS S3.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–skip-action-cable&lt;/td&gt;
+      &lt;td&gt;-C&lt;/td&gt;
+      &lt;td&gt;Skip Action Cable files&lt;/td&gt;
+      &lt;td&gt;The Action Cable integrates the websockets. The option skips the feature.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–skip-asset-pipeline&lt;/td&gt;
+      &lt;td&gt;-A&lt;/td&gt;
+      &lt;td&gt;Indicates when to generate skip asset pipeline&lt;/td&gt;
+      &lt;td&gt;The asset pipeline concatenates and minifies Javascript and CSS and is provided by sprockets. The option skips the feature.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–skip-javascript&lt;/td&gt;
+      &lt;td&gt;-J&lt;/td&gt;
+      &lt;td&gt;Skip JavaScript files&lt;/td&gt;
+      &lt;td&gt;The option skips creating app/javascript directory. It’s useful when front-end app is separated from Rails.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–skip-hotwire&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;Skip Hotwire integration&lt;/td&gt;
+      &lt;td&gt;Hotwire is a default front-end framework for Rails and is a combination of Stimulus and Turbo. The option skips the feature.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–skip-jbuilder&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;Skip jbuilder gem&lt;/td&gt;
+      &lt;td&gt;Jbuilder is a JSON builder and provides a DSL to declare JSON structures.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–skip-test&lt;/td&gt;
+      &lt;td&gt;-T&lt;/td&gt;
+      &lt;td&gt;Skip test files&lt;/td&gt;
+      &lt;td&gt;The option skips to generate unit test files. When RSpec will be used, specify this option.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–skip-system-test&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;Skip system test files&lt;/td&gt;
+      &lt;td&gt;The option skips to generate system test files which allow to test JavaScript functionalities.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–skip-bootsnap&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;Skip bootsnap gem&lt;/td&gt;
+      &lt;td&gt;The option skips bootsnap which optimizes and caches expensive computations for Ruby and Active Support.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–skip-bundle&lt;/td&gt;
+      &lt;td&gt;-B&lt;/td&gt;
+      &lt;td&gt;Don’t run bundle install&lt;/td&gt;
+      &lt;td&gt;The option skips to run bundle install when the Rails app is created.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–template=TEMPLATE&lt;/td&gt;
+      &lt;td&gt;-m&lt;/td&gt;
+      &lt;td&gt;Path to some application template (can be a filesystem path or URL)&lt;/td&gt;
+      &lt;td&gt;The TEMPLATE file configures gems to integrate in Rails’ Gemfile.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–rc=RC&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;Path to file containing extra configuration options for rails command&lt;/td&gt;
+      &lt;td&gt;The RC file is ~/.railsrc which has a list of options to run rails new command.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–javascript=JAVASCRIPT&lt;/td&gt;
+      &lt;td&gt;-j&lt;/td&gt;
+      &lt;td&gt;Choose JavaScript approach [options: importmap (default), webpack, esbuild, rollup]&lt;/td&gt;
+      &lt;td&gt;The option specifies how to handle and bundle JavaScript files.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–css=CSS&lt;/td&gt;
+      &lt;td&gt;-c&lt;/td&gt;
+      &lt;td&gt;Choose CSS processor [options: tailwind, bootstrap, bulma, postcss, sass. check https://github.com/rails/cssbundling-rails&lt;/td&gt;
+      &lt;td&gt;The option specifies a CSS framework.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–asset-pipeline=ASSET_PIPELINE&lt;/td&gt;
+      &lt;td&gt;-a&lt;/td&gt;
+      &lt;td&gt;Choose your asset pipeline [options: sprockets (default), propshaft]&lt;/td&gt;
+      &lt;td&gt;The option specifies an asset pipeline library, legacy Sprockets or newer Propshaft.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–database=DATABASE&lt;/td&gt;
+      &lt;td&gt;-d&lt;/td&gt;
+      &lt;td&gt;Preconfigure for selected database (options: mysql/postgresql/sqlite3/oracle/sqlserver/jdbcmysql/jdbcsqlite3/jdbcpostgresql/jdbc)&lt;/td&gt;
+      &lt;td&gt;The option specifies a database. Options start from jdbc are for JRuby.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–api&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;Preconfigure smaller stack for API only apps&lt;/td&gt;
+      &lt;td&gt;The option skips to create app/assets and etc directories which won’t be used in API only app.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–minimal&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;Preconfigure a minimal rails app&lt;/td&gt;
+      &lt;td&gt;The option creates a minimal Rails app with active record and a few more features.&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;front-end-options&quot;&gt;Front-end Options&lt;/h3&gt;
+
+&lt;p&gt;Among &lt;code&gt;rails new&lt;/code&gt; options, front-end related might draw your eyes.
+Those are:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;–skip-asset-pipeline&lt;/li&gt;
+  &lt;li&gt;–skip-javascript&lt;/li&gt;
+  &lt;li&gt;–skip-hotwire&lt;/li&gt;
+  &lt;li&gt;–javascript=JAVASCRIPT&lt;/li&gt;
+  &lt;li&gt;–css=CSS&lt;/li&gt;
+  &lt;li&gt;–asset-pipeline=ASSET_PIPELINE&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;One thing I should mention is that the &lt;code&gt;--webpack&lt;/code&gt; option is not there.
+That’s because Webpacker has been retired as described in the GitHub repo &lt;a href=&quot;https://github.com/rails/webpacker&quot;&gt;https://github.com/rails/webpacker&lt;/a&gt;.
+The feasible replacement of Webpacker would be importmap or esbuild, which can be specified by the &lt;code&gt;--javascript=JAVASCRIPT&lt;/code&gt; option.
+Both importmap and esbuild are for a rick client such as React.
+The importmap is specifically for Rails freed from npm or yarn, while esbuild is a tool of JavaScript world.&lt;/p&gt;
+
+&lt;p&gt;Another option I should mention is &lt;code&gt;--skip-hotwire&lt;/code&gt;. To specify this option or not, we should understand what is Hotwire.
+Hotwire was introduced in Ruby on Rails 7, and is a default front-end framework.
+Not like React, Hotwire is a server-rendered type framework.
+Hotwire avoids odds related to a rich client such as bundling, the first loading time, JavaScript framework chaos or other.
+Whether you will stick to the JavaScript world to develop front-end code or not, it’s your choice.&lt;/p&gt;
+
+&lt;p&gt;One more options to look at is &lt;code&gt;--asset-pipeline=ASSET_PIPELINE&lt;/code&gt;. The asset pipeline got a choice of Propshaft.
+Propshaft is a kind of simplified Sprockets and workd with jsbundling-rails ans cssbundling-rails gems.
+Its GitHub repo, &lt;a href=&quot;https://github.com/rails/propshaft&quot;&gt;https://github.com/rails/propshaft&lt;/a&gt;, explains details.&lt;/p&gt;
+
+&lt;h3 id=&quot;options-for-simplicity&quot;&gt;Options for Simplicity&lt;/h3&gt;
+
+&lt;p&gt;You might think Ruby on Rails is too gorgeous to do just this, so better look at other frameworks.
+In such a case, two options might help:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;–api&lt;/li&gt;
+  &lt;li&gt;–minimal&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;To develop an API server which doesn’t need any front-end stuff, &lt;code&gt;--api&lt;/code&gt; option works.
+When the option is given, &lt;code&gt;rails new&lt;/code&gt; command strips out many features and creates a much smaller stack with necessities for an API server.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;--minimal&lt;/code&gt; option is interesting.
+When the option is specified, &lt;code&gt;rails new&lt;/code&gt; command creates a bare minimal web app stack.
+It has features of database access, assets access, and just a couple more.&lt;/p&gt;
+
+&lt;h3 id=&quot;dry-options&quot;&gt;DRY Options&lt;/h3&gt;
+
+&lt;p&gt;OKey, we learned &lt;code&gt;rails new&lt;/code&gt; options, so now, it’s time to create a Rails app.
+Well, let’s specify this option, that option, those options and …
+You might end up with typing long, long line to create the app.
+When you hit return key, you might find a typo in one of options.
+It might be a case that you repeat creating Rails apps for multiple projects with the same set of options.&lt;/p&gt;
+
+&lt;p&gt;Yes, Rails provides DRY, don’t repeat yourself, way:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;–rc=RC&lt;/li&gt;
+  &lt;li&gt;–template=TEMPLATE&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The rc file is, like a .bashrc or .zshrc, ~/.railsrc by default.
+If the location is not under the home directory and/or has a different file name, use &lt;code&gt;--rc=RC&lt;/code&gt; option to point it.
+The format of rc file is a list of options one in each line. For example,&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;--api
+-d postgresql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Adding extra gem might repeat in multiple projects, for example, rspec-rails gem.
+For a DRY way, &lt;code&gt;--template=TEMPLATE&lt;/code&gt; option is there.
+Create a template file, &lt;code&gt;template.rb&lt;/code&gt;, in general. The file name can be any, though.
+Then, specify the template file using –template option.
+The format is similar to Gemfile. For example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;gem_group :development, :test do
+  gem &apos;rspec-rails&apos;, &apos;~&amp;gt; 6.0&apos;, &apos;&amp;gt;= 6.0.1&apos;
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So, now, &lt;code&gt;.railsrc&lt;/code&gt; file looks like below:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;--api
+-d postgresql
+-T
+-m /path/to/template.rb
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Once, all are ready, hit &lt;code&gt;rails new app_name&lt;/code&gt; command.
+The Rails app with the desired configurations will be created.&lt;/p&gt;</content><author><name>Yoko Harada</name></author><summary type="html">The easiest way to create a Ruby on Rails app is absolutely to hit the command:</summary></entry><entry><title type="html">Datomic Quick Start in 2023</title><link href="http://localhost:4000/2023/02/07/datomic-quick-start-in-2023.html" rel="alternate" type="text/html" title="Datomic Quick Start in 2023" /><published>2023-02-07T18:03:00+09:00</published><updated>2023-02-07T18:03:00+09:00</updated><id>http://localhost:4000/2023/02/07/datomic-quick-start-in-2023</id><content type="html" xml:base="http://localhost:4000/2023/02/07/datomic-quick-start-in-2023.html">&lt;p&gt;I used to use Datomic, &lt;a href=&quot;https://www.datomic.com&quot;&gt;https://www.datomic.com&lt;/a&gt;, a lot.
 Datomic is a unique database. The most attractive feature would be the idea of preserving transactions.
 Based on the transaction id, Datomic is able to pull out the past data which has been already updated later.&lt;/p&gt;
 
@@ -1577,164 +1875,4 @@ add the number to set when going deeper, remove the number when coming back.&lt;
   &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2014/06/leetcode-restore-ip-addresses-java/&quot;&gt;Restore IP Addresses&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://github.com/raviswan/ProgrammingProblems&quot;&gt;Lottery Ticket Problem&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;http://blog.sdeskills.com/qotd-2016-oct-28-winning-ticket/&quot;&gt;Winning Ticket&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Yoko Harada</name></author><summary type="html">Various types of string related problems exist. Among them, splitting it to make something valid would be a typical one. For example, a string of numbers is given, “make valid IP addresses” is the example. Very similar problem is “make valid lottery numbers.”</summary></entry><entry><title type="html">Weird Puzzle Questions - Egg and Celebrity</title><link href="http://localhost:4000/2017/06/13/weird-puzzles.html" rel="alternate" type="text/html" title="Weird Puzzle Questions - Egg and Celebrity" /><published>2017-06-13T00:00:00+09:00</published><updated>2017-06-13T00:00:00+09:00</updated><id>http://localhost:4000/2017/06/13/weird-puzzles</id><content type="html" xml:base="http://localhost:4000/2017/06/13/weird-puzzles.html">&lt;p&gt;I’m going to write about two weird algorithm problems.
-Those seem quite weired at least to me, yet famous as algorithm questions.
-One is so-called egg dropping, another is finding a celebrity.
-I see these two problems here and there.
-From that, I guess those two are famous algorithm questions.
-But, at least, those two are quite weird.
-Some call them &lt;em&gt;puzzle&lt;/em&gt;. (Yeah, maybe… I was totally puzzled.)&lt;/p&gt;
-
-&lt;p&gt;The egg dropping and finding a celebrity problems are unrelated.
-The approaches and solutions are very different.
-However, in terms of their weirdness,
-I’m going to write a memo put those two together here.&lt;/p&gt;
-
-&lt;h4 id=&quot;problem-description---egg-dropping&quot;&gt;Problem Description - Egg Dropping&lt;/h4&gt;
-
-&lt;p&gt;Many algorithm questions have succinct descriptions.
-Not like those, this problem needs lengthy explanation.
-I re-read a few times to understand such long description correctly.
-Also, it was to figure out how to solve the problem.&lt;/p&gt;
-
-&lt;p&gt;The problem is sometime called “Two Egg Problem” since often &lt;em&gt;two&lt;/em&gt; eggs are used.
-These two eggs play a role to find the highest, safe floor to drop the egg without breaking it.
-The problem description is:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;K floors are there in total.&lt;/li&gt;
-  &lt;li&gt;There exists the highest floor an egg safely lands.&lt;/li&gt;
-  &lt;li&gt;Two (or more) eggs are given.&lt;/li&gt;
-  &lt;li&gt;If the egg doesn’t break after the dropping, it can be reused.&lt;/li&gt;
-  &lt;li&gt;If the egg breaks, the broken egg won’t be used again.&lt;/li&gt;
-  &lt;li&gt;If the egg safely lands after dropping from the floor K_j, lower floors of K_j are considered safe.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Given above conditions, “find the highest, safe floor to drop the egg” is the problem.&lt;/p&gt;
-
-&lt;h4 id=&quot;the-idea-to-find-the-highest-safe-floor&quot;&gt;The idea to find the highest safe floor&lt;/h4&gt;
-
-&lt;p&gt;A bruto force solution is always there which starts dropping the egg from the lowest floor.
-Then, try one by one going upward to the top floor.
-At some floor, the egg will break for the first time.
-One floor below (the last safe floor) is the answer.
-If only one egg is available, this is only way to solve the problem.&lt;/p&gt;
-
-&lt;p&gt;However, there’s an effective solution when multiple eggs are available.&lt;/p&gt;
-
-&lt;p&gt;This problem is often categorized to dynamic programming.
-So, an optimal substructure exists:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;the egg breaks&lt;/li&gt;
-  &lt;li&gt;the egg doesn’t break (safely lands)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The state to maintain in memorization table is a minimum number of attemps.
-For example, table[i][j] expresses the minimum attemps at i eggs and j-th floor.&lt;/p&gt;
-
-&lt;p&gt;table[i][j] will be calcuated by:&lt;/p&gt;
-
-&lt;pre&gt;
-
-min(1 + max(table[i - 1][k - 1], table[i][j - k])) where k = 1 to j
-            ^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^
-                  breaks          doesn&apos;t break
-
-&lt;/pre&gt;
-
-&lt;h4 id=&quot;java-code-for-finding-the-highest-safe-floor&quot;&gt;Java code for finding the highest safe floor&lt;/h4&gt;
-
-&lt;script src=&quot;https://gist.github.com/yokolet/a6843a4336e46e13fa7a3ef44ef2d0b9.js&quot;&gt; &lt;/script&gt;
-
-&lt;p&gt;Above prints:&lt;/p&gt;
-
-&lt;pre&gt;
-
-8
-
-&lt;/pre&gt;
-
-&lt;p&gt;Time complexity: O(nk^2), n: eggs, k: floors&lt;/p&gt;
-
-&lt;h4 id=&quot;problem-description---finding-a-celebrity&quot;&gt;Problem Description - Finding a Celebrity&lt;/h4&gt;
-
-&lt;p&gt;This problem also has a lot of descriptions like egg dropping problem.
-The details are:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;n people come to a party&lt;/li&gt;
-  &lt;li&gt;one of them is a celebrity either he or she&lt;/li&gt;
-  &lt;li&gt;this only one celebrity does not know anyone in the party&lt;/li&gt;
-  &lt;li&gt;all n - 1 people know who is the celebrity&lt;/li&gt;
-  &lt;li&gt;only one available question is “does A know B?”&lt;/li&gt;
-  &lt;li&gt;&lt;code&gt;boolean know(int A, int B)&lt;/code&gt; method is proveded which returns true if A knows B&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Given above conditions, “find the celebrity in the minimum
-number of questions” is the problem.&lt;/p&gt;
-
-&lt;h4 id=&quot;the-idea-to-find-the-celebrity&quot;&gt;The idea to find the celebrity&lt;/h4&gt;
-
-&lt;p&gt;The problem describes relations between people.
-If I draw the relations, it will be a directed graph of n people (n nodes).
-The celebrity node has an out-degree zero and in-degree n - 1.&lt;/p&gt;
-
-&lt;pre&gt;
-
-              +----------------------+
-              |                      |
-              v                      |
- (p0) -----&amp;gt; (C) &amp;lt;----- (p2) &amp;lt;----- (p3)
-            ^   ^^
-            |   | \
-            |   |   \
-            |   |     \
-         (p4) (p5) &amp;lt;--- (p6)
-
-&lt;/pre&gt;
-
-&lt;p&gt;Given the graph above, the method, &lt;code&gt;know(A, B)&lt;/code&gt;, is the same as &lt;code&gt;has an edge from A to B&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;To solve this problem, a typical approach consists of two steps.&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Elimination step&lt;/li&gt;
-  &lt;li&gt;Verification step&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;The elimination step eliminates people who are not a celeb apprently.
-Here, stack is a good data structure.
-After pushing all poeple to the stack, run &lt;code&gt;know&lt;/code&gt; method.
-If A has an edge to B, eliminates A since A is not a celeb.
-Also, check the edge from B to A.&lt;/p&gt;
-
-&lt;p&gt;The verification step verifies the last person is a celeb.
-This is because the elimination process may leave no celeb person in the stack.
-For example, a top rightmost node p3 in the graph has two outbound edges.
-Suppose the first question is made against the celeb (C), p3 will be removed.
-Later, p2 appears, and nobody says “I know p2.”&lt;/p&gt;
-
-&lt;p&gt;For this reason, the verification step is there to
-ensure the person in the stack is the celeb.&lt;/p&gt;
-
-&lt;h4 id=&quot;java-code-for-square-root-implementation&quot;&gt;Java code for square root implementation&lt;/h4&gt;
-
-&lt;script src=&quot;https://gist.github.com/yokolet/8b9e766261890b78e849d162efcf82a1.js&quot;&gt; &lt;/script&gt;
-
-&lt;p&gt;Time complexity: O(n), space complexity O(n)&lt;/p&gt;
-
-&lt;p&gt;The result is:&lt;/p&gt;
-
-&lt;pre&gt;
-1
-&lt;/pre&gt;
-
-&lt;h4 id=&quot;resources&quot;&gt;Resources&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/dynamic-programming-set-11-egg-dropping-puzzle/&quot;&gt;Dynamic Programming Set 11 (Egg Dropping Puzzle)&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=3hcaVyX00_4&quot;&gt;Egg Dropping Dynamic Programming (YouTube)&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/the-celebrity-problem/&quot;&gt;The Celebrity Problem&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://www.cs.princeton.edu/courses/archive/spring13/cos423/problem0-1.pdf&quot;&gt;Celebrity Identification Problem&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Yoko Harada</name></author><summary type="html">I’m going to write about two weird algorithm problems. Those seem quite weired at least to me, yet famous as algorithm questions. One is so-called egg dropping, another is finding a celebrity. I see these two problems here and there. From that, I guess those two are famous algorithm questions. But, at least, those two are quite weird. Some call them puzzle. (Yeah, maybe… I was totally puzzled.)</summary></entry></feed>
+&lt;/ul&gt;</content><author><name>Yoko Harada</name></author><summary type="html">Various types of string related problems exist. Among them, splitting it to make something valid would be a typical one. For example, a string of numbers is given, “make valid IP addresses” is the example. Very similar problem is “make valid lottery numbers.”</summary></entry></feed>
