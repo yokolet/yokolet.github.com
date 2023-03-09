@@ -1787,12 +1787,81 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-1">
-<pre><code class="language-java">
+<pre><code class="language-java">import java.util.HashMap;
+import java.util.Map;
+
+public class DetectSquares {
+    private Map&lt;Integer, Map&lt;Integer, Integer&gt;&gt; x_coord = new HashMap&lt;&gt;();
+
+    public DetectSquares() {}
+
+    public void add(int[] point) {
+        Map&lt;Integer, Integer&gt; y_coord = x_coord.getOrDefault(point[0], new HashMap&lt;&gt;());
+        int cnt = y_coord.getOrDefault(point[1], 0);
+        y_coord.put(point[1], cnt + 1);
+        x_coord.put(point[0], y_coord);
+    }
+
+    public int count(int[] point) {
+        int x0 = point[0], y0 = point[1], result = 0;
+        for (int y : x_coord.getOrDefault(x0, new HashMap&lt;&gt;()).keySet()) {
+            if (y == y0) { continue; }
+            int side = y - y0;
+            int cnt = x_coord.getOrDefault(x0, new HashMap&lt;&gt;()).getOrDefault(y, 0);
+            result += cnt *
+                    x_coord.getOrDefault(x0 + side, new HashMap&lt;&gt;()).getOrDefault(y0, 0) *
+                    x_coord.getOrDefault(x0 + side, new HashMap&lt;&gt;()).getOrDefault(y, 0);
+            result += cnt *
+                    x_coord.getOrDefault(x0 - side, new HashMap&lt;&gt;()).getOrDefault(y0, 0) *
+                    x_coord.getOrDefault(x0 - side, new HashMap&lt;&gt;()).getOrDefault(y, 0);
+        }
+        return result;
+    }
+}
 </code></pre>
 </div>
     
       <div class="tab-content" data-content="solution-2">
-<pre><code class="language-js">
+<pre><code class="language-js">var DetectSquares = function() {
+  this.x_coord = new Map();
+};
+
+/**
+ * @param {number[]} point
+ * @return {void}
+ */
+DetectSquares.prototype.add = function(point) {
+  const [x, y] = point;
+  let y_coord = this.x_coord.has(x) ? this.x_coord.get(x) : new Map();
+  let cnt = y_coord.has(y) ? y_coord.get(y) : 0;
+  y_coord.set(y, cnt + 1);
+  this.x_coord.set(x, y_coord);
+};
+
+/**
+ * @param {number[]} point
+ * @return {number}
+ */
+DetectSquares.prototype.count = function(point) {
+  const [x0, y0] = point;
+  let result = 0;
+  const y_coord = this.x_coord.has(x0) ? this.x_coord.get(x0) : new Map();
+  y_coord.forEach((cnt, y) =&gt; {
+    if (y == y0) { return; }
+    let side = y - y0;
+    if (this.x_coord.has(x0 + side)) {
+      let tmp1 = this.x_coord.get(x0 + side).has(y0) ? this.x_coord.get(x0 + side).get(y0) : 0;
+      let tmp2 = this.x_coord.get(x0 + side).has(y) ? this.x_coord.get(x0 + side).get(y) : 0;
+      result += cnt * tmp1 * tmp2;
+    }
+    if (this.x_coord.has(x0 - side)) {
+      let tmp1 = this.x_coord.get(x0 - side).has(y0) ? this.x_coord.get(x0 - side).get(y0) : 0;
+      let tmp2 = this.x_coord.get(x0 - side).has(y) ? this.x_coord.get(x0 - side).get(y) : 0;
+      result += cnt * tmp1 * tmp2;
+    }
+  });
+  return result;
+};
 </code></pre>
 </div>
     
@@ -1819,7 +1888,42 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-4">
-<pre><code class="language-ruby">
+<pre><code class="language-ruby">class DetectSquares
+  def initialize()
+    @x_coord = Hash.new {|h0, k0| h0[k0] = Hash.new {|h1, k1| h1[k1] = 0}}
+  end
+
+
+=begin
+    :type point: Integer[]
+    :rtype: Void
+=end
+  def add(point)
+    x, y = point
+    @x_coord[x][y] += 1
+  end
+
+
+=begin
+    :type point: Integer[]
+    :rtype: Integer
+=end
+  def count(point)
+    x0, y0 = point
+    result = 0
+    @x_coord[x0].each do |y, cnt|
+      if y == y0
+        next
+      end
+      side = y - y0
+      result += cnt * @x_coord[x0 + side][y0] * @x_coord[x0 + side][y]
+      result += cnt * @x_coord[x0 - side][y0] * @x_coord[x0 - side][y]
+    end
+    result
+  end
+
+
+end
 </code></pre>
 </div>
     

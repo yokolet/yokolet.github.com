@@ -1657,18 +1657,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This problem is a well-known snake game implementation.
-How to manage the snake body coordinates is the key to solve this problem.
-When the snake head collides in to its body, the function should return -1.
-When the snake head comes to the food location, its body gets longer by one.
-Given those requirements, the snake body should be an array.
-When the snake gets longer, simply add its head to the array.
-When the snake moves without getting longer, remove the first coordinate from the array.
-Other than that, when the snake head goes out of the grid, it returns -1.
-When the snake head is on the food location, increment the score.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>Design a Snake game that is played on a device with screen size <code>height x width</code>. Play the game online if you are
 not familiar with the game.</p>
@@ -1703,7 +1692,7 @@ after moving (i.e. a snake of length 4 cannot run into itself).</p>
     <li>At most 10**4 calls will be made to <code>move</code>.</li>
   </ul>
 
-  <p><a href=""></a></p>
+  <p><a href="https://leetcode.com/problems/design-snake-game/">https://leetcode.com/problems/design-snake-game/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
@@ -1724,17 +1713,214 @@ snakeGame.move("L"); // return 2, snake eats the second food. No more food appea
 snakeGame.move("U"); // return -1, game over because snake collides with border
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>The snake should save all coordinates it passed, so it is an array of (row, col) tuple.
-Calculate the snake’s new head, and check it is within the grid.
-If not return -1.
-Also, check the first food location.
-If the snake head is on the first food location, remove the first food from the array and increment the score.
-If it is not on the food location, the snake body won’t get longer.
-Remove the first coordinate from the snake array, which is the equivalent to just move in the same length.
-Lastly, add the new snake head to to array.</p>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This problem is a well-known snake game implementation.
+How to manage the snake body coordinates is the key to solve this problem.
+When the snake head collides in to its body, the function returns -1.
+When the snake head goes out of the grid, the function returns -1.
+When the snake head comes to the food location, its body gets longer by one.
+Also, the score will be incremented.
+Given those requirements, the snake body should be a array-like which has a snake head on the last and tail on the top.
+To move the snake, add a head and delete a tail.
+To make the snake longer, just add the head and don’t delete the tail.</p>
+
+<p>The snake body collision check depends on the language.
+Python is easy since its array has ability to find an element.
+Other languages need an additional data structure such as set.</p>
+
+<p>When the move method gives direction, calculate the next head position.
+After the validity check, if the snake head is on a food location, increment the score.
+Otherwise, delete snake’s tail to make it looks like moved.
+Lastly, add the snake head to array and/or set.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">#include &lt;deque&gt;
+#include &lt;set&gt;
+#include &lt;unordered_map&gt;
+#include &lt;vector&gt;
+
+using namespace std;
+
+class SnakeGame {
+private:
+    int width_, height_;
+    vector&lt;vector&lt;int&gt;&gt; food_;
+    int f_idx = 0;
+    deque&lt;pair&lt;int, int&gt;&gt; snake;  // {row, col}
+    set&lt;int&gt; inuse;
+    unordered_map&lt;string, pair&lt;int, int&gt;&gt; dirs = {
+        {"U", {-1, 0}},
+        {"D", {1, 0}},
+        {"L", {0, -1}},
+        {"R", {0, 1}}
+    };
+    int score = 0;
+    int rc2idx(int row, int col) {
+        return row * width_ + col;
+    }
+
+public:
+    SnakeGame(int width, int height, vector&lt;vector&lt;int&gt;&gt;&amp; food) :
+        width_(width), height_(height), food_(food) {
+        snake.push_back(make_pair(0, 0));
+        inuse.insert(rc2idx(0, 0));
+    }
+
+    int move(string direction) {
+        int sr = snake.back().first + dirs[direction].first;
+        int sc = snake.back().second + dirs[direction].second;
+        if (sr &lt; 0 || sr &gt;= height_ || sc &lt; 0 || sc &gt;= width_) { return -1; }
+        if (f_idx &lt; food_.size() &amp;&amp; sr == food_[f_idx][0] &amp;&amp; sc == food_[f_idx][1]) {
+            f_idx++;
+            score++;
+        } else {
+            pair&lt;int, int&gt; tail = snake.front();
+            snake.pop_front();
+            inuse.erase(rc2idx(tail.first, tail.second));
+        }
+        int head = rc2idx(sr, sc);
+        if (inuse.find(head) != inuse.end()) {
+            return -1;
+        }
+        snake.push_back(make_pair(sr, sc));
+        inuse.insert(head);
+        return score;
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">import java.util.*;
+
+public class SnakeGame {
+    private int width_, height_;
+    int[][] food_;
+    private int f_idx = 0;
+    private Deque&lt;List&lt;Integer&gt;&gt; snake = new ArrayDeque&lt;&gt;();
+    Set&lt;Integer&gt; inuse = new HashSet&lt;&gt;();
+    private final static Map&lt;String, List&lt;Integer&gt;&gt; dirs = Map.of(
+            "U", Arrays.asList(-1, 0),
+            "D", Arrays.asList(1, 0),
+            "L", Arrays.asList(0, -1),
+            "R", Arrays.asList(0, 1)
+    );
+    int score = 0;
+    int rc2idx(int row, int col) {
+        return row * width_ + col;
+    }
+
+    public SnakeGame(int width, int height, int[][] food) {
+        width_ = width;
+        height_ = height;
+        food_ = food;
+        snake.add(Arrays.asList(0, 0));
+        inuse.add(0);
+    }
+
+    public int move(String direction) {
+        List&lt;Integer&gt; head = snake.peekLast();
+        int sr = head.get(0) + dirs.get(direction).get(0);
+        int sc = head.get(1) + dirs.get(direction).get(1);
+        if (sr &lt; 0 || sr &gt;= height_ || sc &lt; 0 || sc &gt;= width_) { return -1; }
+        if (f_idx &lt; food_.length &amp;&amp; sr == food_[f_idx][0] &amp;&amp; sc == food_[f_idx][1]) {
+            f_idx++;
+            score++;
+        } else {
+            List&lt;Integer&gt; tail = snake.pollFirst();
+            inuse.remove(rc2idx(tail.get(0), tail.get(1)));
+        }
+        int newHead = rc2idx(sr, sc);
+        if (inuse.contains(newHead)) { return -1; }
+        snake.add(Arrays.asList(sr, sc));
+        inuse.add(newHead);
+        return score;
+    }
+}
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {number} width
+ * @param {number} height
+ * @param {number[][]} food
+ */
+var SnakeGame = function(width, height, food) {
+  this.width_ = width;
+  this.height_ = height;
+  this.food_ = food;
+  this.snake = [[0, 0]];
+  this.inuse = new Set([0]);
+  this.dirs = {
+    "U": [-1, 0],
+    "D": [1, 0],
+    "L": [0, -1],
+    "R": [0, 1]
+  };
+  this.score = 0;
+  this.rc2idx = (row, col) =&gt; {
+    return row * this.width_ + col;
+  };
+};
+
+/**
+ * @param {string} direction
+ * @return {number}
+ */
+SnakeGame.prototype.move = function(direction) {
+  let sr = this.snake[this.snake.length - 1][0] + this.dirs[direction][0];
+  let sc = this.snake[this.snake.length - 1][1] + this.dirs[direction][1];
+  if (sr &lt; 0 || sr &gt;= this.height_ || sc &lt; 0 || sc &gt;= this.width_) { return -1; }
+  if (this.food_.length &gt; 0 &amp;&amp; sr == this.food_[0][0] &amp;&amp; sc == this.food_[0][1]) {
+    this.food_.shift();
+    this.score += 1;
+  } else {
+    let tail = this.snake.shift();
+    this.inuse.delete(this.rc2idx(tail[0], tail[1]));
+  }
+  let head = this.rc2idx(sr, sc);
+  if (this.inuse.has(head)) { return -1; }
+  this.snake.push([sr, sc]);
+  this.inuse.add(head);
+  return this.score;
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class SnakeGame:
 
     def __init__(self, width: int, height: int, food: List[List[int]]):
@@ -1765,6 +1951,60 @@ Lastly, add the new snake head to to array.</p>
         self.snake.append((sr, sc))
         return self.score
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">class SnakeGame
+
+=begin
+    :type width: Integer
+    :type height: Integer
+    :type food: Integer[][]
+=end
+  def initialize(width, height, food)
+    @width_ = width
+    @height_ = height
+    @food_ = food
+    @snake = [[0, 0]]
+    @dirs = {
+      "U" =&gt; [-1, 0],
+      "D" =&gt; [1, 0],
+      "L" =&gt; [0, -1],
+      "R" =&gt; [0, 1]
+    }
+    @score = 0
+  end
+
+
+=begin
+    :type direction: String
+    :rtype: Integer
+=end
+  def move(direction)
+    sr, sc = @snake[-1][0] + @dirs[direction][0], @snake[-1][1] + @dirs[direction][1]
+    if sr &lt; 0 || sr &gt;= @height_ || sc &lt; 0 || sc &gt;= @width_
+      return -1
+    end
+    if !@food_.empty?  &amp;&amp; [sr, sc] == @food_[0]
+      @food_.shift
+      @score += 1
+    else
+      @snake.shift
+    end
+    if @snake.include?([sr, sc])
+      return -1
+    end
+    @snake &lt;&lt; [sr, sc]
+    @score
+  end
+
+
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
