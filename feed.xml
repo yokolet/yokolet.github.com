@@ -1,4 +1,538 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-03-09T22:09:12+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Blog site mostly for programming topics.</subtitle><entry><title type="html">Rails App Creation with Options</title><link href="http://localhost:4000/2023/03/05/rails-app-creation-with-options.html" rel="alternate" type="text/html" title="Rails App Creation with Options" /><published>2023-03-05T15:50:00+09:00</published><updated>2023-03-05T15:50:00+09:00</updated><id>http://localhost:4000/2023/03/05/rails-app-creation-with-options</id><content type="html" xml:base="http://localhost:4000/2023/03/05/rails-app-creation-with-options.html">&lt;p&gt;The easiest way to create a Ruby on Rails app is absolutely to hit the command:&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-03-12T01:13:54+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Blog site mostly for programming topics.</subtitle><entry><title type="html">Getting Started GraphQL Using Ruby on Rails</title><link href="http://localhost:4000/2023/03/12/getting-started-graphql-using-ruby-on-rails.html" rel="alternate" type="text/html" title="Getting Started GraphQL Using Ruby on Rails" /><published>2023-03-12T01:13:00+09:00</published><updated>2023-03-12T01:13:00+09:00</updated><id>http://localhost:4000/2023/03/12/getting-started-graphql-using-ruby-on-rails</id><content type="html" xml:base="http://localhost:4000/2023/03/12/getting-started-graphql-using-ruby-on-rails.html">&lt;p&gt;GraphQL is an API standard to provide resources on the server-side to various types of clients.
+GraphQL itself is a specification and doesn’t provide an implementation.
+For Ruby on Rails, GraphQL Ruby &lt;a href=&quot;https://graphql-ruby.org/&quot;&gt;https://graphql-ruby.org/&lt;/a&gt; is the most popular library.&lt;/p&gt;
+
+&lt;p&gt;Not like REST API, GraphQL has only one endpoint.
+While REST API uses different endpoints (paths or URL) to access multiple types of resources,
+GraphQL uses schema based queries.
+The REST API clients receives all fields server returned.
+However, GraphQL clients can specify what fields they want to receive from the API server.&lt;/p&gt;
+
+&lt;p&gt;For REST API, the swagger UI &lt;a href=&quot;https://swagger.io/tools/swagger-ui/&quot;&gt;https://swagger.io/tools/swagger-ui/&lt;/a&gt; is often
+used as a documentation and testing tool.
+In general, the swagger UI is provided by the REST API server.&lt;/p&gt;
+
+&lt;p&gt;In contract, the GraphQL server doesn’t provide such UI tool.
+Instead, GraphQL desktop apps are out there, which provides UI based documentation and testing tools.
+The blog post “&lt;a href=&quot;https://testfully.io/blog/graphql-clients/&quot;&gt;Top 10 GraphQL clients&lt;/a&gt;” lists desktop apps with some explanations.
+Such apps have ability to pull the schema from GraphQL server and show that on UI.
+Also, those have features to write GraphQL queries, send those and receive results.&lt;/p&gt;
+
+&lt;p&gt;Since Ruby on Rails is designed for REST API, we need additional steps to use Rails as a GraphQL server.
+This is a memo how to get started GraphQL using Ruby on Rails.&lt;/p&gt;
+
+&lt;h3 id=&quot;setting-up&quot;&gt;Setting Up&lt;/h3&gt;
+
+&lt;h4 id=&quot;create-rails-app&quot;&gt;Create Rails App&lt;/h4&gt;
+
+&lt;p&gt;This memo focuses on creating GraphQL API server.
+The App will be the API only and have a smaller stack with sqlite3 as a database.
+Ruby and Rails versions are:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Ruby: 3.2.1&lt;/li&gt;
+  &lt;li&gt;Rails: 7.0.4.2&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Create &lt;code&gt;.railsrc&lt;/code&gt; file with the content below:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;--api
+--skip-action-mailer
+--skip-action-mailbox
+--skip-action-cable
+--skip-action-text
+--skip-active-job
+--skip-active-storage
+-T
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The default location of &lt;code&gt;.railsrc&lt;/code&gt; is a home directory just like &lt;code&gt;.zshrc&lt;/code&gt; or &lt;code&gt;.bashrc&lt;/code&gt;.
+If it is created in another directory and/or another filename, use &lt;code&gt;--rc=RC&lt;/code&gt; option to specify the file.&lt;/p&gt;
+
+&lt;p&gt;Create the Rails app named “graphql-example”, for example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ rails new graphql-example --rc=./.railsrc
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Test the app is created correctly:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ cd graphql-example
+$ rails s
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then, hit http://localhost:3000/ on a web browser.
+If you see Rails logo and Ruby/Rails versions, the server could start successfully.&lt;/p&gt;
+
+&lt;h4 id=&quot;install-graphql-ruby-gem&quot;&gt;Install GraphQL Ruby gem&lt;/h4&gt;
+
+&lt;p&gt;Once the Rails app is created, the next step is to install GraphQL Ruby (&lt;a href=&quot;https://graphql-ruby.org/&quot;&gt;https://graphql-ruby.org/&lt;/a&gt;) gem.
+Run two commands below:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ bundle add graphql
+$ rails g graphql:install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The second command generates GraphQL basic types, default query/mutation types, and a default schema.
+The schema name is &lt;code&gt;[APP_NAME]_schema.rb&lt;/code&gt;.
+All are located under &lt;code&gt;app/graphql&lt;/code&gt; directory.
+Also, the command adds a route to &lt;code&gt;/graphql&lt;/code&gt;. Have a look at &lt;code&gt;config/route.rb&lt;/code&gt;, which looks like:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# config/routes.rb
+Rails.application.routes.draw do
+  post &quot;/graphql&quot;, to: &quot;graphql#execute&quot;
+  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+
+  # Defines the root path route (&quot;/&quot;)
+  # root &quot;articles#index&quot;
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Lastly, the second command generates a default GraphQL controller, &lt;code&gt;app/controllers/graphql_controller.rb&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h4 id=&quot;try-how-graphql-looks-like&quot;&gt;Try How GraphQL Looks Like&lt;/h4&gt;
+
+&lt;p&gt;For now, GraphQL has started working with the minimal setting.
+The GraphQL gem’s generator already created a very simple API.
+We can test that.&lt;/p&gt;
+
+&lt;p&gt;To test GraphQL, we need a GraphQL client.
+Previously, Graphiql gem (notice, the name has “i” before ql) was often installed along with GraphQL Ruby gem.
+However, once the Rails 7 app is configured as API only server, adding UI became not easy.
+Besides, many free-to-use GraphQL clients are out there as mentioned at the beginning.&lt;/p&gt;
+
+&lt;p&gt;Among those desktop apps, below might be the choice.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;GraphiQL &lt;a href=&quot;https://github.com/skevy/graphiql-app&quot;&gt;https://github.com/skevy/graphiql-app&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Altair &lt;a href=&quot;https://altairgraphql.dev/&quot;&gt;https://altairgraphql.dev/&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Insomnia &lt;a href=&quot;https://insomnia.rest/&quot;&gt;https://insomnia.rest/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This memo is going to use GraphiQL desktop app.
+If you are on MacOS and have brew, try below to install the app.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ brew install --cask graphiql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you have other OS, you can install the desktop app by npm command as well.
+Additional installations are on the GitHub repo.&lt;/p&gt;
+
+&lt;p&gt;When the GraphiQL window is firstly opened, it should look like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/graphiql-default.jpeg&quot; alt=&quot;default graphiql window&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Input http://localhost:3000/graphql in the GraphQL Endpoint field, which is defined in &lt;code&gt;config/routes.rb&lt;/code&gt;
+Also, check the Method choice. It is defined in &lt;code&gt;config/routes.rb&lt;/code&gt; as POST.
+Then, GraphiQL app connects to Rails and pulls the schema defined in the &lt;code&gt;app/graphql/types/query_type.rb&lt;/code&gt;
+and &lt;code&gt;app/graphql/types/mutation_type.rb&lt;/code&gt;.
+Those schemas show up when “&amp;lt; DOCS” button on the right upper area of GraphiQL window is clicked.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/graphiql-docs.jpeg&quot; alt=&quot;default graphiql window&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Both Query and Mutation schemas are displayed when the links get clicked.&lt;/p&gt;
+
+&lt;p&gt;Let’s make a query to testField.
+On the leftmost pane, input GraphQL query.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{
+  testField
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Hit the right arrow button above the query input pane.
+The result is on the center pane.
+The message of “Hello World!” is from &lt;code&gt;app/graphql/types/query_type.rb&lt;/code&gt; file.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/graphiql-query.jpeg&quot; alt=&quot;default graphiql window&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The mutation query can be sent, however, nothing changes since all are static just a test implementation.&lt;/p&gt;
+
+&lt;h3 id=&quot;create-models-and-graphql-types&quot;&gt;Create Models and GraphQL Types&lt;/h3&gt;
+
+&lt;p&gt;GraphQL itself is independent from the active record world.
+However, API connects to a database to retrieve or update resources almost always.
+On Ruby on Rails, creating an active record model is the way to connect to the database.&lt;/p&gt;
+
+&lt;p&gt;Whether a GraphQL type should be defined first or an active record model should be created before the GraphQL type?
+The GraphQL generator creates a type without a model definition.
+But, certainly, the type definition is almost empty.
+When the active record model exists already, GraphQL generator looks at the model definition and generates the type.
+Now, we see a usable type definition.&lt;/p&gt;
+
+&lt;h4 id=&quot;define-models&quot;&gt;Define Models&lt;/h4&gt;
+
+&lt;p&gt;Let’s imagine we will create a blog site.
+The minimum models would be users and posts whose relation is: a user has multiple posts.&lt;/p&gt;
+
+&lt;p&gt;The first thing is to generate user and post models as in below:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ rails g model User email first_name last_name
+$ rails g model Post user:references title:string{50} content:text
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Edit &lt;code&gt;app/models/user.rb&lt;/code&gt; to add a has_many association.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/models/user.rb
+class User &amp;lt; ApplicationRecord
+  has_many :posts, dependent: :destroy
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Add some seed data, so that we can see some results.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# db/seeds.rb
+user1 = User.create(
+  email: &quot;john.doe@example.com&quot;,
+  first_name: &quot;John&quot;,
+  last_name: &quot;Doe&quot;
+)
+
+user2 = User.create(
+  email: &quot;jane.smith@example.com&quot;,
+  first_name: &quot;Jane&quot;,
+  last_name: &quot;Smith&quot;
+)
+
+Post.create(
+  [{
+     user: user1,
+     title: &quot;Accidentally, I created a Rails app!&quot;,
+     content: &quot;My days are this, that and blah. Wait! I accidentally created a Rails app!!&quot;
+   },
+   {
+     user: user2,
+     title: &quot;Blogging&quot;,
+     content: &quot;I like blogging. It&apos;s fun. One day, I started writing a blog post...&quot;
+   },
+   {
+     user: user2,
+     title: &quot;Spring!&quot;,
+     content: &quot;It&apos;s not about a web framework here. I&apos;m talking about a season. Yes, Spring!&quot;
+   }
+  ]
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;All are ready. Run the command below to create tables and insert seed data.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ rails db:create db:migrate db:seed
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To check above worked correctly, Rails console is one of ways to test it.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ rails c
+Loading development environment (Rails 7.0.4.2)
+irb(main):001:0&amp;gt; User.all
+...(user query result here)...
+irb(main):002:0&amp;gt; Post.all
+...(post query result here)...
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;generate-graphql-types&quot;&gt;Generate GraphQL Types&lt;/h4&gt;
+
+&lt;p&gt;For now, active record models are ready.
+The next step is to generate GraphQL types.
+Run the command below.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ rails g graphql:object user
+$ rails g graphql:object post
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The generator captures active record definitions to create user and post types.
+Those two look like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/graphql/types/user_type.rb
+module Types
+  class UserType &amp;lt; Types::BaseObject
+    field :id, ID, null: false
+    field :email, String
+    field :first_name, String
+    field :last_name, String
+    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/graphql/types/post_type.rb
+module Types
+  class PostType &amp;lt; Types::BaseObject
+    field :id, ID, null: false
+    field :user_id, Integer, null: false
+    field :title, String
+    field :content, String
+    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;make-graphql-queries&quot;&gt;Make GraphQL Queries&lt;/h3&gt;
+
+&lt;p&gt;So far, we have some seed data in the database.
+It’s time to make GraphQL queries.&lt;/p&gt;
+
+&lt;p&gt;GraphQL query schema is defined in &lt;code&gt;app/graphql/types/query_type.rb&lt;/code&gt;, which has been generated when GraphQL Ruby gem was installed.
+As we see “testField” in the above section, all should be in the query_type.rb.&lt;/p&gt;
+
+&lt;p&gt;GraphQL examples out there mostly write every query implementation in the query_type.rb.
+That might end up in adding bunch of methods in a single file in an actual development.
+A concern is, that would lead to poor code readability and/or maintainability.
+As far as I searched online, it looks no decisive solution exists for this.
+What I found is a GraphQL Ruby’s Resolver (&lt;a href=&quot;https://graphql-ruby.org/fields/resolvers.html&quot;&gt;https://graphql-ruby.org/fields/resolvers.html&lt;/a&gt;).
+Although GraphQL Ruby team wants people to avoid Resolver, it is a good way to decouple each type’s query implementation.
+So, this blog post uses the Resolver.&lt;/p&gt;
+
+&lt;h4 id=&quot;define-resolvers&quot;&gt;Define Resolvers&lt;/h4&gt;
+
+&lt;p&gt;Queries to be implemented here are:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;a single user query, parameter: user id&lt;/li&gt;
+  &lt;li&gt;all users query, parameter: none&lt;/li&gt;
+  &lt;li&gt;multiple posts query, parameter: none – all posts, user id – one user’s all posts&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For those queries, three resolvers are defined:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/graphql/resolvers/user_resolver.rb
+module Resolvers
+  class UserResolver &amp;lt; GraphQL::Schema::Resolver
+    type Types::UserType, null: false
+
+    argument :id, Int, required: true
+
+    def resolve(id:)
+      User.find(id)
+    end
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/graphql/resolvers/user_collection_resolver.rb
+module Resolvers
+  class UserCollectionResolver &amp;lt; GraphQL::Schema::Resolver
+    type [Types::UserType], null: false
+
+    def resolve(**args)
+      User.all
+    end
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/graphql/resolvers/post_collection_resolver.rb
+module Resolvers
+  class PostCollectionResolver &amp;lt; GraphQL::Schema::Resolver
+    type [Types::PostType], null: false
+
+    argument :user_id, Int, required: false
+
+    def resolve(**args)
+      if args[:user_id]
+        Post.where(user: args[:user_id]).all
+      else
+        Post.all
+      end
+    end
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Above three resolvers should be referenced in the query_type.rb.
+Now query_type.rb becomes below:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/graphql/types/query_type.rb
+module Types
+  class QueryType &amp;lt; Types::BaseObject
+    # Add `node(id: ID!) and `nodes(ids: [ID!]!)`
+    include GraphQL::Types::Relay::HasNodeField
+    include GraphQL::Types::Relay::HasNodesField
+
+    # Add root-level fields here.
+    # They will be entry points for queries on your schema.
+    field :user, resolver: Resolvers::UserResolver
+    field :users, resolver: Resolvers::UserCollectionResolver
+    field :posts, resolver: Resolvers::PostCollectionResolver
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;queries-on-graphiql&quot;&gt;Queries on GraphiQL&lt;/h4&gt;
+
+&lt;p&gt;Let’s test newly defined queries.
+On GraphiQL desktop app, Command + w will delete the tab and initialize UI.
+Input http://localhost:3000/graphql in the Endpoint text field and hit the return key.
+The updated schema is pulled, which is displayed in the Docs pane.&lt;/p&gt;
+
+&lt;p&gt;To get all users, the query is simple.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-graphql&quot;&gt;{
+	users {
+    id
+    email
+    firstName
+    lastName
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/graphiql-users-query.jpeg&quot; alt=&quot;graphiql users query&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;To get one user using user’s id, the query needs a parameter.
+The simple form is to write id in the query.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-graphql&quot;&gt;{
+  user(id: 1) {
+    id
+    email
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Another form is to use a query variable. In this case, the query needs additional info about the variable.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-graphql&quot;&gt;query user($uid: Int!) {
+  user(id: $uid) {
+    id
+    email
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Then, pass the variable in the query variables pane.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-graphql&quot;&gt;{
+  &quot;uid&quot;: 1
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/graphiql-user-with-id-query.jpeg&quot; alt=&quot;graphiql user with id query&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;For post queries, with/without user id are defined.
+If the user id is not provided, the query gets all posts.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-graphql&quot;&gt;{
+  posts {
+    id
+    userId
+    title
+    content
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If the user id is given, the query retrieves the specified user’s all posts.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-graphql&quot;&gt;query posts($uid: Int) {
+  posts(userId: $uid) {
+    id
+    userId
+    title
+    content
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-grapql&quot;&gt;{
+  &quot;uid&quot;: 2
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/graphiql-posts-query.jpeg&quot; alt=&quot;graphiql posts query&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;create-new-resource-by-mutation&quot;&gt;Create New Resource by Mutation&lt;/h3&gt;
+
+&lt;p&gt;GraphQL calls “mutation” to create/update/delete operations over resources.
+Like queries, mutations need a definition for each types.&lt;/p&gt;
+
+&lt;p&gt;The mutation definition inherits &lt;code&gt;GraphQL::Schema::RelayClassicMutation&lt;/code&gt;.
+GraphQL Ruby generator creates &lt;code&gt;app/graphql/mutations/base_mutation.rb&lt;/code&gt;, which is a subclass of &lt;code&gt;GraphQL::Schema::RelayClassicMutation&lt;/code&gt;.
+So, our mutation definition will be a subclass of &lt;code&gt;Mutations::BaseMutation&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h4 id=&quot;user-and-post-mutations&quot;&gt;User and Post Mutations&lt;/h4&gt;
+
+&lt;p&gt;GraphQL Ruby provides a mutation generator. It still needs to edit, however, the generator cuts down the amount of coding.
+Run the command below to create user and post mutation definitions:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ rails g graphql:mutation_create user
+$ rails g graphql:mutation_create post
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;After editing two mutations, those look like below:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/graphql/mutations/user_create.rb
+module Mutations
+  class UserCreate &amp;lt; BaseMutation
+    description &quot;Creates a new user&quot;
+
+    field :user, Types::UserType, null: false
+
+    argument :email, String, required: true
+    argument :first_name, String
+    argument :last_name, String
+
+    def resolve(**kwargs)
+      user = ::User.new(**kwargs)
+      raise GraphQL::ExecutionError.new &quot;Error creating user&quot;, extensions: user.errors.to_hash unless user.save
+
+      { user: user }
+    end
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/graphql/mutations/post_create.rb
+module Mutations
+  class PostCreate &amp;lt; BaseMutation
+    description &quot;Creates a new post&quot;
+
+    field :post, Types::PostType, null: false
+
+    argument :user_id, Integer, required: true
+    argument :title, String, required: true
+    argument :content, String, required: true
+
+    def resolve(**kwargs)
+      post = ::Post.new(**kwargs)
+      raise GraphQL::ExecutionError.new &quot;Error creating post&quot;, extensions: post.errors.to_hash unless post.save
+
+      { post: post }
+    end
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;GraphQL Ruby generator updates &lt;code&gt;app/graphql/types/mutation_type.rb&lt;/code&gt;, so we don’t need to edit this file.
+For now, mutation type definition is like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/graphql/types/mutation_type.rb
+module Types
+  class MutationType &amp;lt; Types::BaseObject
+    field :post_create, mutation: Mutations::PostCreate
+    field :user_create, mutation: Mutations::UserCreate
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;mutations-on-graphiql&quot;&gt;Mutations on GraphiQL&lt;/h4&gt;
+
+&lt;p&gt;Everything is ready.
+It’s time to create a user and post.
+The mutations look like below:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-graphql&quot;&gt;mutation {
+  userCreate(input: {
+    email: &quot;alice.jones@example.com&quot;,
+    firstName: &quot;Alice&quot;,
+    lastName: &quot;Jones&quot;
+  }) {
+    user {
+      id
+      email
+    }
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-graphql&quot;&gt;mutation {
+  postCreate(input: {
+    userId: 3,
+    title: &quot;Hello World!&quot;,
+    content: &quot;Hey, I made it to this world!&quot;
+  }) {
+    post {
+      id
+      userId
+      title
+      content
+    }
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;After executing user and post creations, check that by a query.
+A new user, posts should be created.&lt;/p&gt;</content><author><name>Yoko Harada</name></author><summary type="html">GraphQL is an API standard to provide resources on the server-side to various types of clients. GraphQL itself is a specification and doesn’t provide an implementation. For Ruby on Rails, GraphQL Ruby https://graphql-ruby.org/ is the most popular library.</summary></entry><entry><title type="html">Rails App Creation with Options</title><link href="http://localhost:4000/2023/03/05/rails-app-creation-with-options.html" rel="alternate" type="text/html" title="Rails App Creation with Options" /><published>2023-03-05T15:50:00+09:00</published><updated>2023-03-05T15:50:00+09:00</updated><id>http://localhost:4000/2023/03/05/rails-app-creation-with-options</id><content type="html" xml:base="http://localhost:4000/2023/03/05/rails-app-creation-with-options.html">&lt;p&gt;The easiest way to create a Ruby on Rails app is absolutely to hit the command:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;rails new [APP_NAME]
 &lt;/code&gt;&lt;/pre&gt;
@@ -474,7 +1008,7 @@ So the datomic-pro version is 1.0.6610.&lt;/p&gt;
 
 &lt;p&gt;For the first time, a bunch of libraries in dependency will be downloaded.
 When the leiningen repl is started, try “Connect Datomic and do things” following the Datomic document.
-All should work.&lt;/p&gt;</content><author><name>Yoko Harada</name></author><summary type="html">I used to use Datomic, https://www.datomic.com, a lot. Datomic is a unique database. The most attractive feature would be the idea of preserving transactions. Based on the transaction id, Datomic is able to pull out the past data which has been already updated later.</summary></entry><entry><title type="html">Setting Up GCP Instance for Deep Learning</title><link href="http://localhost:4000/2019/10/30/setting-up-gcp-instance-for-deep-learning.html" rel="alternate" type="text/html" title="Setting Up GCP Instance for Deep Learning" /><published>2019-10-30T09:40:00+09:00</published><updated>2019-10-30T09:40:00+09:00</updated><id>http://localhost:4000/2019/10/30/setting-up-gcp-instance-for-deep-learning</id><content type="html" xml:base="http://localhost:4000/2019/10/30/setting-up-gcp-instance-for-deep-learning.html">&lt;p&gt;This post is going to be very different from what I write here.
+All should work.&lt;/p&gt;</content><author><name>Yoko Harada</name></author><summary type="html">I used to use Datomic, https://www.datomic.com, a lot. Datomic is a unique database. The most attractive feature would be the idea of preserving transactions. Based on the transaction id, Datomic is able to pull out the past data which has been already updated later.</summary></entry><entry><title type="html">Number of Ways to Build Sturdy Brick Wall</title><link href="http://localhost:4000/2022/10/30/number-of-ways-to-build-sturdy-brick-wall.html" rel="alternate" type="text/html" title="Number of Ways to Build Sturdy Brick Wall" /><published>2022-10-30T17:09:57+09:00</published><updated>2022-10-30T17:09:57+09:00</updated><id>http://localhost:4000/2022/10/30/number-of-ways-to-build-sturdy-brick-wall</id><content type="html" xml:base="http://localhost:4000/2022/10/30/number-of-ways-to-build-sturdy-brick-wall.html"></content><author><name>Yoko Harada</name></author><summary type="html"></summary></entry><entry><title type="html">Setting Up GCP Instance for Deep Learning</title><link href="http://localhost:4000/2019/10/30/setting-up-gcp-instance-for-deep-learning.html" rel="alternate" type="text/html" title="Setting Up GCP Instance for Deep Learning" /><published>2019-10-30T09:40:00+09:00</published><updated>2019-10-30T09:40:00+09:00</updated><id>http://localhost:4000/2019/10/30/setting-up-gcp-instance-for-deep-learning</id><content type="html" xml:base="http://localhost:4000/2019/10/30/setting-up-gcp-instance-for-deep-learning.html">&lt;p&gt;This post is going to be very different from what I write here.
 The content is a memo how I create a GCP (Google Cloud Platform) instance for Deep Learning.
 While I study algorithm stuff, I also have been studying Deep Learning.
 In my early days, I tried to train my Deep Learning model only on a laptop.
@@ -1621,258 +2155,4 @@ By comparison of each max, I can get the maximal area.&lt;/p&gt;
   &lt;li&gt;&lt;a href=&quot;http://algorithms.tutorialhorizon.com/dynamic-programming-maximum-size-square-sub-matrix-with-all-1s/&quot;&gt;Maximum size square sub-matrix with all 1s&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/maximum-size-rectangle-binary-sub-matrix-1s/&quot;&gt;Maximum size rectangle binary sub-matrix with all 1s&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2014/05/leetcode-maximal-rectangle-java/&quot;&gt;Maximal Rectangle&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Yoko Harada</name></author><summary type="html">A bunch of algorithm questions take a style of “maximum is a good thing.” Maximal sum, maximal length or maximal size are examples. This memo is about maximal size, precisely, square and rectangle.</summary></entry><entry><title type="html">Iterator To Flatten It</title><link href="http://localhost:4000/2017/06/15/iterator-to-flatten.html" rel="alternate" type="text/html" title="Iterator To Flatten It" /><published>2017-06-15T00:00:00+09:00</published><updated>2017-06-15T00:00:00+09:00</updated><id>http://localhost:4000/2017/06/15/iterator-to-flatten</id><content type="html" xml:base="http://localhost:4000/2017/06/15/iterator-to-flatten.html">&lt;p&gt;Let’s revisit the Iterator pattern.
-“Iterator” is one of design patterns in object-oriented programming (OOP).
-Needless to say, extremely famous Gang of Four (Erich Gamma, Richard Helm, Ralph Johnson and John Vlissides) are creators.
-As in the Wikipedia’s &lt;a href=&quot;https://en.wikipedia.org/wiki/Iterator_pattern&quot;&gt;Iterator pattern&lt;/a&gt;,
-the iterator pattern is used when traversing &lt;em&gt;container&lt;/em&gt; without knowing how the container works. It is OOP’s favorite pattern to “decouple” the iterator from container.&lt;/p&gt;
-
-&lt;p&gt;What does that actually mean? The iterator defines two methods, &lt;code&gt;hasNext()&lt;/code&gt; and &lt;code&gt;next()&lt;/code&gt;.
-Repeating these two method, I can traverse all elements in the container.
-For example, Java’s ArrayList are LinkedList examples of the containers.
-These two have different data structures, but I can traverse all elements exactly the same way: &lt;code&gt;hasNext()&lt;/code&gt; and &lt;code&gt;nex()&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Since the iterator is a handy feature, many including custom classes provide a way to access their elements by the iterator.
-Probably, this is a reason I see various iterator implementation problems.
-The iterator looks a good topic to leave a memo, so I’m going to write about two iterators here.
-These two will flatten nested structure: 2D vector and nested list.&lt;/p&gt;
-
-&lt;h4 id=&quot;problem-description---flatten-2d-vector&quot;&gt;Problem Description - Flatten 2D Vector&lt;/h4&gt;
-
-&lt;p&gt;“Implement an iterator to flatten 2D vector” is the problem.
-It is the iterator, so the implementation should have &lt;code&gt;hasNext()&lt;/code&gt; and &lt;code&gt;next()&lt;/code&gt; methods.
-Repeating these two methods, all elements in 2D vector should be traversed.
-For example, &lt;code&gt;[[1, 2], [3], [4, 5, 6]]&lt;/code&gt; is given, the code:&lt;/p&gt;
-
-&lt;pre&gt;
-
-    while (v2DIter.hasNext()) {
-        result.add(v2DIter.next());
-    }
-
-&lt;/pre&gt;
-
-&lt;p&gt;should add all elements to the result list.
-When it finishes, the result should be &lt;code&gt;[1, 2, 3, 4, 5, 6]&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h4 id=&quot;the-idea-to-implement-iterator-to-flatten-2d-vector&quot;&gt;The idea to implement iterator to flatten 2D vector&lt;/h4&gt;
-
-&lt;p&gt;This sort of nested something is often solved by iterator of iterators approach.
-A parent iterator traverses vectors, say &lt;code&gt;[1, 2]&lt;/code&gt; or &lt;code&gt;[3]&lt;/code&gt;.
-Child iterators traverse individual elements, say &lt;code&gt;1&lt;/code&gt;, &lt;code&gt;2&lt;/code&gt;, or &lt;code&gt;3&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;The most challenging part is when and how to update the child iterator.
-Choices are only two: either &lt;code&gt;hasNext()&lt;/code&gt; or &lt;code&gt;next()&lt;/code&gt; method must be responsible to update.
-In general, it is reasonable to do in &lt;code&gt;next()&lt;/code&gt; method.
-This is because, updating the itereator changes a current element where the iterator points.
-This behavior is something unexptected for &lt;code&gt;hasNext()&lt;/code&gt;, but reasonable to &lt;code&gt;next()&lt;/code&gt; method.&lt;/p&gt;
-
-&lt;h4 id=&quot;java-code-for-iterating-2d-vector&quot;&gt;Java code for iterating 2D Vector&lt;/h4&gt;
-
-&lt;script src=&quot;https://gist.github.com/yokolet/21551034731033910bc6ebe216bfee14.js&quot;&gt; &lt;/script&gt;
-
-&lt;p&gt;Above prints:&lt;/p&gt;
-
-&lt;pre&gt;
-
-1, 2, 3, 4, 5, 6, 
-
-&lt;/pre&gt;
-
-&lt;h4 id=&quot;problem-description---flatten-nested-list&quot;&gt;Problem Description - Flatten Nested List&lt;/h4&gt;
-
-&lt;p&gt;“Implement an iterator to flatten nested list” is the problem.
-Like previous problem, the iterator implementation should have &lt;code&gt;hasNext()&lt;/code&gt; and &lt;code&gt;next()&lt;/code&gt; methods.
-Repeating these two methods, all elements in the nested list should be traversed.
-For example, &lt;code&gt;[[1, 2], 3, [4, [5, 6]]]&lt;/code&gt; is given, the code:&lt;/p&gt;
-
-&lt;pre&gt;
-
-    while (nestedLIter.hasNext()) {
-        result.add(nestedLIter.next());
-    }
-
-&lt;/pre&gt;
-
-&lt;p&gt;should add all elements to the result list.
-When it finishes, the result should be &lt;code&gt;[1, 2, 3, 4, 5, 6]&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;This is similar to flatten 2D vector.
-Big difference is inside of an outermost list is not always a list.
-Inner elements may be an integer, list, or nested list.
-This problem is more complicated compared to the previous one.&lt;/p&gt;
-
-&lt;p&gt;To express each element in the nested list,
-the interface &lt;code&gt;NestedInteger&lt;/code&gt; is provided.&lt;/p&gt;
-
-&lt;pre&gt;
-
-    interface NestedInteger {
-        boolean isInteger();
-        Integer getInteger();
-        List&amp;lt;NestedInteger&amp;gt; getList();
-    }
-
-&lt;/pre&gt;
-
-&lt;h4 id=&quot;the-idea-to-implement-iterator-to-flatten-nested-list&quot;&gt;The idea to implement iterator to flatten nested list&lt;/h4&gt;
-
-&lt;p&gt;Here again, this sort of nested something can be solved by iterator of iterators approach.
-In this case, iterator of iterafor of iterator of … may be there.
-To keep track the data something like … of … of … of …., a stack would be a good data structure.&lt;/p&gt;
-
-&lt;p&gt;If I find the itereator points a list, I will stack it.
-Then, I will pull out an inner iterator.
-If the inner iteartor points another list, I will stack it.
-Then, I will pull out the inner of inner iterator (repeat this as long as needed).
-At some level, pulled out iterator should point an integer.
-This is the value to add to the result.&lt;/p&gt;
-
-&lt;p&gt;Likewise, the challenging part is when and how to update the iterators.
-Following the policy, “reasonable to do in &lt;code&gt;next()&lt;/code&gt; method,
-the iterators will be updated in &lt;code&gt;next()&lt;/code&gt;.
-However, in this case, I saved a current integer value to an instance variable.
-This is because current interator may or may not points a value. It may another itereator.
-Saving a &lt;em&gt;next&lt;/em&gt; value makes easy to update the iterators.&lt;/p&gt;
-
-&lt;h4 id=&quot;java-code-for-iterating-nested-list&quot;&gt;Java code for iterating nested list&lt;/h4&gt;
-
-&lt;script src=&quot;https://gist.github.com/yokolet/e9f1387f213e872d15697d5d13eaedcd.js&quot;&gt; &lt;/script&gt;
-
-&lt;h4 id=&quot;resources&quot;&gt;Resources&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2014/05/leetcode-flatten-nested-list-iterator-java/&quot;&gt;Flatten Nested List Iterator&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Yoko Harada</name></author><summary type="html">Let’s revisit the Iterator pattern. “Iterator” is one of design patterns in object-oriented programming (OOP). Needless to say, extremely famous Gang of Four (Erich Gamma, Richard Helm, Ralph Johnson and John Vlissides) are creators. As in the Wikipedia’s Iterator pattern, the iterator pattern is used when traversing container without knowing how the container works. It is OOP’s favorite pattern to “decouple” the iterator from container.</summary></entry><entry><title type="html">Valid Combinations of Numbers</title><link href="http://localhost:4000/2017/06/14/valid-number-combinations.html" rel="alternate" type="text/html" title="Valid Combinations of Numbers" /><published>2017-06-14T00:00:00+09:00</published><updated>2017-06-14T00:00:00+09:00</updated><id>http://localhost:4000/2017/06/14/valid-number-combinations</id><content type="html" xml:base="http://localhost:4000/2017/06/14/valid-number-combinations.html">&lt;p&gt;Various types of string related problems exist.
-Among them, splitting it to make something valid would be a typical one.
-For example, a string of numbers is given, “make valid IP addresses” is the example.
-Very similar problem is “make valid lottery numbers.”&lt;/p&gt;
-
-&lt;p&gt;When the given string is made by alphabetical characters,
-the problem may ask word breaks with a dictionary.&lt;/p&gt;
-
-&lt;p&gt;“Valid IP addresses” and “valid lottery numbers” are quite similar problems.
-I’m going to write a memo about these two here.&lt;/p&gt;
-
-&lt;h4 id=&quot;problem-description---restore-ip-addresses&quot;&gt;Problem Description - Restore IP Addresses&lt;/h4&gt;
-
-&lt;p&gt;Given a string, restore valid IP addresses.
-For example, “25525511135” is given, the answer will be [“255.255.11.135”, “255.255.111.35”].&lt;/p&gt;
-
-&lt;p&gt;There are some constraints to make it the valid IP address.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;valid IP addresses should have four parts separated by “.”(dot).&lt;/li&gt;
-  &lt;li&gt;each digits must be between 0 to 255&lt;/li&gt;
-  &lt;li&gt;if the character is ‘0’, it should not be followed by any number. ex) 255.0.0.1&lt;/li&gt;
-  &lt;li&gt;must use all characters in the same order&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;When all of the constraints are met, the string becomes the valid IP address.&lt;/p&gt;
-
-&lt;h4 id=&quot;the-idea-to-split-a-string-to-make-ip-addresses&quot;&gt;The idea to split a string to make IP addresses&lt;/h4&gt;
-
-&lt;p&gt;If I think of the first part, it will be three patterns in maximum.
-For example, “25525511135” is given, “2”, “25”, and “255 are all valid numbers to start.
-When the first part is “2”, the valid second part will be “5” and “55.”
-Possible combinations create tree structure as in below.&lt;/p&gt;
-
-&lt;pre&gt;
-
-            /           |          \
-          /             |            \
-         2             25            255
-      /  |         /    |         /   |   \
-    /    |      /       |       /     |      \
-   5     55     5      52      2      25     255
-  | \  / | \  / | \   /   \  / | \  /   \   / | \
-
-&lt;/pre&gt;
-
-&lt;p&gt;When four parts of an IP address are created using valid numbers, another check runs:
-whether all given characters are used or not.
-If yes, I will add the IP address to the result list.&lt;/p&gt;
-
-&lt;p&gt;To solve this problem, I see a Depth First Search (DFS) works well.
-People have solved by various approaches, however, DFS is straightforward.
-This is because finding the answer is traversing a tree.&lt;/p&gt;
-
-&lt;p&gt;In each step, take one to three characters.
-When the number is valid, make it a part of IP address.
-Going deeper and take one to three characters, …(repeat)…
-In the end, check whether all characters are used to create valid four parts of IP address.&lt;/p&gt;
-
-&lt;h4 id=&quot;java-code-for-restoring-valid-ip-addresses&quot;&gt;Java code for restoring valid IP addresses&lt;/h4&gt;
-
-&lt;script src=&quot;https://gist.github.com/yokolet/3fdcfbc84049a1a94deaae80dced35fb.js&quot;&gt; &lt;/script&gt;
-
-&lt;p&gt;Above prints:&lt;/p&gt;
-
-&lt;pre&gt;
-
-[255.255.11.135, 255.255.111.35]
-[0.0.0.0]
-
-&lt;/pre&gt;
-
-&lt;p&gt;Time complexity: O(3^4).&lt;/p&gt;
-
-&lt;h4 id=&quot;problem-description---restore-lottery-numbers&quot;&gt;Problem Description - Restore Lottery Numbers&lt;/h4&gt;
-
-&lt;p&gt;Given a string, restore valid lottery numbers.
-For example, “4938532894754” is given, the answer will be [“49 38 53 28 9 47 54”].&lt;/p&gt;
-
-&lt;p&gt;The problem description sometimes starts from “uncle, Morty.”&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Your favorite uncle, Morty, is crazy about the lottery and
-even crazier about how he picks his “lucky” numbers…&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Like the IP address problem, there are some constraints to make it valid.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;valid lottery numbers should have 7 parts separated by “ “(space).&lt;/li&gt;
-  &lt;li&gt;each digits must be between 1 and 59&lt;/li&gt;
-  &lt;li&gt;all digits are unique&lt;/li&gt;
-  &lt;li&gt;must use all characters in the same order&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;the-idea-to-split-a-string-to-make-lottery-numbers&quot;&gt;The idea to split a string to make lottery numbers&lt;/h4&gt;
-
-&lt;p&gt;This is almost identical to valid IP address problem.
-The small differences are from four parts to seven, from dot to space,
-and from 0-255 to 1-59.
-Relatively big difference is, in lottery problem, each digit is unique.&lt;/p&gt;
-
-&lt;p&gt;To check uniqueness, I added a set in the DFS interaction:
-add the number to set when going deeper, remove the number when coming back.&lt;/p&gt;
-
-&lt;p&gt;Except the differences above, the code is the same as valid IP addresses.&lt;/p&gt;
-
-&lt;h4 id=&quot;java-code-for-restoring-valid-lottery-numbers&quot;&gt;Java code for restoring valid lottery numbers&lt;/h4&gt;
-
-&lt;script src=&quot;https://gist.github.com/yokolet/0b565ac9e3340dba6b91a3e15cf104d1.js&quot;&gt; &lt;/script&gt;
-
-&lt;p&gt;The result is:&lt;/p&gt;
-
-&lt;pre&gt;
-
-[49 38 53 28 9 47 54]
-
-[1 6 3 46 16 5 12, 1 6 3 46 16 51 2, 16 3 46 1 6 5 12, 16 3 46 1 6 51 2]
-
-[]
-
-&lt;/pre&gt;
-
-&lt;p&gt;Time complexity: O(2^7)&lt;/p&gt;
-
-&lt;h4 id=&quot;resources&quot;&gt;Resources&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;http://qa.geeksforgeeks.org/3336/print-all-valid-combinations-of-ip-address&quot;&gt;Print all valid combinations of IP address&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2014/06/leetcode-restore-ip-addresses-java/&quot;&gt;Restore IP Addresses&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://github.com/raviswan/ProgrammingProblems&quot;&gt;Lottery Ticket Problem&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://blog.sdeskills.com/qotd-2016-oct-28-winning-ticket/&quot;&gt;Winning Ticket&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Yoko Harada</name></author><summary type="html">Various types of string related problems exist. Among them, splitting it to make something valid would be a typical one. For example, a string of numbers is given, “make valid IP addresses” is the example. Very similar problem is “make valid lottery numbers.”</summary></entry></feed>
+&lt;/ul&gt;</content><author><name>Yoko Harada</name></author><summary type="html">A bunch of algorithm questions take a style of “maximum is a good thing.” Maximal sum, maximal length or maximal size are examples. This memo is about maximal size, precisely, square and rectangle.</summary></entry></feed>

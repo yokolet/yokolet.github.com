@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/accordion.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Getting Started GraphQL Using Ruby on Rails | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Getting Started GraphQL Using Ruby on Rails" />
+<meta name="author" content="Yoko Harada" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="GraphQL is an API standard to provide resources on the server-side to various types of clients. GraphQL itself is a specification and doesn’t provide an implementation. For Ruby on Rails, GraphQL Ruby https://graphql-ruby.org/ is the most popular library." />
+<meta property="og:description" content="GraphQL is an API standard to provide resources on the server-side to various types of clients. GraphQL itself is a specification and doesn’t provide an implementation. For Ruby on Rails, GraphQL Ruby https://graphql-ruby.org/ is the most popular library." />
+<link rel="canonical" href="http://localhost:4000/2023/03/12/getting-started-graphql-using-ruby-on-rails.html" />
+<meta property="og:url" content="http://localhost:4000/2023/03/12/getting-started-graphql-using-ruby-on-rails.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-03-12T01:13:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Getting Started GraphQL Using Ruby on Rails" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Yoko Harada"},"dateModified":"2023-03-12T01:13:00+09:00","datePublished":"2023-03-12T01:13:00+09:00","description":"GraphQL is an API standard to provide resources on the server-side to various types of clients. GraphQL itself is a specification and doesn’t provide an implementation. For Ruby on Rails, GraphQL Ruby https://graphql-ruby.org/ is the most popular library.","headline":"Getting Started GraphQL Using Ruby on Rails","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/03/12/getting-started-graphql-using-ruby-on-rails.html"},"url":"http://localhost:4000/2023/03/12/getting-started-graphql-using-ruby-on-rails.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Getting Started GraphQL Using Ruby on Rails</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-8">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Mar 12, 2023</p>
+
+    <div class="tags">
+        
+    </div>
+
+    
+
+    <p>GraphQL is an API standard to provide resources on the server-side to various types of clients.
+GraphQL itself is a specification and doesn’t provide an implementation.
+For Ruby on Rails, GraphQL Ruby <a href="https://graphql-ruby.org/">https://graphql-ruby.org/</a> is the most popular library.</p>
+
+<p>Not like REST API, GraphQL has only one endpoint.
+While REST API uses different endpoints (paths or URL) to access multiple types of resources,
+GraphQL uses schema based queries.
+The REST API clients receives all fields server returned.
+However, GraphQL clients can specify what fields they want to receive from the API server.</p>
+
+<p>For REST API, the swagger UI <a href="https://swagger.io/tools/swagger-ui/">https://swagger.io/tools/swagger-ui/</a> is often
+used as a documentation and testing tool.
+In general, the swagger UI is provided by the REST API server.</p>
+
+<p>In contract, the GraphQL server doesn’t provide such UI tool.
+Instead, GraphQL desktop apps are out there, which provides UI based documentation and testing tools.
+The blog post “<a href="https://testfully.io/blog/graphql-clients/">Top 10 GraphQL clients</a>” lists desktop apps with some explanations.
+Such apps have ability to pull the schema from GraphQL server and show that on UI.
+Also, those have features to write GraphQL queries, send those and receive results.</p>
+
+<p>Since Ruby on Rails is designed for REST API, we need additional steps to use Rails as a GraphQL server.
+This is a memo how to get started GraphQL using Ruby on Rails.</p>
+
+<h3 id="setting-up">Setting Up</h3>
+
+<h4 id="create-rails-app">Create Rails App</h4>
+
+<p>This memo focuses on creating GraphQL API server.
+The App will be the API only and have a smaller stack with sqlite3 as a database.
+Ruby and Rails versions are:</p>
+<ul>
+  <li>Ruby: 3.2.1</li>
+  <li>Rails: 7.0.4.2</li>
+</ul>
+
+<p>Create <code>.railsrc</code> file with the content below:</p>
+<pre><code class="language-bash">--api
+--skip-action-mailer
+--skip-action-mailbox
+--skip-action-cable
+--skip-action-text
+--skip-active-job
+--skip-active-storage
+-T
+</code></pre>
+
+<p>The default location of <code>.railsrc</code> is a home directory just like <code>.zshrc</code> or <code>.bashrc</code>.
+If it is created in another directory and/or another filename, use <code>--rc=RC</code> option to specify the file.</p>
+
+<p>Create the Rails app named “graphql-example”, for example:</p>
+
+<pre><code class="language-bash">$ rails new graphql-example --rc=./.railsrc
+</code></pre>
+
+<p>Test the app is created correctly:</p>
+
+<pre><code class="language-bash">$ cd graphql-example
+$ rails s
+</code></pre>
+
+<p>Then, hit http://localhost:3000/ on a web browser.
+If you see Rails logo and Ruby/Rails versions, the server could start successfully.</p>
+
+<h4 id="install-graphql-ruby-gem">Install GraphQL Ruby gem</h4>
+
+<p>Once the Rails app is created, the next step is to install GraphQL Ruby (<a href="https://graphql-ruby.org/">https://graphql-ruby.org/</a>) gem.
+Run two commands below:</p>
+<pre><code class="language-bash">$ bundle add graphql
+$ rails g graphql:install
+</code></pre>
+
+<p>The second command generates GraphQL basic types, default query/mutation types, and a default schema.
+The schema name is <code>[APP_NAME]_schema.rb</code>.
+All are located under <code>app/graphql</code> directory.
+Also, the command adds a route to <code>/graphql</code>. Have a look at <code>config/route.rb</code>, which looks like:</p>
+<pre><code class="language-ruby"># config/routes.rb
+Rails.application.routes.draw do
+  post "/graphql", to: "graphql#execute"
+  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+
+  # Defines the root path route ("/")
+  # root "articles#index"
+end
+</code></pre>
+
+<p>Lastly, the second command generates a default GraphQL controller, <code>app/controllers/graphql_controller.rb</code>.</p>
+
+<h4 id="try-how-graphql-looks-like">Try How GraphQL Looks Like</h4>
+
+<p>For now, GraphQL has started working with the minimal setting.
+The GraphQL gem’s generator already created a very simple API.
+We can test that.</p>
+
+<p>To test GraphQL, we need a GraphQL client.
+Previously, Graphiql gem (notice, the name has “i” before ql) was often installed along with GraphQL Ruby gem.
+However, once the Rails 7 app is configured as API only server, adding UI became not easy.
+Besides, many free-to-use GraphQL clients are out there as mentioned at the beginning.</p>
+
+<p>Among those desktop apps, below might be the choice.</p>
+<ul>
+  <li>GraphiQL <a href="https://github.com/skevy/graphiql-app">https://github.com/skevy/graphiql-app</a></li>
+  <li>Altair <a href="https://altairgraphql.dev/">https://altairgraphql.dev/</a></li>
+  <li>Insomnia <a href="https://insomnia.rest/">https://insomnia.rest/</a></li>
+</ul>
+
+<p>This memo is going to use GraphiQL desktop app.
+If you are on MacOS and have brew, try below to install the app.</p>
+<pre><code class="language-bash">$ brew install --cask graphiql
+</code></pre>
+
+<p>If you have other OS, you can install the desktop app by npm command as well.
+Additional installations are on the GitHub repo.</p>
+
+<p>When the GraphiQL window is firstly opened, it should look like this:</p>
+
+<p><img src="http://localhost:4000/assets/img/graphiql-default.jpeg" alt="default graphiql window" /></p>
+
+<p>Input http://localhost:3000/graphql in the GraphQL Endpoint field, which is defined in <code>config/routes.rb</code>
+Also, check the Method choice. It is defined in <code>config/routes.rb</code> as POST.
+Then, GraphiQL app connects to Rails and pulls the schema defined in the <code>app/graphql/types/query_type.rb</code>
+and <code>app/graphql/types/mutation_type.rb</code>.
+Those schemas show up when “&lt; DOCS” button on the right upper area of GraphiQL window is clicked.</p>
+
+<p><img src="http://localhost:4000/assets/img/graphiql-docs.jpeg" alt="default graphiql window" /></p>
+
+<p>Both Query and Mutation schemas are displayed when the links get clicked.</p>
+
+<p>Let’s make a query to testField.
+On the leftmost pane, input GraphQL query.</p>
+<pre><code>{
+  testField
+}
+</code></pre>
+
+<p>Hit the right arrow button above the query input pane.
+The result is on the center pane.
+The message of “Hello World!” is from <code>app/graphql/types/query_type.rb</code> file.</p>
+
+<p><img src="http://localhost:4000/assets/img/graphiql-query.jpeg" alt="default graphiql window" /></p>
+
+<p>The mutation query can be sent, however, nothing changes since all are static just a test implementation.</p>
+
+<h3 id="create-models-and-graphql-types">Create Models and GraphQL Types</h3>
+
+<p>GraphQL itself is independent from the active record world.
+However, API connects to a database to retrieve or update resources almost always.
+On Ruby on Rails, creating an active record model is the way to connect to the database.</p>
+
+<p>Whether a GraphQL type should be defined first or an active record model should be created before the GraphQL type?
+The GraphQL generator creates a type without a model definition.
+But, certainly, the type definition is almost empty.
+When the active record model exists already, GraphQL generator looks at the model definition and generates the type.
+Now, we see a usable type definition.</p>
+
+<h4 id="define-models">Define Models</h4>
+
+<p>Let’s imagine we will create a blog site.
+The minimum models would be users and posts whose relation is: a user has multiple posts.</p>
+
+<p>The first thing is to generate user and post models as in below:</p>
+
+<pre><code class="language-bash">$ rails g model User email first_name last_name
+$ rails g model Post user:references title:string{50} content:text
+</code></pre>
+
+<p>Edit <code>app/models/user.rb</code> to add a has_many association.</p>
+
+<pre><code class="language-ruby"># app/models/user.rb
+class User &lt; ApplicationRecord
+  has_many :posts, dependent: :destroy
+end
+</code></pre>
+
+<p>Add some seed data, so that we can see some results.</p>
+
+<pre><code class="language-ruby"># db/seeds.rb
+user1 = User.create(
+  email: "john.doe@example.com",
+  first_name: "John",
+  last_name: "Doe"
+)
+
+user2 = User.create(
+  email: "jane.smith@example.com",
+  first_name: "Jane",
+  last_name: "Smith"
+)
+
+Post.create(
+  [{
+     user: user1,
+     title: "Accidentally, I created a Rails app!",
+     content: "My days are this, that and blah. Wait! I accidentally created a Rails app!!"
+   },
+   {
+     user: user2,
+     title: "Blogging",
+     content: "I like blogging. It's fun. One day, I started writing a blog post..."
+   },
+   {
+     user: user2,
+     title: "Spring!",
+     content: "It's not about a web framework here. I'm talking about a season. Yes, Spring!"
+   }
+  ]
+)
+</code></pre>
+
+<p>All are ready. Run the command below to create tables and insert seed data.</p>
+
+<pre><code class="language-bash">$ rails db:create db:migrate db:seed
+</code></pre>
+
+<p>To check above worked correctly, Rails console is one of ways to test it.</p>
+<pre><code class="language-bash">$ rails c
+Loading development environment (Rails 7.0.4.2)
+irb(main):001:0&gt; User.all
+...(user query result here)...
+irb(main):002:0&gt; Post.all
+...(post query result here)...
+...
+</code></pre>
+
+<h4 id="generate-graphql-types">Generate GraphQL Types</h4>
+
+<p>For now, active record models are ready.
+The next step is to generate GraphQL types.
+Run the command below.</p>
+
+<pre><code class="language-bash">$ rails g graphql:object user
+$ rails g graphql:object post
+</code></pre>
+
+<p>The generator captures active record definitions to create user and post types.
+Those two look like this:</p>
+<pre><code class="language-ruby"># app/graphql/types/user_type.rb
+module Types
+  class UserType &lt; Types::BaseObject
+    field :id, ID, null: false
+    field :email, String
+    field :first_name, String
+    field :last_name, String
+    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
+  end
+end
+</code></pre>
+
+<pre><code class="language-ruby"># app/graphql/types/post_type.rb
+module Types
+  class PostType &lt; Types::BaseObject
+    field :id, ID, null: false
+    field :user_id, Integer, null: false
+    field :title, String
+    field :content, String
+    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
+  end
+end
+</code></pre>
+
+<h3 id="make-graphql-queries">Make GraphQL Queries</h3>
+
+<p>So far, we have some seed data in the database.
+It’s time to make GraphQL queries.</p>
+
+<p>GraphQL query schema is defined in <code>app/graphql/types/query_type.rb</code>, which has been generated when GraphQL Ruby gem was installed.
+As we see “testField” in the above section, all should be in the query_type.rb.</p>
+
+<p>GraphQL examples out there mostly write every query implementation in the query_type.rb.
+That might end up in adding bunch of methods in a single file in an actual development.
+A concern is, that would lead to poor code readability and/or maintainability.
+As far as I searched online, it looks no decisive solution exists for this.
+What I found is a GraphQL Ruby’s Resolver (<a href="https://graphql-ruby.org/fields/resolvers.html">https://graphql-ruby.org/fields/resolvers.html</a>).
+Although GraphQL Ruby team wants people to avoid Resolver, it is a good way to decouple each type’s query implementation.
+So, this blog post uses the Resolver.</p>
+
+<h4 id="define-resolvers">Define Resolvers</h4>
+
+<p>Queries to be implemented here are:</p>
+<ul>
+  <li>a single user query, parameter: user id</li>
+  <li>all users query, parameter: none</li>
+  <li>multiple posts query, parameter: none – all posts, user id – one user’s all posts</li>
+</ul>
+
+<p>For those queries, three resolvers are defined:</p>
+
+<pre><code class="language-ruby"># app/graphql/resolvers/user_resolver.rb
+module Resolvers
+  class UserResolver &lt; GraphQL::Schema::Resolver
+    type Types::UserType, null: false
+
+    argument :id, Int, required: true
+
+    def resolve(id:)
+      User.find(id)
+    end
+  end
+end
+</code></pre>
+
+<pre><code class="language-ruby"># app/graphql/resolvers/user_collection_resolver.rb
+module Resolvers
+  class UserCollectionResolver &lt; GraphQL::Schema::Resolver
+    type [Types::UserType], null: false
+
+    def resolve(**args)
+      User.all
+    end
+  end
+end
+</code></pre>
+
+<pre><code class="language-ruby"># app/graphql/resolvers/post_collection_resolver.rb
+module Resolvers
+  class PostCollectionResolver &lt; GraphQL::Schema::Resolver
+    type [Types::PostType], null: false
+
+    argument :user_id, Int, required: false
+
+    def resolve(**args)
+      if args[:user_id]
+        Post.where(user: args[:user_id]).all
+      else
+        Post.all
+      end
+    end
+  end
+end
+</code></pre>
+
+<p>Above three resolvers should be referenced in the query_type.rb.
+Now query_type.rb becomes below:</p>
+<pre><code class="language-ruby"># app/graphql/types/query_type.rb
+module Types
+  class QueryType &lt; Types::BaseObject
+    # Add `node(id: ID!) and `nodes(ids: [ID!]!)`
+    include GraphQL::Types::Relay::HasNodeField
+    include GraphQL::Types::Relay::HasNodesField
+
+    # Add root-level fields here.
+    # They will be entry points for queries on your schema.
+    field :user, resolver: Resolvers::UserResolver
+    field :users, resolver: Resolvers::UserCollectionResolver
+    field :posts, resolver: Resolvers::PostCollectionResolver
+  end
+end
+</code></pre>
+
+<h4 id="queries-on-graphiql">Queries on GraphiQL</h4>
+
+<p>Let’s test newly defined queries.
+On GraphiQL desktop app, Command + w will delete the tab and initialize UI.
+Input http://localhost:3000/graphql in the Endpoint text field and hit the return key.
+The updated schema is pulled, which is displayed in the Docs pane.</p>
+
+<p>To get all users, the query is simple.</p>
+<pre><code class="language-graphql">{
+	users {
+    id
+    email
+    firstName
+    lastName
+  }
+}
+</code></pre>
+<p><img src="http://localhost:4000/assets/img/graphiql-users-query.jpeg" alt="graphiql users query" /></p>
+
+<p>To get one user using user’s id, the query needs a parameter.
+The simple form is to write id in the query.</p>
+<pre><code class="language-graphql">{
+  user(id: 1) {
+    id
+    email
+  }
+}
+</code></pre>
+
+<p>Another form is to use a query variable. In this case, the query needs additional info about the variable.</p>
+<pre><code class="language-graphql">query user($uid: Int!) {
+  user(id: $uid) {
+    id
+    email
+  }
+}
+</code></pre>
+<p>Then, pass the variable in the query variables pane.</p>
+<pre><code class="language-graphql">{
+  "uid": 1
+}
+</code></pre>
+<p><img src="http://localhost:4000/assets/img/graphiql-user-with-id-query.jpeg" alt="graphiql user with id query" /></p>
+
+<p>For post queries, with/without user id are defined.
+If the user id is not provided, the query gets all posts.</p>
+
+<pre><code class="language-graphql">{
+  posts {
+    id
+    userId
+    title
+    content
+  }
+}
+</code></pre>
+
+<p>If the user id is given, the query retrieves the specified user’s all posts.</p>
+
+<pre><code class="language-graphql">query posts($uid: Int) {
+  posts(userId: $uid) {
+    id
+    userId
+    title
+    content
+  }
+}
+</code></pre>
+
+<pre><code class="language-grapql">{
+  "uid": 2
+}
+</code></pre>
+<p><img src="http://localhost:4000/assets/img/graphiql-posts-query.jpeg" alt="graphiql posts query" /></p>
+
+<h3 id="create-new-resource-by-mutation">Create New Resource by Mutation</h3>
+
+<p>GraphQL calls “mutation” to create/update/delete operations over resources.
+Like queries, mutations need a definition for each types.</p>
+
+<p>The mutation definition inherits <code>GraphQL::Schema::RelayClassicMutation</code>.
+GraphQL Ruby generator creates <code>app/graphql/mutations/base_mutation.rb</code>, which is a subclass of <code>GraphQL::Schema::RelayClassicMutation</code>.
+So, our mutation definition will be a subclass of <code>Mutations::BaseMutation</code>.</p>
+
+<h4 id="user-and-post-mutations">User and Post Mutations</h4>
+
+<p>GraphQL Ruby provides a mutation generator. It still needs to edit, however, the generator cuts down the amount of coding.
+Run the command below to create user and post mutation definitions:</p>
+<pre><code class="language-bash">$ rails g graphql:mutation_create user
+$ rails g graphql:mutation_create post
+</code></pre>
+
+<p>After editing two mutations, those look like below:</p>
+<pre><code class="language-ruby"># app/graphql/mutations/user_create.rb
+module Mutations
+  class UserCreate &lt; BaseMutation
+    description "Creates a new user"
+
+    field :user, Types::UserType, null: false
+
+    argument :email, String, required: true
+    argument :first_name, String
+    argument :last_name, String
+
+    def resolve(**kwargs)
+      user = ::User.new(**kwargs)
+      raise GraphQL::ExecutionError.new "Error creating user", extensions: user.errors.to_hash unless user.save
+
+      { user: user }
+    end
+  end
+end
+</code></pre>
+
+<pre><code class="language-ruby"># app/graphql/mutations/post_create.rb
+module Mutations
+  class PostCreate &lt; BaseMutation
+    description "Creates a new post"
+
+    field :post, Types::PostType, null: false
+
+    argument :user_id, Integer, required: true
+    argument :title, String, required: true
+    argument :content, String, required: true
+
+    def resolve(**kwargs)
+      post = ::Post.new(**kwargs)
+      raise GraphQL::ExecutionError.new "Error creating post", extensions: post.errors.to_hash unless post.save
+
+      { post: post }
+    end
+  end
+end
+</code></pre>
+
+<p>GraphQL Ruby generator updates <code>app/graphql/types/mutation_type.rb</code>, so we don’t need to edit this file.
+For now, mutation type definition is like this:</p>
+
+<pre><code class="language-ruby"># app/graphql/types/mutation_type.rb
+module Types
+  class MutationType &lt; Types::BaseObject
+    field :post_create, mutation: Mutations::PostCreate
+    field :user_create, mutation: Mutations::UserCreate
+  end
+end
+</code></pre>
+
+<h4 id="mutations-on-graphiql">Mutations on GraphiQL</h4>
+
+<p>Everything is ready.
+It’s time to create a user and post.
+The mutations look like below:</p>
+
+<pre><code class="language-graphql">mutation {
+  userCreate(input: {
+    email: "alice.jones@example.com",
+    firstName: "Alice",
+    lastName: "Jones"
+  }) {
+    user {
+      id
+      email
+    }
+  }
+}
+</code></pre>
+
+<pre><code class="language-graphql">mutation {
+  postCreate(input: {
+    userId: 3,
+    title: "Hello World!",
+    content: "Hey, I made it to this world!"
+  }) {
+    post {
+      id
+      userId
+      title
+      content
+    }
+  }
+}
+</code></pre>
+
+<p>After executing user and post creations, check that by a query.
+A new user, posts should be created.</p>
+
+
+</div>
+
+
+
+
+                </div>
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    <p class="title is-4">Latest Posts</p>
+
+<div class="columns is-multiline">
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2023/03/12/getting-started-graphql-using-ruby-on-rails.html">Getting Started GraphQL Using Ruby on Rails</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>GraphQL is an API standard to provide resources on the server-side to various types of clients.
+GraphQL itself is a specification and doesn’t provide an implementation.
+For Ruby on Rails, GraphQL Ruby <a href="https://graphql-ruby.org/">https://graphql-ruby.org/</a> is the most popular library.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2023/03/12/getting-started-graphql-using-ruby-on-rails.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Mar 12, 2023</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2023/03/05/rails-app-creation-with-options.html">Rails App Creation with Options</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>The easiest way to create a Ruby on Rails app is absolutely to hit the command:</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2023/03/05/rails-app-creation-with-options.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Mar 5, 2023</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2023/02/07/datomic-quick-start-in-2023.html">Datomic Quick Start in 2023</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>I used to use Datomic, <a href="https://www.datomic.com">https://www.datomic.com</a>, a lot.
+Datomic is a unique database. The most attractive feature would be the idea of preserving transactions.
+Based on the transaction id, Datomic is able to pull out the past data which has been already updated later.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2023/02/07/datomic-quick-start-in-2023.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Feb 7, 2023</p>
+    </footer>
+</div>
+    </div>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="/assets/js/accordion.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>
