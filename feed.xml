@@ -1,4 +1,372 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-03-12T01:13:54+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Blog site mostly for programming topics.</subtitle><entry><title type="html">Getting Started GraphQL Using Ruby on Rails</title><link href="http://localhost:4000/2023/03/12/getting-started-graphql-using-ruby-on-rails.html" rel="alternate" type="text/html" title="Getting Started GraphQL Using Ruby on Rails" /><published>2023-03-12T01:13:00+09:00</published><updated>2023-03-12T01:13:00+09:00</updated><id>http://localhost:4000/2023/03/12/getting-started-graphql-using-ruby-on-rails</id><content type="html" xml:base="http://localhost:4000/2023/03/12/getting-started-graphql-using-ruby-on-rails.html">&lt;p&gt;GraphQL is an API standard to provide resources on the server-side to various types of clients.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-03-19T01:04:07+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Blog site mostly for programming topics.</subtitle><entry><title type="html">Make it Secure, GraphQL by Rails</title><link href="http://localhost:4000/2023/03/19/make-it-secure-graphql-by-rails.html" rel="alternate" type="text/html" title="Make it Secure, GraphQL by Rails" /><published>2023-03-19T01:04:00+09:00</published><updated>2023-03-19T01:04:00+09:00</updated><id>http://localhost:4000/2023/03/19/make-it-secure-graphql-by-rails</id><content type="html" xml:base="http://localhost:4000/2023/03/19/make-it-secure-graphql-by-rails.html">&lt;p&gt;These days, attacks on a web application becomes more and more common.
+Every web application should be protected to get rid of such attacks.
+Ruby on Rails provides ways to make it secure out of the box.
+Additionally, well-used gems in Rails world, such as Devise (&lt;a href=&quot;https://github.com/heartcombo/devise&quot;&gt;https://github.com/heartcombo/devise&lt;/a&gt;),
+give us convenient ways to protect the Rails app.&lt;/p&gt;
+
+&lt;p&gt;However, when it comes to an API only web application, it’s not straightforward.
+For example, passing a token by meta tag won’t work.
+This memo is focusing on GraphQL API and about how to make it secure.&lt;/p&gt;
+
+&lt;p&gt;Versions:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Ruby: 3.2.1&lt;/li&gt;
+  &lt;li&gt;Rails: 7.0.4.3&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;password-authentication&quot;&gt;Password Authentication&lt;/h3&gt;
+
+&lt;p&gt;The most primitive idea to protect web application is adding a password authentication.
+As we know, users who wants to access resources on the web site should register themselves and
+complete a login process by sending an id and credential combination to the web site.
+The id and credential pair will be verified on the web application side.
+If the request is from a registered user with the correct credential, web application returns the result.
+If not, an error message should be sent back to the user who tried to log in.&lt;/p&gt;
+
+&lt;p&gt;If the application is a traditional type, the HTML login form, dropdown or sort will be shown up.
+Then, the web browser or application maintains the logged-in state after the id and credential combination is verified by the server.
+Such states are passed as a session, cookie or hidden field in the HTML form.&lt;/p&gt;
+
+&lt;p&gt;The API only server should do what?
+In general, the API server uses HTTP headers or explicit token exchanges.
+For example, GraphQL API provides login mutation which returns a token after a successful verification.
+The returned token should be added to an HTTP header to make successive mutations and/or queries.&lt;/p&gt;
+
+&lt;p&gt;At this moment, multiple techniques are out there, however, none is decisive for GraphQL API.
+Sometime, REST API is used for login and register user since Devise gem works better with REST API.
+Others do by GraphQL mutation API with the authentication part implementation.&lt;/p&gt;
+
+&lt;p&gt;This memo mentions about a couple of ways to authenticate users.&lt;/p&gt;
+
+&lt;h4 id=&quot;global-id&quot;&gt;Global ID&lt;/h4&gt;
+
+&lt;p&gt;The first one is by Global ID.
+The Global ID is “an app wide URI that uniquely identifies a model instance” as
+described in &lt;a href=&quot;https://github.com/rails/globalid&quot;&gt;https://github.com/rails/globalid&lt;/a&gt;.
+The Global ID based authentication does two jobs below using Global ID as an uniquely identifiable value:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;create a user with the uniquely identifiable value&lt;/li&gt;
+  &lt;li&gt;locate a user based on the uniquely identifiable value&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The Global ID authentication is explained in the YouTube video and GitHub repository below:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;YouTube: Getting started with GraphQL in Rails &lt;a href=&quot;https://www.youtube.com/watch?v=izgCaExV9Uo&quot;&gt;https://www.youtube.com/watch?v=izgCaExV9Uo&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;GitHub: &lt;a href=&quot;https://github.com/phawk/coinfusion/tree/graphql_ruby_2&quot;&gt;https://github.com/phawk/coinfusion/tree/graphql_ruby_2&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Let’s add Global ID based authentication to the GraphQL API created in the previous post,
+&lt;a href=&quot;/2023/03/12/getting-started-graphql-using-ruby-on-rails.html&quot;&gt;Getting Started GraphQL Using Ruby on Rails&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h5 id=&quot;add-gems&quot;&gt;Add Gems&lt;/h5&gt;
+
+&lt;p&gt;The Global ID feature is provided by globalid gem.
+The gem is pulled as an dependency of Action Text and Active Job.
+When the GraphQL app was created in the previous blog post, those two were skipped.
+So, the gem should be added manually.&lt;/p&gt;
+
+&lt;p&gt;Also, we need bcrypt gem, &lt;a href=&quot;https://github.com/bcrypt-ruby/bcrypt-ruby&quot;&gt;https://github.com/bcrypt-ruby/bcrypt-ruby&lt;/a&gt;.
+The bcrypt gem is used to create a password digest and provide user authentication feature.&lt;/p&gt;
+
+&lt;p&gt;To add those two gems, do below:&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;open Gemfile and uncomment bcrypt gem&lt;/li&gt;
+  &lt;li&gt;run &lt;code&gt;bundle add globalid&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h5 id=&quot;update-user-model&quot;&gt;Update User Model&lt;/h5&gt;
+
+&lt;p&gt;The User model should have &lt;code&gt;password_digest&lt;/code&gt; column to save a password digest.
+The User model never ever saves a raw password in the database to avoid the actual password to be stolen.
+This is a very basic security practice.&lt;/p&gt;
+
+&lt;p&gt;The password digest is a hashed value of salt and given password.
+On Rails, the bcrypt gem is responsible to create the hashed value.
+The bcrypt gem is a Ruby implementation of &lt;a href=&quot;https://en.wikipedia.org/wiki/Bcrypt&quot;&gt;bcrypt&lt;/a&gt; password-hashing function.
+Precisely, the bcrypt function creates a concatenated string of a hashing algorithm, cost, salt and hash.
+The hashed value will be saved in the database instead of a raw password.&lt;/p&gt;
+
+&lt;p&gt;Let’s create a migration to add password_digest column to user model.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ rails g migration AddPasswordDigestToUsers
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Edit the migration file and run the migration.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# db/migrate/[DATE TIME]_add_password_digest_to_users.rb
+class AddPasswordDigestToUsers &amp;lt; ActiveRecord::Migration[7.0]
+  def change
+    add_column :users, :password_digest, :string
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ rails db:migrate
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The user model definition should be updated also.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;class User &amp;lt; ApplicationRecord
+  attr_accessor :token
+
+  has_secure_password
+
+  has_many :posts, dependent: :destroy
+
+  validates :email, uniqueness: true
+  validates :password, length: { minimum: 8 }, presence: true
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Since this is a GraphQL API, the authentication is token based.
+Because of that, &lt;code&gt;attr_accessor :token&lt;/code&gt;, is added.
+The &lt;code&gt;has_secure_password&lt;/code&gt; is to signal that the user should be authenticated, which is a provided feature by bcrypt gem.
+The line, &lt;code&gt;validates :password, length: { minimum: 8 }, presence: true&lt;/code&gt; is to require the password input.
+The database won’t have the password column, but still the model creation needs password.
+For this reason, the user model requires the password.&lt;/p&gt;
+
+&lt;h5 id=&quot;update-graphql-controller-types-and-mutations&quot;&gt;Update GraphQL Controller, Types and Mutations&lt;/h5&gt;
+
+&lt;p&gt;The next step is GraphQL controller, type and mutation updates.
+The first one is a graphql_controller update.
+The changes in the controller are:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;add a private method, current_user, to locate a user from token in thr HTTP header based on Global ID&lt;/li&gt;
+  &lt;li&gt;add a current_user entry in graphql context&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/controllers/graphql_controller.rb
+class GraphqlController &amp;lt; ApplicationController
+
+  def execute
+    variables = prepare_variables(params[:variables])
+    query = params[:query]
+    operation_name = params[:operationName]
+    context = {
+      current_user: current_user
+    }
+    result = MiniBlogSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
+    render json: result
+  rescue StandardError =&amp;gt; e
+    raise e unless Rails.env.development?
+    handle_error_in_development(e)
+  end
+
+  private
+
+  def current_user
+    header  = request.headers[&quot;AUTHORIZATION&quot;]
+    token = header&amp;amp;.gsub(/\AToken\s/, &quot;&quot;)
+    GlobalID::Locator.locate_signed(token, for: &apos;graphql&apos;)
+  end
+  # snip
+  # ...
+  # ...
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The second update is the user_type.
+The user_type is used for both query and mutation, so it should have password and token fields.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/graphql/types/user_type.rb
+module Types
+  class UserType &amp;lt; Types::BaseObject
+    field :id, ID, null: false
+    field :email, String, null: false
+    field :first_name, String, null: true
+    field :last_name, String, null: true
+    field :password, String, null: true
+    field :token, String, null: true
+    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The remaining updates are mutations.
+The user registration and login mutations look like below:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/graphql/mutations/user_register.rb
+module Mutations
+  class UserRegister &amp;lt; BaseMutation
+    description &quot;Register a new user&quot;
+
+    field :user, Types::UserType, null: false
+
+    argument :email, String, required: true
+    argument :password, String, required: true
+    argument :first_name, String, required: false
+    argument :last_name, String, required: false
+
+    def resolve(**kwargs)
+      user = ::User.new(**kwargs)
+      if user.save
+        user.token = user.to_sgid(expires_in: 6.hours, for: &apos;graphql&apos;)
+        { user: user }
+      else
+        raise GraphQL::ExecutionError.new &quot;Error creating user&quot;, extensions: user.errors.to_hash
+      end
+    end
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/graphql/mutations/user_login.rb
+module Mutations
+  class UserLogin &amp;lt; BaseMutation
+    description &quot;Login an existing user&quot;
+
+    field :user, Types::UserType, null: false
+
+    argument :email, String, required: true
+    argument :password, String, required: true
+
+    def resolve(email:, password:)
+      user = User.find_by(email: email)
+      if user&amp;amp;.authenticate(password)
+        user.token = user.to_sgid(expires_in: 6.hours, for: &apos;graphql&apos;)
+        { user: user }
+      else
+        raise GraphQL::ExecutionError.new &quot;Error creating user&quot;, extensions: user.errors.to_hash
+      end
+    end
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The mutation_type needs an update to include UserRegister and UserLogin mutations.
+Also, we don’t need UserCreate mutation anymore, so delete it if it is there.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/graphql/types/mutation_type.rb
+module Types
+  class MutationType &amp;lt; Types::BaseObject
+    field :user_register, mutation: Mutations::UserRegister
+    field :user_login, mutation: Mutations::UserLogin
+    field :post_create, mutation: Mutations::PostCreate
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So far, the GraphQL API is able to provide user register and login feature.
+The last piece is to create a post after the successful login.
+To add the authentication feature to post creation mutation,
+BaseMutation class is going to have two methods to check logged in state.
+The GraphqlController already added the context[:current_user] parameter.
+The the authenticate! method raises an exception if context[:current_user] is empty.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;module Mutations
+  class BaseMutation &amp;lt; GraphQL::Schema::RelayClassicMutation
+    argument_class Types::BaseArgument
+    field_class Types::BaseField
+    input_object_class Types::BaseInputObject
+    object_class Types::BaseObject
+
+    private
+
+    def current_user
+      context[:current_user]
+    end
+
+    def authenticate!
+      if current_user.blank?
+        raise GraphQL::ExecutionError.new &quot;Authentication failed. Please log in.&quot;
+      end
+    end
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The PostCreate class will have one line of addition.
+The resolve method will have authenticate! in its first line. That’s it.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/graphql/mutations/post_create.rb
+module Mutations
+  class PostCreate &amp;lt; BaseMutation
+    description &quot;Creates a new post&quot;
+
+    field :post, Types::PostType, null: false
+
+    argument :user_id, Integer, required: true
+    argument :title, String, required: true
+    argument :content, String, required: true
+
+    def resolve(**kwargs)
+      authenticate!
+      post = ::Post.new(**kwargs)
+      raise GraphQL::ExecutionError.new &quot;Error creating post&quot;, extensions: post.errors.to_hash unless post.save
+
+      { post: post }
+    end
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h5 id=&quot;make-queries&quot;&gt;Make Queries&lt;/h5&gt;
+
+&lt;p&gt;All are implemented.
+It’s time to try those.
+Here, GraphQL client is Insomnia (&lt;a href=&quot;https://insomnia.rest/&quot;&gt;https://insomnia.rest/&lt;/a&gt;)
+since both request and response HTTP headers are visible and easy to edit.&lt;/p&gt;
+
+&lt;p&gt;The first GraphQL query is the user registration.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-graphql&quot;&gt;mutation register {
+	userRegister(input: {
+		email: &quot;finn.smith@example.com&quot;,
+		password: &quot;password!&quot;,
+		firstName: &quot;Finn&quot;,
+		lastName: &quot;Smith&quot;
+	}) {
+		user {
+			id
+			email
+			token
+		}
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If the user is successfully registered, a tokenized signed Global ID will be returned.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/insomnia-register-query.jpeg&quot; alt=&quot;img: insomnia user register query&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The next is a login mutation.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-graphql&quot;&gt;mutation login {
+	userLogin(input: {
+		email: &quot;finn.smith@example.com&quot;,
+		password: &quot;password!&quot;
+	}) {
+		user {
+		    id
+			email
+			token
+		}
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The login mutation also returns a tokenized signed Global ID.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/insomnia-login-query.jpeg&quot; alt=&quot;img: insomnia user login query&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The post create mutation needs HTTP header to complete successfully.
+So, the first try will be done without the token in the HTTP header to see it will fail.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-graphql&quot;&gt;mutation post {
+	postCreate(input: {
+		userId: 9,
+		title: &quot;Hello, World!&quot;,
+		content: &quot;This is the first from Finn&quot;
+	}) {
+		post {
+			id
+			title
+			content
+		}
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As expected, it failed without the token in the HTTP header&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/insomnia-post-failed.jpeg&quot; alt=&quot;img: insomnia failed post query&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Then, set Authorization HTTP request header with the token returned from register or login mutation.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Authorization: Token BAh7CEkiCGdpZAY6BkVUSSIsZ2lk.......
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now, it succeeds.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/insomnia-post-with-header.jpeg&quot; alt=&quot;img: insomnia post with header&quot; /&gt;&lt;/p&gt;</content><author><name>Yoko Harada</name></author><summary type="html">These days, attacks on a web application becomes more and more common. Every web application should be protected to get rid of such attacks. Ruby on Rails provides ways to make it secure out of the box. Additionally, well-used gems in Rails world, such as Devise (https://github.com/heartcombo/devise), give us convenient ways to protect the Rails app.</summary></entry><entry><title type="html">Getting Started GraphQL Using Ruby on Rails</title><link href="http://localhost:4000/2023/03/12/getting-started-graphql-using-ruby-on-rails.html" rel="alternate" type="text/html" title="Getting Started GraphQL Using Ruby on Rails" /><published>2023-03-12T01:13:00+09:00</published><updated>2023-03-12T01:13:00+09:00</updated><id>http://localhost:4000/2023/03/12/getting-started-graphql-using-ruby-on-rails</id><content type="html" xml:base="http://localhost:4000/2023/03/12/getting-started-graphql-using-ruby-on-rails.html">&lt;p&gt;GraphQL is an API standard to provide resources on the server-side to various types of clients.
 GraphQL itself is a specification and doesn’t provide an implementation.
 For Ruby on Rails, GraphQL Ruby &lt;a href=&quot;https://graphql-ruby.org/&quot;&gt;https://graphql-ruby.org/&lt;/a&gt; is the most popular library.&lt;/p&gt;
 
@@ -47,14 +415,14 @@ Ruby and Rails versions are:&lt;/p&gt;
 &lt;p&gt;The default location of &lt;code&gt;.railsrc&lt;/code&gt; is a home directory just like &lt;code&gt;.zshrc&lt;/code&gt; or &lt;code&gt;.bashrc&lt;/code&gt;.
 If it is created in another directory and/or another filename, use &lt;code&gt;--rc=RC&lt;/code&gt; option to specify the file.&lt;/p&gt;
 
-&lt;p&gt;Create the Rails app named “graphql-example”, for example:&lt;/p&gt;
+&lt;p&gt;Create the Rails app named “mini-blog”, for example:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ rails new graphql-example --rc=./.railsrc
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ rails new mini-blog --rc=./.railsrc
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Test the app is created correctly:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ cd graphql-example
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ cd mini-blog
 $ rails s
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -84,6 +452,35 @@ end
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Lastly, the second command generates a default GraphQL controller, &lt;code&gt;app/controllers/graphql_controller.rb&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Now, &lt;code&gt;app&lt;/code&gt; directory looks like:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;app
+├── controllers
+│   ├── application_controller.rb
+│   ├── concerns
+│   └── graphql_controller.rb
+├── graphql
+│   ├── mini_blog_schema.rb
+│   ├── mutations
+│   │   └── base_mutation.rb
+│   └── types
+│       ├── base_argument.rb
+│       ├── base_connection.rb
+│       ├── base_edge.rb
+│       ├── base_enum.rb
+│       ├── base_field.rb
+│       ├── base_input_object.rb
+│       ├── base_interface.rb
+│       ├── base_object.rb
+│       ├── base_scalar.rb
+│       ├── base_union.rb
+│       ├── mutation_type.rb
+│       ├── node_type.rb
+│       └── query_type.rb
+└── models
+    ├── application_record.rb
+    └── concerns
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h4 id=&quot;try-how-graphql-looks-like&quot;&gt;Try How GraphQL Looks Like&lt;/h4&gt;
 
@@ -146,32 +543,80 @@ The message of “Hello World!” is from &lt;code&gt;app/graphql/types/query_ty
 However, API connects to a database to retrieve or update resources almost always.
 On Ruby on Rails, creating an active record model is the way to connect to the database.&lt;/p&gt;
 
-&lt;p&gt;Whether a GraphQL type should be defined first or an active record model should be created before the GraphQL type?
-The GraphQL generator creates a type without a model definition.
+&lt;p&gt;Well, a GraphQL type is the first? Or, an active record model should come before the GraphQL type?
+The GraphQL generator can create a type without a model definition.
 But, certainly, the type definition is almost empty.
-When the active record model exists already, GraphQL generator looks at the model definition and generates the type.
-Now, we see a usable type definition.&lt;/p&gt;
+When the active record model exists already, GraphQL generator looks at the database schema and generates the type.
+By this, we will get a usable GraphQL type definition.&lt;/p&gt;
 
 &lt;h4 id=&quot;define-models&quot;&gt;Define Models&lt;/h4&gt;
 
 &lt;p&gt;Let’s imagine we will create a blog site.
-The minimum models would be users and posts whose relation is: a user has multiple posts.&lt;/p&gt;
+The minimum models would be users and posts whose relation is: a user has multiple posts.
+The user’s email should be unique so that the same email user won’t be created more than once.&lt;/p&gt;
 
 &lt;p&gt;The first thing is to generate user and post models as in below:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ rails g model User email first_name last_name
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ rails g model User email:string:uniq first_name:string last_name:string
 $ rails g model Post user:references title:string{50} content:text
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Edit &lt;code&gt;app/models/user.rb&lt;/code&gt; to add a has_many association.&lt;/p&gt;
+&lt;p&gt;We want to add some more constraints to models.
+The user model’s email is implicitly non-null since it is an indexed unique value.
+However, for the graphql generator, it’s better to have non-null constraint explicitly.
+Additionally, we want post model’s title and content to be non-null fields also.
+No need to say, we need migrations.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ rails g migration ChangeEmailNullOnUsers
+$ rails g migration ChangeTitleContentNullOnPosts
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then, edit migration files:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;#  db/migrate/[DATE TIME]_change_email_null_on_users.rb
+class ChangeEmailNullOnUsers &amp;lt; ActiveRecord::Migration[7.0]
+  def change
+    change_column_null :users, :email, false
+  end
+end
+
+#  db/migrate/[DATE TIME]_change_title_content_null_on_posts.rb
+class ChangeTitleContentNullOnPosts &amp;lt; ActiveRecord::Migration[7.0]
+  def change
+    change_column_null :posts, :title, false
+    change_column_null :posts, :content, false
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Create tables on the sqlite3 database.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ rails db:create db:migrate
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We should update models as well.&lt;/p&gt;
+
+&lt;p&gt;Edit &lt;code&gt;app/models/user.rb&lt;/code&gt; to add a has_many association and uniqueness validation.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/models/user.rb
 class User &amp;lt; ApplicationRecord
   has_many :posts, dependent: :destroy
+
+  validates :email, uniqueness: true
 end
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Add some seed data, so that we can see some results.&lt;/p&gt;
+&lt;p&gt;Edit &lt;code&gt;app/models/post.rb&lt;/code&gt; to add presence validations.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/models/post.rb
+class Post &amp;lt; ApplicationRecord
+  belongs_to :user
+
+  validates :title, presence: true
+  validates :content, presence: true
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The model definitions are ready. It’s time to add some seed data, so that we can see some results.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# db/seeds.rb
 user1 = User.create(
@@ -206,9 +651,9 @@ Post.create(
 )
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;All are ready. Run the command below to create tables and insert seed data.&lt;/p&gt;
+&lt;p&gt;Run the command below to add seed data to the database.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ rails db:create db:migrate db:seed
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ rails db:seed
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;To check above worked correctly, Rails console is one of ways to test it.&lt;/p&gt;
@@ -231,15 +676,17 @@ Run the command below.&lt;/p&gt;
 $ rails g graphql:object post
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;The generator captures active record definitions to create user and post types.
-Those two look like this:&lt;/p&gt;
+&lt;p&gt;The generator captures the database schema definition in db/schema.rb to create user and post types.
+Mostly, we can use generated types as those are.&lt;/p&gt;
+
+&lt;p&gt;The generated user_type.rb and post_type.rb look like this:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/graphql/types/user_type.rb
 module Types
   class UserType &amp;lt; Types::BaseObject
     field :id, ID, null: false
-    field :email, String
-    field :first_name, String
-    field :last_name, String
+    field :email, String, null: false
+    field :first_name, String, null: true
+    field :last_name, String, null: true
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
   end
@@ -251,8 +698,8 @@ module Types
   class PostType &amp;lt; Types::BaseObject
     field :id, ID, null: false
     field :user_id, Integer, null: false
-    field :title, String
-    field :content, String
+    field :title, String, null: false
+    field :content, String, null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
   end
@@ -262,29 +709,30 @@ end
 &lt;h3 id=&quot;make-graphql-queries&quot;&gt;Make GraphQL Queries&lt;/h3&gt;
 
 &lt;p&gt;So far, we have some seed data in the database.
-It’s time to make GraphQL queries.&lt;/p&gt;
+The next step is to make GraphQL queries.&lt;/p&gt;
 
 &lt;p&gt;GraphQL query schema is defined in &lt;code&gt;app/graphql/types/query_type.rb&lt;/code&gt;, which has been generated when GraphQL Ruby gem was installed.
-As we see “testField” in the above section, all should be in the query_type.rb.&lt;/p&gt;
+As we see “testField” in the above section, all query definitions should be in the query_type.rb.&lt;/p&gt;
 
-&lt;p&gt;GraphQL examples out there mostly write every query implementation in the query_type.rb.
-That might end up in adding bunch of methods in a single file in an actual development.
-A concern is, that would lead to poor code readability and/or maintainability.
+&lt;p&gt;GraphQL examples out there often write every query implementation in the query_type.rb.
+It’s OK if the API is as simple as examples.
+However, that might end up in adding bunch of methods in a single file in an actual application.
+A concern is, the code will have poor readability and/or maintainability.
 As far as I searched online, it looks no decisive solution exists for this.
 What I found is a GraphQL Ruby’s Resolver (&lt;a href=&quot;https://graphql-ruby.org/fields/resolvers.html&quot;&gt;https://graphql-ruby.org/fields/resolvers.html&lt;/a&gt;).
 Although GraphQL Ruby team wants people to avoid Resolver, it is a good way to decouple each type’s query implementation.
-So, this blog post uses the Resolver.&lt;/p&gt;
+For that reason, the Resolver is used here.&lt;/p&gt;
 
 &lt;h4 id=&quot;define-resolvers&quot;&gt;Define Resolvers&lt;/h4&gt;
 
-&lt;p&gt;Queries to be implemented here are:&lt;/p&gt;
+&lt;p&gt;Queries to be implemented are:&lt;/p&gt;
 &lt;ul&gt;
   &lt;li&gt;a single user query, parameter: user id&lt;/li&gt;
   &lt;li&gt;all users query, parameter: none&lt;/li&gt;
   &lt;li&gt;multiple posts query, parameter: none – all posts, user id – one user’s all posts&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;For those queries, three resolvers are defined:&lt;/p&gt;
+&lt;p&gt;The implementations of resolvers for those queries are defined:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/graphql/resolvers/user_resolver.rb
 module Resolvers
@@ -305,7 +753,7 @@ module Resolvers
   class UserCollectionResolver &amp;lt; GraphQL::Schema::Resolver
     type [Types::UserType], null: false
 
-    def resolve(**args)
+    def resolve(**kwargs)
       User.all
     end
   end
@@ -319,9 +767,9 @@ module Resolvers
 
     argument :user_id, Int, required: false
 
-    def resolve(**args)
-      if args[:user_id]
-        Post.where(user: args[:user_id]).all
+    def resolve(**kwargs)
+      if kwargs[:user_id]
+        Post.where(user: kwargs[:user_id]).all
       else
         Post.all
       end
@@ -350,7 +798,7 @@ end
 
 &lt;h4 id=&quot;queries-on-graphiql&quot;&gt;Queries on GraphiQL&lt;/h4&gt;
 
-&lt;p&gt;Let’s test newly defined queries.
+&lt;p&gt;We are ready to test newly defined queries.
 On GraphiQL desktop app, Command + w will delete the tab and initialize UI.
 Input http://localhost:3000/graphql in the Endpoint text field and hit the return key.
 The updated schema is pulled, which is displayed in the Docs pane.&lt;/p&gt;
@@ -423,14 +871,10 @@ If the user id is not provided, the query gets all posts.&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/graphiql-posts-query.jpeg&quot; alt=&quot;graphiql posts query&quot; /&gt;&lt;/p&gt;
 
-&lt;h3 id=&quot;create-new-resource-by-mutation&quot;&gt;Create New Resource by Mutation&lt;/h3&gt;
+&lt;h3 id=&quot;create-a-new-resource-by-mutation&quot;&gt;Create a New Resource by Mutation&lt;/h3&gt;
 
 &lt;p&gt;GraphQL calls “mutation” to create/update/delete operations over resources.
 Like queries, mutations need a definition for each types.&lt;/p&gt;
-
-&lt;p&gt;The mutation definition inherits &lt;code&gt;GraphQL::Schema::RelayClassicMutation&lt;/code&gt;.
-GraphQL Ruby generator creates &lt;code&gt;app/graphql/mutations/base_mutation.rb&lt;/code&gt;, which is a subclass of &lt;code&gt;GraphQL::Schema::RelayClassicMutation&lt;/code&gt;.
-So, our mutation definition will be a subclass of &lt;code&gt;Mutations::BaseMutation&lt;/code&gt;.&lt;/p&gt;
 
 &lt;h4 id=&quot;user-and-post-mutations&quot;&gt;User and Post Mutations&lt;/h4&gt;
 
@@ -449,8 +893,8 @@ module Mutations
     field :user, Types::UserType, null: false
 
     argument :email, String, required: true
-    argument :first_name, String
-    argument :last_name, String
+    argument :first_name, String, required: false
+    argument :last_name, String, required: false
 
     def resolve(**kwargs)
       user = ::User.new(**kwargs)
@@ -483,7 +927,7 @@ module Mutations
 end
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;GraphQL Ruby generator updates &lt;code&gt;app/graphql/types/mutation_type.rb&lt;/code&gt;, so we don’t need to edit this file.
+&lt;p&gt;GraphQL Ruby generator has already updated &lt;code&gt;app/graphql/types/mutation_type.rb&lt;/code&gt;, so we don’t need to edit this file.
 For now, mutation type definition is like this:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/graphql/types/mutation_type.rb
@@ -531,8 +975,9 @@ The mutations look like below:&lt;/p&gt;
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;After executing user and post creations, check that by a query.
-A new user, posts should be created.&lt;/p&gt;</content><author><name>Yoko Harada</name></author><summary type="html">GraphQL is an API standard to provide resources on the server-side to various types of clients. GraphQL itself is a specification and doesn’t provide an implementation. For Ruby on Rails, GraphQL Ruby https://graphql-ruby.org/ is the most popular library.</summary></entry><entry><title type="html">Rails App Creation with Options</title><link href="http://localhost:4000/2023/03/05/rails-app-creation-with-options.html" rel="alternate" type="text/html" title="Rails App Creation with Options" /><published>2023-03-05T15:50:00+09:00</published><updated>2023-03-05T15:50:00+09:00</updated><id>http://localhost:4000/2023/03/05/rails-app-creation-with-options</id><content type="html" xml:base="http://localhost:4000/2023/03/05/rails-app-creation-with-options.html">&lt;p&gt;The easiest way to create a Ruby on Rails app is absolutely to hit the command:&lt;/p&gt;
+&lt;p&gt;After executing create user and post mutations, check the result by GraphQL queries we tried above.
+A new user, posts should be created.
+The Rails console is another way to test newly added user and post.&lt;/p&gt;</content><author><name>Yoko Harada</name></author><summary type="html">GraphQL is an API standard to provide resources on the server-side to various types of clients. GraphQL itself is a specification and doesn’t provide an implementation. For Ruby on Rails, GraphQL Ruby https://graphql-ruby.org/ is the most popular library.</summary></entry><entry><title type="html">Rails App Creation with Options</title><link href="http://localhost:4000/2023/03/05/rails-app-creation-with-options.html" rel="alternate" type="text/html" title="Rails App Creation with Options" /><published>2023-03-05T15:50:00+09:00</published><updated>2023-03-05T15:50:00+09:00</updated><id>http://localhost:4000/2023/03/05/rails-app-creation-with-options</id><content type="html" xml:base="http://localhost:4000/2023/03/05/rails-app-creation-with-options.html">&lt;p&gt;The easiest way to create a Ruby on Rails app is absolutely to hit the command:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;rails new [APP_NAME]
 &lt;/code&gt;&lt;/pre&gt;
@@ -1999,160 +2444,4 @@ There should be a way to cope with this problem.
 It will be my next challenge.&lt;/p&gt;
 
 &lt;p&gt;If you are interested, my solution and test code for &lt;a href=&quot;https://www.hackerrank.com/domains/tutorials/30-days-of-code&quot;&gt;30 Days of Code&lt;/a&gt;
-are in my repository, &lt;a href=&quot;https://github.com/yokolet/thirty-day-code&quot;&gt;thirty-day-code&lt;/a&gt;.&lt;/p&gt;</content><author><name>Yoko Harada</name></author><summary type="html">Recently, I decided to give Clojure a try. This post is about testing HackerRank problems on a local env.</summary></entry><entry><title type="html">Maximal Square and Rectangle</title><link href="http://localhost:4000/2017/06/16/maximal-area.html" rel="alternate" type="text/html" title="Maximal Square and Rectangle" /><published>2017-06-16T00:00:00+09:00</published><updated>2017-06-16T00:00:00+09:00</updated><id>http://localhost:4000/2017/06/16/maximal-area</id><content type="html" xml:base="http://localhost:4000/2017/06/16/maximal-area.html">&lt;p&gt;A bunch of algorithm questions take a style of “maximum is a good thing.”
-Maximal sum, maximal length or maximal size are examples.
-This memo is about maximal size, precisely, square and rectangle.&lt;/p&gt;
-
-&lt;p&gt;These two have quite similar descriptions. So, I call those siblings.
-The problems are “given 2D matrix filled with 0’s and 1’s, find maximal square/rectangle.”
-Approaches how to solve are also similar.
-However, a difficulty level is not the same.
-The maximal square question is much easier.
-The maximal rectangle question needs an additional step to find the maximum.&lt;/p&gt;
-
-&lt;p&gt;I’m going to start off with the maximal square.&lt;/p&gt;
-
-&lt;h4 id=&quot;problem-description---maximal-square&quot;&gt;Problem Description - Maximal Square&lt;/h4&gt;
-
-&lt;p&gt;Given a 2D binary matrix filled with 0’s and 1’s, find the maximal square with all 1’s.&lt;/p&gt;
-
-&lt;p&gt;For example, following 2D matrix is given:&lt;/p&gt;
-
-&lt;pre&gt;
-
-1   0   1   0   0
-
-1   0   1   1   1
-
-1   1   1   1   1
-
-1   0   0   1   0
-
-&lt;/pre&gt;
-
-&lt;p&gt;The answer will be 4.&lt;/p&gt;
-
-&lt;pre&gt;
-
-1   0   1   0   0
-      +-------+
-1   0 | 1   1 | 1
-      |       |
-1   1 | 1   1 | 1
-      +-------+
-1   0   0   1   0
-
-&lt;/pre&gt;
-
-&lt;h4 id=&quot;the-idea-to-find-maximal-square&quot;&gt;The idea to find maximal square&lt;/h4&gt;
-
-&lt;p&gt;This is a dynamic programming question, so optimal substructure exists:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;include the current cell to form a square&lt;/li&gt;
-  &lt;li&gt;exclude the current call&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;The state to maintain in the auxiliary table is the size of the square so far.
-Following the DP manner, the table will be created by bottom up.&lt;/p&gt;
-
-&lt;p&gt;The first column and row remain as those are.
-When the value of matrix at i’th row and j’th column is 1,
-look above, above-left, and left.
-Among three, find minimum then plus one.
-This is the value in the auxiliary table.&lt;/p&gt;
-
-&lt;h4 id=&quot;java-code-for-finding-maximal-square&quot;&gt;Java code for finding maximal square&lt;/h4&gt;
-
-&lt;script src=&quot;https://gist.github.com/yokolet/6855bc82a187fa8cd2316973bdbe03dd.js&quot;&gt; &lt;/script&gt;
-
-&lt;p&gt;The performance is: time O(nm), space O(nm), where n: rows, m: columns&lt;/p&gt;
-
-&lt;p&gt;The result is:&lt;/p&gt;
-
-&lt;pre&gt;
-
-4
-
-&lt;/pre&gt;
-
-&lt;h4 id=&quot;problem-description---maximal-rectangle&quot;&gt;Problem Description - Maximal Rectangle&lt;/h4&gt;
-
-&lt;p&gt;Given a 2D binary matrix filled with 0’s and 1’s, find the maximal rectangle with all 1’s.&lt;/p&gt;
-
-&lt;p&gt;For example, following 2D matrix is given:&lt;/p&gt;
-
-&lt;pre&gt;
-
-1   0   1   0   0
-
-1   0   1   1   1
-
-1   1   1   1   1
-
-1   0   0   1   0
-
-&lt;/pre&gt;
-
-&lt;p&gt;The answer will be 6.&lt;/p&gt;
-
-&lt;pre&gt;
-
-1   0   1   0   0
-      +-----------+
-1   0 | 1   1   1 |
-      |           |
-1   1 | 1   1   1 |
-      +-----------+
-1   0   0   1   0
-
-&lt;/pre&gt;
-
-&lt;h4 id=&quot;the-idea-to-find-maximal-rectangle&quot;&gt;The idea to find maximal rectangle&lt;/h4&gt;
-
-&lt;p&gt;Also, this is a dynamic programming problem, but has an extra process.
-The first step of DP sees vertically.
-The second step sees horizontally.&lt;/p&gt;
-
-&lt;p&gt;For the DP step, the optimal substructure exists, like the square problem.&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;include the current cell to form a rectangle&lt;/li&gt;
-  &lt;li&gt;exclude the current cell&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;The state to maintain in the auxiliary table is the size of 1’s of vertical stretch.
-Following the DP manner, the table will be created by bottom up.
-When the value of matrix at i’th row and j’th column is 1, look above then plus one.
-This is the value in the auxiliary table.&lt;/p&gt;
-
-&lt;p&gt;After creating the auxiliary table, I need to find the maximal area looking at horizontally.
-How to find it?
-This is exactly the same as &lt;a href=&quot;http://yokolet.github.io/2017/05/25/largest-rectangle-in-histogram.html&quot;&gt;Largest Rectangle in Histogram&lt;/a&gt; problem.&lt;/p&gt;
-
-&lt;p&gt;The second step looks each row to find its max.
-By comparison of each max, I can get the maximal area.&lt;/p&gt;
-
-&lt;h4 id=&quot;java-code-for-finding-maximal-rectangle&quot;&gt;Java code for finding maximal rectangle&lt;/h4&gt;
-
-&lt;script src=&quot;https://gist.github.com/yokolet/0e865893f44e5329c138a4cb24be4d45.js&quot;&gt; &lt;/script&gt;
-
-&lt;p&gt;The performance is: time O(nm), space O(nm), where n: rows, m: columns&lt;/p&gt;
-
-&lt;p&gt;The result is:&lt;/p&gt;
-
-&lt;pre&gt;
-
-6
-
-&lt;/pre&gt;
-
-&lt;h4 id=&quot;resources&quot;&gt;Resources&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/maximum-size-sub-matrix-with-all-1s-in-a-binary-matrix/&quot;&gt;Maximum size square sub-matrix with all 1s&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2014/06/leetcode-maximal-square-java/&quot;&gt;Maximal Square&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://algorithms.tutorialhorizon.com/dynamic-programming-maximum-size-square-sub-matrix-with-all-1s/&quot;&gt;Maximum size square sub-matrix with all 1s&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.geeksforgeeks.org/maximum-size-rectangle-binary-sub-matrix-1s/&quot;&gt;Maximum size rectangle binary sub-matrix with all 1s&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.programcreek.com/2014/05/leetcode-maximal-rectangle-java/&quot;&gt;Maximal Rectangle&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Yoko Harada</name></author><summary type="html">A bunch of algorithm questions take a style of “maximum is a good thing.” Maximal sum, maximal length or maximal size are examples. This memo is about maximal size, precisely, square and rectangle.</summary></entry></feed>
+are in my repository, &lt;a href=&quot;https://github.com/yokolet/thirty-day-code&quot;&gt;thirty-day-code&lt;/a&gt;.&lt;/p&gt;</content><author><name>Yoko Harada</name></author><summary type="html">Recently, I decided to give Clojure a try. This post is about testing HackerRank problems on a local env.</summary></entry></feed>
