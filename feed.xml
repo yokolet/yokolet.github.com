@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-03-19T01:04:07+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Blog site mostly for programming topics.</subtitle><entry><title type="html">Make it Secure, GraphQL by Rails</title><link href="http://localhost:4000/2023/03/19/make-it-secure-graphql-by-rails.html" rel="alternate" type="text/html" title="Make it Secure, GraphQL by Rails" /><published>2023-03-19T01:04:00+09:00</published><updated>2023-03-19T01:04:00+09:00</updated><id>http://localhost:4000/2023/03/19/make-it-secure-graphql-by-rails</id><content type="html" xml:base="http://localhost:4000/2023/03/19/make-it-secure-graphql-by-rails.html">&lt;p&gt;These days, attacks on a web application becomes more and more common.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-03-19T22:36:16+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Blog site mostly for programming topics.</subtitle><entry><title type="html">Make it Secure, GraphQL by Rails</title><link href="http://localhost:4000/2023/03/19/make-it-secure-graphql-by-rails.html" rel="alternate" type="text/html" title="Make it Secure, GraphQL by Rails" /><published>2023-03-19T01:04:00+09:00</published><updated>2023-03-19T01:04:00+09:00</updated><id>http://localhost:4000/2023/03/19/make-it-secure-graphql-by-rails</id><content type="html" xml:base="http://localhost:4000/2023/03/19/make-it-secure-graphql-by-rails.html">&lt;p&gt;These days, attacks on a web application becomes more and more common.
 Every web application should be protected to get rid of such attacks.
 Ruby on Rails provides ways to make it secure out of the box.
 Additionally, well-used gems in Rails world, such as Devise (&lt;a href=&quot;https://github.com/heartcombo/devise&quot;&gt;https://github.com/heartcombo/devise&lt;/a&gt;),
@@ -17,15 +17,15 @@ This memo is focusing on GraphQL API and about how to make it secure.&lt;/p&gt;
 &lt;h3 id=&quot;password-authentication&quot;&gt;Password Authentication&lt;/h3&gt;
 
 &lt;p&gt;The most primitive idea to protect web application is adding a password authentication.
-As we know, users who wants to access resources on the web site should register themselves and
+As we know, users who wants to modify resources on the web site should register themselves and
 complete a login process by sending an id and credential combination to the web site.
 The id and credential pair will be verified on the web application side.
-If the request is from a registered user with the correct credential, web application returns the result.
-If not, an error message should be sent back to the user who tried to log in.&lt;/p&gt;
+Then, the logged in state will be maintained between the user and the web site.
+With the logged in state, web application processes the resource update request and returns the result.
+If not, an error message should be sent back to the user who tried.&lt;/p&gt;
 
-&lt;p&gt;If the application is a traditional type, the HTML login form, dropdown or sort will be shown up.
-Then, the web browser or application maintains the logged-in state after the id and credential combination is verified by the server.
-Such states are passed as a session, cookie or hidden field in the HTML form.&lt;/p&gt;
+&lt;p&gt;The traditional web application would show the HTML login form, dropdown or sort for register and login.
+Then, the web browser and application maintains the logged-in state by a session, cookie or hidden field in the HTML form.&lt;/p&gt;
 
 &lt;p&gt;The API only server should do what?
 In general, the API server uses HTTP headers or explicit token exchanges.
@@ -34,14 +34,13 @@ The returned token should be added to an HTTP header to make successive mutation
 
 &lt;p&gt;At this moment, multiple techniques are out there, however, none is decisive for GraphQL API.
 Sometime, REST API is used for login and register user since Devise gem works better with REST API.
-Others do by GraphQL mutation API with the authentication part implementation.&lt;/p&gt;
+Others do by GraphQL mutation API with the authentication implementation from scratch.&lt;/p&gt;
 
-&lt;p&gt;This memo mentions about a couple of ways to authenticate users.&lt;/p&gt;
+&lt;p&gt;This memo mentions about a way to authenticate users by Global ID.&lt;/p&gt;
 
 &lt;h4 id=&quot;global-id&quot;&gt;Global ID&lt;/h4&gt;
 
-&lt;p&gt;The first one is by Global ID.
-The Global ID is “an app wide URI that uniquely identifies a model instance” as
+&lt;p&gt;The Global ID is “an app wide URI that uniquely identifies a model instance” as
 described in &lt;a href=&quot;https://github.com/rails/globalid&quot;&gt;https://github.com/rails/globalid&lt;/a&gt;.
 The Global ID based authentication does two jobs below using Global ID as an uniquely identifiable value:&lt;/p&gt;
 &lt;ul&gt;
@@ -76,15 +75,15 @@ The bcrypt gem is used to create a password digest and provide user authenticati
 
 &lt;h5 id=&quot;update-user-model&quot;&gt;Update User Model&lt;/h5&gt;
 
-&lt;p&gt;The User model should have &lt;code&gt;password_digest&lt;/code&gt; column to save a password digest.
-The User model never ever saves a raw password in the database to avoid the actual password to be stolen.
+&lt;p&gt;The User model should have a &lt;code&gt;password_digest&lt;/code&gt; column to save a password digest.
+The User model should never ever save a raw password in the database which is to avoid the actual password to be stolen.
 This is a very basic security practice.&lt;/p&gt;
 
 &lt;p&gt;The password digest is a hashed value of salt and given password.
 On Rails, the bcrypt gem is responsible to create the hashed value.
 The bcrypt gem is a Ruby implementation of &lt;a href=&quot;https://en.wikipedia.org/wiki/Bcrypt&quot;&gt;bcrypt&lt;/a&gt; password-hashing function.
-Precisely, the bcrypt function creates a concatenated string of a hashing algorithm, cost, salt and hash.
-The hashed value will be saved in the database instead of a raw password.&lt;/p&gt;
+Precisely, the bcrypt function creates a concatenated string of a hashing algorithm, cost, salt and checksum.
+That sort of hashed value will be saved in the database instead of a raw password.&lt;/p&gt;
 
 &lt;p&gt;Let’s create a migration to add password_digest column to user model.&lt;/p&gt;
 
@@ -120,7 +119,7 @@ Because of that, &lt;code&gt;attr_accessor :token&lt;/code&gt;, is added.
 The &lt;code&gt;has_secure_password&lt;/code&gt; is to signal that the user should be authenticated, which is a provided feature by bcrypt gem.
 The line, &lt;code&gt;validates :password, length: { minimum: 8 }, presence: true&lt;/code&gt; is to require the password input.
 The database won’t have the password column, but still the model creation needs password.
-For this reason, the user model requires the password.&lt;/p&gt;
+For this reason, the password constraint is in the user model.&lt;/p&gt;
 
 &lt;h5 id=&quot;update-graphql-controller-types-and-mutations&quot;&gt;Update GraphQL Controller, Types and Mutations&lt;/h5&gt;
 
@@ -128,8 +127,8 @@ For this reason, the user model requires the password.&lt;/p&gt;
 The first one is a graphql_controller update.
 The changes in the controller are:&lt;/p&gt;
 &lt;ul&gt;
-  &lt;li&gt;add a private method, current_user, to locate a user from token in thr HTTP header based on Global ID&lt;/li&gt;
-  &lt;li&gt;add a current_user entry in graphql context&lt;/li&gt;
+  &lt;li&gt;add a private method, current_user, to locate a user based on Global ID using the token in the HTTP header.&lt;/li&gt;
+  &lt;li&gt;add a current_user entry in graphql context hash table.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/controllers/graphql_controller.rb
@@ -269,7 +268,7 @@ end
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;The PostCreate class will have one line of addition.
-The resolve method will have authenticate! in its first line. That’s it.&lt;/p&gt;
+The resolve method gets &lt;code&gt;authenticate!&lt;/code&gt; in its first line. That’s it.&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/graphql/mutations/post_create.rb
 module Mutations
   class PostCreate &amp;lt; BaseMutation
@@ -338,7 +337,7 @@ since both request and response HTTP headers are visible and easy to edit.&lt;/p
 &lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/insomnia-login-query.jpeg&quot; alt=&quot;img: insomnia user login query&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The post create mutation needs HTTP header to complete successfully.
-So, the first try will be done without the token in the HTTP header to see it will fail.&lt;/p&gt;
+So, let’s try without the token in the HTTP header to see it will fail.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-graphql&quot;&gt;mutation post {
 	postCreate(input: {
@@ -366,7 +365,12 @@ So, the first try will be done without the token in the HTTP header to see it wi
 
 &lt;p&gt;Now, it succeeds.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/insomnia-post-with-header.jpeg&quot; alt=&quot;img: insomnia post with header&quot; /&gt;&lt;/p&gt;</content><author><name>Yoko Harada</name></author><summary type="html">These days, attacks on a web application becomes more and more common. Every web application should be protected to get rid of such attacks. Ruby on Rails provides ways to make it secure out of the box. Additionally, well-used gems in Rails world, such as Devise (https://github.com/heartcombo/devise), give us convenient ways to protect the Rails app.</summary></entry><entry><title type="html">Getting Started GraphQL Using Ruby on Rails</title><link href="http://localhost:4000/2023/03/12/getting-started-graphql-using-ruby-on-rails.html" rel="alternate" type="text/html" title="Getting Started GraphQL Using Ruby on Rails" /><published>2023-03-12T01:13:00+09:00</published><updated>2023-03-12T01:13:00+09:00</updated><id>http://localhost:4000/2023/03/12/getting-started-graphql-using-ruby-on-rails</id><content type="html" xml:base="http://localhost:4000/2023/03/12/getting-started-graphql-using-ruby-on-rails.html">&lt;p&gt;GraphQL is an API standard to provide resources on the server-side to various types of clients.
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/insomnia-post-with-header.jpeg&quot; alt=&quot;img: insomnia post with header&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;code&quot;&gt;Code&lt;/h3&gt;
+
+&lt;p&gt;The example Rails app code is on the GitHub repo.
+Please see &lt;a href=&quot;https://github.com/yokolet/mini-blog&quot;&gt;https://github.com/yokolet/mini-blog&lt;/a&gt;.&lt;/p&gt;</content><author><name>Yoko Harada</name></author><summary type="html">These days, attacks on a web application becomes more and more common. Every web application should be protected to get rid of such attacks. Ruby on Rails provides ways to make it secure out of the box. Additionally, well-used gems in Rails world, such as Devise (https://github.com/heartcombo/devise), give us convenient ways to protect the Rails app.</summary></entry><entry><title type="html">Getting Started GraphQL Using Ruby on Rails</title><link href="http://localhost:4000/2023/03/12/getting-started-graphql-using-ruby-on-rails.html" rel="alternate" type="text/html" title="Getting Started GraphQL Using Ruby on Rails" /><published>2023-03-12T01:13:00+09:00</published><updated>2023-03-12T01:13:00+09:00</updated><id>http://localhost:4000/2023/03/12/getting-started-graphql-using-ruby-on-rails</id><content type="html" xml:base="http://localhost:4000/2023/03/12/getting-started-graphql-using-ruby-on-rails.html">&lt;p&gt;GraphQL is an API standard to provide resources on the server-side to various types of clients.
 GraphQL itself is a specification and doesn’t provide an implementation.
 For Ruby on Rails, GraphQL Ruby &lt;a href=&quot;https://graphql-ruby.org/&quot;&gt;https://graphql-ruby.org/&lt;/a&gt; is the most popular library.&lt;/p&gt;
 
