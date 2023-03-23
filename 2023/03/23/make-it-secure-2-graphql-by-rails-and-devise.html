@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/accordion.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Make it Secure 2, GraphQL by Rails and Devise | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Make it Secure 2, GraphQL by Rails and Devise" />
+<meta name="author" content="Yoko Harada" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This is the second post about securing Rails GraphQL API app. Most of conceptual explanations are in the previous post, Make it Secure, GraphQL by Rails. This memo is focusing on how to add the authentication using Devise gem (https://github.com/heartcombo/devise)." />
+<meta property="og:description" content="This is the second post about securing Rails GraphQL API app. Most of conceptual explanations are in the previous post, Make it Secure, GraphQL by Rails. This memo is focusing on how to add the authentication using Devise gem (https://github.com/heartcombo/devise)." />
+<link rel="canonical" href="http://localhost:4000/2023/03/23/make-it-secure-2-graphql-by-rails-and-devise.html" />
+<meta property="og:url" content="http://localhost:4000/2023/03/23/make-it-secure-2-graphql-by-rails-and-devise.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-03-23T17:46:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Make it Secure 2, GraphQL by Rails and Devise" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Yoko Harada"},"dateModified":"2023-03-23T17:46:00+09:00","datePublished":"2023-03-23T17:46:00+09:00","description":"This is the second post about securing Rails GraphQL API app. Most of conceptual explanations are in the previous post, Make it Secure, GraphQL by Rails. This memo is focusing on how to add the authentication using Devise gem (https://github.com/heartcombo/devise).","headline":"Make it Secure 2, GraphQL by Rails and Devise","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/03/23/make-it-secure-2-graphql-by-rails-and-devise.html"},"url":"http://localhost:4000/2023/03/23/make-it-secure-2-graphql-by-rails-and-devise.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Make it Secure 2, GraphQL by Rails and Devise</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-8">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Mar 23, 2023</p>
+
+    <div class="tags">
+        
+    </div>
+
+    
+
+    <p>This is the second post about securing Rails GraphQL API app.
+Most of conceptual explanations are in the previous post,
+<a href="/2023/03/19/make-it-secure-graphql-by-rails.html">Make it Secure, GraphQL by Rails</a>.
+This memo is focusing on how to add the authentication using Devise gem
+(<a href="https://github.com/heartcombo/devise">https://github.com/heartcombo/devise</a>).</p>
+
+<p>The GraphQL API itself is the same as the previous one.
+The GraphQL app in the previous post uses Global ID and implements the user authentication from scratch.
+The Devise gem covers many of those.
+However the odds are: the Devise gem is for a traditional web application, so the GraphQL API only app can’t use as is.
+Luckily, people have already tried the token based authentication by Devise and established a couple of ways to do that.
+A combination with JWT (Jason Web Token, <a href="https://github.com/jwt/ruby-jwt">https://github.com/jwt/ruby-jwt</a>) is one,
+while with Devise Token Auth
+(<a href="https://github.com/lynndylanhurley/devise_token_auth">https://github.com/lynndylanhurley/devise_token_auth</a>)
+is another one.
+This memo uses GraphQLDevise gem
+(<a href="https://github.com/graphql-devise/graphql_devise">https://github.com/graphql-devise/graphql_devise</a>),
+which is implemented on top of Devise Token Auth.</p>
+
+<p>Versions:</p>
+<ul>
+  <li>Ruby: 3.2.1</li>
+  <li>Rails: 7.0.4.3</li>
+</ul>
+
+<h4 id="create-rails-app">Create Rails App</h4>
+
+<p>The Rails app creation is same as previous two posts.
+However, the app here introduces Devise gem, so this memo starts from creating the app for clarity.</p>
+
+<p>Create an option list file, for example, ./.railsrc, with the following content.</p>
+<pre><code>--api
+--skip-action-mailer
+--skip-action-mailbox
+--skip-action-cable
+--skip-action-text
+--skip-active-job
+--skip-active-storage
+-T
+</code></pre>
+
+<p>This app skips email based user registration provided by Devise gem.
+For this reason, the option list has <code>--skip-action-mailer</code>.
+The option list above creates much smaller API only Rails app.</p>
+
+<p>Run the command to create the app.</p>
+
+<pre><code class="language-bash">$ rails new mini-blog-2 --rc=./.railsrc
+</code></pre>
+
+<h4 id="setup-graphql_devise-gem">Setup graphql_devise gem</h4>
+
+<p>The app is going to use graphql_devise gem for the authentication.
+The first step is to add and initialize the gem.</p>
+
+<pre><code class="language-bash">$ cd mini-blog-2
+$ bundle add graphql_devise
+</code></pre>
+
+<p>Above command installs graphql_devise gem as well as graphql, devise, devise_auth_token gems as dependencies.</p>
+
+<p>The next step depends on the design decision, whether to create a new GraphQL path for the authentication or to use an existing path.
+If the new path is chosen, GraphQL paths will have <code>/graphql</code> and <code>/graphql_auth</code>.
+If the existing path is chosen, GraphQL path will be only <code>/graphql</code> as normal GraphQL app has.
+To use existing path, graphql_devise initializer needs an existing GraphQL schema as a mount point.
+The choice here is to mount on the exising schema.
+For this reason, the second step is to initialize GraphQL gem.</p>
+
+<pre><code class="language-bash">$ rails g graphql:install
+</code></pre>
+
+<p>Above command generates the schema <code>MiniBlog2Schema</code> in the app/graphql/mini_blog2_schema.rb.
+This is the mount point.
+The graphql_devise initialization includes Devise model creation, so it needs model name for the authentication.
+The model name is typically User.</p>
+
+<pre><code class="language-bash">$ rails g graphql_devise:install User --mount MiniBlog2Schema
+</code></pre>
+
+<p>Above command shows messages from Devise gem in addition to creating a bunch of files.
+As for GraphQL side, <code>include GraphqlDevise::SetUserByToken</code> is added to app/controllers/application_controller.rb,
+and a schema plugin is added to app/graphql/mini_blog2_schema.rb.</p>
+<pre><code class="language-ruby"># app/controllers/application_controller.rb
+class ApplicationController &lt; ActionController::API
+  include GraphqlDevise::SetUserByToken
+end
+</code></pre>
+<pre><code class="language-ruby"># app/graphql/mini_blog2_schema.rb
+class MiniBlog2Schema &lt; GraphQL::Schema
+  use GraphqlDevise::SchemaPlugin.new(
+    query:            Types::QueryType,
+    mutation:         Types::MutationType,
+    resource_loaders: [
+      GraphqlDevise::ResourceLoader.new(User)
+    ]
+  )
+  mutation(Types::MutationType)
+  query(Types::QueryType)
+
+  # more code here
+
+end
+</code></pre>
+
+<p>The migration file for the user model has been created as well, so run the migration.</p>
+<pre><code class="language-bash">$ rails db:migrate
+</code></pre>
+
+<h4 id="additional-graphql_devise-configuration">Additional graphql_devise configuration</h4>
+
+<p>We are almost there.
+Since the app mounts the authentication path to the existing GraphQL path, some more configurations are required.</p>
+
+<p>Add <code>include GraphqlDevise::FieldAuthentication</code> in the file, app/graphql/types/base_field.rb.
+Add <code>gql_devise_context(User)</code> in the file, app/controller/graphql_controller.rb, to receive
+user info from GraphQL queries/mutations.</p>
+<pre><code class="language-ruby"># app/graphql/types/base_field.rb.
+module Types
+  class BaseField &lt; GraphQL::Schema::Field
+    include GraphqlDevise::FieldAuthentication
+
+    argument_class Types::BaseArgument
+  end
+end
+</code></pre>
+<pre><code class="language-ruby"># app/controller/graphql_controller.rb
+def execute
+  variables = prepare_variables(params[:variables])
+  query = params[:query]
+  operation_name = params[:operationName]
+  context = gql_devise_context(User)
+  result = MiniBlog2Schema.execute(query, variables: variables, context: context, operation_name: operation_name)
+  render json: result
+rescue StandardError =&gt; e
+  raise e unless Rails.env.development?
+  handle_error_in_development(e)
+end
+</code></pre>
+
+<h4 id="make-mutation-queries-to-register-and-login">Make Mutation Queries to Register and Login</h4>
+
+<p>For now, we can register a user and login.
+Let’s try.
+As a GraphQL client, Insomnia (<a href="https://insomnia.rest/">https://insomnia.rest/</a>) is used since Insomnia has a nice UI
+for HTTP request/response headers.</p>
+
+<p>To register the user, make mutation query below.</p>
+<pre><code class="language-graphql">mutation register {
+	userRegister(
+		email: "finn.smith@example.com"
+		password: "password!"
+		passwordConfirmation: "password!"
+	) {
+		authenticatable {
+			email
+		}
+		credentials{
+			accessToken
+			client
+			uid
+		}
+	}
+}
+</code></pre>
+<p>Above query sets only required fields. Other fields can be seen in Insomnia’s Schema pane.
+The response fields are the same. The accessToken, client and uid will be used for later queries, so those are requested.</p>
+
+<p><img src="http://localhost:4000/assets/img/insomnia-devise-register.jpeg" alt="img: insomnia devise user register" /></p>
+
+<p>Let’s check HTTP response headers. As in below, authentication related headers can been seen.</p>
+
+<p><img src="http://localhost:4000/assets/img/insomnia-devise-register-response-header.jpeg" alt="img: insomnia devise user register response header" /></p>
+
+<p>To login as a registered user, make mutation query below.</p>
+<pre><code class="language-graphql">mutation login {
+	userLogin(
+		email: "finn.smith@example.com"
+		password: "password!"
+	) {
+		authenticatable {
+			email
+		}
+		credentials{
+			accessToken
+			client
+			uid
+		}
+	}
+}
+</code></pre>
+
+<p>Successful login returns the same result as the registration.</p>
+
+<p><img src="http://localhost:4000/assets/img/insomnia-devise-login.jpeg" alt="img: insomnia devise user login" />
+<img src="http://localhost:4000/assets/img/insomnia-devise-login-response-header.jpeg" alt="img: insomnia devise user login response header" /></p>
+
+<h4 id="user-and-post-models">User and Post Models</h4>
+
+<p>If we imagine to create a blog site, minimum models would be users and posts.
+Those two models should have a relation: a user has many posts.</p>
+
+<p>The user model is already created when graphql_devise was initialized.
+The post model should be created, but nothing special.</p>
+
+<pre><code class="language-bash">$ rails g model Post user:references title:string{50} content:text
+</code></pre>
+
+<p>We want to add some non-null constraints to user and post models.
+Create migrations:</p>
+<pre><code class="language-bash">$ rails g migration ChangeEmailNullOnUsers
+$ rails g migration ChangeTitleContentNullOnPosts
+</code></pre>
+
+<p>Edit migration files:</p>
+<pre><code class="language-ruby">#  db/migrate/[DATE TIME]_change_email_null_on_users.rb
+class ChangeEmailNullOnUsers &lt; ActiveRecord::Migration[7.0]
+  def change
+    change_column_null :users, :email, false
+  end
+end
+
+#  db/migrate/[DATE TIME]_change_title_content_null_on_posts.rb
+class ChangeTitleContentNullOnPosts &lt; ActiveRecord::Migration[7.0]
+  def change
+    change_column_null :posts, :title, false
+    change_column_null :posts, :content, false
+  end
+end
+</code></pre>
+
+<p>Run migration:</p>
+<pre><code class="language-bash">$ rails db:migrate
+</code></pre>
+
+<p>Update models:</p>
+<pre><code class="language-ruby"># app/models/user.rb
+class User &lt; ActiveRecord::Base
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable
+  include GraphqlDevise::Authenticatable
+
+  has_many :posts, dependent: :destroy
+
+  validates :email, presence: true, uniqueness: true
+end
+
+# app/models/post.rb
+class Post &lt; ApplicationRecord
+  belongs_to :user
+
+  validates :title, presence: true
+  validates :content, presence: true
+end
+</code></pre>
+
+<h4 id="graphql-queries">GraphQL Queries</h4>
+
+<p>To make queries, we need GraphQL types.
+Generate user and post types.</p>
+<pre><code class="language-bash">$ rails g graphql:object user
+$ rails g graphql:object post
+</code></pre>
+<p>Now, we got two types:</p>
+<ul>
+  <li>app/graphql/types/user_type.rb</li>
+  <li>app/graphql/types/post_type.rb</li>
+</ul>
+
+<p>We need query definitions for both user and post.
+Create resolvers as in below:</p>
+<pre><code class="language-ruby"># app/graphql/resolvers/user_resolver.rb
+module Resolvers
+  class UserResolver &lt; GraphQL::Schema::Resolver
+    type [Types::UserType], null: false
+
+    argument :id, Int, required: false
+
+    def resolve(**kwargs)
+      if kwargs[:id]
+        [User.find(kwargs[:id])]
+      else
+        User.all
+      end
+    end
+  end
+end
+
+# app/graphql/resolvers/post_resolver.rb
+module Resolvers
+  class PostResolver &lt; GraphQL::Schema::Resolver
+    type [Types::PostType], null: false
+
+    argument :user_id, Int, required: false
+
+    def resolve(**kwargs)
+      if kwargs[:user_id]
+        Post.where(user: kwargs[:user_id]).all
+      else
+        Post.all
+      end
+    end
+  end
+end
+</code></pre>
+
+<p>Update query_types to include user and post resolvers with authenticate option false.
+An assumption here is that we don’t need to authenticate for queries.</p>
+<pre><code class="language-ruby"># app/graphql/types/query_type.rb
+module Types
+  class QueryType &lt; Types::BaseObject
+    # Add `node(id: ID!) and `nodes(ids: [ID!]!)`
+    include GraphQL::Types::Relay::HasNodeField
+    include GraphQL::Types::Relay::HasNodesField
+
+    # Add root-level fields here.
+    # They will be entry points for queries on your schema.
+    field :users, resolver: Resolvers::UserResolver, authenticate: false
+    field :posts, resolver: Resolvers::PostResolver, authenticate: false
+  end
+end
+</code></pre>
+
+<p>An example query to get all users will be blow:</p>
+<pre><code class="language-graphql">query users {
+	users {
+		id
+		email
+	}
+}
+</code></pre>
+
+<p><img src="http://localhost:4000/assets/img/insomnia-devise-users.jpeg" alt="img: insomnia devise users query" /></p>
+
+<p>To make the query above, no authentication is required at all.</p>
+
+<p>We can make post query as well, however, it returns an empty array at this moment.</p>
+
+<h4 id="graphql-mutations">GraphQL Mutations</h4>
+
+<p>The next is a create post mutation so that we can see some results from the post query.</p>
+
+<pre><code class="language-bash">$ rails g graphql:mutation_create post
+</code></pre>
+
+<p>Above generates app/graphql/mutations/post_create.rb file.
+After some editing, the post_create.rb looks like below:</p>
+<pre><code class="language-ruby"># app/graphql/mutations/post_create.rb
+module Mutations
+  class PostCreate &lt; BaseMutation
+    description "Creates a new post"
+
+    field :post, Types::PostType, null: false
+
+    argument :title, String, required: true
+    argument :content, String, required: true
+
+    def resolve(**kwargs)
+      kwargs[:user_id] = context[:current_resource].id
+      post = ::Post.new(**kwargs)
+      raise GraphQL::ExecutionError.new "Error creating post", extensions: post.errors.to_hash unless post.save
+
+      { post: post }
+    end
+  end
+end
+</code></pre>
+
+<p>Since mutation queries require authentication, the logged in user information is available in the context.
+The user id to create a post is retrieved from the authentication result.</p>
+
+<p>Lastly, we need a little hack on Rails 7.0.4.3 and Devise 4.9.0.
+In general, API only web application don’t use cookie or session.
+However, Devise has been developed based on a traditional web application, so it still relies on the cookie.
+The issue is on-going and discussed at
+<a href="https://github.com/heartcombo/devise/issues/5443">https://github.com/heartcombo/devise/issues/5443</a>.</p>
+
+<p>The workaround is adding below three lines to config/application.rb.</p>
+<pre><code class="language-ruby"># config/application.rb
+
+    config.session_store :cookie_store, key: '_interslice_session'
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use config.session_store, config.session_options
+</code></pre>
+
+<p>Everything is ready.
+It’s time to create some posts.
+As the application designed like this, we need to log in first.
+Try login mutation query.</p>
+
+<pre><code class="language-graphql">mutation login {
+	userLogin(
+		email: "finn.smith@example.com"
+		password: "password!"
+	) {
+		authenticatable {
+			email
+		}
+		credentials{
+			accessToken
+			client
+			uid
+		}
+	}
+}
+</code></pre>
+
+<p><img src="http://localhost:4000/assets/img/insomnia-devise-login-for-post.jpeg" alt="img: insomnia devise login for post" /></p>
+
+<p>The successful login returns accessToken, client, and uid.
+These three are used to authenticate.
+The create post mutation query looks like below:</p>
+<pre><code class="language-graphql">mutation post {
+	postCreate(input: {
+		title: "Hello World, Again",
+		content: "This is the second post from Finn."
+	}) {
+		post {id userId title content}
+	}
+}
+</code></pre>
+
+<p>Set three user authentication values to the HTTP request header.
+Be careful, GraphQL result is accessToken, but HTTP request header is access-token.
+Now, we could create a post.</p>
+
+<p><img src="http://localhost:4000/assets/img/insomnia-devise-post.jpeg" alt="img: insomnia devise post mutation" /></p>
+
+<p><img src="http://localhost:4000/assets/img/insomnia-devise-post-headers.jpeg" alt="img: insomnia devise post request headers" /></p>
+
+<p>Add some more posts using different user’s authentication values.</p>
+
+<p>To get all posts by all users, make below query.</p>
+<pre><code class="language-graphql">query posts {
+	posts {
+		id
+		userId
+		title
+		content
+	}
+}
+</code></pre>
+
+<p><img src="http://localhost:4000/assets/img/insomnia-devise-all-posts.jpeg" alt="img: insomnia devise all posts" /></p>
+
+<p>To get all post of a specific user, make below query with user’s id.</p>
+<pre><code class="language-graphql">query posts {
+	posts(userId: 3) {
+		id
+		userId
+		title
+		content
+	}
+}
+</code></pre>
+
+<p><img src="http://localhost:4000/assets/img/insomnia-devise-post-of-a-user.jpeg" alt="img: insomnia devise posts of a user" /></p>
+
+
+</div>
+
+
+
+
+                </div>
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    <p class="title is-4">Latest Posts</p>
+
+<div class="columns is-multiline">
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2023/03/23/make-it-secure-2-graphql-by-rails-and-devise.html">Make it Secure 2, GraphQL by Rails and Devise</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>This is the second post about securing Rails GraphQL API app.
+Most of conceptual explanations are in the previous post,
+<a href="/2023/03/19/make-it-secure-graphql-by-rails.html">Make it Secure, GraphQL by Rails</a>.
+This memo is focusing on how to add the authentication using Devise gem
+(<a href="https://github.com/heartcombo/devise">https://github.com/heartcombo/devise</a>).</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2023/03/23/make-it-secure-2-graphql-by-rails-and-devise.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Mar 23, 2023</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2023/03/19/make-it-secure-graphql-by-rails.html">Make it Secure, GraphQL by Rails</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>These days, attacks on a web application becomes more and more common.
+Every web application should be protected to get rid of such attacks.
+Ruby on Rails provides ways to make it secure out of the box.
+Additionally, well-used gems in Rails world, such as Devise (<a href="https://github.com/heartcombo/devise">https://github.com/heartcombo/devise</a>),
+give us convenient ways to protect the Rails app.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2023/03/19/make-it-secure-graphql-by-rails.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Mar 19, 2023</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2023/03/12/getting-started-graphql-using-ruby-on-rails.html">Getting Started GraphQL Using Ruby on Rails</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>GraphQL is an API standard to provide resources on the server-side to various types of clients.
+GraphQL itself is a specification and doesn’t provide an implementation.
+For Ruby on Rails, GraphQL Ruby <a href="https://graphql-ruby.org/">https://graphql-ruby.org/</a> is the most popular library.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2023/03/12/getting-started-graphql-using-ruby-on-rails.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Mar 12, 2023</p>
+    </footer>
+</div>
+    </div>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="/assets/js/accordion.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>

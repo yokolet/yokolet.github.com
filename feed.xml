@@ -1,4 +1,461 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-03-19T22:36:16+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Blog site mostly for programming topics.</subtitle><entry><title type="html">Make it Secure, GraphQL by Rails</title><link href="http://localhost:4000/2023/03/19/make-it-secure-graphql-by-rails.html" rel="alternate" type="text/html" title="Make it Secure, GraphQL by Rails" /><published>2023-03-19T01:04:00+09:00</published><updated>2023-03-19T01:04:00+09:00</updated><id>http://localhost:4000/2023/03/19/make-it-secure-graphql-by-rails</id><content type="html" xml:base="http://localhost:4000/2023/03/19/make-it-secure-graphql-by-rails.html">&lt;p&gt;These days, attacks on a web application becomes more and more common.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-03-23T17:46:52+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Blog site mostly for programming topics.</subtitle><entry><title type="html">Make it Secure 2, GraphQL by Rails and Devise</title><link href="http://localhost:4000/2023/03/23/make-it-secure-2-graphql-by-rails-and-devise.html" rel="alternate" type="text/html" title="Make it Secure 2, GraphQL by Rails and Devise" /><published>2023-03-23T17:46:00+09:00</published><updated>2023-03-23T17:46:00+09:00</updated><id>http://localhost:4000/2023/03/23/make-it-secure-2-graphql-by-rails-and-devise</id><content type="html" xml:base="http://localhost:4000/2023/03/23/make-it-secure-2-graphql-by-rails-and-devise.html">&lt;p&gt;This is the second post about securing Rails GraphQL API app.
+Most of conceptual explanations are in the previous post,
+&lt;a href=&quot;/2023/03/19/make-it-secure-graphql-by-rails.html&quot;&gt;Make it Secure, GraphQL by Rails&lt;/a&gt;.
+This memo is focusing on how to add the authentication using Devise gem
+(&lt;a href=&quot;https://github.com/heartcombo/devise&quot;&gt;https://github.com/heartcombo/devise&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;The GraphQL API itself is the same as the previous one.
+The GraphQL app in the previous post uses Global ID and implements the user authentication from scratch.
+The Devise gem covers many of those.
+However the odds are: the Devise gem is for a traditional web application, so the GraphQL API only app can’t use as is.
+Luckily, people have already tried the token based authentication by Devise and established a couple of ways to do that.
+A combination with JWT (Jason Web Token, &lt;a href=&quot;https://github.com/jwt/ruby-jwt&quot;&gt;https://github.com/jwt/ruby-jwt&lt;/a&gt;) is one,
+while with Devise Token Auth
+(&lt;a href=&quot;https://github.com/lynndylanhurley/devise_token_auth&quot;&gt;https://github.com/lynndylanhurley/devise_token_auth&lt;/a&gt;)
+is another one.
+This memo uses GraphQLDevise gem
+(&lt;a href=&quot;https://github.com/graphql-devise/graphql_devise&quot;&gt;https://github.com/graphql-devise/graphql_devise&lt;/a&gt;),
+which is implemented on top of Devise Token Auth.&lt;/p&gt;
+
+&lt;p&gt;Versions:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Ruby: 3.2.1&lt;/li&gt;
+  &lt;li&gt;Rails: 7.0.4.3&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;create-rails-app&quot;&gt;Create Rails App&lt;/h4&gt;
+
+&lt;p&gt;The Rails app creation is same as previous two posts.
+However, the app here introduces Devise gem, so this memo starts from creating the app for clarity.&lt;/p&gt;
+
+&lt;p&gt;Create an option list file, for example, ./.railsrc, with the following content.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;--api
+--skip-action-mailer
+--skip-action-mailbox
+--skip-action-cable
+--skip-action-text
+--skip-active-job
+--skip-active-storage
+-T
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This app skips email based user registration provided by Devise gem.
+For this reason, the option list has &lt;code&gt;--skip-action-mailer&lt;/code&gt;.
+The option list above creates much smaller API only Rails app.&lt;/p&gt;
+
+&lt;p&gt;Run the command to create the app.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ rails new mini-blog-2 --rc=./.railsrc
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;setup-graphql_devise-gem&quot;&gt;Setup graphql_devise gem&lt;/h4&gt;
+
+&lt;p&gt;The app is going to use graphql_devise gem for the authentication.
+The first step is to add and initialize the gem.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ cd mini-blog-2
+$ bundle add graphql_devise
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Above command installs graphql_devise gem as well as graphql, devise, devise_auth_token gems as dependencies.&lt;/p&gt;
+
+&lt;p&gt;The next step depends on the design decision, whether to create a new GraphQL path for the authentication or to use an existing path.
+If the new path is chosen, GraphQL paths will have &lt;code&gt;/graphql&lt;/code&gt; and &lt;code&gt;/graphql_auth&lt;/code&gt;.
+If the existing path is chosen, GraphQL path will be only &lt;code&gt;/graphql&lt;/code&gt; as normal GraphQL app has.
+To use existing path, graphql_devise initializer needs an existing GraphQL schema as a mount point.
+The choice here is to mount on the exising schema.
+For this reason, the second step is to initialize GraphQL gem.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ rails g graphql:install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Above command generates the schema &lt;code&gt;MiniBlog2Schema&lt;/code&gt; in the app/graphql/mini_blog2_schema.rb.
+This is the mount point.
+The graphql_devise initialization includes Devise model creation, so it needs model name for the authentication.
+The model name is typically User.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ rails g graphql_devise:install User --mount MiniBlog2Schema
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Above command shows messages from Devise gem in addition to creating a bunch of files.
+As for GraphQL side, &lt;code&gt;include GraphqlDevise::SetUserByToken&lt;/code&gt; is added to app/controllers/application_controller.rb,
+and a schema plugin is added to app/graphql/mini_blog2_schema.rb.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/controllers/application_controller.rb
+class ApplicationController &amp;lt; ActionController::API
+  include GraphqlDevise::SetUserByToken
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/graphql/mini_blog2_schema.rb
+class MiniBlog2Schema &amp;lt; GraphQL::Schema
+  use GraphqlDevise::SchemaPlugin.new(
+    query:            Types::QueryType,
+    mutation:         Types::MutationType,
+    resource_loaders: [
+      GraphqlDevise::ResourceLoader.new(User)
+    ]
+  )
+  mutation(Types::MutationType)
+  query(Types::QueryType)
+
+  # more code here
+
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The migration file for the user model has been created as well, so run the migration.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ rails db:migrate
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;additional-graphql_devise-configuration&quot;&gt;Additional graphql_devise configuration&lt;/h4&gt;
+
+&lt;p&gt;We are almost there.
+Since the app mounts the authentication path to the existing GraphQL path, some more configurations are required.&lt;/p&gt;
+
+&lt;p&gt;Add &lt;code&gt;include GraphqlDevise::FieldAuthentication&lt;/code&gt; in the file, app/graphql/types/base_field.rb.
+Add &lt;code&gt;gql_devise_context(User)&lt;/code&gt; in the file, app/controller/graphql_controller.rb, to receive
+user info from GraphQL queries/mutations.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/graphql/types/base_field.rb.
+module Types
+  class BaseField &amp;lt; GraphQL::Schema::Field
+    include GraphqlDevise::FieldAuthentication
+
+    argument_class Types::BaseArgument
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/controller/graphql_controller.rb
+def execute
+  variables = prepare_variables(params[:variables])
+  query = params[:query]
+  operation_name = params[:operationName]
+  context = gql_devise_context(User)
+  result = MiniBlog2Schema.execute(query, variables: variables, context: context, operation_name: operation_name)
+  render json: result
+rescue StandardError =&amp;gt; e
+  raise e unless Rails.env.development?
+  handle_error_in_development(e)
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;make-mutation-queries-to-register-and-login&quot;&gt;Make Mutation Queries to Register and Login&lt;/h4&gt;
+
+&lt;p&gt;For now, we can register a user and login.
+Let’s try.
+As a GraphQL client, Insomnia (&lt;a href=&quot;https://insomnia.rest/&quot;&gt;https://insomnia.rest/&lt;/a&gt;) is used since Insomnia has a nice UI
+for HTTP request/response headers.&lt;/p&gt;
+
+&lt;p&gt;To register the user, make mutation query below.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-graphql&quot;&gt;mutation register {
+	userRegister(
+		email: &quot;finn.smith@example.com&quot;
+		password: &quot;password!&quot;
+		passwordConfirmation: &quot;password!&quot;
+	) {
+		authenticatable {
+			email
+		}
+		credentials{
+			accessToken
+			client
+			uid
+		}
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Above query sets only required fields. Other fields can be seen in Insomnia’s Schema pane.
+The response fields are the same. The accessToken, client and uid will be used for later queries, so those are requested.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/insomnia-devise-register.jpeg&quot; alt=&quot;img: insomnia devise user register&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Let’s check HTTP response headers. As in below, authentication related headers can been seen.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/insomnia-devise-register-response-header.jpeg&quot; alt=&quot;img: insomnia devise user register response header&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;To login as a registered user, make mutation query below.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-graphql&quot;&gt;mutation login {
+	userLogin(
+		email: &quot;finn.smith@example.com&quot;
+		password: &quot;password!&quot;
+	) {
+		authenticatable {
+			email
+		}
+		credentials{
+			accessToken
+			client
+			uid
+		}
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Successful login returns the same result as the registration.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/insomnia-devise-login.jpeg&quot; alt=&quot;img: insomnia devise user login&quot; /&gt;
+&lt;img src=&quot;http://localhost:4000/assets/img/insomnia-devise-login-response-header.jpeg&quot; alt=&quot;img: insomnia devise user login response header&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;user-and-post-models&quot;&gt;User and Post Models&lt;/h4&gt;
+
+&lt;p&gt;If we imagine to create a blog site, minimum models would be users and posts.
+Those two models should have a relation: a user has many posts.&lt;/p&gt;
+
+&lt;p&gt;The user model is already created when graphql_devise was initialized.
+The post model should be created, but nothing special.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ rails g model Post user:references title:string{50} content:text
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We want to add some non-null constraints to user and post models.
+Create migrations:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ rails g migration ChangeEmailNullOnUsers
+$ rails g migration ChangeTitleContentNullOnPosts
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Edit migration files:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;#  db/migrate/[DATE TIME]_change_email_null_on_users.rb
+class ChangeEmailNullOnUsers &amp;lt; ActiveRecord::Migration[7.0]
+  def change
+    change_column_null :users, :email, false
+  end
+end
+
+#  db/migrate/[DATE TIME]_change_title_content_null_on_posts.rb
+class ChangeTitleContentNullOnPosts &amp;lt; ActiveRecord::Migration[7.0]
+  def change
+    change_column_null :posts, :title, false
+    change_column_null :posts, :content, false
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Run migration:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ rails db:migrate
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Update models:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/models/user.rb
+class User &amp;lt; ActiveRecord::Base
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable
+  include GraphqlDevise::Authenticatable
+
+  has_many :posts, dependent: :destroy
+
+  validates :email, presence: true, uniqueness: true
+end
+
+# app/models/post.rb
+class Post &amp;lt; ApplicationRecord
+  belongs_to :user
+
+  validates :title, presence: true
+  validates :content, presence: true
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;graphql-queries&quot;&gt;GraphQL Queries&lt;/h4&gt;
+
+&lt;p&gt;To make queries, we need GraphQL types.
+Generate user and post types.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ rails g graphql:object user
+$ rails g graphql:object post
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now, we got two types:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;app/graphql/types/user_type.rb&lt;/li&gt;
+  &lt;li&gt;app/graphql/types/post_type.rb&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;We need query definitions for both user and post.
+Create resolvers as in below:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/graphql/resolvers/user_resolver.rb
+module Resolvers
+  class UserResolver &amp;lt; GraphQL::Schema::Resolver
+    type [Types::UserType], null: false
+
+    argument :id, Int, required: false
+
+    def resolve(**kwargs)
+      if kwargs[:id]
+        [User.find(kwargs[:id])]
+      else
+        User.all
+      end
+    end
+  end
+end
+
+# app/graphql/resolvers/post_resolver.rb
+module Resolvers
+  class PostResolver &amp;lt; GraphQL::Schema::Resolver
+    type [Types::PostType], null: false
+
+    argument :user_id, Int, required: false
+
+    def resolve(**kwargs)
+      if kwargs[:user_id]
+        Post.where(user: kwargs[:user_id]).all
+      else
+        Post.all
+      end
+    end
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Update query_types to include user and post resolvers with authenticate option false.
+An assumption here is that we don’t need to authenticate for queries.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/graphql/types/query_type.rb
+module Types
+  class QueryType &amp;lt; Types::BaseObject
+    # Add `node(id: ID!) and `nodes(ids: [ID!]!)`
+    include GraphQL::Types::Relay::HasNodeField
+    include GraphQL::Types::Relay::HasNodesField
+
+    # Add root-level fields here.
+    # They will be entry points for queries on your schema.
+    field :users, resolver: Resolvers::UserResolver, authenticate: false
+    field :posts, resolver: Resolvers::PostResolver, authenticate: false
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;An example query to get all users will be blow:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-graphql&quot;&gt;query users {
+	users {
+		id
+		email
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/insomnia-devise-users.jpeg&quot; alt=&quot;img: insomnia devise users query&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;To make the query above, no authentication is required at all.&lt;/p&gt;
+
+&lt;p&gt;We can make post query as well, however, it returns an empty array at this moment.&lt;/p&gt;
+
+&lt;h4 id=&quot;graphql-mutations&quot;&gt;GraphQL Mutations&lt;/h4&gt;
+
+&lt;p&gt;The next is a create post mutation so that we can see some results from the post query.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;$ rails g graphql:mutation_create post
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Above generates app/graphql/mutations/post_create.rb file.
+After some editing, the post_create.rb looks like below:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/graphql/mutations/post_create.rb
+module Mutations
+  class PostCreate &amp;lt; BaseMutation
+    description &quot;Creates a new post&quot;
+
+    field :post, Types::PostType, null: false
+
+    argument :title, String, required: true
+    argument :content, String, required: true
+
+    def resolve(**kwargs)
+      kwargs[:user_id] = context[:current_resource].id
+      post = ::Post.new(**kwargs)
+      raise GraphQL::ExecutionError.new &quot;Error creating post&quot;, extensions: post.errors.to_hash unless post.save
+
+      { post: post }
+    end
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Since mutation queries require authentication, the logged in user information is available in the context.
+The user id to create a post is retrieved from the authentication result.&lt;/p&gt;
+
+&lt;p&gt;Lastly, we need a little hack on Rails 7.0.4.3 and Devise 4.9.0.
+In general, API only web application don’t use cookie or session.
+However, Devise has been developed based on a traditional web application, so it still relies on the cookie.
+The issue is on-going and discussed at
+&lt;a href=&quot;https://github.com/heartcombo/devise/issues/5443&quot;&gt;https://github.com/heartcombo/devise/issues/5443&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The workaround is adding below three lines to config/application.rb.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# config/application.rb
+
+    config.session_store :cookie_store, key: &apos;_interslice_session&apos;
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use config.session_store, config.session_options
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Everything is ready.
+It’s time to create some posts.
+As the application designed like this, we need to log in first.
+Try login mutation query.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-graphql&quot;&gt;mutation login {
+	userLogin(
+		email: &quot;finn.smith@example.com&quot;
+		password: &quot;password!&quot;
+	) {
+		authenticatable {
+			email
+		}
+		credentials{
+			accessToken
+			client
+			uid
+		}
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/insomnia-devise-login-for-post.jpeg&quot; alt=&quot;img: insomnia devise login for post&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The successful login returns accessToken, client, and uid.
+These three are used to authenticate.
+The create post mutation query looks like below:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-graphql&quot;&gt;mutation post {
+	postCreate(input: {
+		title: &quot;Hello World, Again&quot;,
+		content: &quot;This is the second post from Finn.&quot;
+	}) {
+		post {id userId title content}
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Set three user authentication values to the HTTP request header.
+Be careful, GraphQL result is accessToken, but HTTP request header is access-token.
+Now, we could create a post.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/insomnia-devise-post.jpeg&quot; alt=&quot;img: insomnia devise post mutation&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/insomnia-devise-post-headers.jpeg&quot; alt=&quot;img: insomnia devise post request headers&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Add some more posts using different user’s authentication values.&lt;/p&gt;
+
+&lt;p&gt;To get all posts by all users, make below query.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-graphql&quot;&gt;query posts {
+	posts {
+		id
+		userId
+		title
+		content
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/insomnia-devise-all-posts.jpeg&quot; alt=&quot;img: insomnia devise all posts&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;To get all post of a specific user, make below query with user’s id.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-graphql&quot;&gt;query posts {
+	posts(userId: 3) {
+		id
+		userId
+		title
+		content
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/insomnia-devise-post-of-a-user.jpeg&quot; alt=&quot;img: insomnia devise posts of a user&quot; /&gt;&lt;/p&gt;</content><author><name>Yoko Harada</name></author><summary type="html">This is the second post about securing Rails GraphQL API app. Most of conceptual explanations are in the previous post, Make it Secure, GraphQL by Rails. This memo is focusing on how to add the authentication using Devise gem (https://github.com/heartcombo/devise).</summary></entry><entry><title type="html">Make it Secure, GraphQL by Rails</title><link href="http://localhost:4000/2023/03/19/make-it-secure-graphql-by-rails.html" rel="alternate" type="text/html" title="Make it Secure, GraphQL by Rails" /><published>2023-03-19T01:04:00+09:00</published><updated>2023-03-19T01:04:00+09:00</updated><id>http://localhost:4000/2023/03/19/make-it-secure-graphql-by-rails</id><content type="html" xml:base="http://localhost:4000/2023/03/19/make-it-secure-graphql-by-rails.html">&lt;p&gt;These days, attacks on a web application becomes more and more common.
 Every web application should be protected to get rid of such attacks.
 Ruby on Rails provides ways to make it secure out of the box.
 Additionally, well-used gems in Rails world, such as Devise (&lt;a href=&quot;https://github.com/heartcombo/devise&quot;&gt;https://github.com/heartcombo/devise&lt;/a&gt;),
@@ -2335,117 +2792,4 @@ The second step is to loop over the division by prime numbers found in the first
 This solution has the time complexity of O(square root of n), which made all HackerRank test cases pass.
 The solution would be a good entry here as my memo.&lt;/p&gt;
 
-&lt;script src=&quot;https://gist.github.com/yokolet/6a16de49404c7306019b052cdb7b9401.js&quot;&gt; &lt;/script&gt;</content><author><name>Yoko Harada</name></author><summary type="html">“Given an integer n, find whether n is a prime number or not” – This is a typical algorithm question. If the given number is small, repeating a division from 2 to n gives the answer.</summary></entry><entry><title type="html">HackerRank Code Testing by Clojure</title><link href="http://localhost:4000/2019/08/29/hackerank-code-testing-by-clojure.html" rel="alternate" type="text/html" title="HackerRank Code Testing by Clojure" /><published>2019-08-29T08:20:00+09:00</published><updated>2019-08-29T08:20:00+09:00</updated><id>http://localhost:4000/2019/08/29/hackerank-code-testing-by-clojure</id><content type="html" xml:base="http://localhost:4000/2019/08/29/hackerank-code-testing-by-clojure.html">&lt;p&gt;Recently, I decided to give Clojure a try.
-This post is about testing HackerRank problems on a local env.&lt;/p&gt;
-
-&lt;p&gt;I used to write Clojure code for my day job, however, no Clojure at all for two years.
-Instead, almost all were done by Python.
-I became familiar with Python’s functional programming world now.
-Aside of ML/DL projects, I did bunch at HackerRank, leetcode or sort.
-After a while, I thought, “maybe I can solve problems by Clojure like Python…”&lt;/p&gt;
-
-&lt;p&gt;Luckily, HackerRank supports Clojure. So, I started.&lt;/p&gt;
-
-&lt;p&gt;Soon, I hit the wall. I wanted to test a code. Okay, writing test is not hard.
-Something quite hard was the HackerRank platform.
-Test data comes in from &lt;code&gt;STDIN&lt;/code&gt;. Something output to &lt;code&gt;STDOUT&lt;/code&gt; is tested.
-For many problems, it’s effective to have &lt;code&gt;read-line&lt;/code&gt; and &lt;code&gt;println&lt;/code&gt; in the code side.&lt;/p&gt;
-
-&lt;p&gt;I did quite a lot of research and trials so that the code can be tested
-without any modification on HackerRank platform.
-This experience, setting up a testing environment was a good Clojure study.
-That’s why I wrote the blog post.
-This post may help other Clojure newbies to figure out how.&lt;/p&gt;
-
-&lt;h4 id=&quot;binding-stdin&quot;&gt;Binding &lt;code&gt;STDIN&lt;/code&gt;&lt;/h4&gt;
-
-&lt;p&gt;Clojure has &lt;a href=&quot;https://clojuredocs.org/clojure.core/binding&quot;&gt;&lt;code&gt;clojure.core/binding&lt;/code&gt;&lt;/a&gt; function.
-This function is used to create new bindings, which is like, replacing the current bindings.
-In Clojure, &lt;code&gt;STDIN&lt;/code&gt; is bind to &lt;code&gt;*in*&lt;/code&gt;.
-So, what should be done is to bind &lt;code&gt;*in*&lt;/code&gt; to something else.&lt;/p&gt;
-
-&lt;p&gt;Next question is what should be “something else.”&lt;/p&gt;
-
-&lt;p&gt;HackerRank test case is provided by a file.
-People can get the test data file if they pay 5 Hackos.
-The “Hackos” are points people can get when their solutions successfully pass all tests.
-Unless the problem is a very entry level, the test case file tends to pretty big.
-It’s unable to write the test data in the code often.
-For this reason, I wanted to get the test data from a file and bind it to &lt;code&gt;*in*&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;What I did was:&lt;/p&gt;
-&lt;ol&gt;
-  &lt;li&gt;create a file under &lt;code&gt;resource&lt;/code&gt; directory&lt;/li&gt;
-  &lt;li&gt;read it as a resource&lt;/li&gt;
-  &lt;li&gt;convert it to a reader&lt;/li&gt;
-  &lt;li&gt;bind the reader to &lt;code&gt;*in*&lt;/code&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-clojure&quot;&gt;(require &apos;[clojure.java.io :as io])
-(with-open [rdr (io/reader (io/resource n))]
-    (binding [*in* rdr]
-      (f)))
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Since the project was created by the &lt;a href=&quot;https://leiningen.org/&quot;&gt;&lt;code&gt;leningen&lt;/code&gt;&lt;/a&gt;,
-the &lt;code&gt;resources&lt;/code&gt; directory is already on the path. Just to give a relative file path
-as &lt;code&gt;n&lt;/code&gt;, the file is read. The &lt;code&gt;f&lt;/code&gt; is a function which consumes data from &lt;code&gt;STDIN&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h4 id=&quot;catching-stdout&quot;&gt;Catching &lt;code&gt;STDOUT&lt;/code&gt;&lt;/h4&gt;
-
-&lt;p&gt;Now, reading from &lt;code&gt;STDIN&lt;/code&gt; was cleared. Next will be to catch &lt;code&gt;STDOUT&lt;/code&gt;.
-Clojure has a convenient function &lt;a href=&quot;https://clojuredocs.org/clojure.core/with-out-str&quot;&gt;&lt;code&gt;clojure.core/with-out-str&lt;/code&gt;&lt;/a&gt;.
-Compared to a reading part, catching &lt;code&gt;STDOU&lt;/code&gt; was much easier.
-For example:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-clojure&quot;&gt;;; define function which prints to stdout
-&amp;gt; (defn say-it []
-    (println &quot;seriously?&quot;)
-    (println &quot;can&apos;t believe&quot;))
-
-;; assign STDOUT to &quot;out&quot;
-&amp;gt; (def out (with-out-str (say-it)))
-
-;; what&apos;s in the &quot;out&quot;
-&amp;gt; out
-&quot;seriously?\ncan&apos;t believe\n&quot; 
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The same idea for the reading can be applied to &lt;code&gt;STDOUT&lt;/code&gt; – printing out to a file under &lt;code&gt;resources&lt;/code&gt; directory.
-However, in general, the expected output is simple for the HackerRank problems.
-At this moment, &lt;code&gt;with-out-str&lt;/code&gt; function satisfies my needs.&lt;/p&gt;
-
-&lt;h4 id=&quot;wrapping-tests&quot;&gt;Wrapping Tests&lt;/h4&gt;
-
-&lt;p&gt;So far, &lt;code&gt;STDIN&lt;/code&gt; and &lt;code&gt;STDOUT&lt;/code&gt; work well to fit with the HackerRank platform.
-However, to bind resource reader to &lt;code&gt;STDIN&lt;/code&gt;, I should write &lt;code&gt;with-open ...&lt;/code&gt; in every test case. 
-I want to avoid writing the same lines again and again.
-After searching online, I found &lt;a href=&quot;https://clojuredocs.org/clojure.test/use-fixtures&quot;&gt;&lt;code&gt;clojure.test/use-fixtures&lt;/code&gt;&lt;/a&gt; function.
-This function works like Unit test’s &lt;code&gt;setUp()/tearDown()&lt;/code&gt; methods.
-As the Clojure API document explains:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-clojure&quot;&gt;(defn my-test-fixture [f]
-        (create-db)   ;; setUp
-        (f)           ;; test
-        (destroy-db)) ;; tearDown
-(use-fixtures :once my-test-fixture
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Define the fixture function, then call &lt;code&gt;use-fixture&lt;/code&gt; function.
-The tests in the same namespace are all wrapped by the fixture.&lt;/p&gt;
-
-&lt;p&gt;Below is an example test by the &lt;code&gt;use-fixture&lt;/code&gt; function.&lt;/p&gt;
-
-&lt;script src=&quot;https://gist.github.com/yokolet/efad0031c483bcc77ea9ada37e708db2.js&quot;&gt; &lt;/script&gt;
-
-&lt;h4 id=&quot;gotchas&quot;&gt;Gotchas&lt;/h4&gt;
-
-&lt;p&gt;The function &lt;code&gt;use-fixture&lt;/code&gt; made my test code simple. It’s good.
-However, it has a downside.
-Some problems provide multiple test cases, which means multiple resource files on my test environment.
-Since only one &lt;code&gt;use-fixture&lt;/code&gt; is applied to all tests in the same namespace,
-my &lt;code&gt;wrap-test&lt;/code&gt; and fixture design don’t work nicely.
-There should be a way to cope with this problem.
-It will be my next challenge.&lt;/p&gt;
-
-&lt;p&gt;If you are interested, my solution and test code for &lt;a href=&quot;https://www.hackerrank.com/domains/tutorials/30-days-of-code&quot;&gt;30 Days of Code&lt;/a&gt;
-are in my repository, &lt;a href=&quot;https://github.com/yokolet/thirty-day-code&quot;&gt;thirty-day-code&lt;/a&gt;.&lt;/p&gt;</content><author><name>Yoko Harada</name></author><summary type="html">Recently, I decided to give Clojure a try. This post is about testing HackerRank problems on a local env.</summary></entry></feed>
+&lt;script src=&quot;https://gist.github.com/yokolet/6a16de49404c7306019b052cdb7b9401.js&quot;&gt; &lt;/script&gt;</content><author><name>Yoko Harada</name></author><summary type="html">“Given an integer n, find whether n is a prime number or not” – This is a typical algorithm question. If the given number is small, repeating a division from 2 to n gives the answer.</summary></entry></feed>
