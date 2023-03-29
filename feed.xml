@@ -1,4 +1,334 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-03-23T17:59:04+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Blog site mostly for programming topics.</subtitle><entry><title type="html">Make it Secure 2, GraphQL by Rails and Devise</title><link href="http://localhost:4000/2023/03/23/make-it-secure-2-graphql-by-rails-and-devise.html" rel="alternate" type="text/html" title="Make it Secure 2, GraphQL by Rails and Devise" /><published>2023-03-23T17:46:00+09:00</published><updated>2023-03-23T17:46:00+09:00</updated><id>http://localhost:4000/2023/03/23/make-it-secure-2-graphql-by-rails-and-devise</id><content type="html" xml:base="http://localhost:4000/2023/03/23/make-it-secure-2-graphql-by-rails-and-devise.html">&lt;p&gt;This is the second post about securing Rails GraphQL API app.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-03-29T23:39:40+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Blog site mostly for programming topics.</subtitle><entry><title type="html">Make it Secure 3, CSRF for GraphQL on Rails</title><link href="http://localhost:4000/2023/03/29/make-it-secure-3-csrf-for-graphql-on-rails.html" rel="alternate" type="text/html" title="Make it Secure 3, CSRF for GraphQL on Rails" /><published>2023-03-29T23:39:00+09:00</published><updated>2023-03-29T23:39:00+09:00</updated><id>http://localhost:4000/2023/03/29/make-it-secure-3-csrf-for-graphql-on-rails</id><content type="html" xml:base="http://localhost:4000/2023/03/29/make-it-secure-3-csrf-for-graphql-on-rails.html">&lt;p&gt;This is the third post about securing Rails GraphQL API app.
+The topic is CSRF protection for GraphQL API.
+CSRF is an acronym of &lt;a href=&quot;https://owasp.org/www-community/attacks/csrf&quot;&gt;Cross-Site Request Forgery&lt;/a&gt;,
+and one of well-known vulnerabilities and a type of session hijack.&lt;/p&gt;
+
+&lt;p&gt;If an attacker succeeds to hijack session, the request from the attacker looks a proper one from a victim.
+The attacker is able to execute state changing operations using victim’s identity.&lt;/p&gt;
+
+&lt;p&gt;According to the document, &lt;a href=&quot;https://guides.rubyonrails.org/security.html&quot;&gt;Securing Rails Applications&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;CSRF appears very rarely in CVE (Common Vulnerabilities and Exposures) - less than 0.1% in 2006 - but it really is
+a ‘sleeping giant’ [Grossman]. This is in stark contrast to the results in many security contract works - CSRF is
+an important security issue.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Above being said, we should think about CSRF protection.&lt;/p&gt;
+
+&lt;h4 id=&quot;graphql-needs-csrf-protection&quot;&gt;GraphQL needs CSRF protection?&lt;/h4&gt;
+
+&lt;p&gt;OK, we had a basic idea of CSRF attack.
+Then, the question is whether GraphQL API needs CSRF protection or not.
+If it is truly API only app, the app doesn’t use a cookie nor session at all.
+There should be no session to be hijacked…
+Well, developers might have a vague belief that there should be no session skipping actual HTTP response headers checks.&lt;/p&gt;
+
+&lt;p&gt;Some GraphQL clients, such as GraphiQL, don’t handle HTTP request/response headers well.
+People might miss what are passed in HTTP response headers.
+In contract, Insomnia (&lt;a href=&quot;https://insomnia.rest/&quot;&gt;https://insomnia.rest/&lt;/a&gt;) or Postman (&lt;a href=&quot;https://www.postman.com/&quot;&gt;https://www.postman.com/&lt;/a&gt;)
+does a good job.
+Postman’s handling is awesome.
+By default, Postman adds meaningful HTTP response headers to HTTP request header automatically.
+Besides, those are controllable. We can choose what should be sent back with GraphQL request.
+Postman is famous for REST API client, however, GraphQL support is also good.&lt;/p&gt;
+
+&lt;p&gt;Once we check HTTP response headers returned with GraphQL query result, cookie and/or session might be found.
+For example, the previous post, &lt;a href=&quot;/2023/03/23/make-it-secure-2-graphql-by-rails-and-devise.html&quot;&gt;Make it Secure 2, GraphQL by Rails and Devise&lt;/a&gt;
+uses Devise for authentication.
+To make it work, cookie and session setup was added to &lt;code&gt;config/application.rb&lt;/code&gt; since Devise needs that.
+The Rails app was created with &lt;code&gt;--api&lt;/code&gt; option, so the addition of cookie and session was done manually.
+We knew that GraphQL response would come back with the session.
+If GraphQL API app is created without &lt;code&gt;--api&lt;/code&gt; option, the cookie and sessions might come back with GraphQL response unknowingly.
+The blog post, &lt;a href=&quot;https://checkmarx.com/blog/whats-old-becomes-new-again-csrf-attacks-on-graphql-apis/&quot;&gt;What’s Old Becomes New Again: CSRF Attacks on GraphQL APIs&lt;/a&gt;,
+mentions “misconfiguration,” which would include the case of “unknowingly.”&lt;/p&gt;
+
+&lt;p&gt;The answer to the question, GraphQL needs CSRF protection?, depends on what gems are used.&lt;/p&gt;
+
+&lt;h4 id=&quot;csrf-protection-setup-for-graphql&quot;&gt;CSRF Protection Setup for GraphQL&lt;/h4&gt;
+
+&lt;p&gt;Rails provides CSRF protection out of the box, however, it is based on traditional web application.
+The meta tag is used to embed CSRF token.
+It uses flash UI when the session nullify option is used.
+API only, GraphQL app needs tweaks to make it work.&lt;/p&gt;
+
+&lt;h5 id=&quot;how-rails-csrf-protection-works&quot;&gt;How Rails CSRF Protection Works&lt;/h5&gt;
+
+&lt;p&gt;Before moving on to the code, let’s revisit how traditional Rails app does for CSRF protection.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Rails app creates CSRF token&lt;/li&gt;
+  &lt;li&gt;Rails app ties the CSRF token to a session&lt;/li&gt;
+  &lt;li&gt;Rails app passes the CSRF token to a client using HTML meta tag with the session&lt;/li&gt;
+  &lt;li&gt;A client sends back the CSRF token using X-CSRF-TOKEN HTTP request header with the session&lt;/li&gt;
+  &lt;li&gt;Rails app compares the CSRF token returned as X-CSRF-TOKEN and tokens in the session&lt;/li&gt;
+  &lt;li&gt;Rails app does what protect_from_forgery specifies if the token is failed to verify&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Among the steps above, API only app should do something else for step 3 and 6.
+In general, the cookie is used to return a pair of CSRF-TOKEN as key and the token as value.
+Using the cookie might be controversial in terms of better security.
+Another way is to return the token as a part of GraphQL login/register mutation response body.
+This might be better than the cookie, however, other queries and mutations lose a chance to get updated token.
+It is recommended that the CSRF token should be updated in every interaction to the server.
+Given that, using cookie would be an agreeable solution.&lt;/p&gt;
+
+&lt;p&gt;When the CSRF token verification fails, three below protect_from_forgery strategies are possible behaviors.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;:exception&lt;/code&gt; – Raises ActionController::InvalidAuthenticityToken exception, which is captured in the GraphQL response body.&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;:reset_session&lt;/code&gt; – Resets the session. New token will be created and returned to the client.&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;:null_session&lt;/code&gt; – Provides an empty session during request. The cookies/sessions added by Devise are also deleted.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Not like REST API, GraphQL always uses HTTP POST method by design.
+The HTTP methods is useless to control the protect_from_forgery strategies, so we should add a custom strategy.&lt;/p&gt;
+
+&lt;h4 id=&quot;graphql-rails-app&quot;&gt;GraphQL Rails app&lt;/h4&gt;
+
+&lt;p&gt;The CSRF protection will be added to the previously created mini-blog-2 app.
+How to create the app is explained in
+&lt;a href=&quot;/2023/03/23/make-it-secure-2-graphql-by-rails-and-devise.html&quot;&gt;Make it Secure 2, GraphQL by Rails and Devise&lt;/a&gt;.
+The code is at &lt;a href=&quot;https://github.com/yokolet/mini-blog-2&quot;&gt;https://github.com/yokolet/mini-blog-2&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The app uses Devise gem for a user authentication.&lt;/p&gt;
+
+&lt;h4 id=&quot;update-for-null-session-strategy&quot;&gt;Update for null session strategy&lt;/h4&gt;
+
+&lt;p&gt;This is to fix a flash error caused by no UI, API only setting.
+This GraphQL app doesn’t use null_session strategy, but it’s good to have the update below for a future change.&lt;/p&gt;
+
+&lt;p&gt;Add config.middleware.use ActionDispatch::Flash in config/application.rb.
+The three lines for cookie and session were added when Devise authentication was set up.
+The cookie and session are used for CSRF protection as well, so leave those lines as are.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# config/application.rb
+# ...
+# ...
+module MiniBlog2
+  class Application &amp;lt; Rails::Application
+    # ...
+    # ...
+    config.session_store :cookie_store, key: &quot;_mini-blog-2_session_#{Rails.env}&quot;
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use config.session_store, config.session_options
+
+    # when protect_from_forgery with: :null_session is used, add blow.
+    config.middleware.use ActionDispatch::Flash
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;add-method-to-create-and-set-csrf-token&quot;&gt;Add method to create and set CSRF token&lt;/h4&gt;
+
+&lt;p&gt;As mentioned above, the CSRF token will be added to cookie.
+Add set_csrf_token method in ApplicationController.
+Since the Rails app is configured API only, two modules are included to use cookie and form_authenticity_token method.
+The form_authenticity_token method generates a token and ties it to the session.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/controllers/application_controller.rb
+class ApplicationController &amp;lt; ActionController::API
+  include GraphqlDevise::SetUserByToken
+  include ActionController::Cookies
+  include ActionController::RequestForgeryProtection
+
+  protected
+  
+  def set_csrf_token
+    cookies[&apos;CSRF-TOKEN&apos;] = form_authenticity_token
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;implement-custom-protect_from_forgery-strategy&quot;&gt;Implement Custom protect_from_forgery Strategy&lt;/h4&gt;
+
+&lt;p&gt;By the nature of GraphQL API, it’s very hard to choose protect_from_forgery strategies depending on queries and mutations.
+For that reason, a custom strategy class is added here.
+The strategy plan is:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;userLogin and userRegister mutations don’t need CSRF token verification, but want the token for later queries. Use reset_session.&lt;/li&gt;
+  &lt;li&gt;users and posts queries, createPost mutation do CSRF token verification. Use exception.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Something extra is that schema fetching query is issued very often while using the GraphQL client such as Insomnia or Postman.
+Absolutely, that doesn’t need CSRF token verification.
+We should consider such query exists to implement the custom strategy.&lt;/p&gt;
+
+&lt;p&gt;The below implementation parses GraphQL query and gets query/mutation names defined in the schema.
+The implementation is primitive and doesn’t support multiple or nested queries done in a single HTTP request.
+Assuming only one query comes in, it finds the name of a query or mutation.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/controllers/concerns/mini_blog_strategy.rb
+class MiniBlogStrategy
+  def initialize(controller)
+    @controller = controller
+  end
+
+  def handle_unverified_request
+    query_string = JSON.parse(@controller.request.body.string)[&quot;query&quot;]
+    operationName = GraphQL.parse(query_string).definitions[0].selections[0].name
+    if %(users posts postCreate).include?(operationName)
+      exception.handle_unverified_request
+    else
+      reset_session.handle_unverified_request
+    end
+  end
+
+  private
+
+  def reset_session
+    ActionController::RequestForgeryProtection::ProtectionMethods::ResetSession.new(@controller)
+  end
+
+  def exception
+    ActionController::RequestForgeryProtection::ProtectionMethods::Exception.new(@controller)
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;update-graphql_controller&quot;&gt;Update graphql_controller&lt;/h4&gt;
+
+&lt;p&gt;The last piece is a GraphqlController update.
+It’s simple. Just add set_csrf_token method and the custom strategy.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# app/controllers/graphql_controller.rb
+class GraphqlController &amp;lt; ApplicationController
+  # If accessing from outside this domain, nullify the session
+  # This allows for outside API access while preventing CSRF attacks,
+  # but you&apos;ll have to authenticate your user separately
+  # protect_from_forgery with: :null_session
+  protect_from_forgery with: MiniBlogStrategy
+  after_action :set_csrf_token
+
+  def execute
+    # ...
+  end
+
+  # ...
+  # ...
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;try-csrf-protection&quot;&gt;Try CSRF Protection&lt;/h4&gt;
+
+&lt;p&gt;All are ready. Let’s see CSRF Protection is working.
+The GraphQL client used here is Postman since its HTTP request/response header handling is great.&lt;/p&gt;
+
+&lt;p&gt;The first step is the userLogin mutation.
+Open Postman, then:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;select POST for HTTP method&lt;/li&gt;
+  &lt;li&gt;input http://localhost:3000/graphql&lt;/li&gt;
+  &lt;li&gt;select Body&lt;/li&gt;
+  &lt;li&gt;select GraphQL&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Right after GraphQL is selected, Postman makes a schema fetch query.
+As in the image below, “Schema Fetched” status appears.&lt;/p&gt;
+
+&lt;p&gt;What happened behind the scene?
+The GraphQL request comes to GraphQLController.
+Sine the HTTP request header doesn’t include x-csrf-token header, session reset was performed following the unverified strategy.
+At the same time, the cookie and session are returned.
+If we look at the terminal where Rails is running, “Can’t verify CSRF token authenticity.” should be spotted among the
+bunch of outputs.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/postman-schema-fetch.jpeg&quot; alt=&quot;img: postman schema fetch&quot; /&gt;
+&lt;img src=&quot;http://localhost:4000/assets/img/postman-schema-fetch-cookie-session.jpeg&quot; alt=&quot;img: postman schema fetch cookie session&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The userLogin mutation looks like below:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-graphql&quot;&gt;mutation login {
+    userLogin(
+        email: &quot;finn.smith@example.com&quot;
+        password: &quot;password!&quot;
+    ) {
+        credentials {
+            accessToken
+            client
+            uid
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Write the mutation and click “Send” button.
+Again, we’ll see “Can’t verify CSRF token authenticity.” on the terminal, but get the CSRF-TOKEN cookie and session
+in the HTTP response header.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/postman-login-query.jpeg&quot; alt=&quot;img: postman login query&quot; /&gt;
+&lt;img src=&quot;http://localhost:4000/assets/img/postman-login-query-cookie-session.jpeg&quot; alt=&quot;img: postman login query cookie session&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The next step is to make posts or users query.
+For example, posts query looks like below:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-graphql&quot;&gt;query {
+    posts {
+        id
+        userId
+        title
+        content
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Add X-CSRF-TOKEN to the HTTP request header.
+The token can be seen in the login response’s header, so copy and paste it to the value column.
+Also, make sure the session is set in the cookie.
+Write the query and click “Send” button.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/postman-posts-query-x-csrf-token.jpeg&quot; alt=&quot;img: postman posts query x-csrf token&quot; /&gt;
+&lt;img src=&quot;http://localhost:4000/assets/img/postman-posts-query-session.jpeg&quot; alt=&quot;img: postman posts query session&quot; /&gt;
+&lt;img src=&quot;http://localhost:4000/assets/img/postman-posts-query.jpeg&quot; alt=&quot;img: postman posts query&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Let’s see CSRF verification failure.
+Click check box on the left of X-CSRF-TOKEN to deactivate. The header won’t be sent.
+Now we see ActionController::InvalidAuthenticityToken exception.
+On the terminal where Rails is running, “Can’t verify CSRF token authenticity.” appears again.
+That means the exception strategy is working.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/postman-posts-query-failure.jpeg&quot; alt=&quot;img: postman posts query failure&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Lastly, let’s try postCreate mutation.
+The mutation looks like below:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-graphql&quot;&gt;mutation create_post {
+    postCreate(input: {
+        title: &quot;This is a test post title&quot;,
+        content: &quot;This is a test post content.&quot;
+    }) {
+        post {
+            id
+            userId
+            title
+            content
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As explained in the previous post, access-token, client and uid should be set in the HTTP request header
+in addition to X-CSRF-TOKEN and session.
+Previously tried userLogin mutation gave us those three values already. Set those to the request header.
+Make sure the session is attached in the cookie if the GraphQL client is not Postman.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/postman-create-post-headers.jpeg&quot; alt=&quot;img: postman create post headers&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Write the mutation query and click “Send” button.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/postman-create-post-query.jpeg&quot; alt=&quot;img: postman create post query&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The new post was successfully created.&lt;/p&gt;
+
+&lt;h3 id=&quot;code&quot;&gt;Code&lt;/h3&gt;
+
+&lt;p&gt;The example Rails app code is on the GitHub repo.
+Please see &lt;a href=&quot;https://github.com/yokolet/mini-blog-3&quot;&gt;https://github.com/yokolet/mini-blog-3&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;OWASP: &lt;a href=&quot;https://owasp.org/www-community/attacks/csrf&quot;&gt;Cross-Site Request Forgery&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://marcgg.com/blog/2016/08/22/csrf-rails/&quot;&gt;Understanding Rails’ Forgery Protection Strategies&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://medium.com/rubyinside/a-deep-dive-into-csrf-protection-in-rails-19fa0a42c0ef&quot;&gt;A Deep Dive into CSRF Protection in Rails&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://guides.rubyonrails.org/security.html&quot;&gt;Securing Rails Applications&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://blog.eq8.eu/article/rails-api-authentication-with-spa-csrf-tokens.html&quot;&gt;Rails CSRF protection for SPA&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://checkmarx.com/blog/whats-old-becomes-new-again-csrf-attacks-on-graphql-apis/&quot;&gt;What’s Old Becomes New Again: CSRF Attacks on GraphQL APIs&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Yoko Harada</name></author><summary type="html">This is the third post about securing Rails GraphQL API app. The topic is CSRF protection for GraphQL API. CSRF is an acronym of Cross-Site Request Forgery, and one of well-known vulnerabilities and a type of session hijack.</summary></entry><entry><title type="html">Make it Secure 2, GraphQL by Rails and Devise</title><link href="http://localhost:4000/2023/03/23/make-it-secure-2-graphql-by-rails-and-devise.html" rel="alternate" type="text/html" title="Make it Secure 2, GraphQL by Rails and Devise" /><published>2023-03-23T17:46:00+09:00</published><updated>2023-03-23T17:46:00+09:00</updated><id>http://localhost:4000/2023/03/23/make-it-secure-2-graphql-by-rails-and-devise</id><content type="html" xml:base="http://localhost:4000/2023/03/23/make-it-secure-2-graphql-by-rails-and-devise.html">&lt;p&gt;This is the second post about securing Rails GraphQL API app.
 Most of conceptual explanations are in the previous post,
 &lt;a href=&quot;/2023/03/19/make-it-secure-graphql-by-rails.html&quot;&gt;Make it Secure, GraphQL by Rails&lt;/a&gt;.
 This memo is focusing on how to add the authentication using Devise gem
@@ -376,12 +706,20 @@ However, Devise has been developed based on a traditional web application, so it
 The issue is on-going and discussed at
 &lt;a href=&quot;https://github.com/heartcombo/devise/issues/5443&quot;&gt;https://github.com/heartcombo/devise/issues/5443&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;The workaround is adding below three lines to config/application.rb.&lt;/p&gt;
+&lt;p&gt;The workaround is adding below three lines to config/application.rb.
+The session store’s key is, in general, “&lt;em&gt;[APP NAME]_session&lt;/em&gt;#{Rails.env}”.&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# config/application.rb
-
-    config.session_store :cookie_store, key: &apos;_interslice_session&apos;
+# ...
+# ...
+module MiniBlog2
+  class Application &amp;lt; Rails::Application
+    # ...
+    # ...
+    config.session_store :cookie_store, key: &quot;_mini-blog-2_session_#{Rails.env}&quot;
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use config.session_store, config.session_options
+  end
+end
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Everything is ready.
@@ -2766,35 +3104,4 @@ For a reference, it’s worth writing a memo what kind of problems are out there
   &lt;li&gt;Wikipedia: &lt;a href=&quot;https://en.wikipedia.org/wiki/Catalan_number&quot;&gt;Catalan number&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;Tom Davis: &lt;a href=&quot;http://www.geometer.org/mathcircles/catalan.pdf&quot;&gt;Catalan Numbers&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;GeeksforGeeks: &lt;a href=&quot;https://www.geeksforgeeks.org/program-nth-catalan-number/&quot;&gt;Program for nth Catalan Number&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Yoko Harada</name></author><summary type="html">What is Catalan number ? The Catalan number belongs to the domain of combinatorial mathematics. It is a sequence of natural numbers such that: 1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012, 742900, 2674440, 9694845, 35357670, 129644790, 477638700, 1767263190, ... The sequence appears in counting problems. Wikipedia has the details about the sequence: Catalan Number.</summary></entry><entry><title type="html">Prime Check of a Big Number</title><link href="http://localhost:4000/2019/09/05/prime-check-of-a-big-number.html" rel="alternate" type="text/html" title="Prime Check of a Big Number" /><published>2019-09-05T13:05:00+09:00</published><updated>2019-09-05T13:05:00+09:00</updated><id>http://localhost:4000/2019/09/05/prime-check-of-a-big-number</id><content type="html" xml:base="http://localhost:4000/2019/09/05/prime-check-of-a-big-number.html">&lt;p&gt;“Given an integer &lt;code&gt;n&lt;/code&gt;, find whether &lt;code&gt;n&lt;/code&gt; is a prime number or not” – This is a typical
-algorithm question.
-If the given number is small, repeating a division from 2 to &lt;code&gt;n&lt;/code&gt; gives the answer.&lt;/p&gt;
-
-&lt;p&gt;A better solution would be to stop looping at square root of &lt;code&gt;n&lt;/code&gt;.
-Suppose the given number &lt;code&gt;n&lt;/code&gt; is not a prime number (composite number), the &lt;code&gt;n&lt;/code&gt; has
-two numbers &lt;code&gt;a, b&lt;/code&gt; where &lt;code&gt;n = ab&lt;/code&gt;.
-From the equation, both &lt;code&gt;a&lt;/code&gt; and &lt;code&gt;b&lt;/code&gt; should be equal to or less than square root of &lt;code&gt;n&lt;/code&gt;.
-So, if the factor of &lt;code&gt;n&lt;/code&gt; exists, the factor should be the equal to or less than square root of &lt;code&gt;n&lt;/code&gt;.
-Checking the number up to square root of &lt;code&gt;n&lt;/code&gt; is enough to find &lt;code&gt;n&lt;/code&gt; is prime or not.&lt;/p&gt;
-
-&lt;p&gt;However, looping over up to square root of &lt;code&gt;n&lt;/code&gt; runs slow still once the given number becomes bigger.
-Well-known faster algorithm is the Sieve of Eratosthenes (&lt;a href=&quot;https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes&quot;&gt;Wikipedia&lt;/a&gt;).
-The algorithm starts from a boolean array of size n initialized by &lt;code&gt;true&lt;/code&gt; value.
-The iteration goes from 2 to n while crossing out all multiples of 2, then 3, 5, … (set &lt;code&gt;false&lt;/code&gt; to all multiples of 2, 3, 5…).
-In the end, if the last array element is true, the given number &lt;code&gt;n&lt;/code&gt; is confirmed the prime number.&lt;/p&gt;
-
-&lt;p&gt;The problem of the Sieve of Eratosthenes is a memory consumption.
-HackerRank problem has teasing test cases of &lt;code&gt;100000003&lt;/code&gt; and &lt;code&gt;1000000007&lt;/code&gt;.
-Those numbers easily cause memory out of error.
-The naive looping approach ends up in a timeout failure.&lt;/p&gt;
-
-&lt;h4 id=&quot;combination-of-sieve-and-looping&quot;&gt;Combination of Sieve and Looping&lt;/h4&gt;
-
-&lt;p&gt;There should be plenty of solutions to find a given big number is a prime or not.
-What came up in my mind is a combination of the sieve and looping over.
-The first step is to find all prime numbers up to square root of the given number using the sieve.
-The second step is to loop over the division by prime numbers found in the first step.
-This solution has the time complexity of O(square root of n), which made all HackerRank test cases pass.
-The solution would be a good entry here as my memo.&lt;/p&gt;
-
-&lt;script src=&quot;https://gist.github.com/yokolet/6a16de49404c7306019b052cdb7b9401.js&quot;&gt; &lt;/script&gt;</content><author><name>Yoko Harada</name></author><summary type="html">“Given an integer n, find whether n is a prime number or not” – This is a typical algorithm question. If the given number is small, repeating a division from 2 to n gives the answer.</summary></entry></feed>
+&lt;/ul&gt;</content><author><name>Yoko Harada</name></author><summary type="html">What is Catalan number ? The Catalan number belongs to the domain of combinatorial mathematics. It is a sequence of natural numbers such that: 1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012, 742900, 2674440, 9694845, 35357670, 129644790, 477638700, 1767263190, ... The sequence appears in counting problems. Wikipedia has the details about the sequence: Catalan Number.</summary></entry></feed>

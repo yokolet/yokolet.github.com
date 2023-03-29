@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/accordion.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Make it Secure 3, CSRF for GraphQL on Rails | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.2" />
+<meta property="og:title" content="Make it Secure 3, CSRF for GraphQL on Rails" />
+<meta name="author" content="Yoko Harada" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This is the third post about securing Rails GraphQL API app. The topic is CSRF protection for GraphQL API. CSRF is an acronym of Cross-Site Request Forgery, and one of well-known vulnerabilities and a type of session hijack." />
+<meta property="og:description" content="This is the third post about securing Rails GraphQL API app. The topic is CSRF protection for GraphQL API. CSRF is an acronym of Cross-Site Request Forgery, and one of well-known vulnerabilities and a type of session hijack." />
+<link rel="canonical" href="http://localhost:4000/2023/03/29/make-it-secure-3-csrf-for-graphql-on-rails.html" />
+<meta property="og:url" content="http://localhost:4000/2023/03/29/make-it-secure-3-csrf-for-graphql-on-rails.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-03-29T23:39:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Make it Secure 3, CSRF for GraphQL on Rails" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Yoko Harada"},"dateModified":"2023-03-29T23:39:00+09:00","datePublished":"2023-03-29T23:39:00+09:00","description":"This is the third post about securing Rails GraphQL API app. The topic is CSRF protection for GraphQL API. CSRF is an acronym of Cross-Site Request Forgery, and one of well-known vulnerabilities and a type of session hijack.","headline":"Make it Secure 3, CSRF for GraphQL on Rails","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2023/03/29/make-it-secure-3-csrf-for-graphql-on-rails.html"},"url":"http://localhost:4000/2023/03/29/make-it-secure-3-csrf-for-graphql-on-rails.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Make it Secure 3, CSRF for GraphQL on Rails</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-8">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Mar 29, 2023</p>
+
+    <div class="tags">
+        
+    </div>
+
+    
+
+    <p>This is the third post about securing Rails GraphQL API app.
+The topic is CSRF protection for GraphQL API.
+CSRF is an acronym of <a href="https://owasp.org/www-community/attacks/csrf">Cross-Site Request Forgery</a>,
+and one of well-known vulnerabilities and a type of session hijack.</p>
+
+<p>If an attacker succeeds to hijack session, the request from the attacker looks a proper one from a victim.
+The attacker is able to execute state changing operations using victim’s identity.</p>
+
+<p>According to the document, <a href="https://guides.rubyonrails.org/security.html">Securing Rails Applications</a>:</p>
+<blockquote>
+  <p>CSRF appears very rarely in CVE (Common Vulnerabilities and Exposures) - less than 0.1% in 2006 - but it really is
+a ‘sleeping giant’ [Grossman]. This is in stark contrast to the results in many security contract works - CSRF is
+an important security issue.</p>
+</blockquote>
+
+<p>Above being said, we should think about CSRF protection.</p>
+
+<h4 id="graphql-needs-csrf-protection">GraphQL needs CSRF protection?</h4>
+
+<p>OK, we had a basic idea of CSRF attack.
+Then, the question is whether GraphQL API needs CSRF protection or not.
+If it is truly API only app, the app doesn’t use a cookie nor session at all.
+There should be no session to be hijacked…
+Well, developers might have a vague belief that there should be no session skipping actual HTTP response headers checks.</p>
+
+<p>Some GraphQL clients, such as GraphiQL, don’t handle HTTP request/response headers well.
+People might miss what are passed in HTTP response headers.
+In contract, Insomnia (<a href="https://insomnia.rest/">https://insomnia.rest/</a>) or Postman (<a href="https://www.postman.com/">https://www.postman.com/</a>)
+does a good job.
+Postman’s handling is awesome.
+By default, Postman adds meaningful HTTP response headers to HTTP request header automatically.
+Besides, those are controllable. We can choose what should be sent back with GraphQL request.
+Postman is famous for REST API client, however, GraphQL support is also good.</p>
+
+<p>Once we check HTTP response headers returned with GraphQL query result, cookie and/or session might be found.
+For example, the previous post, <a href="/2023/03/23/make-it-secure-2-graphql-by-rails-and-devise.html">Make it Secure 2, GraphQL by Rails and Devise</a>
+uses Devise for authentication.
+To make it work, cookie and session setup was added to <code>config/application.rb</code> since Devise needs that.
+The Rails app was created with <code>--api</code> option, so the addition of cookie and session was done manually.
+We knew that GraphQL response would come back with the session.
+If GraphQL API app is created without <code>--api</code> option, the cookie and sessions might come back with GraphQL response unknowingly.
+The blog post, <a href="https://checkmarx.com/blog/whats-old-becomes-new-again-csrf-attacks-on-graphql-apis/">What’s Old Becomes New Again: CSRF Attacks on GraphQL APIs</a>,
+mentions “misconfiguration,” which would include the case of “unknowingly.”</p>
+
+<p>The answer to the question, GraphQL needs CSRF protection?, depends on what gems are used.</p>
+
+<h4 id="csrf-protection-setup-for-graphql">CSRF Protection Setup for GraphQL</h4>
+
+<p>Rails provides CSRF protection out of the box, however, it is based on traditional web application.
+The meta tag is used to embed CSRF token.
+It uses flash UI when the session nullify option is used.
+API only, GraphQL app needs tweaks to make it work.</p>
+
+<h5 id="how-rails-csrf-protection-works">How Rails CSRF Protection Works</h5>
+
+<p>Before moving on to the code, let’s revisit how traditional Rails app does for CSRF protection.</p>
+
+<ol>
+  <li>Rails app creates CSRF token</li>
+  <li>Rails app ties the CSRF token to a session</li>
+  <li>Rails app passes the CSRF token to a client using HTML meta tag with the session</li>
+  <li>A client sends back the CSRF token using X-CSRF-TOKEN HTTP request header with the session</li>
+  <li>Rails app compares the CSRF token returned as X-CSRF-TOKEN and tokens in the session</li>
+  <li>Rails app does what protect_from_forgery specifies if the token is failed to verify</li>
+</ol>
+
+<p>Among the steps above, API only app should do something else for step 3 and 6.
+In general, the cookie is used to return a pair of CSRF-TOKEN as key and the token as value.
+Using the cookie might be controversial in terms of better security.
+Another way is to return the token as a part of GraphQL login/register mutation response body.
+This might be better than the cookie, however, other queries and mutations lose a chance to get updated token.
+It is recommended that the CSRF token should be updated in every interaction to the server.
+Given that, using cookie would be an agreeable solution.</p>
+
+<p>When the CSRF token verification fails, three below protect_from_forgery strategies are possible behaviors.</p>
+<ul>
+  <li><code>:exception</code> – Raises ActionController::InvalidAuthenticityToken exception, which is captured in the GraphQL response body.</li>
+  <li><code>:reset_session</code> – Resets the session. New token will be created and returned to the client.</li>
+  <li><code>:null_session</code> – Provides an empty session during request. The cookies/sessions added by Devise are also deleted.</li>
+</ul>
+
+<p>Not like REST API, GraphQL always uses HTTP POST method by design.
+The HTTP methods is useless to control the protect_from_forgery strategies, so we should add a custom strategy.</p>
+
+<h4 id="graphql-rails-app">GraphQL Rails app</h4>
+
+<p>The CSRF protection will be added to the previously created mini-blog-2 app.
+How to create the app is explained in
+<a href="/2023/03/23/make-it-secure-2-graphql-by-rails-and-devise.html">Make it Secure 2, GraphQL by Rails and Devise</a>.
+The code is at <a href="https://github.com/yokolet/mini-blog-2">https://github.com/yokolet/mini-blog-2</a>.</p>
+
+<p>The app uses Devise gem for a user authentication.</p>
+
+<h4 id="update-for-null-session-strategy">Update for null session strategy</h4>
+
+<p>This is to fix a flash error caused by no UI, API only setting.
+This GraphQL app doesn’t use null_session strategy, but it’s good to have the update below for a future change.</p>
+
+<p>Add config.middleware.use ActionDispatch::Flash in config/application.rb.
+The three lines for cookie and session were added when Devise authentication was set up.
+The cookie and session are used for CSRF protection as well, so leave those lines as are.</p>
+
+<pre><code class="language-ruby"># config/application.rb
+# ...
+# ...
+module MiniBlog2
+  class Application &lt; Rails::Application
+    # ...
+    # ...
+    config.session_store :cookie_store, key: "_mini-blog-2_session_#{Rails.env}"
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use config.session_store, config.session_options
+
+    # when protect_from_forgery with: :null_session is used, add blow.
+    config.middleware.use ActionDispatch::Flash
+  end
+end
+</code></pre>
+
+<h4 id="add-method-to-create-and-set-csrf-token">Add method to create and set CSRF token</h4>
+
+<p>As mentioned above, the CSRF token will be added to cookie.
+Add set_csrf_token method in ApplicationController.
+Since the Rails app is configured API only, two modules are included to use cookie and form_authenticity_token method.
+The form_authenticity_token method generates a token and ties it to the session.</p>
+
+<pre><code class="language-ruby"># app/controllers/application_controller.rb
+class ApplicationController &lt; ActionController::API
+  include GraphqlDevise::SetUserByToken
+  include ActionController::Cookies
+  include ActionController::RequestForgeryProtection
+
+  protected
+  
+  def set_csrf_token
+    cookies['CSRF-TOKEN'] = form_authenticity_token
+  end
+end
+</code></pre>
+
+<h4 id="implement-custom-protect_from_forgery-strategy">Implement Custom protect_from_forgery Strategy</h4>
+
+<p>By the nature of GraphQL API, it’s very hard to choose protect_from_forgery strategies depending on queries and mutations.
+For that reason, a custom strategy class is added here.
+The strategy plan is:</p>
+<ul>
+  <li>userLogin and userRegister mutations don’t need CSRF token verification, but want the token for later queries. Use reset_session.</li>
+  <li>users and posts queries, createPost mutation do CSRF token verification. Use exception.</li>
+</ul>
+
+<p>Something extra is that schema fetching query is issued very often while using the GraphQL client such as Insomnia or Postman.
+Absolutely, that doesn’t need CSRF token verification.
+We should consider such query exists to implement the custom strategy.</p>
+
+<p>The below implementation parses GraphQL query and gets query/mutation names defined in the schema.
+The implementation is primitive and doesn’t support multiple or nested queries done in a single HTTP request.
+Assuming only one query comes in, it finds the name of a query or mutation.</p>
+
+<pre><code class="language-ruby"># app/controllers/concerns/mini_blog_strategy.rb
+class MiniBlogStrategy
+  def initialize(controller)
+    @controller = controller
+  end
+
+  def handle_unverified_request
+    query_string = JSON.parse(@controller.request.body.string)["query"]
+    operationName = GraphQL.parse(query_string).definitions[0].selections[0].name
+    if %(users posts postCreate).include?(operationName)
+      exception.handle_unverified_request
+    else
+      reset_session.handle_unverified_request
+    end
+  end
+
+  private
+
+  def reset_session
+    ActionController::RequestForgeryProtection::ProtectionMethods::ResetSession.new(@controller)
+  end
+
+  def exception
+    ActionController::RequestForgeryProtection::ProtectionMethods::Exception.new(@controller)
+  end
+end
+</code></pre>
+
+<h4 id="update-graphql_controller">Update graphql_controller</h4>
+
+<p>The last piece is a GraphqlController update.
+It’s simple. Just add set_csrf_token method and the custom strategy.</p>
+
+<pre><code class="language-ruby"># app/controllers/graphql_controller.rb
+class GraphqlController &lt; ApplicationController
+  # If accessing from outside this domain, nullify the session
+  # This allows for outside API access while preventing CSRF attacks,
+  # but you'll have to authenticate your user separately
+  # protect_from_forgery with: :null_session
+  protect_from_forgery with: MiniBlogStrategy
+  after_action :set_csrf_token
+
+  def execute
+    # ...
+  end
+
+  # ...
+  # ...
+end
+</code></pre>
+
+<h4 id="try-csrf-protection">Try CSRF Protection</h4>
+
+<p>All are ready. Let’s see CSRF Protection is working.
+The GraphQL client used here is Postman since its HTTP request/response header handling is great.</p>
+
+<p>The first step is the userLogin mutation.
+Open Postman, then:</p>
+<ul>
+  <li>select POST for HTTP method</li>
+  <li>input http://localhost:3000/graphql</li>
+  <li>select Body</li>
+  <li>select GraphQL</li>
+</ul>
+
+<p>Right after GraphQL is selected, Postman makes a schema fetch query.
+As in the image below, “Schema Fetched” status appears.</p>
+
+<p>What happened behind the scene?
+The GraphQL request comes to GraphQLController.
+Sine the HTTP request header doesn’t include x-csrf-token header, session reset was performed following the unverified strategy.
+At the same time, the cookie and session are returned.
+If we look at the terminal where Rails is running, “Can’t verify CSRF token authenticity.” should be spotted among the
+bunch of outputs.</p>
+
+<p><img src="http://localhost:4000/assets/img/postman-schema-fetch.jpeg" alt="img: postman schema fetch" />
+<img src="http://localhost:4000/assets/img/postman-schema-fetch-cookie-session.jpeg" alt="img: postman schema fetch cookie session" /></p>
+
+<p>The userLogin mutation looks like below:</p>
+<pre><code class="language-graphql">mutation login {
+    userLogin(
+        email: "finn.smith@example.com"
+        password: "password!"
+    ) {
+        credentials {
+            accessToken
+            client
+            uid
+        }
+    }
+}
+</code></pre>
+
+<p>Write the mutation and click “Send” button.
+Again, we’ll see “Can’t verify CSRF token authenticity.” on the terminal, but get the CSRF-TOKEN cookie and session
+in the HTTP response header.</p>
+
+<p><img src="http://localhost:4000/assets/img/postman-login-query.jpeg" alt="img: postman login query" />
+<img src="http://localhost:4000/assets/img/postman-login-query-cookie-session.jpeg" alt="img: postman login query cookie session" /></p>
+
+<p>The next step is to make posts or users query.
+For example, posts query looks like below:</p>
+<pre><code class="language-graphql">query {
+    posts {
+        id
+        userId
+        title
+        content
+    }
+}
+</code></pre>
+
+<p>Add X-CSRF-TOKEN to the HTTP request header.
+The token can be seen in the login response’s header, so copy and paste it to the value column.
+Also, make sure the session is set in the cookie.
+Write the query and click “Send” button.</p>
+
+<p><img src="http://localhost:4000/assets/img/postman-posts-query-x-csrf-token.jpeg" alt="img: postman posts query x-csrf token" />
+<img src="http://localhost:4000/assets/img/postman-posts-query-session.jpeg" alt="img: postman posts query session" />
+<img src="http://localhost:4000/assets/img/postman-posts-query.jpeg" alt="img: postman posts query" /></p>
+
+<p>Let’s see CSRF verification failure.
+Click check box on the left of X-CSRF-TOKEN to deactivate. The header won’t be sent.
+Now we see ActionController::InvalidAuthenticityToken exception.
+On the terminal where Rails is running, “Can’t verify CSRF token authenticity.” appears again.
+That means the exception strategy is working.</p>
+
+<p><img src="http://localhost:4000/assets/img/postman-posts-query-failure.jpeg" alt="img: postman posts query failure" /></p>
+
+<p>Lastly, let’s try postCreate mutation.
+The mutation looks like below:</p>
+<pre><code class="language-graphql">mutation create_post {
+    postCreate(input: {
+        title: "This is a test post title",
+        content: "This is a test post content."
+    }) {
+        post {
+            id
+            userId
+            title
+            content
+        }
+    }
+}
+</code></pre>
+
+<p>As explained in the previous post, access-token, client and uid should be set in the HTTP request header
+in addition to X-CSRF-TOKEN and session.
+Previously tried userLogin mutation gave us those three values already. Set those to the request header.
+Make sure the session is attached in the cookie if the GraphQL client is not Postman.</p>
+
+<p><img src="http://localhost:4000/assets/img/postman-create-post-headers.jpeg" alt="img: postman create post headers" /></p>
+
+<p>Write the mutation query and click “Send” button.</p>
+
+<p><img src="http://localhost:4000/assets/img/postman-create-post-query.jpeg" alt="img: postman create post query" /></p>
+
+<p>The new post was successfully created.</p>
+
+<h3 id="code">Code</h3>
+
+<p>The example Rails app code is on the GitHub repo.
+Please see <a href="https://github.com/yokolet/mini-blog-3">https://github.com/yokolet/mini-blog-3</a>.</p>
+
+<h3 id="references">References</h3>
+<ul>
+  <li>OWASP: <a href="https://owasp.org/www-community/attacks/csrf">Cross-Site Request Forgery</a></li>
+  <li><a href="https://marcgg.com/blog/2016/08/22/csrf-rails/">Understanding Rails’ Forgery Protection Strategies</a></li>
+  <li><a href="https://medium.com/rubyinside/a-deep-dive-into-csrf-protection-in-rails-19fa0a42c0ef">A Deep Dive into CSRF Protection in Rails</a></li>
+  <li><a href="https://guides.rubyonrails.org/security.html">Securing Rails Applications</a></li>
+  <li><a href="https://blog.eq8.eu/article/rails-api-authentication-with-spa-csrf-tokens.html">Rails CSRF protection for SPA</a></li>
+  <li><a href="https://checkmarx.com/blog/whats-old-becomes-new-again-csrf-attacks-on-graphql-apis/">What’s Old Becomes New Again: CSRF Attacks on GraphQL APIs</a></li>
+</ul>
+
+</div>
+
+
+
+
+                </div>
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    <p class="title is-4">Latest Posts</p>
+
+<div class="columns is-multiline">
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2023/03/29/make-it-secure-3-csrf-for-graphql-on-rails.html">Make it Secure 3, CSRF for GraphQL on Rails</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>This is the third post about securing Rails GraphQL API app.
+The topic is CSRF protection for GraphQL API.
+CSRF is an acronym of <a href="https://owasp.org/www-community/attacks/csrf">Cross-Site Request Forgery</a>,
+and one of well-known vulnerabilities and a type of session hijack.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2023/03/29/make-it-secure-3-csrf-for-graphql-on-rails.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Mar 29, 2023</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2023/03/23/make-it-secure-2-graphql-by-rails-and-devise.html">Make it Secure 2, GraphQL by Rails and Devise</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>This is the second post about securing Rails GraphQL API app.
+Most of conceptual explanations are in the previous post,
+<a href="/2023/03/19/make-it-secure-graphql-by-rails.html">Make it Secure, GraphQL by Rails</a>.
+This memo is focusing on how to add the authentication using Devise gem
+(<a href="https://github.com/heartcombo/devise">https://github.com/heartcombo/devise</a>).</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2023/03/23/make-it-secure-2-graphql-by-rails-and-devise.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Mar 23, 2023</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2023/03/19/make-it-secure-graphql-by-rails.html">Make it Secure, GraphQL by Rails</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>These days, attacks on a web application becomes more and more common.
+Every web application should be protected to get rid of such attacks.
+Ruby on Rails provides ways to make it secure out of the box.
+Additionally, well-used gems in Rails world, such as Devise (<a href="https://github.com/heartcombo/devise">https://github.com/heartcombo/devise</a>),
+give us convenient ways to protect the Rails app.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2023/03/19/make-it-secure-graphql-by-rails.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Mar 19, 2023</p>
+    </footer>
+</div>
+    </div>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="/assets/js/accordion.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>
