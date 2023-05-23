@@ -1,4 +1,271 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-03-30T23:11:07+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Blog site mostly for programming topics.</subtitle><entry><title type="html">Make it Secure 3, CSRF for GraphQL on Rails</title><link href="http://localhost:4000/2023/03/29/make-it-secure-3-csrf-for-graphql-on-rails.html" rel="alternate" type="text/html" title="Make it Secure 3, CSRF for GraphQL on Rails" /><published>2023-03-29T23:39:00+09:00</published><updated>2023-03-29T23:39:00+09:00</updated><id>http://localhost:4000/2023/03/29/make-it-secure-3-csrf-for-graphql-on-rails</id><content type="html" xml:base="http://localhost:4000/2023/03/29/make-it-secure-3-csrf-for-graphql-on-rails.html">&lt;p&gt;This is the third post about securing Rails GraphQL API app.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-05-23T21:49:24+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Blog site mostly for programming topics.</subtitle><entry><title type="html">Rails 7 React/Redux Development with esbuild</title><link href="http://localhost:4000/2023/05/23/rails-7-react-redux-development-with-esbuild.html" rel="alternate" type="text/html" title="Rails 7 React/Redux Development with esbuild" /><published>2023-05-23T21:47:00+09:00</published><updated>2023-05-23T21:47:00+09:00</updated><id>http://localhost:4000/2023/05/23/rails-7-react-redux-development-with-esbuild</id><content type="html" xml:base="http://localhost:4000/2023/05/23/rails-7-react-redux-development-with-esbuild.html">&lt;p&gt;Rails 7 provides a couple of approaches to bundle a rich JavaScript application such as SPA.
+To create the JavaScript application, we should specify &lt;code&gt;j|--javascript&lt;/code&gt; option with
+importmap (default), webpack, esbuild or rollup when &lt;code&gt;rails new&lt;/code&gt; command gets run.
+Although webpack is still among the choices, it has been retired as describe in the
+&lt;a href=&quot;https://github.com/rails/webpacker/blob/master/README.md&quot;&gt;https://github.com/rails/webpacker/blob/master/README.md&lt;/a&gt;.
+The choice here is &lt;a href=&quot;https://esbuild.github.io/&quot;&gt;esbuild&lt;/a&gt; since it is friendly to JavaScript development,
+for example, starting from &lt;code&gt;yarn create react-app ...&lt;/code&gt;.
+The esbuild is gaining popularity and known to run very fast with its Go-lang implementation.&lt;/p&gt;
+
+&lt;p&gt;This blog post creates React/Redux application on top of Rails 7.
+The application is a sample counter app which comes from what &lt;code&gt;yarn create react-app [app name] --template redux-typescript&lt;/code&gt;
+command creates.&lt;/p&gt;
+
+&lt;h3 id=&quot;create-a-rails-app-with-esbuild-option&quot;&gt;Create a Rails App with esbuild Option&lt;/h3&gt;
+
+&lt;p&gt;The command to create an app is something like:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;% rails new [APP NAME] -j esbuild -T
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;-j esbuild&lt;/code&gt; option installs frontend development packages/tools.
+Additionally, the command, &lt;code&gt;./bin/rails javascript:install:esbuild&lt;/code&gt;, gets run during the app creation.
+The package.json, Procfile.dev and couple other files for JavaScript development are also created.&lt;/p&gt;
+
+&lt;h3 id=&quot;create-an-entry-point-for-reactjs-app&quot;&gt;Create an Entry Point for ReactJS App&lt;/h3&gt;
+
+&lt;p&gt;The next step is to create and entry point for ReactJS app.
+All incoming HTTP requests are received by controllers on Rails.
+Following such Rails style, the entry point to ReactJS app is also a controller.
+However, instead of &lt;code&gt;rails g controller ...&lt;/code&gt;, stimulus generator is used for this.
+The generated controller is a JavaScript class, which is a subclass of stimulus Controller.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;% rails g stimulus react
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Above generates &lt;code&gt;app/javascript/controllers/react_controller.js&lt;/code&gt; and updates &lt;code&gt;app/javascript/controllers/index.js&lt;/code&gt;.
+The generated controller class is equivalent to ReactJS app’s index.tsx(jsx).
+What we write in index.tsx should go to a connect method in the generated controller class.&lt;/p&gt;
+
+&lt;h3 id=&quot;create-a-view-to-mount-reactjs-app&quot;&gt;Create a View to Mount ReactJS App&lt;/h3&gt;
+
+&lt;p&gt;If the ReactJS app is created by &lt;code&gt;yarn create react-app ...&lt;/code&gt; or npm, npx command,
+the app has a mount point in &lt;code&gt;public/index.html&lt;/code&gt;, something like: &lt;code&gt;&amp;lt;div id=&quot;root&quot;&amp;gt;&amp;lt;/div&amp;gt;&lt;/code&gt;.
+It is Rails, so we should create a controller.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;% rails g controller pages home
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Above creates a couple of files as we know.
+Edit &lt;code&gt;app/views/pages/home.html.erb&lt;/code&gt; and add the mount point.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-erbruby&quot;&gt;&amp;lt;%# app/views/pages/home.html.erb %&amp;gt;
+
+&amp;lt;h1&amp;gt;Pages#home&amp;lt;/h1&amp;gt;
+&amp;lt;p&amp;gt;Find me in app/views/pages/home.html.erb&amp;lt;/p&amp;gt;
+&amp;lt;%= content_tag(:div, &quot;&quot;, id:&quot;root&quot;, data:{ controller: &quot;react&quot; }) %&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Also, edit &lt;code&gt;config/routes.rb&lt;/code&gt; to add a path to pages#home.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;# config/routes.rb
+
+Rails.application.routes.draw do
+  root &apos;pages#home&apos;
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;setup-basic-react-typescript-app&quot;&gt;Setup Basic React TypeScript App&lt;/h3&gt;
+
+&lt;p&gt;At this moment, the Rails side is ready.
+However, the JavaScript side has a package.json file only, which is like right after &lt;code&gt;yarn --init&lt;/code&gt; ran.
+Since it is a React TypeScript app, install basic packages.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;% yarn add react react-dom @types/react @types/react-dom typescript
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Also, TypeScript initialization should be done.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;% tsc --init --project tsconfig.json --noEmit --jsx react-jsx
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;redux-toolkit-counter-example&quot;&gt;Redux Toolkit Counter Example&lt;/h3&gt;
+
+&lt;p&gt;When the redux-typescript template is used to create a ReactJS App, the counter example comes with it.
+For examples, &lt;code&gt;yarn create react-app my-app --template redux-typescript&lt;/code&gt; command creates files below
+(excludes node_modules directory):&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;.
+├── README.md
+├── package.json
+├── public
+│   ├── favicon.ico
+│   ├── index.html
+│   ├── logo192.png
+│   ├── logo512.png
+│   ├── manifest.json
+│   └── robots.txt
+├── src
+│   ├── App.css
+│   ├── App.test.tsx
+│   ├── App.tsx
+│   ├── app
+│   │   ├── hooks.ts
+│   │   └── store.ts
+│   ├── features
+│   │   └── counter
+│   │       ├── Counter.module.css
+│   │       ├── Counter.tsx
+│   │       ├── counterAPI.ts
+│   │       ├── counterSlice.spec.ts
+│   │       └── counterSlice.ts
+│   ├── index.css
+│   ├── index.tsx
+│   ├── logo.svg
+│   ├── react-app-env.d.ts
+│   ├── reportWebVitals.ts
+│   └── setupTests.ts
+├── tsconfig.json
+└── yarn.lock
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We want files under src directory.
+How to map those files under &lt;code&gt;app/javascript&lt;/code&gt; might be controversy.
+Some might create a components directory.
+However, as for Redux Toolkit, features and/or app directories are more common.&lt;/p&gt;
+
+&lt;p&gt;The app here is created by copying files under &lt;code&gt;src&lt;/code&gt; to &lt;code&gt;app/javascript&lt;/code&gt; almost as those are.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;app/javascript
+├── App.tsx
+├── app
+│   ├── hooks.ts
+│   └── store.ts
+├── application.js
+├── controllers
+│   ├── application.js
+│   ├── hello_controller.js
+│   ├── index.js
+│   └── react_controller.js
+├── features
+│   └── counter
+│       ├── Counter.module.css
+│       ├── Counter.tsx
+│       ├── counterAPI.ts
+│       ├── counterSlice.spec.ts
+│       └── counterSlice.ts
+└── logo.svg
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Handling of .css files will be mentioned later since that needs a bit of fix.&lt;/p&gt;
+
+&lt;p&gt;To run the counter app, Redux Toolkit and react binding packages should be installed.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;% yarn add @reduxjs/toolkit react-redux
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;update-react_controllerjs&quot;&gt;Update react_controller.js&lt;/h3&gt;
+
+&lt;p&gt;Previously mentioned, &lt;code&gt;app/javascript/controllers/react_controller.js&lt;/code&gt; is equivalent to ReactJS app’s index.tsx.&lt;/p&gt;
+
+&lt;p&gt;The file looks like below to run the counter app.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-tsx&quot;&gt;// app/javascript/controllers/react_controller.js
+
+import { Controller } from &quot;@hotwired/stimulus&quot;
+import React from &apos;react&apos;;
+import { createRoot } from &apos;react-dom/client&apos;;
+import { Provider } from &quot;react-redux&quot;;
+import App from &apos;../App&apos;;
+import { store } from &apos;../app/store&apos;;
+
+// Connects to data-controller=&quot;react&quot;
+export default class extends Controller {
+  connect() {
+    const container = document.getElementById(&apos;root&apos;);
+    const root = createRoot(container);
+
+    root.render(
+      &amp;lt;React.StrictMode&amp;gt;
+        &amp;lt;Provider store={store}&amp;gt;
+          &amp;lt;App /&amp;gt;
+        &amp;lt;/Provider&amp;gt;
+      &amp;lt;/React.StrictMode&amp;gt;
+    );
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;update-packagejson-scripts-section&quot;&gt;Update package.json scripts section&lt;/h3&gt;
+
+&lt;p&gt;When the Rails app is created, package.json’s scripts section looks like below.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&quot;scripts&quot;: {
+  &quot;build&quot;: &quot;esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --public-path=assets&quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As in the above directory tree, the counter app has .tsx and .svg files under app/javascript.
+So that esbuild can load those, two loaders should be added to the esbuild option.&lt;/p&gt;
+
+&lt;p&gt;Additionally, the script section should have TypeScript check.&lt;/p&gt;
+
+&lt;p&gt;After the update, the script section looks like below:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&quot;scripts&quot;: {
+  &quot;build&quot;: &quot;esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --public-path=assets --loader:.js=jsx --loader:.svg=file&quot;,
+  &quot;check-types&quot;: &quot;tsc --project tsconfig.json --noEmit --watch --preserveWatchOutput&quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;avoid-sprocketsdoublelinkerror-applicationcss-error&quot;&gt;Avoid Sprockets::DoubleLinkError application.css Error&lt;/h3&gt;
+
+&lt;p&gt;If esbuild is used in a Rails app, .css files need extra caution.
+We might end up in having two application.css files generated by esbuild and originally created by &lt;code&gt;rails new&lt;/code&gt; command.
+If that happens, the conflict raises the Sprockets::DoubleLinkError application.css error.&lt;/p&gt;
+
+&lt;p&gt;When a .tsx(.jsx) file imports CSS, esbuild generates app/assets/builds/application.css.
+Whereas we have app/assets/stylesheets/application.css generated by rails new command.
+These two application.css files have the same name but different contents.&lt;/p&gt;
+
+&lt;p&gt;A couple to few ways would be there to avoid the error.
+Probably, below two are easy ones.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Never ever import css files in .tsx(.jsx).
+Instead, write all styles in &lt;code&gt;app/assets/stylesheets/application.css&lt;/code&gt; or take a traditional Rails way.&lt;/li&gt;
+  &lt;li&gt;Rename &lt;code&gt;app/assets/stylesheets/application.css&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The app here mainly took the second approach, but partially the first approach.
+The &lt;code&gt;app/assets/stylesheets/application.css&lt;/code&gt; was renamed to &lt;code&gt;app/assets/stylesheets/application-rails.css&lt;/code&gt;.
+The &lt;code&gt;app/views/layouts/application.html.erb&lt;/code&gt; file got one more stylesheet_link_tag shown below:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-erbruby&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+  &amp;lt;head&amp;gt;
+    &amp;lt;title&amp;gt;React/Redux App&amp;lt;/title&amp;gt;
+    &amp;lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&amp;gt;
+    &amp;lt;%= favicon_link_tag &apos;favicon.ico&apos; %&amp;gt;
+    &amp;lt;%= csrf_meta_tags %&amp;gt;
+    &amp;lt;%= csp_meta_tag %&amp;gt;
+
+    &amp;lt;%= stylesheet_link_tag &quot;application&quot;, &quot;data-turbo-track&quot;: &quot;reload&quot; %&amp;gt;
+    &amp;lt;%= stylesheet_link_tag &quot;application-rails&quot;, &quot;data-turbo-track&quot;: &quot;reload&quot; %&amp;gt;
+    &amp;lt;%= javascript_include_tag &quot;application&quot;, &quot;data-turbo-track&quot;: &quot;reload&quot;, defer: true %&amp;gt;
+  &amp;lt;/head&amp;gt;
+
+  &amp;lt;body&amp;gt;
+    &amp;lt;%= yield %&amp;gt;
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;All styles in &lt;code&gt;index.css&lt;/code&gt; and &lt;code&gt;App.css&lt;/code&gt; are moved to &lt;code&gt;app/assets/stylesheets/application-rails.css&lt;/code&gt;.
+The css import was removed from &lt;code&gt;App.tsx&lt;/code&gt; and &lt;code&gt;app/javascript/controllers/react_controller.js&lt;/code&gt;.
+However, &lt;code&gt;app/javascript/features/counter/Counter.module.css&lt;/code&gt; is there, which is imported in
+&lt;code&gt;app/javascript/features/counter/Counter.tsx&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;use-bindev-not-rails-s&quot;&gt;Use bin/dev, not rails s&lt;/h3&gt;
+
+&lt;p&gt;To run the Rails app, use &lt;code&gt;bin/dev&lt;/code&gt;.
+As defined in &lt;code&gt;Procfile.dev&lt;/code&gt;, we need Rails server and esbuild with watch option.
+The &lt;code&gt;bin/dev&lt;/code&gt; command does that.
+If everything goes well, the counter app below shows up at http://localhost:3000/ .&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/img/react-redux-counter-app.jpeg&quot; alt=&quot;img: react redux counter app&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;code&quot;&gt;Code&lt;/h3&gt;
+
+&lt;p&gt;The example Rails app code is on the GitHub repo.
+Please see &lt;a href=&quot;https://github.com/yokolet/rails7-typescript-redux-counter-example&quot;&gt;https://github.com/yokolet/rails7-typescript-redux-counter-example&lt;/a&gt;&lt;/p&gt;</content><author><name>Yoko Harada</name></author><summary type="html">Rails 7 provides a couple of approaches to bundle a rich JavaScript application such as SPA. To create the JavaScript application, we should specify j|--javascript option with importmap (default), webpack, esbuild or rollup when rails new command gets run. Although webpack is still among the choices, it has been retired as describe in the https://github.com/rails/webpacker/blob/master/README.md. The choice here is esbuild since it is friendly to JavaScript development, for example, starting from yarn create react-app .... The esbuild is gaining popularity and known to run very fast with its Go-lang implementation.</summary></entry><entry><title type="html">Make it Secure 3, CSRF for GraphQL on Rails</title><link href="http://localhost:4000/2023/03/29/make-it-secure-3-csrf-for-graphql-on-rails.html" rel="alternate" type="text/html" title="Make it Secure 3, CSRF for GraphQL on Rails" /><published>2023-03-29T23:39:00+09:00</published><updated>2023-03-29T23:39:00+09:00</updated><id>http://localhost:4000/2023/03/29/make-it-secure-3-csrf-for-graphql-on-rails</id><content type="html" xml:base="http://localhost:4000/2023/03/29/make-it-secure-3-csrf-for-graphql-on-rails.html">&lt;p&gt;This is the third post about securing Rails GraphQL API app.
 The topic is CSRF protection for GraphQL API.
 CSRF is an acronym of &lt;a href=&quot;https://owasp.org/www-community/attacks/csrf&quot;&gt;Cross-Site Request Forgery&lt;/a&gt;,
 and one of well-known vulnerabilities and a type of session hijack.&lt;/p&gt;
@@ -2934,174 +3201,4 @@ So the new node can be added to its parent’s left or right child easily.&lt;/p
 &lt;ul&gt;
   &lt;li&gt;Wikipedia: &lt;a href=&quot;https://en.wikipedia.org/wiki/Binary_tree#Types_of_binary_trees&quot;&gt;Types of Binary Tree&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://www.cs.cmu.edu/~adamchik/15-121/lectures/Binary%20Heaps/heaps.html&quot;&gt;Binary Heaps&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Yoko Harada</name></author><summary type="html">Problems which ask a binary tree traverse, add/delete nodes, etc. are popular in algorithm questions. The binary trees are often just a binary tree or binary search tree. Sometimes, the problem pinpoints a particular type of a binary tree, for example, a balanced binary tree or complete binary tree.</summary></entry><entry><title type="html">Catalan number</title><link href="http://localhost:4000/2019/09/09/catalan-number.html" rel="alternate" type="text/html" title="Catalan number" /><published>2019-09-09T04:41:00+09:00</published><updated>2019-09-09T04:41:00+09:00</updated><id>http://localhost:4000/2019/09/09/catalan-number</id><content type="html" xml:base="http://localhost:4000/2019/09/09/catalan-number.html">&lt;p&gt;What is &lt;strong&gt;Catalan number&lt;/strong&gt; ?
-The Catalan number belongs to the domain of combinatorial mathematics.
-It is a sequence of natural numbers such that:
-&lt;code&gt;1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012, 742900, 2674440, 9694845, 35357670, 129644790, 477638700, 1767263190, ...&lt;/code&gt;
-The sequence appears in counting problems.
-Wikipedia has the details about the sequence: &lt;a href=&quot;https://en.wikipedia.org/wiki/Catalan_number&quot;&gt;Catalan Number&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;The algorithm of the Catalan number calculation is not difficult.
-Once the problem is identified as the Catalan number,
-the solution will come up relatively easy.
-However, something not easy is to identify it is the Catalan number problem.&lt;/p&gt;
-
-&lt;h4 id=&quot;various-types-of-counting-problems&quot;&gt;Various types of counting problems&lt;/h4&gt;
-
-&lt;p&gt;The Wikipedia article mentions various types of counting problems which are solved by the Catalan number.
-One more great resource is “Catalan Numbers” (&lt;a href=&quot;http://www.geometer.org/mathcircles/catalan.pdf&quot;&gt;http://www.geometer.org/mathcircles/catalan.pdf&lt;/a&gt;).
-The document refers to multiple counting problems as well as how to solve those.
-For a reference, it’s worth writing a memo what kind of problems are out there.&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;Balanced parentheses&lt;/p&gt;
-
-    &lt;p&gt;Problem: Given &lt;code&gt;n&lt;/code&gt; pairs of parentheses, how many patterns exist to create
- valid (balanced) combinations of parentheses.&lt;/p&gt;
-
-    &lt;p&gt;Example:&lt;/p&gt;
-
-    &lt;pre&gt;&lt;code&gt; n  counts  patterns
- 0  1       *
- 1  1       ()
- 2  2       (()) ()()
- 3  5       ((())) ()(()) ()()() (())() (()())
-&lt;/code&gt;&lt;/pre&gt;
-
-    &lt;p&gt;Note: This is a basic pattern of the Catalan number.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Dyck words&lt;/p&gt;
-
-    &lt;p&gt;Problem: Given &lt;code&gt;n&lt;/code&gt;, how many patterns exist to create words of n Xs and n Ys such that
- in every prefix of the word frequency(‘X’) ≥ frequency(‘Y’)&lt;/p&gt;
-
-    &lt;p&gt;Example:&lt;/p&gt;
-
-    &lt;pre&gt;&lt;code&gt; n  counts  patterns
- 0  1       *
- 1  1       XY
- 2  2       XXYY XYXY
- 3  5       XXXYYY XYXXYY XYXYXY XXYYXY XXYXYY
-&lt;/code&gt;&lt;/pre&gt;
-
-    &lt;p&gt;Note: If X and Y are mapped ( and ) respectively, the problem is the same as
- the balanced parentheses.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Mountain Ranges&lt;/p&gt;
-
-    &lt;p&gt;Problem: Given &lt;code&gt;n&lt;/code&gt; pairs of sticks, how many patterns exist to create mountains.&lt;/p&gt;
-
-    &lt;pre&gt;&lt;code&gt; n  counts  patterns
- 0  1       *
- 1  1       /\
- 2  2       /\
-           /  \  /\/\
- 3  5        /\
-            /  \     /\             /\      /\/\
-           /    \  /\/  \  /\/\/\  /  \/\  /    \
-&lt;/code&gt;&lt;/pre&gt;
-
-    &lt;p&gt;Note: If / and \ are mapped to ( and ) respectively, the problem is the same as
- the balanced parentheses.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Binary Search Trees&lt;/p&gt;
-
-    &lt;p&gt;Problem: Given &lt;code&gt;n&lt;/code&gt;, how many unique binary search tress exist to create node value &lt;code&gt;1 to n&lt;/code&gt;.&lt;/p&gt;
-
-    &lt;p&gt;Example:&lt;/p&gt;
-    &lt;pre&gt;&lt;code&gt; n  counts  patterns
- 0  1       *
- 1  1       1
- 2  2         2  1
-             /    \
-            1      2
- 3  5           3    3     2    1    1
-               /    /     / \    \    \
-             2    1     1   3    3    2
-            /      \            /      \
-           1        2          2        3
-&lt;/code&gt;&lt;/pre&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Diagonal Paths&lt;/p&gt;
-
-    &lt;p&gt;Problem: Given &lt;code&gt;n x n&lt;/code&gt; grid, how many paths of length &lt;code&gt;2n&lt;/code&gt; exist from bottom left to upper right corner.&lt;/p&gt;
-
-    &lt;p&gt;Example:&lt;/p&gt;
-    &lt;pre&gt;&lt;code&gt; n  counts  patterns
- 0  1       *
- 1  1        ↑
-            →
- 2  2         ↑       ↑
-              ↑    ↑ →
-           → →    →
- 3  5           ↑        ↑         ↑        ↑          ↑
-                ↑        ↑      ↑ →      ↑ →           ↑
-                ↑   ↑ → →    ↑ →         ↑         ↑ →
-           → → →   →        →         → →      → →
-&lt;/code&gt;&lt;/pre&gt;
-
-    &lt;p&gt;Note: If → and ↑ are mapped to ( and ), the problem is the same as the
- balanced parentheses.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Multiplication orderings&lt;/p&gt;
-
-    &lt;p&gt;Problem: Given &lt;code&gt;n+1&lt;/code&gt; numbers to multiply together, how many patterns exist to make multiplication
- precedences without changing the order of numbers.&lt;/p&gt;
-
-    &lt;p&gt;Example:&lt;/p&gt;
-
-    &lt;pre&gt;&lt;code&gt; n  counts  patterns
- 0  1       (a)
- 1  1       (ab)
- 2  2       ((ab)c) (a(bc))
- 3  5       (((ab)c)d) ((ab)(cd)) ((a(bc))d) (a((bc)d)) (a(b(cd)))
-&lt;/code&gt;&lt;/pre&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Polygon Triangulation&lt;/p&gt;
-
-    &lt;p&gt;Problem: Given &lt;code&gt;n+2&lt;/code&gt; sides of convex polygon, how many patterns exist to cut into
- triangles of non-crossing line segments.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Handshaking&lt;/p&gt;
-
-    &lt;p&gt;Problem: Given &lt;code&gt;2n&lt;/code&gt; people seated around the round table, how many patterns exists to
- shake hands without crossing arms.&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h4 id=&quot;code-example&quot;&gt;Code Example&lt;/h4&gt;
-
-&lt;p&gt;For all problems above, the number of patterns can be found the code below:&lt;/p&gt;
-
-&lt;script src=&quot;https://gist.github.com/yokolet/f33be1919df2015a172fd3c80f89aaef.js&quot;&gt; &lt;/script&gt;
-
-&lt;p&gt;The first &lt;code&gt;numPatterns&lt;/code&gt; method runs faster if the problem asks only one number such as:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;leetcode: &lt;a href=&quot;https://leetcode.com/problems/unique-binary-search-trees/&quot;&gt;Unique Binary Search Trees&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;topcoder: &lt;a href=&quot;https://community.topcoder.com/stat?c=problem_statement&amp;amp;pm=7868&amp;amp;rd=10777&quot;&gt;Hands Shaking&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;However, when problem asks accumulation of patterns such as:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;HackerRank: &lt;a href=&quot;https://www.hackerrank.com/contests/walmart-codesprint-algo/challenges/popsicle-stick-mountains&quot;&gt;Popsicle Stick Mountains&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;the second DP solution works to avoid repetition.&lt;/p&gt;
-
-&lt;h4 id=&quot;resources&quot;&gt;Resources&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Wikipedia: &lt;a href=&quot;https://en.wikipedia.org/wiki/Catalan_number&quot;&gt;Catalan number&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;Tom Davis: &lt;a href=&quot;http://www.geometer.org/mathcircles/catalan.pdf&quot;&gt;Catalan Numbers&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;GeeksforGeeks: &lt;a href=&quot;https://www.geeksforgeeks.org/program-nth-catalan-number/&quot;&gt;Program for nth Catalan Number&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Yoko Harada</name></author><summary type="html">What is Catalan number ? The Catalan number belongs to the domain of combinatorial mathematics. It is a sequence of natural numbers such that: 1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012, 742900, 2674440, 9694845, 35357670, 129644790, 477638700, 1767263190, ... The sequence appears in counting problems. Wikipedia has the details about the sequence: Catalan Number.</summary></entry></feed>
+&lt;/ul&gt;</content><author><name>Yoko Harada</name></author><summary type="html">Problems which ask a binary tree traverse, add/delete nodes, etc. are popular in algorithm questions. The binary trees are often just a binary tree or binary search tree. Sometimes, the problem pinpoints a particular type of a binary tree, for example, a balanced binary tree or complete binary tree.</summary></entry></feed>
