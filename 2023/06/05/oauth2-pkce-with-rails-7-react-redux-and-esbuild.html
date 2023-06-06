@@ -291,7 +291,7 @@ end
 </code></pre>
 
 <p>Edit app/views/pages/home.html.erb to add the div tag with id=root as the mount point.</p>
-<pre><code class="language-erbruby">&lt;%# app/views/pages/home.html.erb %&gt;
+<pre><code class="language-erb">&lt;%# app/views/pages/home.html.erb %&gt;
 
 &lt;h1&gt;Pages#home&lt;/h1&gt;
 &lt;p&gt;Find me in app/views/pages/home.html.erb&lt;/p&gt;
@@ -398,7 +398,9 @@ var environment = {
 
 <p>Lastly, add javascript tag in app/views/layouts/application.html.erb.
 The tag should come before application.js since the variables defined in settings.js will be referenced in application.js.</p>
-<pre><code class="language-erbruby">...
+<pre><code class="language-erb">&lt;%# app/views/layouts/application.html.erb %&gt;
+
+...
 &lt;head&gt;
     &lt;title&gt;TwitterOauthPkceExample&lt;/title&gt;
     &lt;meta name="viewport" content="width=device-width,initial-scale=1"&gt;

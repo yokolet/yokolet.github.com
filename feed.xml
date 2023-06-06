@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-06-05T22:47:07+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Blog site mostly for programming topics.</subtitle><entry><title type="html">OAuth2 PKCE With Rails 7, React/Redux and esbuild</title><link href="http://localhost:4000/2023/06/05/oauth2-pkce-with-rails-7-react-redux-and-esbuild.html" rel="alternate" type="text/html" title="OAuth2 PKCE With Rails 7, React/Redux and esbuild" /><published>2023-06-05T22:47:00+09:00</published><updated>2023-06-05T22:47:00+09:00</updated><id>http://localhost:4000/2023/06/05/oauth2-pkce-with-rails-7-react-redux-and-esbuild</id><content type="html" xml:base="http://localhost:4000/2023/06/05/oauth2-pkce-with-rails-7-react-redux-and-esbuild.html">&lt;p&gt;Logging in to a web site is what users do quite a lot.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-06-06T20:01:44+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Blog site mostly for programming topics.</subtitle><entry><title type="html">OAuth2 PKCE With Rails 7, React/Redux and esbuild</title><link href="http://localhost:4000/2023/06/05/oauth2-pkce-with-rails-7-react-redux-and-esbuild.html" rel="alternate" type="text/html" title="OAuth2 PKCE With Rails 7, React/Redux and esbuild" /><published>2023-06-05T22:47:00+09:00</published><updated>2023-06-05T22:47:00+09:00</updated><id>http://localhost:4000/2023/06/05/oauth2-pkce-with-rails-7-react-redux-and-esbuild</id><content type="html" xml:base="http://localhost:4000/2023/06/05/oauth2-pkce-with-rails-7-react-redux-and-esbuild.html">&lt;p&gt;Logging in to a web site is what users do quite a lot.
 Suppose it is a blog site.
 Once a user completes a log-in process, the user is allowed to create a new post, update contents and delete a post.
 The blog site might have a feature to leave comments by logged in users.&lt;/p&gt;
@@ -163,7 +163,7 @@ end
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Edit app/views/pages/home.html.erb to add the div tag with id=root as the mount point.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-erbruby&quot;&gt;&amp;lt;%# app/views/pages/home.html.erb %&amp;gt;
+&lt;pre&gt;&lt;code class=&quot;language-erb&quot;&gt;&amp;lt;%# app/views/pages/home.html.erb %&amp;gt;
 
 &amp;lt;h1&amp;gt;Pages#home&amp;lt;/h1&amp;gt;
 &amp;lt;p&amp;gt;Find me in app/views/pages/home.html.erb&amp;lt;/p&amp;gt;
@@ -270,7 +270,9 @@ var environment = {
 
 &lt;p&gt;Lastly, add javascript tag in app/views/layouts/application.html.erb.
 The tag should come before application.js since the variables defined in settings.js will be referenced in application.js.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-erbruby&quot;&gt;...
+&lt;pre&gt;&lt;code class=&quot;language-erb&quot;&gt;&amp;lt;%# app/views/layouts/application.html.erb %&amp;gt;
+
+...
 &amp;lt;head&amp;gt;
     &amp;lt;title&amp;gt;TwitterOauthPkceExample&amp;lt;/title&amp;gt;
     &amp;lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&amp;gt;
