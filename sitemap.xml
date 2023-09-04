@@ -109,10 +109,6 @@
 <lastmod>2019-10-30T09:40:00+09:00</lastmod>
 </url>
 <url>
-<loc>http://localhost:4000/2022/10/30/number-of-ways-to-build-sturdy-brick-wall.html</loc>
-<lastmod>2022-10-30T17:09:57+09:00</lastmod>
-</url>
-<url>
 <loc>http://localhost:4000/2023/02/07/datomic-quick-start-in-2023.html</loc>
 <lastmod>2023-02-07T18:03:00+09:00</lastmod>
 </url>
@@ -143,6 +139,10 @@
 <url>
 <loc>http://localhost:4000/2023/06/05/oauth2-pkce-with-rails-7-react-redux-and-esbuild.html</loc>
 <lastmod>2023-06-05T22:47:00+09:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/2023/09/04/ruby-on-rails-secrets-management.html</loc>
+<lastmod>2023-09-04T15:13:00+09:00</lastmod>
 </url>
 <url>
 <loc>http://localhost:4000/algo/minimize_maximum/2022-07-22-minimize-maximum-divide-chocolate.html</loc>
