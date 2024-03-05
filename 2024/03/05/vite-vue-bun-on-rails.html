@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <meta http-equiv='cache-control' content='no-cache'>
+    <meta http-equiv='expires' content='0'>
+    <meta http-equiv='pragma' content='no-cache'>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/accordion.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Vite + Vue + Bun on Rails | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.5" />
+<meta property="og:title" content="Vite + Vue + Bun on Rails" />
+<meta name="author" content="Yoko Harada" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Vue.js is one of frontend frameworks gaining popularity among rapidly emerging JavaScript technologies. The combination of Vue.js and Rails is becoming more popular as well, however, Vue.js development on Rails is not so straightforward. The reason would be that Vue.js relies on Vite for a development environment such as HMR (Hot Module Replacement) and bundling." />
+<meta property="og:description" content="Vue.js is one of frontend frameworks gaining popularity among rapidly emerging JavaScript technologies. The combination of Vue.js and Rails is becoming more popular as well, however, Vue.js development on Rails is not so straightforward. The reason would be that Vue.js relies on Vite for a development environment such as HMR (Hot Module Replacement) and bundling." />
+<link rel="canonical" href="http://localhost:4000/2024/03/05/vite-vue-bun-on-rails.html" />
+<meta property="og:url" content="http://localhost:4000/2024/03/05/vite-vue-bun-on-rails.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-03-05T21:18:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Vite + Vue + Bun on Rails" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Yoko Harada"},"dateModified":"2024-03-05T21:18:00+09:00","datePublished":"2024-03-05T21:18:00+09:00","description":"Vue.js is one of frontend frameworks gaining popularity among rapidly emerging JavaScript technologies. The combination of Vue.js and Rails is becoming more popular as well, however, Vue.js development on Rails is not so straightforward. The reason would be that Vue.js relies on Vite for a development environment such as HMR (Hot Module Replacement) and bundling.","headline":"Vite + Vue + Bun on Rails","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2024/03/05/vite-vue-bun-on-rails.html"},"url":"http://localhost:4000/2024/03/05/vite-vue-bun-on-rails.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+<script>
+  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-761764-8');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Vite + Vue + Bun on Rails</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-8">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Mar 5, 2024</p>
+
+    <div class="tags">
+        
+    </div>
+
+    
+
+    <p><a href="https://vuejs.org/">Vue.js</a> is one of frontend frameworks gaining popularity among rapidly emerging JavaScript technologies.
+The combination of Vue.js and Rails is becoming more popular as well,
+however, Vue.js development on Rails is not so straightforward.
+The reason would be that Vue.js relies on <a href="https://vitejs.dev/">Vite</a> for a development environment
+such as HMR (Hot Module Replacement) and bundling.</p>
+
+<p>Since Rails 7, some JavaScript approaches have been supported.
+As of version 7.1.3.2, importmap (default), bun, webpack, esbuild and rollup are the choices.
+Vite is a replacement of such JavaScript approaches, but is not listed yet.</p>
+
+<p>Here comes the <a href="https://rubygems.org/gems/vite_rails">vite_rails gem</a>.
+The gem sets up the environment for Vite on Rails.
+Vite itself is independent from frontend frameworks.
+By adding a plugin, Vite + Vue development environment will be created.</p>
+
+<p>One more addition in this blog post is <a href="https://bun.sh/">Bun</a>.
+Bun runs really fast.
+Here, Bun is used just a replacement of npm or yarn.
+However, Bun is a all-in-one toolkit and covers some features of Vite such as bundling.
+For the topic of Bun vs. Vite, the blog post,
+<a href="https://dev.to/this-is-learning/why-use-vite-when-bun-is-also-a-bundler-vite-vs-bun-2723">Why use Vite when Bun is also a bundler? - Vite vs. Bun</a>,
+explains well.
+At this moment, Vite on Bun is an effective combination.</p>
+
+<p>This blog post explains how Vue, Vite and Bun on Rails can be created.
+The source code is on the GitHub, <a href="https://github.com/yokolet/rails-vite-vue">rails-vite-vue</a>.</p>
+
+<h3 id="prerequisite">Prerequisite</h3>
+
+<p>This blog is not about a big application,
+even though we need tools to be installed before getting started.
+Below is a list of what should be installed.</p>
+
+<ol>
+  <li>Ruby: <a href="https://www.ruby-lang.org/en/documentation/installation/">Installing Ruby</a></li>
+  <li>Rails: <a href="https://guides.rubyonrails.org/v5.0/getting_started.html#installing-rails">Installing Rails</a></li>
+  <li>Node.js: <a href="https://nodejs.org/en/download/package-manager/">Installing Node.js via package manager</a><br />
+or Download from <a href="https://nodejs.org/en">https://nodejs.org/en</a></li>
+  <li>Bun: <a href="https://bun.sh/docs/installation">https://bun.sh/docs/installation</a></li>
+</ol>
+
+<h3 id="versions">Versions</h3>
+
+<ul>
+  <li>Ruby 3.2.3</li>
+  <li>Rails 7.1.3.2</li>
+  <li>Node.js v21.5.0</li>
+  <li>Bun 1.0.29</li>
+</ul>
+
+<h3 id="create-a-rails-app-skipping-javascript">Create a Rails App Skipping JavaScript</h3>
+
+<p>Rails supports importmap (default), bun, webpack, esbuild and rollup as JavaScript approaches.
+None of those will be used to transpile, bundle, or etc. to create a frontend by Vue.
+Bun will be used, but its role is a replacement of npm or yarn here.
+The best option is <code>--skip-javascript</code>.
+Also, <code>--minimal</code> option works if the app can be a simple one.</p>
+
+<p>The command blow creates a Rails app without a JavaScript support.</p>
+
+<pre><code class="language-bash">$ rails new [APP NAME] --skip-javascript -T
+</code></pre>
+
+<h3 id="install-vite">Install Vite</h3>
+
+<p>The next step is to install Vite.
+Change a directory to the application, then type the command below.</p>
+
+<pre><code class="language-bash">$ bundle add vite_rails
+</code></pre>
+
+<p>The command above installs vite_rails gem along with a Ruby version of vite command.
+The Ruby version of vite command is used to install Vite and JavaScript version of vite command.</p>
+
+<p>Now, it’s time to use the Ruby version of vite command. Type below.</p>
+
+<pre><code class="language-bash">$ bundle exec vite install
+</code></pre>
+
+<p>Above command does a lot.
+It installs the vite JavaScript package which includes JavaScript version of vite command.
+Also, it installs the vite-plugin-ruby JavaScript package.
+During the package installation, npm runs. It looks no option to switch to yarn or bun.</p>
+
+<p>Additionally, it creates files listed below.</p>
+
+<ul>
+  <li>Procfile.dev</li>
+  <li>app/frontend/entrypoints/application.js</li>
+  <li>bin/vite</li>
+  <li>config/initializers/content_security_policy.rb</li>
+  <li>config/vite.json</li>
+  <li>vite.config.ts</li>
+</ul>
+
+<h3 id="switching-from-npm-to-bun">Switching from npm to bun</h3>
+
+<p>Bun runs really fast, so this blog uses bun instead of npm.
+Since package-lock.json is no longer needed, delete the npm lock file.</p>
+
+<pre><code class="language-bash">$ rm package-lock.json
+$ bun install
+</code></pre>
+
+<p>Once bun install is completed,  Bun’s lock file, <code>bun.lockb</code>, will be created.
+After this, use bun command to install JavaScript packages.</p>
+
+<h3 id="install-vue-and-vue-plugin">Install Vue and Vue Plugin</h3>
+
+<p>We need Vue JavaScript package to develop Vue app.
+We also need the Vue plugin for Vite.
+Vite is a framework independent development tool.
+To use Vite for Vue development, Vue plugin should be installed and set up.</p>
+
+<pre><code class="language-bash">$ bun add vue @vitejs/plugin-vue
+</code></pre>
+
+<p>After the vue and plugin installation, edit <code>vite.config.ts</code> to set up Vue plugin.</p>
+
+<pre><code class="language-typescript">import { defineConfig } from 'vite'
+import RubyPlugin from 'vite-plugin-ruby'
+import vue from '@vitejs/plugin-vue' // added
+
+export default defineConfig({
+  plugins: [
+    RubyPlugin(),
+    vue(),  // added
+  ],
+})
+</code></pre>
+
+<h3 id="set-up-starter-command">Set up Starter Command</h3>
+
+<p>When the app was created, we skipped the JavaScript approaches.
+Because of that, the app doesn’t have a handy command such as <code>bin/dev</code>.
+The vite_rails gem created <code>Profile,dev</code> configuration for a foreman.
+This works, but, still, we need to type <code>foreman start -f Procfile.dev</code> to start the development server.
+It’s better to have the command, <code>bin/dev</code>.</p>
+
+<h5 id="packagejson">package.json</h5>
+
+<p>Add the scripts section in package.json.</p>
+
+<pre><code class="language-json">{
+  "scripts": {
+    "dev": "bunx --bun vite",
+    "build": "bunx --bun vite build"
+  },
+  "devDependencies": {
+    "vite": "^5.1.4",
+    "vite-plugin-ruby": "^5.0.0"
+  },
+  "dependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "vue": "^3.4.21"
+  }
+}
+</code></pre>
+
+<p>The <a href="https://bun.sh/docs/cli/bunx">bunx command</a> should be installed when Bun was installed.
+The bunx is a counterpart of npx.</p>
+
+<h5 id="procfiledev">Procfile.dev</h5>
+
+<p>Update the file as in below.</p>
+
+<pre><code class="language-bash">web: env RUBY_DEBUG_OPEN=true bin/rails server
+js: bun run dev
+</code></pre>
+
+<p>This setting is to start two servers – one for Rails and another for a frontend.</p>
+
+<h5 id="bindev">bin/dev</h5>
+
+<p>Create a new file <code>bin/dev</code> with the contents below.</p>
+
+<pre><code class="language-bash">#!/usr/bin/env sh
+
+if gem list --no-installed --exact --silent foreman; then
+  echo "Installing foreman..."
+  gem install foreman
+fi
+
+# Default to port 3000 if not specified
+export PORT="${PORT:-3000}"
+
+exec foreman start -f Procfile.dev "$@"
+</code></pre>
+
+<p>Then, change the file permission to executable.
+For example, <code>chmod 755 bin/dev</code>.</p>
+
+<p>For now, we can start the two development servers by just typing <code>bin/dev</code>.</p>
+
+<h3 id="create-a-vue-app-mount-point">Create a Vue App Mount Point</h3>
+
+<p>Since it is a Rails app, a controller is responsible to receive HTTP requests.</p>
+
+<pre><code class="language-bash">$ rails g controller pages index
+</code></pre>
+
+<p>Edit <code>app/views/pages/index.html.erb</code> to add the mount point.</p>
+
+<pre><code class="language-erbruby">&lt;%= content_tag(:div, "", id:"app") %&gt;
+</code></pre>
+
+<p>Edit <code>config/routes.rb</code> so that the Vue app can be seen at a root path.</p>
+
+<pre><code class="language-ruby">Rails.application.routes.draw do
+  root 'pages#index'  # updated for a Vue app
+  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+
+  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
+  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  get "up" =&gt; "rails/health#show", as: :rails_health_check
+
+  # Defines the root path route ("/")
+  # root "posts#index"
+end
+</code></pre>
+
+<h3 id="create-a-vue-app">Create a Vue App</h3>
+
+<p>To make an app creation simple, the Vue app used here is the one create by <code>bun create vite</code> command.
+During the app creation, Vue and JavaScript was selected as a framework and language.</p>
+
+<p>When vite_rails gem is used, an entrypoint file is <code>app/frontend/entrypoints/application.js</code>.
+The file is equivalent to <code>main.js</code> of the Vue sample app.
+Replace whole content of application.js (Rails) by main.js (Vite + Vue)
+or add entire main.js (Vite + Vue) to application.js (Rails).</p>
+
+<p>Six files of Vite + Vue app below:</p>
+
+<pre><code class="language-bash">$ tree src public
+src
+├── App.vue
+├── assets
+│   └── vue.svg
+├── components
+│   └── HelloWorld.vue
+├── main.js
+└── style.css
+public
+└── vite.svg
+
+4 directories, 6 files
+</code></pre>
+
+<p>should be mapped to below on Rails:</p>
+
+<pre><code class="language-bash">$ tree app/frontend
+app/frontend
+├── App.vue
+├── assets
+│   └── vue.svg
+├── components
+│   └── HelloWorld.vue
+├── entrypoints
+│   ├── application.js
+│   └── style.css
+└── vite.svg
+
+4 directories, 6 files
+</code></pre>
+
+<p>How to organize directories/files under app/frontend looks not standardized yet.
+The vite_rails gem watches all files under app/frontend and reload if necessary.
+Above directory structure is just an example.</p>
+
+<h3 id="start-the-app-and-verify-hmr">Start the App and Verify HMR</h3>
+
+<p>Start the servers by:</p>
+
+<pre><code class="language-bash">$ bin/dev
+</code></pre>
+
+<p>Open http://localhost:3000/ on a browser.
+The webpage below should show up.</p>
+
+<p><img width="500px" src="http://localhost:4000/assets/img/vite_vue_rails.jpeg" alt="img: vite + vue on rails" /></p>
+
+<p>Try editing <code>app/frontend/App.vue</code> and <code>app/frontend/components/HelloWorld.vue</code> and
+verify HMR (Hot Module Replacement) is working.</p>
+
+<h3 id="references">References</h3>
+<ul>
+  <li>Vite Ruby: <a href="https://vite-ruby.netlify.app/">https://vite-ruby.netlify.app/</a></li>
+  <li>Vue.js Guide: <a href="https://vuejs.org/guide/introduction.html">https://vuejs.org/guide/introduction.html</a></li>
+  <li>Build a frontend using Vite and Bun: <a href="https://bun.sh/guides/ecosystem/vite">https://bun.sh/guides/ecosystem/vite</a></li>
+  <li><a href="https://dev.to/this-is-learning/why-use-vite-when-bun-is-also-a-bundler-vite-vs-bun-2723">Why use Vite when Bun is also a bundler? - Vite vs. Bun</a></li>
+  <li><a href="https://bootrails.com/blog/ruby-on-rails-and-vuejs-tutorial/">Ruby-on-Rails and VueJS tutorial</a></li>
+  <li><a href="https://dev.to/chmich/setup-vite-on-rails-7-f1i">Create Rails-7 app with Vite</a></li>
+  <li><a href="https://dev.to/jetthoughts/integrating-bun-with-vite-ruby-for-lightning-fast-frontend-builds-1fh2">Integrating Bun with Vite Ruby for Lightning-Fast Frontend Builds</a></li>
+  <li><a href="https://clouddevs.com/ruby-on-rails/building-app-with-vuejs-frontend/">Building a Rails App with a Vue.js Frontend</a></li>
+  <li><a href="https://medium.com/@oscarreciogonzalez/vue-on-rails-15686b85b1d3">Vue on Rails</a></li>
+  <li><a href="https://guillaume.barillot.me/2022/05/05/rails-vite-vue-3-pina-starter-pack/">Rails 7 + Vite + Vue 3 + Pinia starter pack</a></li>
+  <li>Source code: <a href="https://github.com/yokolet/rails-vite-vue">https://github.com/yokolet/rails-vite-vue</a></li>
+</ul>
+
+</div>
+
+
+
+
+                </div>
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    <p class="title is-4">Latest Posts</p>
+
+<div class="columns is-multiline">
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2024/03/05/vite-vue-bun-on-rails.html">Vite + Vue + Bun on Rails</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p><a href="https://vuejs.org/">Vue.js</a> is one of frontend frameworks gaining popularity among rapidly emerging JavaScript technologies.
+The combination of Vue.js and Rails is becoming more popular as well,
+however, Vue.js development on Rails is not so straightforward.
+The reason would be that Vue.js relies on <a href="https://vitejs.dev/">Vite</a> for a development environment
+such as HMR (Hot Module Replacement) and bundling.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2024/03/05/vite-vue-bun-on-rails.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Mar 5, 2024</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2024/03/01/bun-react-on-rails.html">Bun + React on Rails</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>In the frontend world, new technologies keep emerging rapidly these years.
+Still, React is a well-established and very popular frontend framework,
+Vue.js, Svelte, Astro and more frameworks are gaining popularity.
+Not just the frameworks, tools for a transpiler/bundler or sort are also under a rapid development.
+In JavaScript domain, esbuild, rollup, vite and some more are out.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2024/03/01/bun-react-on-rails.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Mar 1, 2024</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2023/09/04/ruby-on-rails-secrets-management.html">Ruby on Rails Secrets Management</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>A web application needs various kinds of values, params and etc which should not be revealed to the public, say GitHub repo.
+For example, API keys, tokens, passwords, and endpoints, all those should be kept secret.
+Another important factor is that such secrets should be shared among the team members.
+Additionally, all those secrets should come along with the deployment.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2023/09/04/ruby-on-rails-secrets-management.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Sep 4, 2023</p>
+    </footer>
+</div>
+    </div>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="/assets/js/accordion.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>
