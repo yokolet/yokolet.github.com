@@ -25,21 +25,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Random Pick with Weight | yokolet’s notelets</title>
+<title>Maximum Sum of Distinct Subarrays With Length K | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.5" />
-<meta property="og:title" content="Random Pick with Weight" />
+<meta property="og:title" content="Maximum Sum of Distinct Subarrays With Length K" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/design/2022-12-28-random-pick-with-weight.html" />
-<meta property="og:url" content="http://localhost:4000/algo/design/2022-12-28-random-pick-with-weight.html" />
+<link rel="canonical" href="http://localhost:4000/algo/arrays/2024-05-24-maximum-sum-of-distinct-subarrays-with-length-k.html" />
+<meta property="og:url" content="http://localhost:4000/algo/arrays/2024-05-24-maximum-sum-of-distinct-subarrays-with-length-k.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-12-28T17:20:00+09:00" />
+<meta property="article:published_time" content="2024-05-24T18:07:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Random Pick with Weight" />
+<meta property="twitter:title" content="Maximum Sum of Distinct Subarrays With Length K" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-12-28T17:20:00+09:00","datePublished":"2022-12-28T17:20:00+09:00","description":"Blog site mostly for programming topics.","headline":"Random Pick with Weight","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/design/2022-12-28-random-pick-with-weight.html"},"url":"http://localhost:4000/algo/design/2022-12-28-random-pick-with-weight.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2024-05-24T18:07:00+09:00","datePublished":"2024-05-24T18:07:00+09:00","description":"Blog site mostly for programming topics.","headline":"Maximum Sum of Distinct Subarrays With Length K","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/arrays/2024-05-24-maximum-sum-of-distinct-subarrays-with-length-k.html"},"url":"http://localhost:4000/algo/arrays/2024-05-24-maximum-sum-of-distinct-subarrays-with-length-k.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -96,7 +96,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Random Pick with Weight</h1>
+            <h1 class="title is-2">Maximum Sum of Distinct Subarrays With Length K</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -117,7 +117,7 @@
     
     <div class="menu-list">
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Arrays
             </a>
@@ -1282,7 +1282,7 @@
             </ul>
         </div>
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Design
             </a>
@@ -1664,7 +1664,7 @@
                     
                     <div class="content">
 
-    <p>Published: Dec 28, 2022</p>
+    <p>Published: May 24, 2024</p>
 
     <div class="tags">
         
@@ -1673,11 +1673,15 @@
 </span>
         
         <span class="tag  is-primary ">
-    Binary Search
+    Array
 </span>
         
         <span class="tag  is-primary ">
-    Prefix Sum
+    Hash Table
+</span>
+        
+        <span class="tag  is-primary ">
+    Sliding Window
 </span>
         
     </div>
@@ -1686,53 +1690,52 @@
 
     <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>You are given a 0-indexed array of positive integers <code>w</code> where <code>w[i]</code> describes the weight of the i-th index.</p>
+  <p>You are given an integer array nums and an integer <code>k</code>. Find the maximum subarray sum of all the subarrays of <code>nums</code>
+that meet the following conditions:</p>
 
-  <p>You need to implement the function <code>pickIndex()</code>, which randomly picks an index in the range <code>[0, w.length - 1]</code>
-(inclusive) and returns it. The probability of picking an index <code>i</code> is <code>w[i] / sum(w)</code>.</p>
   <ul>
-    <li>For example, if <code>w = [1, 3]</code>, the probability of picking index 0 is 1 / (1 + 3) = 0.25 (i.e., 25%), and the
- probability of picking index 1 is 3 / (1 + 3) = 0.75 (i.e., 75%).</li>
+    <li>The length of the subarray is <code>k</code>, and</li>
+    <li>All the elements of the subarray are distinct.</li>
   </ul>
+
+  <p>Return the maximum subarray sum of all the subarrays that meet the conditions. If no subarray meets the conditions,
+return 0.</p>
+
+  <p>A subarray is a contiguous non-empty sequence of elements within an array.</p>
 
   <p>Constraints:</p>
   <ul>
-    <li><code>1 &lt;= w.length &lt;= 10**4</code></li>
-    <li><code>1 &lt;= w[i] &lt;= 105</code></li>
-    <li><code>pickIndex</code> will be called at most 10**4 times.</li>
+    <li><code>1 &lt;= k &lt;= nums.length &lt;= 10**5</code></li>
+    <li><code>1 &lt;= nums[i] &lt;= 10**5</code></li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/random-pick-with-weight/">https://leetcode.com/problems/random-pick-with-weight/</a></p>
+  <p><a href="https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k/">https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
 <pre><code>Example 1
-Input
-["Solution","pickIndex"]
-[[[1]],[]]
-Output
-[null,0]
-
-Explanation
-Solution solution = new Solution([1]);
-solution.pickIndex(); // return 0. The only option is to return 0 since there is only one element in w.
+Input: nums = [1,5,4,2,9,9,9], k = 3
+Output: 15
+Explanation: The subarrays of nums with length 3 are:
+- [1,5,4] which meets the requirements and has a sum of 10.
+- [5,4,2] which meets the requirements and has a sum of 11.
+- [4,2,9] which meets the requirements and has a sum of 15.
+- [2,9,9] which does not meet the requirements because the element 9 is repeated.
+- [9,9,9] which does not meet the requirements because the element 9 is repeated.
+We return 15 because it is the maximum subarray sum of all the subarrays that meet the conditions
 </code></pre>
 
 <pre><code>Example 2
-Input
-["Solution","pickIndex","pickIndex","pickIndex","pickIndex","pickIndex"]
-[[[1,3]],[],[],[],[],[]]
-Output
-[null,1,1,1,1,0]
+Input: nums = [4,4,4], k = 3
+Output: 0
+Explanation: The subarrays of nums with length 3 are:
+- [4,4,4] which does not meet the requirements because the element 4 is repeated.
+We return 0 because no subarrays meet the conditions.
 </code></pre>
 
 <h2 id="how-to-solve">How to Solve</h2>
-<p>This problem requires some ideas.
-The prefix sum and binary search are a good approach.
-The prefix sum reflects the difference of each weight.
-Do binary search on the prefix sum to get the index of a randomly generated weight.
-It depends on the languages what values are generated by random function.
-For example, C++ doesn’t need to regularize the given weights, but others need to change values between 0 to 1.</p>
+
+<p>Use hash table and sliding window.</p>
 
 <h2 id="solution">Solution</h2>
 
@@ -1767,31 +1770,24 @@ For example, C++ doesn’t need to regularize the given weights, but others need
   <div class="container box">
     
       <div class="is-active tab-content" data-content="solution-0">
-<pre><code class="language-cpp">class RandomPickWithWeight {
-private:
-    vector&lt;int&gt; weights;
+<pre><code class="language-cpp">class MaxSumOfSubArrayLengthK {
 public:
-    Solution(vector&lt;int&gt;&amp; w) {
-        srand(time(NULL));
-        weights.push_back(w[0]);
-        for (int i = 1; i &lt; w.size(); ++i) {
-            weights.push_back(w[i] + weights.back());
+    long long maximumSubarraySum(vector&lt;int&gt;&amp; nums, int k) {
+        unordered_map&lt;int, int&gt; seen;
+        long long curSum = 0, maxSum = 0;
+        for (int i = 0; i &lt; k; ++i) {
+            seen[nums[i]]++;
+            curSum += nums[i];
         }
-    }
-    
-    int pickIndex() {
-        int weight = rand() % weights.back();
-        int left = 0, right = weights.size() - 1;
-        int mid;
-        while (left &lt; right) {
-            mid = (left + right) / 2;
-            if (weight &gt;= weights[mid]) {
-                left = mid + 1;
-            } else {
-                right = mid;
-            }
+        if (seen.size() == k) maxSum = max(maxSum, curSum);
+        for (int i = k; i &lt; nums.size(); ++i) {
+            curSum -= nums[i - k];
+            if (--seen[nums[i - k]] == 0) seen.erase(nums[i - k]);
+            seen[nums[i]]++;
+            curSum += nums[i];
+            if (seen.size() == k) maxSum = max(maxSum, curSum);
         }
-        return left;
+        return maxSum;
     }
 };
 </code></pre>
@@ -1808,61 +1804,12 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-3">
-<pre><code class="language-python">class RandomPickWithWeight:
-
-    def __init__(self, w: List[int]):
-        total = sum(w)
-        self.weights = [w[0] / total]
-        for v in w[1:len(w) - 1]:
-            self.weights.append(self.weights[-1] + v / total)
-        self.weights.append(1)
-
-    def pickIndex(self) -&gt; int:
-        weight = random.random()
-        left, right = 0, len(self.weights) - 1
-        while left &lt; right:
-            mid = (left + right) // 2
-            if weight &gt;= self.weights[mid]:
-                left = mid + 1
-            else:
-                right = mid
-        return left
+<pre><code class="language-python">
 </code></pre>
 </div>
     
       <div class="tab-content" data-content="solution-4">
-<pre><code class="language-ruby">class RandomPickWithWeight
-
-=begin
-    :type w: Integer[]
-=end
-    def initialize(w)
-        total = w.sum
-        @weights = [w[0].to_f / total]
-        (1...w.size - 1).each do |i|
-            @weights &lt;&lt; w[i].to_f / total + @weights[-1]
-        end
-        @weights &lt;&lt; 1
-    end
-
-
-=begin
-    :rtype: Integer
-=end
-    def pick_index()
-        weight = rand
-        left, right = 0, @weights.size - 1
-        while left &lt; right
-            mid = (left + right) / 2
-            if weight &gt;= @weights[mid]
-                left = mid + 1
-            else
-                right = mid
-            end
-        end
-        left
-    end
-end
+<pre><code class="language-ruby">
 </code></pre>
 </div>
     
@@ -1871,8 +1818,8 @@ end
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: constructor: <code>O(n)</code>, pickIndex: <code>O(log(n))</code></li>
-  <li>Space: <code>O(n)</code></li>
+  <li>Time: <code>O(n)</code></li>
+  <li>Space: <code>O(k)</code></li>
 </ul>
 
 </div>

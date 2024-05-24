@@ -203,6 +203,13 @@
                     </li>
                     
                     <li>
+                        <a href="/algo/arrays/2024-05-24-maximum-sum-of-distinct-subarrays-with-length-k"
+                           class="submenu">
+                            Maximum Sum of Distinct Subarrays With Length K
+                        </a>
+                    </li>
+                    
+                    <li>
                         <a href="/algo/arrays/2022-09-23-merge-sorted-array"
                            class="submenu">
                             Merge Sorted Array
@@ -360,6 +367,13 @@
             <ul class="content">
                 
                 
+                    
+                    <li>
+                        <a href="/algo/strings/2024-05-24-append-characters-to-string-to-make-subsequence"
+                           class="submenu">
+                            Append Characters to String to Make Subsequence
+                        </a>
+                    </li>
                     
                     <li>
                         <a href="/algo/strings/2022-09-14-concatenated-words"
@@ -1010,6 +1024,13 @@
                     </li>
                     
                     <li>
+                        <a href="/algo/dynamic_programming/2024-05-23-longest-common-subsequence"
+                           class="submenu">
+                            Longest Common Subsequence
+                        </a>
+                    </li>
+                    
+                    <li>
                         <a href="/algo/dynamic_programming/2022-10-20-longest-increasing-path-in-a-matrix"
                            class="submenu">
                             Longest Increasing Path in a Matrix
@@ -1191,6 +1212,13 @@
                         <a href="/algo/sorting_and_searching/2022-12-22-meeting-rooms-iii"
                            class="submenu">
                             Meeting Rooms III -- Most Used Room
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/algo/sorting_and_searching/2024-05-24-merge-intervals"
+                           class="submenu">
+                            Merge Intervals
                         </a>
                     </li>
                     
@@ -1711,14 +1739,78 @@ Output: ["g1 act car","a8 act zoo","ab1 off key dog","a1 9 2 3 1","zo4 4 7"]
 </code></pre>
 
 <h2 id="analysis">Analysis</h2>
-<p>This solution relies on Python’s tuple sorting feature.
+<p>The Python solution relies on a tuple sorting feature.
 While sorting the tuple, the first element, the second element if the first is the same
 will be used to compare.
 The custom comparator returns <code>(1,)</code> for digit logs so that digit logs come later.
 For letter logs, it returns <code>(0, string except id, id)</code> to comply with the condition.
 With this custom comparator, just soring the log gives us the answer.</p>
 
+<p>The C++ solution relies on the stable_sort function.
+The custom comparator logic is similar to the Python’s.</p>
+
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class ReorderDataInLogFiles {
+public:
+    vector&lt;string&gt; reorderLogFiles(vector&lt;string&gt;&amp; logs) {
+        stable_sort(logs.begin(), logs.end(),
+            [](const string &amp;a, const string &amp;b) {
+                if (isdigit(a.back())) return false;
+                if (isdigit(b.back())) return true;
+                const string aa = a.substr(a.find(' '));
+                const string bb = b.substr(b.find(' '));
+                if (aa == bb) return a &lt; b;
+                return aa &lt; bb;
+            });
+        return logs;
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class ReorderDataInLogFiles:
     def reorderLogFiles(self, logs: List[str]) -&gt; List[str]:
         def comp(log):
@@ -1729,10 +1821,19 @@ With this custom comparator, just soring the log gives us the answer.</p>
                 return (0, rest, id_)
         return sorted(logs, key=comp)
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(nlog(n))</code></li>
+  <li>Time: <code>O(n * log(n))</code></li>
   <li>Space: <code>O(1)</code></li>
 </ul>
 

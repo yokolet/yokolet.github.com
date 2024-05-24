@@ -203,6 +203,13 @@
                     </li>
                     
                     <li>
+                        <a href="/algo/arrays/2024-05-24-maximum-sum-of-distinct-subarrays-with-length-k"
+                           class="submenu">
+                            Maximum Sum of Distinct Subarrays With Length K
+                        </a>
+                    </li>
+                    
+                    <li>
                         <a href="/algo/arrays/2022-09-23-merge-sorted-array"
                            class="submenu">
                             Merge Sorted Array
@@ -360,6 +367,13 @@
             <ul class="content">
                 
                 
+                    
+                    <li>
+                        <a href="/algo/strings/2024-05-24-append-characters-to-string-to-make-subsequence"
+                           class="submenu">
+                            Append Characters to String to Make Subsequence
+                        </a>
+                    </li>
                     
                     <li>
                         <a href="/algo/strings/2022-09-14-concatenated-words"
@@ -1010,6 +1024,13 @@
                     </li>
                     
                     <li>
+                        <a href="/algo/dynamic_programming/2024-05-23-longest-common-subsequence"
+                           class="submenu">
+                            Longest Common Subsequence
+                        </a>
+                    </li>
+                    
+                    <li>
                         <a href="/algo/dynamic_programming/2022-10-20-longest-increasing-path-in-a-matrix"
                            class="submenu">
                             Longest Increasing Path in a Matrix
@@ -1191,6 +1212,13 @@
                         <a href="/algo/sorting_and_searching/2022-12-22-meeting-rooms-iii"
                            class="submenu">
                             Meeting Rooms III -- Most Used Room
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/algo/sorting_and_searching/2024-05-24-merge-intervals"
+                           class="submenu">
+                            Merge Intervals
                         </a>
                     </li>
                     
@@ -1660,14 +1688,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>If the problem asks “number of ways,” it might be a dynamic programming.
-Some state is there, and the next state depends on the previous state.
-In this problem, we’ll count “101” or “010” sub sequence.
-When the character is ‘1’, previous states should be ‘’, ‘10’, or ‘0’.
-Those are counted and lead to the answer.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>You are given a 0-indexed binary string <code>s</code> which represents the types of buildings along a street where:</p>
   <ul>
@@ -1710,15 +1731,25 @@ Output: 0
 Explanation: It can be shown that there are no valid selections.
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>If the problem asks “number of ways,” it might be a dynamic programming.
+Some state is there, and the next state depends on the previous state.
+In this problem, we’ll count “101” or “010” sub sequence.
+When the character is ‘1’, previous states should be ‘’, ‘10’, or ‘0’.
+Those are counted and lead to the answer.</p>
+
 <p>Only valid strings are “101” or “010”.
-We should focus on ‘0’, ‘1’, ‘01’, ‘10’, then the result.
-When a current character is ‘1’:</p>
+We should focus on ‘0’, ‘1’, ‘01’, ‘10’, then the total.</p>
+
+<p>When a current character is ‘1’:</p>
 <ul>
   <li>count up ‘1’ by 1</li>
   <li>update ‘01’ by adding the value of ‘0’</li>
-  <li>update the result by adding the value of ‘10’
-When a current character is ‘0’:</li>
+  <li>update the result by adding the value of ‘10’</li>
+</ul>
+
+<p>When a current character is ‘0’:</p>
+<ul>
   <li>count up ‘0’ by 1</li>
   <li>update ‘10’ by adding the value of ‘1’</li>
   <li>update the result by adding the value of ‘01’</li>
@@ -1727,6 +1758,70 @@ When a current character is ‘0’:</li>
 <p>In the end, we can get the answer.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class NumberOfWaysToSelectBuildings {
+public:
+    long long numberOfWays(string s) {
+        unsigned long n0 = 0, n1 = 0, n01 = 0, n10 = 0, total = 0;
+        for (char &amp;c : s) {
+            if (c == '1') {
+                n1++;
+                n01 += n0;
+                total += n10;
+            } else {
+                n0++;
+                n10 += n1;
+                total += n01;
+            }
+        }
+        return total;
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class NumberOfWaysToSelectBuildings:
     def numberOfWays(self, s: str) -&gt; int:
         n0, n1, n01, n10, total = 0, 0, 0, 0, 0
@@ -1741,6 +1836,15 @@ When a current character is ‘0’:</li>
                 total += n01
         return total
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>

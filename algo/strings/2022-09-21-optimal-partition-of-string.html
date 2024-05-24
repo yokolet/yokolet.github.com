@@ -203,6 +203,13 @@
                     </li>
                     
                     <li>
+                        <a href="/algo/arrays/2024-05-24-maximum-sum-of-distinct-subarrays-with-length-k"
+                           class="submenu">
+                            Maximum Sum of Distinct Subarrays With Length K
+                        </a>
+                    </li>
+                    
+                    <li>
                         <a href="/algo/arrays/2022-09-23-merge-sorted-array"
                            class="submenu">
                             Merge Sorted Array
@@ -360,6 +367,13 @@
             <ul class="content">
                 
                 
+                    
+                    <li>
+                        <a href="/algo/strings/2024-05-24-append-characters-to-string-to-make-subsequence"
+                           class="submenu">
+                            Append Characters to String to Make Subsequence
+                        </a>
+                    </li>
                     
                     <li>
                         <a href="/algo/strings/2022-09-14-concatenated-words"
@@ -1010,6 +1024,13 @@
                     </li>
                     
                     <li>
+                        <a href="/algo/dynamic_programming/2024-05-23-longest-common-subsequence"
+                           class="submenu">
+                            Longest Common Subsequence
+                        </a>
+                    </li>
+                    
+                    <li>
                         <a href="/algo/dynamic_programming/2022-10-20-longest-increasing-path-in-a-matrix"
                            class="submenu">
                             Longest Increasing Path in a Matrix
@@ -1191,6 +1212,13 @@
                         <a href="/algo/sorting_and_searching/2022-12-22-meeting-rooms-iii"
                            class="submenu">
                             Meeting Rooms III -- Most Used Room
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/algo/sorting_and_searching/2024-05-24-merge-intervals"
+                           class="submenu">
+                            Merge Intervals
                         </a>
                     </li>
                     
@@ -1660,12 +1688,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>To solve string partition problems, hash table or set is used to save a previous occurrence.
-If the problem asks a length, it needs hash table.
-However, this problem asks just a number of groups, set is a good data structure to solve.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>Given a string <code>s</code>, partition the string into one or more substrings
 such that the characters in each substring are unique.
@@ -1699,12 +1722,78 @@ Explanation:
 The only valid partition is ("s","s","s","s","s","s").
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>To solve string partition problems, hash table or set is used to save a previous occurrence.
+If the problem asks a length, it needs hash table.
+However, this problem asks just a number of groups, so set is a good data structure.</p>
+
 <p>Use a set to save the previous occurrence of a same character.
 If the same character appears, count up and clear the set.
 In the end, if the set is not empty, count up.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class OptimalPartitionString {
+private:
+  int count = 1;
+  set&lt;char&gt; seen;
+public:
+  int partitionString(string s) {
+    for (char&amp; c : s) {
+      if (seen.count(c)) {
+        count++;
+        seen.clear();
+      }
+      seen.emplace(c);
+    }
+    return count;
+  }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class OptimalPartitionString:
     def partitionString(self, s: str) -&gt; int:
         count, seen = 0, set()
@@ -1715,6 +1804,27 @@ In the end, if the set is not empty, count up.</p>
             seen.add(c)
         return count + 1 if seen else count
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {String} s
+# @return {Integer}
+def partition_string(s)
+    count, seen = 1, Set.new
+    s.each_char do |c|
+      if seen.include?(c)
+        count += 1
+        seen.clear
+      end
+      seen.add(c)
+    end
+    count
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
