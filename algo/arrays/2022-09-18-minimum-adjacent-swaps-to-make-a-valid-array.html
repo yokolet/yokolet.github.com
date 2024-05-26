@@ -432,6 +432,13 @@
                     </li>
                     
                     <li>
+                        <a href="/algo/strings/2024-05-25-length-of-the-longest-valid-substring"
+                           class="submenu">
+                            Length of the Longest Valid Substring
+                        </a>
+                    </li>
+                    
+                    <li>
                         <a href="/algo/strings/2022-12-09-license-key-formatting"
                            class="submenu">
                             License Key Formatting
@@ -1684,13 +1691,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is a minimum swaps to rearrange something problem.
-This would be an easier problem compared to other problems of this kind.
-The leftmost smallest and rightmost largest values move.
-Just looking at indices of those two values will lead to the answer.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>You are given a 0-indexed integer array <code>nums</code>.
 Swaps of adjacent elements are able to be performed on nums.
@@ -1733,7 +1734,12 @@ Output: 0
 Explanation: The array is already valid, so we return 0.
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This is a minimum swaps to rearrange something problem.
+This would be an easier problem compared to other problems of this kind.
+The leftmost smallest and rightmost largest values move.
+Just looking at indices of those two values will lead to the answer.</p>
+
 <p>Find the leftmost smallest value’s index and rightmost largest value’s index.
 The smallest value’s swap count is the index of that value.
 The largest value’s swap count is (n - 1 - largest value’s index)
@@ -1742,6 +1748,78 @@ If smallest values index is bigger than largest index, a swap for the largest is
 done once. That’s why n - 1 or n - 2.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class MinimumAdjacentSwapsToMakeAValidArray {
+public:
+    int minimumSwaps(vector&lt;int&gt;&amp; nums) {
+        ios_base::sync_with_stdio(false);
+        cin.tie(NULL); cout.tie(NULL);
+
+        vector&lt;int&gt; smallest{INT_MAX, -1}, largest{0, -1};
+        for (int i = 0; i &lt; nums.size(); ++i) {
+          if (smallest[0] &gt; nums[i]) {
+            smallest[0] = nums[i];
+            smallest[1] = i;
+          }
+          if (largest[0] &lt;= nums[i]) {
+            largest[0] = nums[i];
+            largest[1] = i;
+          }
+        }
+        if (smallest[1] &lt; largest[1]) {
+          return smallest[1] + nums.size() - 1 - largest[1];
+        } else if (smallest[1] &gt; largest[1]) {
+          return smallest[1] + nums.size() - 2 - largest[1];
+        } else {
+          return 0;
+        }
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class MinimumAdjacentSwapsToMakeAValidArray:
     def minimumSwaps(self, nums: List[int]) -&gt; int:
         n = len(nums)
@@ -1759,6 +1837,15 @@ done once. That’s why n - 1 or n - 2.</p>
         else:
             return s_idx + n - 2 - l_idx
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>

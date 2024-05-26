@@ -432,6 +432,13 @@
                     </li>
                     
                     <li>
+                        <a href="/algo/strings/2024-05-25-length-of-the-longest-valid-substring"
+                           class="submenu">
+                            Length of the Longest Valid Substring
+                        </a>
+                    </li>
+                    
+                    <li>
                         <a href="/algo/strings/2022-12-09-license-key-formatting"
                            class="submenu">
                             License Key Formatting
@@ -1688,13 +1695,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This problem tells us to focus on only indices of <code>'|'</code>.
-Then it’s easy to think of a binary search solution.
-The tricky part is, candles might there continuously.
-Those should be subtracted.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>There is a long table with a line of plates and candles arranged on top of it.
 You are given a 0-indexed string <code>s</code> consisting of characters <code>'*'</code> and <code>'|'</code> only,
@@ -1742,7 +1743,12 @@ Explanation:
 - The other queries have zero plates between candles.
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This problem tells us to focus on only indices of <code>'|'</code>.
+Then it’s easy to think of a binary search solution.
+The tricky part is, candles might there continuously.
+Those should be subtracted.</p>
+
 <p>Since only indicies of candles matter, create an array of candle indicies.
 Given left and right of a query, find left insertion point of left value.
 Also, find right insertion point of right value.
@@ -1750,6 +1756,67 @@ We’ll see indicies of candles, so calculate the range length.
 However, the multiple candles might be there continuously, so subtract those.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class PlatesBetweenCandles {
+public:
+    vector&lt;int&gt; platesBetweenCandles(string s, vector&lt;vector&lt;int&gt;&gt;&amp; queries) {
+        vector&lt;int&gt; nums, answer;
+        for (int i = 0; i &lt; s.size(); ++i) {
+            if (s[i] == '|') nums.push_back(i);
+        }
+        for (int i = 0; i &lt; queries.size(); ++i) {
+            int l = lower_bound(nums.begin(), nums.end(), queries[i][0]) - nums.begin();
+            int r = upper_bound(nums.begin(), nums.end(), queries[i][1]) - nums.begin();
+            answer.push_back(l != r ? nums[r - 1] - nums[l] - (r - l - 1) : 0);
+        }
+        return answer;
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class PlatesBetweenCandles:
     def platesBetweenCandles(self, s: str, queries: List[List[int]]) -&gt; List[int]:
         nums = [i for i in range(len(s)) if s[i] == '|']
@@ -1765,10 +1832,19 @@ However, the multiple candles might be there continuously, so subtract those.</p
             answer.append(idx_r - idx_l + 1 - candles)
         return answer
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(mlog(n))</code> – m: number of queries, n: number of candles</li>
+  <li>Time: <code>O(m * log(n))</code> – m: number of queries, n: number of candles</li>
   <li>Space: <code>O(n)</code></li>
 </ul>
 

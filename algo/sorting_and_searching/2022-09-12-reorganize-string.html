@@ -432,6 +432,13 @@
                     </li>
                     
                     <li>
+                        <a href="/algo/strings/2024-05-25-length-of-the-longest-valid-substring"
+                           class="submenu">
+                            Length of the Longest Valid Substring
+                        </a>
+                    </li>
+                    
+                    <li>
                         <a href="/algo/strings/2022-12-09-license-key-formatting"
                            class="submenu">
                             License Key Formatting
@@ -1688,12 +1695,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>The problem asks to return a re-generated string, so, just count the character frequency is not enough.
-Since reorder is required, it needs some sorting as well.
-Using heap, generate a new string based on the character frequency is the way.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>Given a string <code>s</code>, rearrange the characters of <code>s</code> so that any two adjacent characters are not the same.
 Return any possible rearrangement of <code>s</code> or return <code>""</code> if not possible.</p>
@@ -1718,7 +1720,11 @@ Input: s = "aaab"
 Output: ""
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>The problem asks to return a re-generated string, so, just count the character frequency is not enough.
+Since reorder is required, it needs some sorting as well.
+Using heap, generate a new string based on the character frequency is the way.</p>
+
 <p>The first step is to create a heap based on the character frequency.
 It is the max heap, so frequency values are negative for Python heap.
 Take the most frequent character and add it to the result and count down the number of the character.
@@ -1728,6 +1734,80 @@ Do the same, add to the result, get it back to heap if necessary.
 This way, the result string will be created.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class ReorganizeString {
+public:
+    string reorganizeString(string s) {
+        unordered_map&lt;char, int&gt; counter;
+        for (char c : s) counter[c]++;
+
+        priority_queue&lt;pair&lt;int, char&gt;&gt; heap;
+        for (auto c : counter) heap.push({c.second, c.first});
+
+        string result = "";
+        while (!heap.empty()) {
+            pair&lt;int, char&gt; h1 = heap.top();
+            heap.pop();
+            result.push_back(h1.second);
+            if (heap.empty()) {
+                if (h1.first - 1 &gt; 0) heap.push({h1.first - 1, h1.second});
+                break;
+            }
+            pair&lt;int, char&gt; h2 = heap.top();
+            heap.pop();
+            result.push_back(h2.second);
+            if (h2.first - 1 &gt; 0) heap.push({h2.first - 1, h2.second});
+            if (h1.first - 1 &gt; 0) heap.push({h1.first - 1, h1.second});
+        }
+        if (!heap.empty()) return "";
+        return result;
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class ReorganizeString:
     def reorganizeString(self, s: str) -&gt; str:
         counter = collections.Counter(list(s))
@@ -1752,10 +1832,19 @@ This way, the result string will be created.</p>
                 heapq.heappush(heap, (cnt, c))
         return result
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(nlog(n))</code></li>
+  <li>Time: <code>O(n * log(n))</code></li>
   <li>Space: <code>O(n)</code></li>
 </ul>
 

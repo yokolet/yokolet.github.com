@@ -25,21 +25,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Design Circular Queue | yokolet’s notelets</title>
+<title>Length of the Longest Valid Substring | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.5" />
-<meta property="og:title" content="Design Circular Queue" />
+<meta property="og:title" content="Length of the Longest Valid Substring" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/design/2022-09-25-design-circular-queue.html" />
-<meta property="og:url" content="http://localhost:4000/algo/design/2022-09-25-design-circular-queue.html" />
+<link rel="canonical" href="http://localhost:4000/algo/strings/2024-05-25-length-of-the-longest-valid-substring.html" />
+<meta property="og:url" content="http://localhost:4000/algo/strings/2024-05-25-length-of-the-longest-valid-substring.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-09-25T21:18:00+09:00" />
+<meta property="article:published_time" content="2024-05-25T12:25:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Design Circular Queue" />
+<meta property="twitter:title" content="Length of the Longest Valid Substring" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-25T21:18:00+09:00","datePublished":"2022-09-25T21:18:00+09:00","description":"Blog site mostly for programming topics.","headline":"Design Circular Queue","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/design/2022-09-25-design-circular-queue.html"},"url":"http://localhost:4000/algo/design/2022-09-25-design-circular-queue.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2024-05-25T12:25:00+09:00","datePublished":"2024-05-25T12:25:00+09:00","description":"Blog site mostly for programming topics.","headline":"Length of the Longest Valid Substring","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/strings/2024-05-25-length-of-the-longest-valid-substring.html"},"url":"http://localhost:4000/algo/strings/2024-05-25-length-of-the-longest-valid-substring.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -96,7 +96,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Design Circular Queue</h1>
+            <h1 class="title is-2">Length of the Longest Valid Substring</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -360,7 +360,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Strings
             </a>
@@ -1289,7 +1289,7 @@
             </ul>
         </div>
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Design
             </a>
@@ -1671,20 +1671,24 @@
                     
                     <div class="content">
 
-    <p>Published: Sep 25, 2022</p>
+    <p>Published: May 25, 2024</p>
 
     <div class="tags">
         
         <span class="tag  is-primary ">
-    Medium
+    Hard
 </span>
         
         <span class="tag  is-primary ">
-    Queue
+    String
 </span>
         
         <span class="tag  is-primary ">
-    Design
+    Hash Table
+</span>
+        
+        <span class="tag  is-primary ">
+    Sliding Window
 </span>
         
         <span class="tag  is-primary ">
@@ -1697,80 +1701,48 @@
 
     <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>Design your implementation of the circular queue.
-The circular queue is a linear data structure in which the operations are performed based on
-FIFO (First In First Out) principle and the last position is connected back to the first position to make a circle.
-It is also called “Ring Buffer”.</p>
+  <p>You are given a string word and an array of strings forbidden. A string is called valid if none of its substrings
+are present in forbidden.</p>
 
-  <p>One of the benefits of the circular queue is that we can make use of the spaces in front of the queue.
-In a normal queue, once the queue becomes full, we cannot insert the next element even if there is a space in front of the queue.
-But using the circular queue, we can use the space to store new values.</p>
+  <p>Return the length of the longest valid substring of the string word.</p>
 
-  <p>Implementation the MyCircularQueue class:</p>
-  <ul>
-    <li><code>MyCircularQueue(k)</code> Initializes the object with the size of the queue to be <code>k</code>.</li>
-    <li><code>int Front()</code> Gets the front item from the queue. If the queue is empty, return -1.</li>
-    <li><code>int Rear()</code> Gets the last item from the queue. If the queue is empty, return -1.</li>
-    <li><code>boolean enQueue(int value)</code> Inserts an element into the circular queue. Return true if the operation is successful.</li>
-    <li><code>boolean deQueue()</code> Deletes an element from the circular queue. Return true if the operation is successful.</li>
-    <li><code>boolean isEmpty()</code> Checks whether the circular queue is empty or not.</li>
-    <li><code>boolean isFull()</code> Checks whether the circular queue is full or not.</li>
-  </ul>
-
-  <p>You must solve the problem without using the built-in queue data structure in your programming language.</p>
+  <p>A substring is a contiguous sequence of characters in a string, possibly empty.</p>
 
   <p>Constraints:</p>
   <ul>
-    <li><code>1 &lt;= k &lt;= 1000</code></li>
-    <li><code>0 &lt;= value &lt;= 1000</code></li>
-    <li>At most 3000 calls will be made to <code>enQueue</code>, <code>deQueue</code>, <code>Front</code>, <code>Rear</code>, <code>isEmpty</code>, and <code>isFull</code>.</li>
+    <li><code>1 &lt;= word.length &lt;= 10**5</code></li>
+    <li>word consists only of lowercase English letters.</li>
+    <li><code>1 &lt;= forbidden.length &lt;= 10**5</code></li>
+    <li><code>1 &lt;= forbidden[i].length &lt;= 10</code></li>
+    <li><code>forbidden[i]</code> consists only of lowercase English letters.</li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/design-circular-queue/">https://leetcode.com/problems/design-circular-queue/</a></p>
+  <p><a href="https://leetcode.com/problems/length-of-the-longest-valid-substring/">https://leetcode.com/problems/length-of-the-longest-valid-substring/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
 <pre><code>Example 1
-
-Input
-["MyCircularQueue", "enQueue", "enQueue", "enQueue", "enQueue", "Rear", "isFull", "deQueue", "enQueue", "Rear"]
-[[3], [1], [2], [3], [4], [], [], [], [4], []]
-Output
-[null, true, true, true, false, 3, true, true, true, 4]
-
-Explanation
-MyCircularQueue myCircularQueue = new MyCircularQueue(3);
-myCircularQueue.enQueue(1); // return True
-myCircularQueue.enQueue(2); // return True
-myCircularQueue.enQueue(3); // return True
-myCircularQueue.enQueue(4); // return False
-myCircularQueue.Rear();     // return 3
-myCircularQueue.isFull();   // return True
-myCircularQueue.deQueue();  // return True
-myCircularQueue.enQueue(4); // return True
-myCircularQueue.Rear();     // return 4
+Input: word = "cbaaaabc", forbidden = ["aaa","cb"]
+Output: 4
+Explanation: There are 11 valid substrings in word: "c", "b", "a", "ba", "aa", "bc", "baa", "aab", "ab", "abc" and "aabc". The length of the longest valid substring is 4. 
+It can be shown that all other substrings contain either "aaa" or "cb" as a substring.
 </code></pre>
 
 <pre><code>Example 2
-Input
-["MyCircularQueue","enQueue","Rear","Front","deQueue","Front","deQueue","Front","enQueue","enQueue","enQueue","enQueue"]
-[[3],[2],[],[],[],[],[],[],[4],[2],[2],[3]]
-Output
-[null,true,2,2,true,-1,false,-1,true,true,true,false]
+Input: word = "leetcode", forbidden = ["de","le","e"]
+Output: 4
+Explanation: There are 11 valid substrings in word: "l", "t", "c", "o", "d", "tc", "co", "od", "tco", "cod", and "tcod". The length of the longest valid substring is 4.
+It can be shown that all other substrings contain either "de", "le", or "e" as a substring.
 </code></pre>
 
 <h2 id="how-to-solve">How to Solve</h2>
-<p>Basically, an array and pointer is all to implement the circular queue.
-However, it needs much consideration when the enqueue index comes back to the top.
-An additional parameter, the size – current size of the queue, will help implementing this easily.</p>
 
-<p>The solution here has a capacity k, queue array, head pointer and queue size as instance variables.
-When the size is zero, the queue is empty.
-While the size is the same as the capacity k, the queue is full.
-Only when the queue is not full, a new value can be added.
-The index is the current head plus size modulo capacity.
-Only when the queue is not empty, the deQueue operation is possible.
-Move the head to the current head plus one module capacity.</p>
+<p>Basic idea is not complicated. Use a sliding window and check sub strings whether it is in the forbidden list or not.
+However, as it is marked Hard, the implementation needs a tweak.
+Unless, the solution gets a Memory Limit Exceeded or Time Limit Exceeded error.
+The solution here uses substr function instead of extending the word one character by one character
+to avoid the memory limit error.
+Also, it limits the loop by <code>min(i + 9, right)</code> to avoid the time limit error.</p>
 
 <h2 id="solution">Solution</h2>
 
@@ -1805,277 +1777,45 @@ Move the head to the current head plus one module capacity.</p>
   <div class="container box">
     
       <div class="is-active tab-content" data-content="solution-0">
-<pre><code class="language-cpp">#include &lt;vector&gt;
-
-using namespace std;
-
-class MyCircularQueue {
-private:
-    int k_, head = 0, size = 0;
-    vector&lt;int&gt; q;
-
+<pre><code class="language-cpp">class LengthOfLongestValidSubstring {
 public:
-    MyCircularQueue(int k) : k_(k) {
-        q.resize(k_);
-    }
-
-    bool enQueue(int value) {
-        if (isFull()) { return false; }
-        q[(head + size) % k_] = value;
-        size++;
-        return true;
-    }
-
-    bool deQueue() {
-        if (isEmpty()) { return false; }
-        head = (head + 1) % k_;
-        size--;
-        return true;
-    }
-
-    int Front() {
-        if (isEmpty()) { return -1; }
-        return q[head];
-    }
-
-    int Rear() {
-        if (isEmpty()) { return -1; }
-        return q[(head + size - 1) % k_];
-    }
-
-    bool isEmpty() {
-        return size == 0;
-    }
-
-    bool isFull() {
-        return size == k_;
+    int longestValidSubstring(string word, vector&lt;string&gt;&amp; forbidden) {
+        unordered_set&lt;string&gt; seen(forbidden.begin(), forbidden.end());
+        int n = word.size(), maxLen = 0;
+        int right = n;
+        for (int i = n - 1; i &gt;= 0; --i) {
+            for (int j = i; j &lt;= min(i + 9, right); ++j) {
+                string cur = word.substr(i, j - i + 1);
+                if (seen.find(cur) != seen.end()) {
+                    right = j;
+                    break;
+                }
+            }
+            maxLen = max(maxLen, right - i);
+        }
+        return maxLen;
     }
 };
 </code></pre>
 </div>
     
       <div class="tab-content" data-content="solution-1">
-<pre><code class="language-java">class MyCircularQueue {
-    private int k_, head = 0, size = 0;
-    private int[] q;
-
-    public MyCircularQueue(int k) {
-        this.k_ = k;
-        this.q = new int[k];
-    }
-
-    public boolean enQueue(int value) {
-        if (this.isFull()) { return false; }
-        this.q[(this.head + this.size) % this.k_] = value;
-        this.size++;
-        return true;
-    }
-
-    public boolean deQueue() {
-        if (this.isEmpty()) { return false; }
-        this.head = (this.head + 1) % this.k_;
-        this.size--;
-        return true;
-    }
-
-    public int Front() {
-        if (this.isEmpty()) { return -1; }
-        return this.q[this.head];
-    }
-
-    public int Rear() {
-        if (this.isEmpty()) { return -1; }
-        return this.q[(this.head + this.size - 1) % this.k_];
-    }
-
-    public boolean isEmpty() {
-        return this.size == 0;
-    }
-
-    public boolean isFull() {
-        return this.size == this.k_;
-    }
-}
+<pre><code class="language-java">
 </code></pre>
 </div>
     
       <div class="tab-content" data-content="solution-2">
-<pre><code class="language-js">/**
- * @param {number} k
- */
-var MyCircularQueue = function(k) {
-  this.k_ = k, this.head = 0, this.size = 0;
-  this.q = [];
-};
-
-/**
- * @param {number} value
- * @return {boolean}
- */
-MyCircularQueue.prototype.enQueue = function(value) {
-  if (this.isFull()) { return false; }
-  this.q[(this.head + this.size) % this.k_] = value;
-  this.size += 1;
-  return true;
-};
-
-/**
- * @return {boolean}
- */
-MyCircularQueue.prototype.deQueue = function() {
-  if (this.isEmpty()) { return false; }
-  this.head = (this.head + 1) % this.k_;
-  this.size -= 1;
-  return true;
-};
-
-/**
- * @return {number}
- */
-MyCircularQueue.prototype.Front = function() {
-  if (this.isEmpty()) { return -1; }
-  return this.q[this.head];
-};
-
-/**
- * @return {number}
- */
-MyCircularQueue.prototype.Rear = function() {
-  if (this.isEmpty()) { return -1; }
-  return this.q[(this.head + this.size - 1) % this.k_]
-};
-
-/**
- * @return {boolean}
- */
-MyCircularQueue.prototype.isEmpty = function() {
-  return this.size == 0;
-};
-
-/**
- * @return {boolean}
- */
-MyCircularQueue.prototype.isFull = function() {
-  return this.size == this.k_;
-};
+<pre><code class="language-js">
 </code></pre>
 </div>
     
       <div class="tab-content" data-content="solution-3">
-<pre><code class="language-python">class MyCircularQueue:
-
-    def __init__(self, k: int):
-        self.k = k
-        self.queue = [-1 for _ in range(k)]
-        self.head = 0
-        self.size = 0
-
-    def enQueue(self, value: int) -&gt; bool:
-        if self.isFull():
-            return False
-        idx = (self.head + self.size) % self.k
-        self.queue[idx] = value
-        self.size += 1
-        return True
-
-    def deQueue(self) -&gt; bool:
-        if self.isEmpty():
-            return False
-        self.head = (self.head + 1) % self.k
-        self.size -= 1
-        return True
-
-    def Front(self) -&gt; int:
-        if self.isEmpty():
-            return -1
-        return self.queue[self.head]
-
-    def Rear(self) -&gt; int:
-        if self.isEmpty():
-            return -1
-        idx = (self.head + self.size - 1) % self.k
-        return self.queue[idx]
-
-    def isEmpty(self) -&gt; bool:
-        return self.size == 0
-
-    def isFull(self) -&gt; bool:
-        return self.size == self.k
+<pre><code class="language-python">
 </code></pre>
 </div>
     
       <div class="tab-content" data-content="solution-4">
-<pre><code class="language-ruby">class MyCircularQueue
-
-=begin
-    :type k: Integer
-=end
-  def initialize(k)
-    @k_ = k
-    @head = 0
-    @size = 0
-    @q = Array.new(k)
-  end
-
-
-=begin
-    :type value: Integer
-    :rtype: Boolean
-=end
-  def en_queue(value)
-    return false if is_full
-    @q[(@head + @size) % @k_] = value
-    @size += 1
-    true
-  end
-
-
-=begin
-    :rtype: Boolean
-=end
-  def de_queue()
-    return false if is_empty
-    @head = (@head + 1) % @k_
-    @size -= 1
-    true
-  end
-
-
-=begin
-    :rtype: Integer
-=end
-  def front()
-    return -1 if is_empty
-    @q[@head]
-  end
-
-
-=begin
-    :rtype: Integer
-=end
-  def rear()
-    return -1 if is_empty
-    @q[(@head + @size - 1) % @k_]
-  end
-
-
-=begin
-    :rtype: Boolean
-=end
-  def is_empty()
-    @size == 0
-  end
-
-
-=begin
-    :rtype: Boolean
-=end
-  def is_full()
-    @size == @k_
-  end
-
-
-end
+<pre><code class="language-ruby">
 </code></pre>
 </div>
     
@@ -2084,10 +1824,9 @@ end
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(1)</code></li>
-  <li>Space: <code>O(k)</code></li>
+  <li>Time: <code>O(n)</code> – n: a length of the given word. The inner loop runs constant time.</li>
+  <li>Space: <code>O(m)</code> – m: number of the forbidden words.</li>
 </ul>
-
 
 </div>
 
