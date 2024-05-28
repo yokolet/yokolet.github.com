@@ -1153,6 +1153,13 @@
                     </li>
                     
                     <li>
+                        <a href="/algo/sorting_and_searching/2024-05-28-count-number-of-rectangles-containing-each-point"
+                           class="submenu">
+                            Count Number of Rectangles Containing Each Point
+                        </a>
+                    </li>
+                    
+                    <li>
                         <a href="/algo/sorting_and_searching/2022-09-21-divide-intervals-into-minimum-number-of-groups"
                            class="submenu">
                             Divide Intervals Into Minimum Number of Groups
@@ -1695,12 +1702,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is a typical backtracking problem. Normally, a depth-first search works well.
-For the backtracking problem, how to get the state back to previous one is important.
-The solution here uses a special character as visited status and set it back when the process goes back.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>Given an <code>m x n</code> grid of characters <code>board</code> and a string <code>word</code>, return true if word exists in the grid.</p>
 
@@ -1743,7 +1745,11 @@ Input: board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "
 Output: false
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This is a typical backtracking problem. Normally, a depth-first search works well.
+For the backtracking problem, how to get the state back to previous one is important.
+The solution here uses a special character as visited status and set it back when the process goes back.</p>
+
 <p>Since it is a backtracking problem, the depth-first approach is used here.
 As a visited state management, a special character ‘#’ is used. 
 Save the current character on the board to make it back later.
@@ -1751,6 +1757,83 @@ Set the special character to the cell and go deeper recursion with the suffix of
 When the suffix becomes empty, all character in the give word is found.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">class WordSearch {
+public:
+    bool exist(vector&lt;vector&lt;char&gt;&gt;&amp; board, string word) {
+        int m = board.size(), n = board[0].size();
+
+        function&lt;bool(int, int, int)&gt; dfs = [&amp;](int row, int col, int idx) {
+            if (idx == word.size()) return true;
+            if (row &lt; 0 || row &gt;= m || col &lt; 0 || col &gt;= n || board[row][col] != word[idx]) return false;
+
+            char cur = board[row][col];
+            board[row][col] = '\0';
+
+            bool down = dfs(row + 1, col, idx + 1);
+            bool up = dfs(row - 1, col, idx + 1);
+            bool right = dfs(row, col + 1, idx + 1);
+            bool left = dfs(row, col - 1, idx + 1);
+            if (down || up || right || left) return true;
+
+            board[row][col] = cur;
+            return false;
+        };
+
+        for (int i = 0; i &lt; m; ++i) {
+            for (int j = 0; j &lt; n; ++j) {
+                if (dfs(i, j, 0)) return true;
+            }
+        }
+
+        return false;
+    }
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class WordSearch:
     def exist(self, board: List[List[str]], word: str) -&gt; bool:
         m, n = len(board), len(board[0])
@@ -1774,6 +1857,15 @@ When the suffix becomes empty, all character in the give word is found.</p>
                     return True
         return False
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>

@@ -25,21 +25,21 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Contains Duplicate II | yokolet’s notelets</title>
+<title>Count Number of Rectangles Containing Each Point | yokolet’s notelets</title>
 <meta name="generator" content="Jekyll v3.9.5" />
-<meta property="og:title" content="Contains Duplicate II" />
+<meta property="og:title" content="Count Number of Rectangles Containing Each Point" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Blog site mostly for programming topics." />
 <meta property="og:description" content="Blog site mostly for programming topics." />
-<link rel="canonical" href="http://localhost:4000/algo/arrays/2022-10-21-contains-duplicate-ii.html" />
-<meta property="og:url" content="http://localhost:4000/algo/arrays/2022-10-21-contains-duplicate-ii.html" />
+<link rel="canonical" href="http://localhost:4000/algo/sorting_and_searching/2024-05-28-count-number-of-rectangles-containing-each-point.html" />
+<meta property="og:url" content="http://localhost:4000/algo/sorting_and_searching/2024-05-28-count-number-of-rectangles-containing-each-point.html" />
 <meta property="og:site_name" content="yokolet’s notelets" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-10-21T13:59:00+09:00" />
+<meta property="article:published_time" content="2024-05-28T16:37:00+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Contains Duplicate II" />
+<meta property="twitter:title" content="Count Number of Rectangles Containing Each Point" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-10-21T13:59:00+09:00","datePublished":"2022-10-21T13:59:00+09:00","description":"Blog site mostly for programming topics.","headline":"Contains Duplicate II","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/arrays/2022-10-21-contains-duplicate-ii.html"},"url":"http://localhost:4000/algo/arrays/2022-10-21-contains-duplicate-ii.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2024-05-28T16:37:00+09:00","datePublished":"2024-05-28T16:37:00+09:00","description":"Blog site mostly for programming topics.","headline":"Count Number of Rectangles Containing Each Point","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/sorting_and_searching/2024-05-28-count-number-of-rectangles-containing-each-point.html"},"url":"http://localhost:4000/algo/sorting_and_searching/2024-05-28-count-number-of-rectangles-containing-each-point.html"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
@@ -96,7 +96,7 @@
         <section class="hero  is-small  is-bold is-primary" >
     <div class="hero-body ">
         <div class="container">
-            <h1 class="title is-2">Contains Duplicate II</h1>
+            <h1 class="title is-2">Count Number of Rectangles Containing Each Point</h1>
             <p class="subtitle is-3"></p>
             
         </div>
@@ -117,7 +117,7 @@
     
     <div class="menu-list">
         
-        <div class="container is-active">
+        <div class="container ">
             <a class="menu-label">
                 Arrays
             </a>
@@ -1137,7 +1137,7 @@
             </ul>
         </div>
         
-        <div class="container ">
+        <div class="container is-active">
             <a class="menu-label">
                 Sorting and searching
             </a>
@@ -1678,20 +1678,16 @@
                     
                     <div class="content">
 
-    <p>Published: Oct 21, 2022</p>
+    <p>Published: May 28, 2024</p>
 
     <div class="tags">
         
         <span class="tag  is-primary ">
-    Easy
+    Sorting
 </span>
         
         <span class="tag  is-primary ">
-    Hash Table
-</span>
-        
-        <span class="tag  is-primary ">
-    Sliding Window
+    Binary Search
 </span>
         
         <span class="tag  is-primary ">
@@ -1704,46 +1700,65 @@
 
     <h2 id="problem-description">Problem Description</h2>
 <blockquote>
-  <p>Given an integer array <code>nums</code> and an integer <code>k</code>, return <code>true</code> if there are two distinct indices <code>i</code> and <code>j</code> in the
-array such that <code>nums[i] == nums[j]</code> and <code>abs(i - j) &lt;= k</code>.</p>
+  <p>You are given a 2D integer array rectangles where <code>rectangles[i] = [l_i, h_i]</code> indicates that ith rectangle
+has a length of <code>l_i</code> and a height of <code>h_i</code>. You are also given a 2D integer array points where 
+<code>points[j] = [x_j, y_j]</code> is a point with coordinates <code>(x_j, y_j)</code>.</p>
+
+  <p>The i-th rectangle has its bottom-left corner point at the coordinates <code>(0, 0)</code> and its top-right corner point at
+<code>(l_i, h_i)</code>.</p>
+
+  <p>Return an integer array count of length points.length where <code>count[j]</code> is the number of rectangles
+that contain the j-th point.</p>
+
+  <p>The i-th rectangle contains the j-th point if <code>0 &lt;= x_j &lt;= l_i</code> and <code>0 &lt;= y_j &lt;= h_i</code>. Note that points
+that lie on the edges of a rectangle are also considered to be contained by that rectangle.</p>
 
   <p>Constraints:</p>
   <ul>
-    <li><code>1 &lt;= nums.length &lt;= 10**5</code></li>
-    <li><code>-10**9 &lt;= nums[i] &lt;= 10**9</code></li>
-    <li><code>0 &lt;= k &lt;= 10**5</code></li>
+    <li><code>1 &lt;= rectangles.length, points.length &lt;= 5 * 10**4</code></li>
+    <li><code>rectangles[i].length == points[j].length == 2</code></li>
+    <li><code>1 &lt;= l_i, x_j &lt;= 10**9</code></li>
+    <li><code>1 &lt;= h_i, y_j &lt;= 100</code></li>
+    <li>All the rectangles are unique.</li>
+    <li>All the points are unique.</li>
   </ul>
 
-  <p><a href="https://leetcode.com/problems/contains-duplicate-ii/">https://leetcode.com/problems/contains-duplicate-ii/</a></p>
+  <p><a href="https://leetcode.com/problems/count-number-of-rectangles-containing-each-point/">https://leetcode.com/problems/count-number-of-rectangles-containing-each-point/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
 <pre><code>Example 1
-Input: nums = [1,2,3,1], k = 3
-Output: true
+Input: rectangles = [[1,2],[2,3],[2,5]], points = [[2,1],[1,4]]
+Output: [2,1]
+Explanation: 
+The first rectangle contains no points.
+The second rectangle contains only the point (2, 1).
+The third rectangle contains the points (2, 1) and (1, 4).
+The number of rectangles that contain the point (2, 1) is 2.
+The number of rectangles that contain the point (1, 4) is 1.
+Therefore, we return [2, 1].
 </code></pre>
 
 <pre><code>Example 2
-Input: nums = [1,0,1,1], k = 1
-Output: true
-</code></pre>
+Input: rectangles = [[1,1],[2,2],[3,3]], points = [[1,3],[1,1]]
+Output: [1,3]
+Explanation:
+The first rectangle contains only the point (1, 1).
+The second rectangle contains only the point (1, 1).
+The third rectangle contains the points (1, 3) and (1, 1).
+The number of rectangles that contain the point (1, 3) is 1.
+The number of rectangles that contain the point (1, 1) is 3.
+Therefore, we return [1, 3].
 
-<pre><code>Example 3
-Input: nums = [1,2,3,1,2,3], k = 2
-Output: false
 </code></pre>
 
 <h2 id="how-to-solve">How to Solve</h2>
-<p>This is not a difficult problem.
-Multiple O(n) iterations would be the easiest, brute force approach.
-However, making the solution efficient, say, O(n), needs a bit of considerations.
-While we check all values from index 0 to n, what we care about is the last index of the same value only.
-When the same value appears, check the last index.
-If the difference is less than or equals to k, return True.</p>
 
-<p>The Hash Table is a good data structure to save the value and its last index pair.
-If the same value is in the Hash Table, check the difference between the last and current index.
-Return true if the difference is less than or equals to k.</p>
+<p>The solution here takes a binary search approach.
+The max value of height is 100 from the constraint, so the solution creates a vector of size 101 whose index is a height.
+Each vector element is a vector of lengths. The lengths should be sorted for the binary search.
+Find the upper_bound index of lengths in the given point’s height.
+Add the identified index, which is a count of rectangles.</p>
 
 <h2 id="solution">Solution</h2>
 
@@ -1778,90 +1793,47 @@ Return true if the difference is less than or equals to k.</p>
   <div class="container box">
     
       <div class="is-active tab-content" data-content="solution-0">
-<pre><code class="language-cpp">#include &lt;unordered_map&gt;
-#include &lt;vector&gt;
-
-using namespace std;
-
-class ContainsDuplicate2 {
+<pre><code class="language-cpp">class NumberOfRectanglesContainingEachPoint {
 public:
-    bool containsNearbyDuplicate(vector&lt;int&gt;&amp; nums, int k) {
-        unordered_map&lt;int, int&gt; counts;
-        for (int i = 0; i &lt; nums.size(); ++i) {
-            if (counts.find(nums[i]) != counts.end() &amp;&amp; i - counts[nums[i]] &lt;= k) {
-                return true;
-            }
-            counts[nums[i]] = i;
+    vector&lt;int&gt; countRectangles(vector&lt;vector&lt;int&gt;&gt;&amp; rectangles, vector&lt;vector&lt;int&gt;&gt;&amp; points) {
+        vector&lt;vector&lt;int&gt;&gt; heights(101);
+        for (vector&lt;int&gt;&amp; coord : rectangles) {
+            heights[coord[1]].push_back(coord[0]);
         }
-        return false;
+        for (vector&lt;int&gt;&amp; height : heights) {
+            sort(height.begin(), height.end());
+        }
+        vector&lt;int&gt; answer;
+        for (vector&lt;int&gt;&amp; point : points) {
+            int total = 0;
+            for (int i = point[1]; i &lt;= 100; ++i) {
+                total += heights[i].end() - upper_bound(heights[i].begin(), heights[i].end(), point[0] - 1);
+            }
+            answer.push_back(total);
+        }
+        return answer;
     }
 };
 </code></pre>
 </div>
     
       <div class="tab-content" data-content="solution-1">
-<pre><code class="language-java">import java.util.*;
-
-class ContainsDuplicate2 {
-    public boolean containsNearbyDuplicate(int[] nums, int k) {
-        Map&lt;Integer, Integer&gt; counts = new HashMap&lt;&gt;();
-        for (int i = 0; i &lt; nums.length; ++i) {
-            if (counts.containsKey(nums[i]) &amp;&amp; i - counts.get(nums[i]) &lt;= k) {
-                return true;
-            }
-            counts.put(nums[i], i);
-        }
-        return false;
-    }
-}
+<pre><code class="language-java">
 </code></pre>
 </div>
     
       <div class="tab-content" data-content="solution-2">
-<pre><code class="language-js">/**
- * @param {number[]} nums
- * @param {number} k
- * @return {boolean}
- */
-var containsNearbyDuplicate = function(nums, k) {
-  const counts = new Map();
-  for (let i = 0; i &lt; nums.length; i++) {
-    if (counts.has(nums[i]) &amp;&amp; i - counts.get(nums[i]) &lt;= k) {
-      return true;
-    }
-    counts.set(nums[i], i);
-  }
-  return false;
-};
+<pre><code class="language-js">
 </code></pre>
 </div>
     
       <div class="tab-content" data-content="solution-3">
-<pre><code class="language-python">class ContainsDuplicate2:
-    def containsNearbyDuplicate(self, nums: List[int], k: int) -&gt; bool:
-        counts = {}
-        for idx, v in enumerate(nums):
-            if v in counts and idx - counts[v] &lt;= k:
-                return True
-            counts[v] = idx
-        return False
+<pre><code class="language-python">
 </code></pre>
 </div>
     
       <div class="tab-content" data-content="solution-4">
-<pre><code class="language-ruby"># @param {Integer[]} nums
-# @param {Integer} k
-# @return {Boolean}
-def contains_nearby_duplicate(nums, k)
-  counts = {}
-  (0...nums.size).each do |i|
-    if counts.has_key?(nums[i]) &amp;&amp; i - counts[nums[i]] &lt;= k
-      return true
-    end
-    counts[nums[i]] = i
-  end
-  false
-end
+<pre><code class="language-ruby">
 </code></pre>
 </div>
     
@@ -1870,8 +1842,8 @@ end
 
 <h2 id="complexities">Complexities</h2>
 <ul>
-  <li>Time: <code>O(n)</code></li>
-  <li>Space: <code>O(n)</code></li>
+  <li>Time: <code>O(n * log(n))</code></li>
+  <li>Space: <code>O(1)</code></li>
 </ul>
 
 </div>
