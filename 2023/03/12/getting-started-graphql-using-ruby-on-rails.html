@@ -270,7 +270,7 @@ Additional installations are on the GitHub repo.</p>
 
 <p>When the GraphiQL window is firstly opened, it should look like this:</p>
 
-<p><img src="http://localhost:4000/assets/img/graphiql-default.jpeg" alt="default graphiql window" /></p>
+<p><img src="/assets/img/graphiql-default.jpeg" alt="default graphiql window" /></p>
 
 <p>Input http://localhost:3000/graphql in the GraphQL Endpoint field, which is defined in <code>config/routes.rb</code>
 Also, check the Method choice. It is defined in <code>config/routes.rb</code> as POST.
@@ -278,7 +278,7 @@ Then, GraphiQL app connects to Rails and pulls the schema defined in the <code>a
 and <code>app/graphql/types/mutation_type.rb</code>.
 Those schemas show up when “&lt; DOCS” button on the right upper area of GraphiQL window is clicked.</p>
 
-<p><img src="http://localhost:4000/assets/img/graphiql-docs.jpeg" alt="default graphiql window" /></p>
+<p><img src="/assets/img/graphiql-docs.jpeg" alt="default graphiql window" /></p>
 
 <p>Both Query and Mutation schemas are displayed when the links get clicked.</p>
 
@@ -293,7 +293,7 @@ On the leftmost pane, input GraphQL query.</p>
 The result is on the center pane.
 The message of “Hello World!” is from <code>app/graphql/types/query_type.rb</code> file.</p>
 
-<p><img src="http://localhost:4000/assets/img/graphiql-query.jpeg" alt="default graphiql window" /></p>
+<p><img src="/assets/img/graphiql-query.jpeg" alt="default graphiql window" /></p>
 
 <p>The mutation query can be sent, however, nothing changes since all are static just a test implementation.</p>
 
@@ -573,7 +573,7 @@ The updated schema is pulled, which is displayed in the Docs pane.</p>
   }
 }
 </code></pre>
-<p><img src="http://localhost:4000/assets/img/graphiql-users-query.jpeg" alt="graphiql users query" /></p>
+<p><img src="/assets/img/graphiql-users-query.jpeg" alt="graphiql users query" /></p>
 
 <p>To get one user using user’s id, the query needs a parameter.
 The simple form is to write id in the query.</p>
@@ -598,7 +598,7 @@ The simple form is to write id in the query.</p>
   "uid": 1
 }
 </code></pre>
-<p><img src="http://localhost:4000/assets/img/graphiql-user-with-id-query.jpeg" alt="graphiql user with id query" /></p>
+<p><img src="/assets/img/graphiql-user-with-id-query.jpeg" alt="graphiql user with id query" /></p>
 
 <p>For post queries, with/without user id are defined.
 If the user id is not provided, the query gets all posts.</p>
@@ -629,7 +629,7 @@ If the user id is not provided, the query gets all posts.</p>
   "uid": 2
 }
 </code></pre>
-<p><img src="http://localhost:4000/assets/img/graphiql-posts-query.jpeg" alt="graphiql posts query" /></p>
+<p><img src="/assets/img/graphiql-posts-query.jpeg" alt="graphiql posts query" /></p>
 
 <h3 id="create-a-new-resource-by-mutation">Create a New Resource by Mutation</h3>
 

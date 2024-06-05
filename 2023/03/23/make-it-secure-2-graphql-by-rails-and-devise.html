@@ -293,11 +293,11 @@ for HTTP request/response headers.</p>
 <p>Above query sets only required fields. Other fields can be seen in Insomnia’s Schema pane.
 The response fields are the same. The accessToken, client and uid will be used for later queries, so those are requested.</p>
 
-<p><img src="http://localhost:4000/assets/img/insomnia-devise-register.jpeg" alt="img: insomnia devise user register" /></p>
+<p><img src="/assets/img/insomnia-devise-register.jpeg" alt="img: insomnia devise user register" /></p>
 
 <p>Let’s check HTTP response headers. As in below, authentication related headers can been seen.</p>
 
-<p><img src="http://localhost:4000/assets/img/insomnia-devise-register-response-header.jpeg" alt="img: insomnia devise user register response header" /></p>
+<p><img src="/assets/img/insomnia-devise-register-response-header.jpeg" alt="img: insomnia devise user register response header" /></p>
 
 <p>To login as a registered user, make mutation query below.</p>
 <pre><code class="language-graphql">mutation login {
@@ -319,8 +319,8 @@ The response fields are the same. The accessToken, client and uid will be used f
 
 <p>Successful login returns the same result as the registration.</p>
 
-<p><img src="http://localhost:4000/assets/img/insomnia-devise-login.jpeg" alt="img: insomnia devise user login" />
-<img src="http://localhost:4000/assets/img/insomnia-devise-login-response-header.jpeg" alt="img: insomnia devise user login response header" /></p>
+<p><img src="/assets/img/insomnia-devise-login.jpeg" alt="img: insomnia devise user login" />
+<img src="/assets/img/insomnia-devise-login-response-header.jpeg" alt="img: insomnia devise user login response header" /></p>
 
 <h4 id="user-and-post-models">User and Post Models</h4>
 
@@ -459,7 +459,7 @@ end
 }
 </code></pre>
 
-<p><img src="http://localhost:4000/assets/img/insomnia-devise-users.jpeg" alt="img: insomnia devise users query" /></p>
+<p><img src="/assets/img/insomnia-devise-users.jpeg" alt="img: insomnia devise users query" /></p>
 
 <p>To make the query above, no authentication is required at all.</p>
 
@@ -542,7 +542,7 @@ Try login mutation query.</p>
 }
 </code></pre>
 
-<p><img src="http://localhost:4000/assets/img/insomnia-devise-login-for-post.jpeg" alt="img: insomnia devise login for post" /></p>
+<p><img src="/assets/img/insomnia-devise-login-for-post.jpeg" alt="img: insomnia devise login for post" /></p>
 
 <p>The successful login returns accessToken, client, and uid.
 These three are used to authenticate.
@@ -561,9 +561,9 @@ The create post mutation query looks like below:</p>
 Be careful, GraphQL result is accessToken, but HTTP request header is access-token.
 Now, we could create a post.</p>
 
-<p><img src="http://localhost:4000/assets/img/insomnia-devise-post.jpeg" alt="img: insomnia devise post mutation" /></p>
+<p><img src="/assets/img/insomnia-devise-post.jpeg" alt="img: insomnia devise post mutation" /></p>
 
-<p><img src="http://localhost:4000/assets/img/insomnia-devise-post-headers.jpeg" alt="img: insomnia devise post request headers" /></p>
+<p><img src="/assets/img/insomnia-devise-post-headers.jpeg" alt="img: insomnia devise post request headers" /></p>
 
 <p>Add some more posts using different user’s authentication values.</p>
 
@@ -578,7 +578,7 @@ Now, we could create a post.</p>
 }
 </code></pre>
 
-<p><img src="http://localhost:4000/assets/img/insomnia-devise-all-posts.jpeg" alt="img: insomnia devise all posts" /></p>
+<p><img src="/assets/img/insomnia-devise-all-posts.jpeg" alt="img: insomnia devise all posts" /></p>
 
 <p>To get all post of a specific user, make below query with user’s id.</p>
 <pre><code class="language-graphql">query posts {
@@ -591,7 +591,7 @@ Now, we could create a post.</p>
 }
 </code></pre>
 
-<p><img src="http://localhost:4000/assets/img/insomnia-devise-post-of-a-user.jpeg" alt="img: insomnia devise posts of a user" /></p>
+<p><img src="/assets/img/insomnia-devise-post-of-a-user.jpeg" alt="img: insomnia devise posts of a user" /></p>
 
 <h3 id="code">Code</h3>
 

@@ -444,7 +444,7 @@ since both request and response HTTP headers are visible and easy to edit.</p>
 </code></pre>
 <p>If the user is successfully registered, a tokenized signed Global ID will be returned.</p>
 
-<p><img src="http://localhost:4000/assets/img/insomnia-register-query.jpeg" alt="img: insomnia user register query" /></p>
+<p><img src="/assets/img/insomnia-register-query.jpeg" alt="img: insomnia user register query" /></p>
 
 <p>The next is a login mutation.</p>
 <pre><code class="language-graphql">mutation login {
@@ -462,7 +462,7 @@ since both request and response HTTP headers are visible and easy to edit.</p>
 </code></pre>
 <p>The login mutation also returns a tokenized signed Global ID.</p>
 
-<p><img src="http://localhost:4000/assets/img/insomnia-login-query.jpeg" alt="img: insomnia user login query" /></p>
+<p><img src="/assets/img/insomnia-login-query.jpeg" alt="img: insomnia user login query" /></p>
 
 <p>The post create mutation needs HTTP header to complete successfully.
 So, let’s try without the token in the HTTP header to see it will fail.</p>
@@ -484,7 +484,7 @@ So, let’s try without the token in the HTTP header to see it will fail.</p>
 
 <p>As expected, it failed without the token in the HTTP header</p>
 
-<p><img src="http://localhost:4000/assets/img/insomnia-post-failed.jpeg" alt="img: insomnia failed post query" /></p>
+<p><img src="/assets/img/insomnia-post-failed.jpeg" alt="img: insomnia failed post query" /></p>
 
 <p>Then, set Authorization HTTP request header with the token returned from register or login mutation.</p>
 
@@ -493,7 +493,7 @@ So, let’s try without the token in the HTTP header to see it will fail.</p>
 
 <p>Now, it succeeds.</p>
 
-<p><img src="http://localhost:4000/assets/img/insomnia-post-with-header.jpeg" alt="img: insomnia post with header" /></p>
+<p><img src="/assets/img/insomnia-post-with-header.jpeg" alt="img: insomnia post with header" /></p>
 
 <h3 id="code">Code</h3>
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-06-02T00:12:06+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Blog site mostly for programming topics.</subtitle><entry><title type="html">Vite + Vue + Bun on Rails</title><link href="http://localhost:4000/2024/03/05/vite-vue-bun-on-rails.html" rel="alternate" type="text/html" title="Vite + Vue + Bun on Rails" /><published>2024-03-05T21:18:00+09:00</published><updated>2024-03-05T21:18:00+09:00</updated><id>http://localhost:4000/2024/03/05/vite-vue-bun-on-rails</id><content type="html" xml:base="http://localhost:4000/2024/03/05/vite-vue-bun-on-rails.html"><![CDATA[<p><a href="https://vuejs.org/">Vue.js</a> is one of frontend frameworks gaining popularity among rapidly emerging JavaScript technologies.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-06-05T14:44:05+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Blog site mostly for programming topics.</subtitle><entry><title type="html">Vite + Vue + Bun on Rails</title><link href="http://localhost:4000/2024/03/05/vite-vue-bun-on-rails.html" rel="alternate" type="text/html" title="Vite + Vue + Bun on Rails" /><published>2024-03-05T21:18:00+09:00</published><updated>2024-03-05T21:18:00+09:00</updated><id>http://localhost:4000/2024/03/05/vite-vue-bun-on-rails</id><content type="html" xml:base="http://localhost:4000/2024/03/05/vite-vue-bun-on-rails.html"><![CDATA[<p><a href="https://vuejs.org/">Vue.js</a> is one of frontend frameworks gaining popularity among rapidly emerging JavaScript technologies.
 The combination of Vue.js and Rails is becoming more popular as well,
 however, Vue.js development on Rails is not so straightforward.
 The reason would be that Vue.js relies on <a href="https://vitejs.dev/">Vite</a> for a development environment
@@ -277,7 +277,7 @@ Above directory structure is just an example.</p>
 <p>Open http://localhost:3000/ on a browser.
 The webpage below should show up.</p>
 
-<p><img width="500px" src="http://localhost:4000/assets/img/vite_vue_rails.jpeg" alt="img: vite + vue on rails" /></p>
+<p><img width="500px" src="/assets/img/vite_vue_rails.jpeg" alt="img: vite + vue on rails" /></p>
 
 <p>Try editing <code>app/frontend/App.vue</code> and <code>app/frontend/components/HelloWorld.vue</code> and
 verify HMR (Hot Module Replacement) is working.</p>
@@ -552,7 +552,7 @@ Add a div tag in the index.html.erb file.</p>
 <p>Then go to http://localhost:3000/pages/index on the browser.
 The React app shows up.</p>
 
-<p><img width="300px" src="http://localhost:4000/assets/img/rails-bun-react.jpeg" alt="img: bun + react on rails" /></p>
+<p><img width="300px" src="/assets/img/rails-bun-react.jpeg" alt="img: bun + react on rails" /></p>
 
 <h3 id="references">References</h3>
 <ul>
@@ -1118,16 +1118,16 @@ export const getTwitterOauthUrl = (): string =&gt; {
 
 <p>The button looks like below:</p>
 
-<p><img src="http://localhost:4000/assets/img/oauth-pkce-login-button.jpeg" alt="img: oauth pkce login button" /></p>
+<p><img src="/assets/img/oauth-pkce-login-button.jpeg" alt="img: oauth pkce login button" /></p>
 
 <p>When a user (human) clicks the button, Twitter navigates to the login page if the user has not yet logged in.
 If the user is already logged in, this step is skipped.</p>
 
-<p><img src="http://localhost:4000/assets/img/oauth-pkce-twitter-login-page.jpeg" alt="img: oauth pkce twitter login page" /></p>
+<p><img src="/assets/img/oauth-pkce-twitter-login-page.jpeg" alt="img: oauth pkce twitter login page" /></p>
 
 <p>After the successful login, Twitter shows the authorize app page.</p>
 
-<p><img src="http://localhost:4000/assets/img/oauth-pkce-twitter-authorize-app-page.jpeg" alt="img: oauth pkce twitter authorize app page" /></p>
+<p><img src="/assets/img/oauth-pkce-twitter-authorize-app-page.jpeg" alt="img: oauth pkce twitter authorize app page" /></p>
 
 <p>When the user clicks the Authorize app button, Twitter redirects to the given redirect URI with the code as the URL parameter.</p>
 
@@ -1239,7 +1239,7 @@ export function TwitterProfile() {
 ...
 </code></pre>
 
-<p><img src="http://localhost:4000/assets/img/oauth-pkce-user-profile.jpeg" alt="img: oauth pkce user profile" /></p>
+<p><img src="/assets/img/oauth-pkce-user-profile.jpeg" alt="img: oauth pkce user profile" /></p>
 
 <h4 id="core-logic-on-the-server-side-app">Core Logic on the Server Side App</h4>
 
@@ -1720,7 +1720,7 @@ As defined in <code>Procfile.dev</code>, we need Rails server and esbuild with w
 The <code>bin/dev</code> command does that.
 If everything goes well, the counter app below shows up at http://localhost:3000/ .</p>
 
-<p><img src="http://localhost:4000/assets/img/react-redux-counter-app.jpeg" alt="img: react redux counter app" /></p>
+<p><img src="/assets/img/react-redux-counter-app.jpeg" alt="img: react redux counter app" /></p>
 
 <h3 id="code">Code</h3>
 
@@ -1958,8 +1958,8 @@ At the same time, the cookie and session are returned.
 If we look at the terminal where Rails is running, “Can’t verify CSRF token authenticity.” should be spotted among the
 bunch of outputs.</p>
 
-<p><img src="http://localhost:4000/assets/img/postman-schema-fetch.jpeg" alt="img: postman schema fetch" />
-<img src="http://localhost:4000/assets/img/postman-schema-fetch-cookie-session.jpeg" alt="img: postman schema fetch cookie session" /></p>
+<p><img src="/assets/img/postman-schema-fetch.jpeg" alt="img: postman schema fetch" />
+<img src="/assets/img/postman-schema-fetch-cookie-session.jpeg" alt="img: postman schema fetch cookie session" /></p>
 
 <p>The userLogin mutation looks like below:</p>
 <pre><code class="language-graphql">mutation login {
@@ -1980,8 +1980,8 @@ bunch of outputs.</p>
 Again, we’ll see “Can’t verify CSRF token authenticity.” on the terminal, but get the CSRF-TOKEN cookie and session
 in the HTTP response header.</p>
 
-<p><img src="http://localhost:4000/assets/img/postman-login-query.jpeg" alt="img: postman login query" />
-<img src="http://localhost:4000/assets/img/postman-login-query-cookie-session.jpeg" alt="img: postman login query cookie session" /></p>
+<p><img src="/assets/img/postman-login-query.jpeg" alt="img: postman login query" />
+<img src="/assets/img/postman-login-query-cookie-session.jpeg" alt="img: postman login query cookie session" /></p>
 
 <p>The next step is to make posts or users query.
 For example, posts query looks like below:</p>
@@ -2000,9 +2000,9 @@ The token can be seen in the login response’s header, so copy and paste it to 
 Also, make sure the session is set in the cookie.
 Write the query and click “Send” button.</p>
 
-<p><img src="http://localhost:4000/assets/img/postman-posts-query-x-csrf-token.jpeg" alt="img: postman posts query x-csrf token" />
-<img src="http://localhost:4000/assets/img/postman-posts-query-session.jpeg" alt="img: postman posts query session" />
-<img src="http://localhost:4000/assets/img/postman-posts-query.jpeg" alt="img: postman posts query" /></p>
+<p><img src="/assets/img/postman-posts-query-x-csrf-token.jpeg" alt="img: postman posts query x-csrf token" />
+<img src="/assets/img/postman-posts-query-session.jpeg" alt="img: postman posts query session" />
+<img src="/assets/img/postman-posts-query.jpeg" alt="img: postman posts query" /></p>
 
 <p>Let’s see CSRF verification failure.
 Click check box on the left of X-CSRF-TOKEN to deactivate. The header won’t be sent.
@@ -2010,7 +2010,7 @@ Now we see ActionController::InvalidAuthenticityToken exception.
 On the terminal where Rails is running, “Can’t verify CSRF token authenticity.” appears again.
 That means the exception strategy is working.</p>
 
-<p><img src="http://localhost:4000/assets/img/postman-posts-query-failure.jpeg" alt="img: postman posts query failure" /></p>
+<p><img src="/assets/img/postman-posts-query-failure.jpeg" alt="img: postman posts query failure" /></p>
 
 <p>Lastly, let’s try postCreate mutation.
 The mutation looks like below:</p>
@@ -2034,11 +2034,11 @@ in addition to X-CSRF-TOKEN and session.
 Previously tried userLogin mutation gave us those three values already. Set those to the request header.
 Make sure the session is attached in the cookie if the GraphQL client is not Postman.</p>
 
-<p><img src="http://localhost:4000/assets/img/postman-create-post-headers.jpeg" alt="img: postman create post headers" /></p>
+<p><img src="/assets/img/postman-create-post-headers.jpeg" alt="img: postman create post headers" /></p>
 
 <p>Write the mutation query and click “Send” button.</p>
 
-<p><img src="http://localhost:4000/assets/img/postman-create-post-query.jpeg" alt="img: postman create post query" /></p>
+<p><img src="/assets/img/postman-create-post-query.jpeg" alt="img: postman create post query" /></p>
 
 <p>The new post was successfully created.</p>
 
@@ -2222,11 +2222,11 @@ for HTTP request/response headers.</p>
 <p>Above query sets only required fields. Other fields can be seen in Insomnia’s Schema pane.
 The response fields are the same. The accessToken, client and uid will be used for later queries, so those are requested.</p>
 
-<p><img src="http://localhost:4000/assets/img/insomnia-devise-register.jpeg" alt="img: insomnia devise user register" /></p>
+<p><img src="/assets/img/insomnia-devise-register.jpeg" alt="img: insomnia devise user register" /></p>
 
 <p>Let’s check HTTP response headers. As in below, authentication related headers can been seen.</p>
 
-<p><img src="http://localhost:4000/assets/img/insomnia-devise-register-response-header.jpeg" alt="img: insomnia devise user register response header" /></p>
+<p><img src="/assets/img/insomnia-devise-register-response-header.jpeg" alt="img: insomnia devise user register response header" /></p>
 
 <p>To login as a registered user, make mutation query below.</p>
 <pre><code class="language-graphql">mutation login {
@@ -2248,8 +2248,8 @@ The response fields are the same. The accessToken, client and uid will be used f
 
 <p>Successful login returns the same result as the registration.</p>
 
-<p><img src="http://localhost:4000/assets/img/insomnia-devise-login.jpeg" alt="img: insomnia devise user login" />
-<img src="http://localhost:4000/assets/img/insomnia-devise-login-response-header.jpeg" alt="img: insomnia devise user login response header" /></p>
+<p><img src="/assets/img/insomnia-devise-login.jpeg" alt="img: insomnia devise user login" />
+<img src="/assets/img/insomnia-devise-login-response-header.jpeg" alt="img: insomnia devise user login response header" /></p>
 
 <h4 id="user-and-post-models">User and Post Models</h4>
 
@@ -2388,7 +2388,7 @@ end
 }
 </code></pre>
 
-<p><img src="http://localhost:4000/assets/img/insomnia-devise-users.jpeg" alt="img: insomnia devise users query" /></p>
+<p><img src="/assets/img/insomnia-devise-users.jpeg" alt="img: insomnia devise users query" /></p>
 
 <p>To make the query above, no authentication is required at all.</p>
 
@@ -2471,7 +2471,7 @@ Try login mutation query.</p>
 }
 </code></pre>
 
-<p><img src="http://localhost:4000/assets/img/insomnia-devise-login-for-post.jpeg" alt="img: insomnia devise login for post" /></p>
+<p><img src="/assets/img/insomnia-devise-login-for-post.jpeg" alt="img: insomnia devise login for post" /></p>
 
 <p>The successful login returns accessToken, client, and uid.
 These three are used to authenticate.
@@ -2490,9 +2490,9 @@ The create post mutation query looks like below:</p>
 Be careful, GraphQL result is accessToken, but HTTP request header is access-token.
 Now, we could create a post.</p>
 
-<p><img src="http://localhost:4000/assets/img/insomnia-devise-post.jpeg" alt="img: insomnia devise post mutation" /></p>
+<p><img src="/assets/img/insomnia-devise-post.jpeg" alt="img: insomnia devise post mutation" /></p>
 
-<p><img src="http://localhost:4000/assets/img/insomnia-devise-post-headers.jpeg" alt="img: insomnia devise post request headers" /></p>
+<p><img src="/assets/img/insomnia-devise-post-headers.jpeg" alt="img: insomnia devise post request headers" /></p>
 
 <p>Add some more posts using different user’s authentication values.</p>
 
@@ -2507,7 +2507,7 @@ Now, we could create a post.</p>
 }
 </code></pre>
 
-<p><img src="http://localhost:4000/assets/img/insomnia-devise-all-posts.jpeg" alt="img: insomnia devise all posts" /></p>
+<p><img src="/assets/img/insomnia-devise-all-posts.jpeg" alt="img: insomnia devise all posts" /></p>
 
 <p>To get all post of a specific user, make below query with user’s id.</p>
 <pre><code class="language-graphql">query posts {
@@ -2520,7 +2520,7 @@ Now, we could create a post.</p>
 }
 </code></pre>
 
-<p><img src="http://localhost:4000/assets/img/insomnia-devise-post-of-a-user.jpeg" alt="img: insomnia devise posts of a user" /></p>
+<p><img src="/assets/img/insomnia-devise-post-of-a-user.jpeg" alt="img: insomnia devise posts of a user" /></p>
 
 <h3 id="code">Code</h3>
 
@@ -2843,7 +2843,7 @@ since both request and response HTTP headers are visible and easy to edit.</p>
 </code></pre>
 <p>If the user is successfully registered, a tokenized signed Global ID will be returned.</p>
 
-<p><img src="http://localhost:4000/assets/img/insomnia-register-query.jpeg" alt="img: insomnia user register query" /></p>
+<p><img src="/assets/img/insomnia-register-query.jpeg" alt="img: insomnia user register query" /></p>
 
 <p>The next is a login mutation.</p>
 <pre><code class="language-graphql">mutation login {
@@ -2861,7 +2861,7 @@ since both request and response HTTP headers are visible and easy to edit.</p>
 </code></pre>
 <p>The login mutation also returns a tokenized signed Global ID.</p>
 
-<p><img src="http://localhost:4000/assets/img/insomnia-login-query.jpeg" alt="img: insomnia user login query" /></p>
+<p><img src="/assets/img/insomnia-login-query.jpeg" alt="img: insomnia user login query" /></p>
 
 <p>The post create mutation needs HTTP header to complete successfully.
 So, let’s try without the token in the HTTP header to see it will fail.</p>
@@ -2883,7 +2883,7 @@ So, let’s try without the token in the HTTP header to see it will fail.</p>
 
 <p>As expected, it failed without the token in the HTTP header</p>
 
-<p><img src="http://localhost:4000/assets/img/insomnia-post-failed.jpeg" alt="img: insomnia failed post query" /></p>
+<p><img src="/assets/img/insomnia-post-failed.jpeg" alt="img: insomnia failed post query" /></p>
 
 <p>Then, set Authorization HTTP request header with the token returned from register or login mutation.</p>
 
@@ -2892,7 +2892,7 @@ So, let’s try without the token in the HTTP header to see it will fail.</p>
 
 <p>Now, it succeeds.</p>
 
-<p><img src="http://localhost:4000/assets/img/insomnia-post-with-header.jpeg" alt="img: insomnia post with header" /></p>
+<p><img src="/assets/img/insomnia-post-with-header.jpeg" alt="img: insomnia post with header" /></p>
 
 <h3 id="code">Code</h3>
 
@@ -3041,7 +3041,7 @@ Additional installations are on the GitHub repo.</p>
 
 <p>When the GraphiQL window is firstly opened, it should look like this:</p>
 
-<p><img src="http://localhost:4000/assets/img/graphiql-default.jpeg" alt="default graphiql window" /></p>
+<p><img src="/assets/img/graphiql-default.jpeg" alt="default graphiql window" /></p>
 
 <p>Input http://localhost:3000/graphql in the GraphQL Endpoint field, which is defined in <code>config/routes.rb</code>
 Also, check the Method choice. It is defined in <code>config/routes.rb</code> as POST.
@@ -3049,7 +3049,7 @@ Then, GraphiQL app connects to Rails and pulls the schema defined in the <code>a
 and <code>app/graphql/types/mutation_type.rb</code>.
 Those schemas show up when “&lt; DOCS” button on the right upper area of GraphiQL window is clicked.</p>
 
-<p><img src="http://localhost:4000/assets/img/graphiql-docs.jpeg" alt="default graphiql window" /></p>
+<p><img src="/assets/img/graphiql-docs.jpeg" alt="default graphiql window" /></p>
 
 <p>Both Query and Mutation schemas are displayed when the links get clicked.</p>
 
@@ -3064,7 +3064,7 @@ On the leftmost pane, input GraphQL query.</p>
 The result is on the center pane.
 The message of “Hello World!” is from <code>app/graphql/types/query_type.rb</code> file.</p>
 
-<p><img src="http://localhost:4000/assets/img/graphiql-query.jpeg" alt="default graphiql window" /></p>
+<p><img src="/assets/img/graphiql-query.jpeg" alt="default graphiql window" /></p>
 
 <p>The mutation query can be sent, however, nothing changes since all are static just a test implementation.</p>
 
@@ -3344,7 +3344,7 @@ The updated schema is pulled, which is displayed in the Docs pane.</p>
   }
 }
 </code></pre>
-<p><img src="http://localhost:4000/assets/img/graphiql-users-query.jpeg" alt="graphiql users query" /></p>
+<p><img src="/assets/img/graphiql-users-query.jpeg" alt="graphiql users query" /></p>
 
 <p>To get one user using user’s id, the query needs a parameter.
 The simple form is to write id in the query.</p>
@@ -3369,7 +3369,7 @@ The simple form is to write id in the query.</p>
   "uid": 1
 }
 </code></pre>
-<p><img src="http://localhost:4000/assets/img/graphiql-user-with-id-query.jpeg" alt="graphiql user with id query" /></p>
+<p><img src="/assets/img/graphiql-user-with-id-query.jpeg" alt="graphiql user with id query" /></p>
 
 <p>For post queries, with/without user id are defined.
 If the user id is not provided, the query gets all posts.</p>
@@ -3400,7 +3400,7 @@ If the user id is not provided, the query gets all posts.</p>
   "uid": 2
 }
 </code></pre>
-<p><img src="http://localhost:4000/assets/img/graphiql-posts-query.jpeg" alt="graphiql posts query" /></p>
+<p><img src="/assets/img/graphiql-posts-query.jpeg" alt="graphiql posts query" /></p>
 
 <h3 id="create-a-new-resource-by-mutation">Create a New Resource by Mutation</h3>
 
