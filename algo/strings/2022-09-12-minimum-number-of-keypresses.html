@@ -42,13 +42,13 @@
 {"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-12T17:20:00+09:00","datePublished":"2022-09-12T17:20:00+09:00","description":"Blog site mostly for programming topics.","headline":"Minimum Number of Keypresses","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/algo/strings/2022-09-12-minimum-number-of-keypresses.html"},"url":"http://localhost:4000/algo/strings/2022-09-12-minimum-number-of-keypresses.html"}</script>
 <!-- End Jekyll SEO tag -->
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-761764-8"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WWDGEJ9Y9L"></script>
 <script>
-  window['ga-disable-UA-761764-8'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window['ga-disable-G-WWDGEJ9Y9L'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'UA-761764-8');
+  gtag('config', 'G-WWDGEJ9Y9L');
 </script><!-- head scripts --></head>
 
   <body>
@@ -1702,7 +1702,12 @@
 
     
 
-    <h2 id="problem-description">Problem Description</h2>
+    <h2 id="introduction">Introduction</h2>
+<p>String related problems are sometime often confusing.
+We should read the problem description carefully.
+It might be turned out it is not so difficult like this problem.</p>
+
+<h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>You have a keypad with 9 buttons, numbered from 1 to 9, each mapped to lowercase English letters.
 You can choose which characters each button is matched to as long as:</p>
@@ -1752,11 +1757,7 @@ Type 'l' by pressing button 3 twice.
 A total of 15 button presses are needed, so return 15.
 </code></pre>
 
-<h2 id="how-to-solve">How to Solve</h2>
-<p>String related problems are sometime often confusing.
-We should read the problem description carefully.
-It might be turned out it is not so difficult like this problem.</p>
-
+<h2 id="analysis">Analysis</h2>
 <p>In this problem, a frequency of characters matters.
 The most frequently used characters should be put as the first letter.
 The solution starts from counting the characters and sorting based on the frequency.
@@ -1767,53 +1768,6 @@ Lastly characters after 18th are 3.
 Depends on the input string length, those are counted.</p>
 
 <h2 id="solution">Solution</h2>
-
-<div class="tabs is-boxed " id="solution">
-  <div class="container">
-    <ul>
-      
-        <li class="is-active" data-tab="solution-0">
-          <a><span>C++ </span></a>
-        </li>
-      
-        <li data-tab="solution-1">
-          <a><span>Java </span></a>
-        </li>
-      
-        <li data-tab="solution-2">
-          <a><span>JavaScript </span></a>
-        </li>
-      
-        <li data-tab="solution-3">
-          <a><span>Python </span></a>
-        </li>
-      
-        <li data-tab="solution-4">
-          <a><span>Ruby </span></a>
-        </li>
-      
-    </ul>
-  </div>
-</div>
-<div id="solution-content">
-  <div class="container box">
-    
-      <div class="is-active tab-content" data-content="solution-0">
-<pre><code class="language-cpp">
-</code></pre>
-</div>
-    
-      <div class="tab-content" data-content="solution-1">
-<pre><code class="language-java">
-</code></pre>
-</div>
-    
-      <div class="tab-content" data-content="solution-2">
-<pre><code class="language-js">
-</code></pre>
-</div>
-    
-      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class MinimumNumberOfKeypresses:
     def minimumKeypresses(self, s: str) -&gt; int:
         counter = collections.Counter(s)
@@ -1827,15 +1781,6 @@ Depends on the input string length, those are counted.</p>
             else:
                 return sum(values[:9]) + 2 * sum(values[9:18]) + 3 * sum(values[18:])
 </code></pre>
-</div>
-    
-      <div class="tab-content" data-content="solution-4">
-<pre><code class="language-ruby">
-</code></pre>
-</div>
-    
-  </div>
-</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>

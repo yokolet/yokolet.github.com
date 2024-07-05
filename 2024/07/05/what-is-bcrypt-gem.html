@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <meta http-equiv='cache-control' content='no-cache'>
+    <meta http-equiv='expires' content='0'>
+    <meta http-equiv='pragma' content='no-cache'>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/accordion.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>What is bcrypt gem? | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.5" />
+<meta property="og:title" content="What is bcrypt gem?" />
+<meta name="author" content="Yoko Harada" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="When a Ruby on Rails application is created by rails new command, we typically see bcrypt gem in Gemfile." />
+<meta property="og:description" content="When a Ruby on Rails application is created by rails new command, we typically see bcrypt gem in Gemfile." />
+<link rel="canonical" href="http://localhost:4000/2024/07/05/what-is-bcrypt-gem.html" />
+<meta property="og:url" content="http://localhost:4000/2024/07/05/what-is-bcrypt-gem.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-07-05T23:33:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="What is bcrypt gem?" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Yoko Harada"},"dateModified":"2024-07-05T23:33:00+09:00","datePublished":"2024-07-05T23:33:00+09:00","description":"When a Ruby on Rails application is created by rails new command, we typically see bcrypt gem in Gemfile.","headline":"What is bcrypt gem?","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2024/07/05/what-is-bcrypt-gem.html"},"url":"http://localhost:4000/2024/07/05/what-is-bcrypt-gem.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WWDGEJ9Y9L"></script>
+<script>
+  window['ga-disable-G-WWDGEJ9Y9L'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-WWDGEJ9Y9L');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">What is bcrypt gem?</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-8">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Jul 5, 2024</p>
+
+    <div class="tags">
+        
+    </div>
+
+    
+
+    <p>When a Ruby on Rails application is created by <code>rails new</code> command, we typically see bcrypt gem in <code>Gemfile</code>.</p>
+
+<pre><code class="language-ruby"># Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
+# gem "bcrypt", "~&gt; [VERSION]"
+</code></pre>
+
+<p>The Rails generator adds commonly used gems to Gemfile so that developers can add those by just removing <code>#</code>
+at the beginning of a line. That’s pretty handy.</p>
+
+<p>Okay, then, what is bcrypt gem actually doing?
+The instruction at <a href="https://guides.rubyonrails.org/active_model_basics.html#securepassword">https://guides.rubyonrails.org/active_model_basics.html#securepassword</a>
+says:</p>
+
+<blockquote>
+  <p>ActiveModel::SecurePassword depends on bcrypt, so include this gem in your Gemfile….”</p>
+</blockquote>
+
+<p>We can understand how to setup and use the gem to make passwords secure,
+but still it’s not clear why the passwords become secure by bcrypt gem.</p>
+
+<p>It’s time google it!</p>
+
+<h3 id="hashing-not-encryption">Hashing, not Encryption</h3>
+
+<p>If we see google search results about bcrypt, we notice many websites mention about hashing vs encryption.
+The difference is a one-way or two-way algorithm or function.
+The one-way function is able to generate a string of random characters based on the given string, but there’s no way to
+make the original string back. In another words, it is impossible to decrypt.
+The generated string is called a hash or digital fingerprint.</p>
+
+<p>On the other hand, the two-way algorithm or function can do both: encrypt and decrypt.
+If the two-way function is used to generate a string of random characters based on the the given string,
+the given string can be recovered from the generated string. This process is called an encryption and decryption.</p>
+
+<p>Bcrypt is the one-way function, so we will never ever know what is the password actually.
+The question now would be how to test a given password from a user A is correct.
+To test the password, exactly the same hashing process runs to generate a hashed string,
+then, compare the saved and generated hashed strings. If those matches, the given password is correct.</p>
+
+<p>Since nobody can recover passwords from hashed string, the one-way function is commonly used to secure password storage.</p>
+
+<p>What about the two-way function? The two-way function or encryption/decryption is used to secure communication
+including emails, store sensitive data such as PII (personal identifiable information), and etc.</p>
+
+<p>In the area of two-way function, many online articles mention symmetric and asymmetric key encryption.
+The symmetric encryption uses the same key to both encryption and decryption.
+While asymmetric encryption uses a key pair, which is known as a public/private key pair.
+The private key is used to encrypt. The public key is used to decrypt.
+Well-known algorithms are:</p>
+<ul>
+  <li>Symmetric: Advanced Encryption Standard (AES), Data Encryption Standard (DES)</li>
+  <li>Asymmetric: Rivest-Shamir-Adleman (RSA), Digital Signature Algorithm (DSA)</li>
+</ul>
+
+<p>If you are a software developer, you should have used one when you generated a ssh key pair.
+Then, you should have pasted a public key to the source code repository such as GitHub or GitLab.</p>
+
+<h3 id="bcrypt-algorithm--slow-is-good">Bcrypt algorithm – slow is good</h3>
+
+<p>Of course, bcrypt is not the only widely used hashing algorithm. 
+Famous algorithms are <a href="https://en.wikipedia.org/wiki/Argon2">Argon2id</a>,
+<a href="https://en.wikipedia.org/wiki/Scrypt">scrypt</a>, and
+<a href="https://en.wikipedia.org/wiki/PBKDF2">PBKDF2</a>.</p>
+
+<p>Among those, bcrypt is said to be good since its computation is slow.
+SLOW?? WHAT?
+Yes, in the computing world, the faster, the better. To make it run faster, people use their brains and pay a lot of efforts.
+Even though, bcrypt is good because it runs slow.</p>
+
+<p>One of the purposes of the slow computation is to stop attackers in an early stage.
+When a monitoring is in place, an administrator can spot a suspicious activity.
+Thanks for the slow bcrypt, the attackers’ progresses slow down, which effectively prevents further data breach.</p>
+
+<p>Bcrypt has a cost parameter to control its slowness.
+The Ruby world has another gem called <a href="https://github.com/binarylogic/authlogic">authlogic</a>, which covers bcrypt,
+scrypt and a couple more hashing algorithm. Authlogic’s API document has interesting benchmarks at:
+<a href="https://www.rubydoc.info/github/binarylogic/authlogic/Authlogic/CryptoProviders/BCrypt">https://www.rubydoc.info/github/binarylogic/authlogic/Authlogic/CryptoProviders/BCrypt</a></p>
+<pre><code class="language-ruby">require "bcrypt"
+require "digest"
+require "benchmark"
+
+Benchmark.bm(18) do |x|
+  x.report("BCrypt (cost = 10:") {
+    100.times { BCrypt::Password.create("mypass", :cost =&gt; 10) }
+  }
+  x.report("BCrypt (cost = 4:") {
+    100.times { BCrypt::Password.create("mypass", :cost =&gt; 4) }
+  }
+  x.report("Sha512:") {
+    100.times { Digest::SHA512.hexdigest("mypass") }
+  }
+  x.report("Sha1:") {
+    100.times { Digest::SHA1.hexdigest("mypass") }
+  }
+end
+
+#                          user     system      total        real
+# BCrypt (cost = 10):  37.360000   0.020000  37.380000 ( 37.558943)
+# BCrypt (cost = 4):    0.680000   0.000000   0.680000 (  0.677460)
+# Sha512:               0.000000   0.000000   0.000000 (  0.000672)
+# Sha1:                 0.000000   0.000000   0.000000 (  0.000454)
+</code></pre>
+
+<p>As the result shows, the cost 10 bcrypt runs very slow.</p>
+
+<p>Bcrypt gem’s default cost is 12 as explained at
+<a href="https://github.com/bcrypt-ruby/bcrypt-ruby">https://github.com/bcrypt-ruby/bcrypt-ruby</a>.
+So, by default, bcrypt-ruby runs much slower.</p>
+
+<h3 id="its-salted">It’s salted</h3>
+
+<p>Another goodness of bcrypt is, it is salted.
+The salt is a some length of random characters used by hashing functions.
+As for bcrypt, the salt is randomly generated 16 byte value, which will be 22 characters after base 64 encoded.
+Using salt, bcrypt generate a hash (or checksum) from <code>salt + password</code>.
+This makes hashed strings really unique and almost impossible to find passwords.</p>
+
+<p>When the hashing is done, the generated string will have a format blow:</p>
+
+<pre><code>$2&lt;a/b/x/y&gt;$[cost]$[22 character salt][31 character hash]
+
+$2a$12$K0ByB.6YI2/OYrB4fQOYLe6Tv0datUVf6VZ/2Jzwm879BW5K1cHey
+\__/\/ \____________________/\_____________________________/
+Alg Cost      Salt                  Hash (Checksum)
+</code></pre>
+
+<p>Since every password has a different salt, bcrypt makes guessing the passwords really hard.</p>
+
+<h3 id="devise-and-bcrypt-gem">Devise and bcrypt gem</h3>
+
+<p>Bcrypt-ruby gem or simply bcrypt gem is a widely used hashing function in the Rails ecosystem.
+For example, famous devise gem uses bcrypt as a default hashing algorithm.</p>
+
+<p>Let’s try what are going on by getting hands dirty.</p>
+
+<h4 id="create-a-sample-rails-app">Create a sample Rails app</h4>
+
+<p>As always, the first command is <code>rails new</code>. This can be very simple app, so –minimal option is added.
+Also, <code>-d postgresql</code> option is added to see what are actually in the database.
+Once the app is created, setup the database, install devise gem, and finally create a devise User model.</p>
+
+<pre><code class="language-bash">$ bundle exec rails new devise-sample --minimal -d postgresql
+$ rake db:setup
+$ bundle add devise
+$ bundle exec rails g devise:install
+$ bundle exec rails g devise User
+$ bundle exec rails db:migrate
+</code></pre>
+
+<p>At this point, sign up, sign in, sign out and some more password related paths are already created.</p>
+
+<pre><code class="language-bash">$ bundle exec rails routes
+                  Prefix Verb   URI Pattern                    Controller#Action
+        new_user_session GET    /users/sign_in(.:format)       devise/sessions#new
+            user_session POST   /users/sign_in(.:format)       devise/sessions#create
+    destroy_user_session DELETE /users/sign_out(.:format)      devise/sessions#destroy
+       new_user_password GET    /users/password/new(.:format)  devise/passwords#new
+      edit_user_password GET    /users/password/edit(.:format) devise/passwords#edit
+           user_password PATCH  /users/password(.:format)      devise/passwords#update
+                         PUT    /users/password(.:format)      devise/passwords#update
+                         POST   /users/password(.:format)      devise/passwords#create
+cancel_user_registration GET    /users/cancel(.:format)        devise/registrations#cancel
+   new_user_registration GET    /users/sign_up(.:format)       devise/registrations#new
+  edit_user_registration GET    /users/edit(.:format)          devise/registrations#edit
+       user_registration PATCH  /users(.:format)               devise/registrations#update
+                         PUT    /users(.:format)               devise/registrations#update
+                         DELETE /users(.:format)               devise/registrations#destroy
+                         POST   /users(.:format)               devise/registrations#create
+      rails_health_check GET    /up(.:format)                  rails/health#show
+</code></pre>
+
+<p>For a convenience, let’s create a simple page which has buttons of sign up/in/out.</p>
+
+<pre><code class="language-bash">$ bundle exec rails g controller home index
+</code></pre>
+
+<p>Add below to <code>app/views/home/index.html.erb</code>.</p>
+
+<pre><code class="language-ruby">&lt;% if notice %&gt;
+  &lt;p class="alert alert-success"&gt;&lt;%= notice %&gt;&lt;/p&gt;
+&lt;% end %&gt;
+&lt;% if alert %&gt;
+  &lt;p class="alert alert-danger"&gt;&lt;%= alert %&gt;&lt;/p&gt;
+&lt;% end %&gt;
+
+&lt;%= button_to(
+        "Sign Up",
+        new_user_registration_path,
+        method: :get
+      ) %&gt;
+&lt;br/&gt;
+&lt;%= button_to(
+        "Sign In",
+        new_user_session_path,
+        method: :get
+      ) %&gt;
+&lt;br/&gt;
+&lt;%= button_to(
+        "Log Out",
+        destroy_user_session_path,
+        method: :delete
+      ) %&gt;
+</code></pre>
+
+<p>Update <code>config/routes.rb</code> as in blow:</p>
+
+<pre><code class="language-ruby">Rails.application.routes.draw do
+  root 'home#index'
+  #...
+  # ...
+end
+</code></pre>
+
+<p>All are ready. It’s time to start a Rails server and create users.</p>
+
+<pre><code class="language-bash">$ bundle exec rails s
+</code></pre>
+
+<p>If the server starts, go to http://localhost:3000 on a browser.</p>
+
+<p><img width="500px" src="/assets/img/devise-sample-buttons.jpeg" alt="img: devise sample buttons" /></p>
+
+<p>Sign up the first user with:</p>
+<ul>
+  <li>email: foo@example.com</li>
+  <li>password: Foo’sPassw0rd!</li>
+</ul>
+
+<p><img width="500px" src="/assets/img/devise-sample-foo-signup.jpeg" alt="img: devise sample sign up foo" /></p>
+
+<p>Click the “Log Out” button and sign up the second user with exactly the same password as the first user:</p>
+
+<ul>
+  <li>email: bar@example.com</li>
+  <li>password: Foo’sPassw0rd!</li>
+</ul>
+
+<p><img width="500px" src="/assets/img/devise-sample-bar-signup.jpeg" alt="img: devise sample sign up bar" /></p>
+
+<h4 id="what-have-been-created">What have been created</h4>
+
+<p>Now we had two devise users successfully signed up. Two users can be verified on a Rails console, but let’s see
+what are in PostgreSQL first.</p>
+
+<pre><code class="language-bash"># In this case, PostgreSQL was installed by brew on MacOS.
+# On other OS, installation, or setup, psql command may start with different arguments. 
+$ psql postgres
+postgres=# \c devise_sample_development
+devise_sample_development=# select * from users;
+
+ id |      email      |                      encrypted_password                      | reset_password_token |...
+----+-----------------+--------------------------------------------------------------+----------------------+...
+  2 | foo@example.com | $2a$12$biaK7edYPkOMEKUFjt9rCucUrine6wP.La20blTv7.bvpxtPv/dYi |                      |...
+  3 | bar@example.com | $2a$12$.e3uUveScoJJmjBg9FNozeU9G.knZVODPmmk6xCVU0Amwmk4Pg316 |                      |...
+(2 rows)
+</code></pre>
+
+<p>The encrypted_password column has hashed values generated by bcrypt.
+Although two users used the exactly the same password, salt strings (22 characters after “12$”) are different.
+As a result, hash values (last 31 characters) are different.</p>
+
+<p>Open up the Rails console and test some bcrypt APIs.</p>
+
+<pre><code class="language-bash">$ bundle exec rails c
+</code></pre>
+
+<pre><code class="language-ruby"># get bcrypt generated hash values
+irb(main):001&gt; hashes = User.all.map {|u| u.encrypted_password }
+  User Load (0.9ms)  SELECT "users".* FROM "users"
+=&gt;
+["$2a$12$biaK7edYPkOMEKUFjt9rCucUrine6wP.La20blTv7.bvpxtPv/dYi",
+...
+irb(main):002&gt; hashes
+=&gt;
+["$2a$12$biaK7edYPkOMEKUFjt9rCucUrine6wP.La20blTv7.bvpxtPv/dYi",
+ "$2a$12$.e3uUveScoJJmjBg9FNozeU9G.knZVODPmmk6xCVU0Amwmk4Pg316"]
+
+# try some bcrypt APIs
+irb(main):004&gt; require 'bcrypt'
+=&gt; true
+irb(main):005&gt; foo = BCrypt::Password.new(hashes[0])
+=&gt; "$2a$12$biaK7edYPkOMEKUFjt9rCucUrine6wP.La20blTv7.bvpxtPv/dYi"
+
+# yes! the password test passes 
+irb(main):006&gt; foo == "Foo'sPassw0rd!"
+=&gt; true
+
+# the second user's password test passes as well
+irb(main):010&gt; BCrypt::Password.new(hashes[1]) == "Foo'sPassw0rd!"
+=&gt; true
+
+# get parameters from a generated hash value
+# bcrypt version
+irb(main):011&gt; foo.version
+=&gt; "2a"
+# cost 
+irb(main):012&gt; foo.cost
+=&gt; 12
+# salt -- bcrypt gem's salt method returns "version + cost + salt"
+irb(main):013&gt; foo.salt
+=&gt; "$2a$12$biaK7edYPkOMEKUFjt9rCu"
+# checksum or hash of 31 characters
+irb(main):014&gt; foo.checksum
+=&gt; "cUrine6wP.La20blTv7.bvpxtPv/dYi"
+irb(main):015&gt; foo.checksum.length
+=&gt; 31
+</code></pre>
+
+<p>As in above, we can manually test the password’s validity.</p>
+
+<h3 id="what-can-be-prevented-by-password-hashing">What can be prevented by password hashing?</h3>
+
+<p>At this point, we know what is bcrypt (bcrypt gem) and how to use it.
+Bcrypt is there to secure a password storage.
+The question is from what the password storage will be secured.</p>
+
+<p>In this world, two major password storage attacks are there: brute force and rainbow table attack.
+The brute force attack takes trial and error approach guessing every possible password string.
+Nothing can prevent the brute force attack 100%.
+However, because of the bcrypt’s slow computing process, the attack can be detected in the early stage.
+That way, a damage can be possibly minimized.</p>
+
+<p>Considering the slow computing process, evil hackers invented rainbow table attack.
+The table has already generated hashing values using really many combinations of salt and possible password string.
+The rainbow attack can bypass the slow bcrypt computation time.
+Bcrypt is strong enough to be cracked, but there’s no guarantee to make it 100% secure.
+A good news is, the rainbow table attack happens when the password storage is compromised.</p>
+
+<p>As a Rails developer, what we can do would be to put an additional layer of password security.
+Two factor authentication or CAPTCHA might be good options.</p>
+
+<p>Other than that, Rails devs might just pray for administrators or DevOps people’s relentless work
+to save the password storage.</p>
+
+<h3 id="references">References</h3>
+
+<ul>
+  <li>Argon2: <a href="https://en.wikipedia.org/wiki/Argon2">https://en.wikipedia.org/wiki/Argon2</a></li>
+  <li>scrypt: <a href="https://en.wikipedia.org/wiki/Scrypt">https://en.wikipedia.org/wiki/Scrypt</a></li>
+  <li>bcrypt: <a href="https://en.wikipedia.org/wiki/Bcrypt">https://en.wikipedia.org/wiki/Bcrypt</a></li>
+  <li>PBKDF2: <a href="https://en.wikipedia.org/wiki/PBKDF2">https://en.wikipedia.org/wiki/PBKDF2</a></li>
+  <li>authlogic: <a href="https://github.com/binarylogic/authlogic">https://github.com/binarylogic/authlogic</a></li>
+  <li>bcrypt-ruby: <a href="https://github.com/bcrypt-ruby/bcrypt-ruby">https://github.com/bcrypt-ruby/bcrypt-ruby</a></li>
+  <li>OWASP Password Storage Cheat Sheet: <a href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html">https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html</a></li>
+  <li>What is bcrypt and how does it work?: <a href="https://nordvpn.com/blog/what-is-bcrypt/">https://nordvpn.com/blog/what-is-bcrypt/</a></li>
+  <li>What is brute force attack?: <a href="https://nordvpn.com/blog/brute-force-attack/">https://nordvpn.com/blog/brute-force-attack/</a></li>
+</ul>
+
+
+</div>
+
+
+
+
+                </div>
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    <p class="title is-4">Latest Posts</p>
+
+<div class="columns is-multiline">
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2024/07/05/what-is-bcrypt-gem.html">What is bcrypt gem?</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>When a Ruby on Rails application is created by <code>rails new</code> command, we typically see bcrypt gem in <code>Gemfile</code>.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2024/07/05/what-is-bcrypt-gem.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Jul 5, 2024</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2024/03/05/vite-vue-bun-on-rails.html">Vite + Vue + Bun on Rails</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p><a href="https://vuejs.org/">Vue.js</a> is one of frontend frameworks gaining popularity among rapidly emerging JavaScript technologies.
+The combination of Vue.js and Rails is becoming more popular as well,
+however, Vue.js development on Rails is not so straightforward.
+The reason would be that Vue.js relies on <a href="https://vitejs.dev/">Vite</a> for a development environment
+such as HMR (Hot Module Replacement) and bundling.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2024/03/05/vite-vue-bun-on-rails.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Mar 5, 2024</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2024/03/01/bun-react-on-rails.html">Bun + React on Rails</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>In the frontend world, new technologies keep emerging rapidly these years.
+Still, React is a well-established and very popular frontend framework,
+Vue.js, Svelte, Astro and more frameworks are gaining popularity.
+Not just the frameworks, tools for a transpiler/bundler or sort are also under a rapid development.
+In JavaScript domain, esbuild, rollup, vite and some more are out.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2024/03/01/bun-react-on-rails.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Mar 1, 2024</p>
+    </footer>
+</div>
+    </div>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="/assets/js/accordion.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>
