@@ -1,4 +1,309 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-07-05T23:40:06+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Blog site mostly for programming topics.</subtitle><entry><title type="html">What is bcrypt gem?</title><link href="http://localhost:4000/2024/07/05/what-is-bcrypt-gem.html" rel="alternate" type="text/html" title="What is bcrypt gem?" /><published>2024-07-05T23:33:00+09:00</published><updated>2024-07-05T23:33:00+09:00</updated><id>http://localhost:4000/2024/07/05/what-is-bcrypt-gem</id><content type="html" xml:base="http://localhost:4000/2024/07/05/what-is-bcrypt-gem.html"><![CDATA[<p>When a Ruby on Rails application is created by <code>rails new</code> command, we typically see bcrypt gem in <code>Gemfile</code>.</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-07-17T21:07:49+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Blog site mostly for programming topics.</subtitle><entry><title type="html">Conserving Network Resources – Keep-Alive</title><link href="http://localhost:4000/2024/07/17/conserving-network-resources-keep-alive.html" rel="alternate" type="text/html" title="Conserving Network Resources – Keep-Alive" /><published>2024-07-17T21:05:00+09:00</published><updated>2024-07-17T21:05:00+09:00</updated><id>http://localhost:4000/2024/07/17/conserving-network-resources-keep-alive</id><content type="html" xml:base="http://localhost:4000/2024/07/17/conserving-network-resources-keep-alive.html"><![CDATA[<p>“When you type a URL in your browser, what will happen?”
+If you are a web developer, you might have answered this sort of interview question once or twice.
+It would be a popular question to test the knowledge how the Internet works.
+As it is famous, you will find many answers here and there online.</p>
+
+<p>A common answer includes steps below:</p>
+<ol>
+  <li>DNS Resolution</li>
+  <li>TCP Three-Way Handshake</li>
+  <li>HTTPS Upgrade (SSL/TLS Handshake)</li>
+  <li>HTTP Request/Response</li>
+  <li>Browser Rendering</li>
+</ol>
+
+<p>This blog post focuses on the first three steps: DNS, TCP, and TLS, to think how the technology conserves the network
+resources.</p>
+
+<h3 id="dns-resolution">DNS Resolution</h3>
+
+<p>To get website contents, devices send a TCP packet. The essential components of TCP packet are a
+destination IP address and destination port. However it is not convenient to type 142.250.207.14, 17.253.144.10, or
+54.239.28.85 in the URL box to go to Google, Apple or Amazon websites.
+Sure, people type google.com, apple.com or amazon.com instead of IP addresses.</p>
+
+<p>The first step is to find an IP address based on a given URL string. This is done by Domain Name Service (or DNS).
+DNS provides a domain name to IP address mapping service and is basically a huge distributed database.
+As you may know, DNS servers form a hierarchical structure.
+On the top layer, 13 root servers are there:</p>
+<ul>
+  <li>a: Verisign, Los Angels CA</li>
+  <li>b: USC-ISI, Marina del Rey, CA</li>
+  <li>c: Cogent, Herndon, VA</li>
+  <li>d: U Maryland, College Park, MD</li>
+  <li>e: NASA, Mt. View, CA</li>
+  <li>f: Internet Software C., Palo Alto, CA</li>
+  <li>g: US DoD, Columbus, OH</li>
+  <li>h: ARL, Aberdeen, MD</li>
+  <li>i: Netnod, Stockholm</li>
+  <li>j: Verisign, Dulles, VA</li>
+  <li>k: RIPE, London</li>
+  <li>l: ICANN, Los Angels, CA</li>
+  <li>m: WIDE, Tokyo</li>
+</ul>
+
+<p>The next is a layer of Top-level domain (TLD) servers. These servers handle top-level domains such as .com, .org, .net, .edu
+and .gov and all of the country top-level domains such as .uk, .fr, .ca, and .jp. The third layer is Authoritative DNS
+servers. Many organizations run authoritative DNS servers. Among them, Cloudflare, Google and some more
+provides publicly accessible DNS servers.</p>
+
+<p>To get the IP address from URL string, browsers/devices make queries to a local DNS server.
+It might be an Internet Service Provider (or ISP) DNS server and often called DNS resolver.
+The local DNS server asks to the root DNS server and get a referral – what TLD DNS server likely knows the domain.
+Then, the local DNS server asks to the specified TLD DNS server.
+Again, the local DNS server get the referral from the TLD DNS server.
+Lastly, the local DNS server goes to the specified authoritative DNS server to get the IP address.</p>
+
+<p>It is a long way to finally get the IP address, however, domain name and IP address mappings are cached in certain points.
+A browser and OS have a cache. The local DNS server has a cache as well.
+If the mapping is in the cache, it is a much shorter way.</p>
+
+<p><img width="1000px" src="/assets/img/DNS_query.jpg" alt="img: DNS query" /></p>
+
+<h3 id="tcp-three-way-handshake">TCP Three-Way Handshake</h3>
+
+<p>The second step is the TCP three-way handshake.
+TCP (Transmission Control Protocol) is frequently compared to UDP (User Datagram Protocol).
+While TCP is described as connection-oriented, UDP is connectionless.
+TCP establishes the connection before data transfer begins. This phase is called the three-way handshake.</p>
+
+<p>As the name expresses, the three-way handshake consists of 3 phases.</p>
+<ul>
+  <li>Phase 1: A client sends a SYN segment, which contains SYN bit 1 and randomly chosen client initial sequence number.</li>
+  <li>Phase 2: A server receives the SYN segment and grants it. The server sends back a SYNACK segment, which contains
+  SYN bit 1, client initial sequence number + 1, and randomly chosen server initial sequence number.</li>
+  <li>Phase 3: The client receives SYNACK segment and acknowledges it. The client sends back the acknowledgement, which
+  contains SYN bit 0, client initial sequence number + 1 and server initial sequence number + 1.</li>
+</ul>
+
+<p>After above three phases are completed, data can be sent over TCP.</p>
+
+<p><img width="1000px" src="/assets/img/TCP-3Way-Handshake.jpg" alt="img: TCP 3 Way Handshake" /></p>
+
+<h3 id="https-upgrade-ssltls-handshake">HTTPS Upgrade (SSL/TLS Handshake)</h3>
+
+<p>The third step is TLS handshake. This handshake is much more complicated compared to TCP handshake.
+TLS handshake goes like this:</p>
+
+<ol>
+  <li>ClientHello: The client initiates the handshake by sending a message containing its supported protocols,
+ cipher suites, and random session ID.</li>
+  <li>ServerHello: The server responds with its chosen protocol, cipher suite, and session ID.</li>
+  <li>Certificate: The server sends its digital certificate, which contains its public key and identity information.</li>
+  <li>Key Exchange: The client and server use asymmetric encryption to exchange cryptographic keys,
+ ensuring secure communication.</li>
+  <li>Change Cipher Spec: Both parties send a “change cipher spec” message to indicate they are switching to
+ the new symmetric encryption key.</li>
+  <li>Finished: The client and server exchange “finished” messages to verify the integrity of the handshake and ensure
+ both parties agree on the session parameters.</li>
+</ol>
+
+<p>Finally, web contents are ready to be downloaded to the browsers or devices.</p>
+
+<h3 id="numbers-of-three-steps">Numbers of three steps</h3>
+
+<p>At this point, we learn gory details of DNS lookup, TCP and TLS handshakes.
+Well, let’s look at numbers related to the 3 steps above.</p>
+
+<h4 id="number-of-dns-lookups">Number of DNS lookups</h4>
+
+<p>It is said that DNS traffic is extremely busy.
+<a href="https://news.ycombinator.com/item?id=36984419">This Hacker News post</a> says
+“1.1.1.1 is now handling more than 1.3T requests per day.”
+The 1.1.1.1 is a Cloudflare DNS server. Only one authoritative DNS server has to deal with 1.3T requests per day!
+The post is 11 months ago from middle of July 2024, so data was taken around June 2023.
+Here is another a bit old data.
+A Reddit post from 2018 says, only one Pi-Hole DNS server processed around 18,000 DNS queries per day.
+If we think of the number of public authoritative DNS servers, global DNS lookups may go up to 10 trillion
+or more per day these days.</p>
+
+<p>To conclude, DNS traffic is really extremely busy.</p>
+
+<h4 id="time-needed-for-dns-lookup-tcptls-handshakes">Time needed for DNS lookup, TCP/TLS handshakes</h4>
+
+<p>The number is from an AI assisted answer popped up by online search. So, the numbers are just an estimation.</p>
+
+<ul>
+  <li>DNS lookup: 10-100 milliseconds <br />
+  varies depending on the complexity of the domain name, DNS server performance, and network latency.</li>
+  <li>TCP handshake: 10-30 milliseconds</li>
+  <li>TLS handshake: 200-1000 milliseconds <br />
+  varies depending on the TLS version, the complexity of the certificate, and network latency.</li>
+</ul>
+
+<p>As the unit is milliseconds, overall performance looks not so bad. However, when the sequence repeats many times,
+combined performance might not be negligible.</p>
+
+<h3 id="here-comes-the-keep-alive">Here Comes the Keep-Alive</h3>
+
+<p>If you are a web developer, you are sure to know that HTTP protocol is stateless.
+The connection is closed once a request/response sequence is completed.
+When someone type the URL on the browser, a DNS look up runs followed by a TCP handshake and TLS handshake.
+Finally, web contents are shown up on the browser. At this point, the connection is closed.
+When the same person clicks a button in the web page just shown up, again gory stuff explained above repeats.
+The DNS lookup runs followed by the TCP handshake and TLS handshake.
+The same person might click another button in the same web page. The previous connection is already closed.
+So, DNS lookup, TCP handshake, and TLS handshake are performed, then finally, the web contents show up.</p>
+
+<p>We are like: Oh, it’s a prime day. Let’s go to Amazon and click, click, click …….
+Wow, what if every click triggers DNS lookup, TCP handshake, and TLS handshake?
+How many people on earth do click, click, click ……?
+The Internet world must be really extremely busy.</p>
+
+<p>But, smart people are out there. They have invented a way to avoid repeating three steps.
+Yes, it is the keep-alive.
+The keep-alive is a mechanism to let the connection open. The consecutive HTTP request/response sequences can
+skip DNS lookup, TCP handshake and TLS handshake. Using the keep-alive improves overall web performance
+as well as conserves network resources.
+Apparently, the number of DNS look ups is cut down.</p>
+
+<p>During the era of HTTP/1.0, a client or server should explicitly specify the keep-alive in the HTTP header
+like below:</p>
+
+<pre><code>Connection: Keep-Alive
+Keep-Alive: timeout=5, max=1000
+</code></pre>
+
+<p>The timeout is the time in seconds that the host will allow an idle connection to remain open.
+The max is the maximum number of requests that can be sent on this connection.</p>
+
+<p>Now, HTTP/1.1 is out. The keep-alive becomes a default behavior. Below is an excerpt from RFC2616 section 8.1.2</p>
+<blockquote>
+  <p>A significant difference between HTTP/1.1 and earlier versions of
+HTTP is that persistent connections are the default behavior of any
+HTTP connection. That is, unless otherwise indicated, the client
+SHOULD assume that the server will maintain a persistent connection,
+even after error responses from the server.</p>
+</blockquote>
+
+<h3 id="test-keep-alive">Test Keep-Alive</h3>
+
+<p>Well, we know Rails 7 supports HTTP/1.1, so does the keep-alive.
+The keep-alive should be available and working.
+But, is there any way to test the keep-alive is working?
+It is very simple. Use curl command and request twice.</p>
+
+<p>Let’s try some. The first test is to make sure the keep-alive is working.</p>
+<pre><code class="language-bash">$ curl -Iv http://localhost:3000  -o /dev/null http://localhost:3000
+* Host localhost:3000 was resolved.
+* IPv6: ::1
+* IPv4: 127.0.0.1
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying [::1]:3000...
+* Connected to localhost (::1) port 3000
+&gt; HEAD / HTTP/1.1
+&gt; Host: localhost:3000
+&gt; User-Agent: curl/8.6.0
+&gt; Accept: */*
+&gt;
+&lt; HTTP/1.1 200 OK
+&lt; x-frame-options: SAMEORIGIN
+&lt; x-xss-protection: 0
+&lt; x-content-type-options: nosniff
+#...(snip snip snip)...
+&lt; Content-Length: 0
+&lt;
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+* Connection #0 to host localhost left intact
+* Found bundle for host: 0x600002e64480 [serially]
+* Can not multiplex, even if we wanted to
+* Re-using existing connection with host localhost
+&gt; HEAD / HTTP/1.1
+&gt; Host: localhost:3000
+&gt; User-Agent: curl/8.6.0
+&gt; Accept: */*
+&gt;
+&lt; HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+&lt; x-frame-options: SAMEORIGIN
+x-frame-options: SAMEORIGIN
+&lt; x-xss-protection: 0
+x-xss-protection: 0
+&lt; x-content-type-options: nosniff
+x-content-type-options: nosniff
+#...(snip snip snip)...
+&lt; Content-Length: 0
+Content-Length: 0
+
+&lt;
+* Connection #0 to host localhost left intact
+</code></pre>
+
+<p>Focus on the lines <code>* Connection #0 to host localhost left intact</code> and
+<code>* Re-using existing connection with host localhost</code>.  Those are the evidence that the keep-alive is working.</p>
+
+<p>For a comparison, let’s add <code>Connection: close</code> to the request header to test the keep-alive disabled.</p>
+
+<pre><code class="language-bash">$ curl -Iv http://localhost:3000  -o /dev/null http://localhost:3000  -H "Connection: close"
+* Host localhost:3000 was resolved.
+* IPv6: ::1
+* IPv4: 127.0.0.1
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying [::1]:3000...
+* Connected to localhost (::1) port 3000
+&gt; HEAD / HTTP/1.1
+&gt; Host: localhost:3000
+&gt; User-Agent: curl/8.6.0
+&gt; Accept: */*
+&gt; Connection: close
+&gt;
+&lt; HTTP/1.1 200 OK
+&lt; x-frame-options: SAMEORIGIN
+&lt; x-xss-protection: 0
+&lt; x-content-type-options: nosniff
+#...(snip snip snip)...
+&lt; Connection: close
+&lt; Content-Length: 0
+&lt;
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+* Closing connection
+* Hostname localhost was found in DNS cache
+*   Trying [::1]:3000...
+* Connected to localhost (::1) port 3000
+&gt; HEAD / HTTP/1.1
+&gt; Host: localhost:3000
+&gt; User-Agent: curl/8.6.0
+&gt; Accept: */*
+&gt; Connection: close
+&gt;
+&lt; HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+&lt; x-frame-options: SAMEORIGIN
+x-frame-options: SAMEORIGIN
+&lt; x-xss-protection: 0
+x-xss-protection: 0
+&lt; x-content-type-options: nosniff
+x-content-type-options: nosniff
+#...(snip snip snip)...
+&lt; Connection: close
+Connection: close
+&lt; Content-Length: 0
+Content-Length: 0
+
+&lt;
+* Closing connection
+</code></pre>
+
+<p>We see the line <code>* Closing connection</code>, so we know the keep-alive becomes off.</p>
+
+<p>Additionally, the second connection says <code>* Hostname localhost was found in DNS cache</code>, which means
+the second DNS look up hits the cache.</p>
+
+<p>“When you type a URL in your browser, what will happen?” is the interesting question.
+We can learn how the Internet works as well as the network resource conservation and web performance.</p>
+
+<h3 id="references">References</h3>
+<ul>
+  <li>Optimizing HTTP: Keep-alive and Pipelining: <a href="https://www.igvita.com/2011/10/04/optimizing-http-keep-alive-and-pipelining/">https://www.igvita.com/2011/10/04/optimizing-http-keep-alive-and-pipelining/</a></li>
+  <li><a href="https://medium.com/@roopa.kushtagi/mastering-dns-a-comprehensive-overview-of-internet-address-translation-73793d0598ba">Mastering DNS: A Comprehensive Overview of Internet Address Translation</a></li>
+  <li><a href="https://circleid.com/posts/20230316-analysis-of-7.5-trillion-dns-queries-reveals-public-resolvers-dominate-the-internet">Analysis of 7.5 Trillion DNS Queries Reveals Public Resolvers Dominate the Internet</a></li>
+  <li>“1.1.1.1 is now handling more than 1.3T requests per day”: <a href="https://news.ycombinator.com/item?id=36984419">https://news.ycombinator.com/item?id=36984419</a></li>
+  <li>Hypertext Transfer Protocol – HTTP/1.1: <a href="https://www.rfc-editor.org/rfc/rfc2616">https://www.rfc-editor.org/rfc/rfc2616</a></li>
+  <li>The Transport Layer Security (TLS) Protocol Version 1.2 <a href="https://www.ietf.org/rfc/rfc5246.txt">https://www.ietf.org/rfc/rfc5246.txt</a></li>
+  <li>Keep Alive: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Keep-Alive">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Keep-Alive</a></li>
+</ul>]]></content><author><name>Yoko Harada</name></author><summary type="html"><![CDATA[“When you type a URL in your browser, what will happen?” If you are a web developer, you might have answered this sort of interview question once or twice. It would be a popular question to test the knowledge how the Internet works. As it is famous, you will find many answers here and there online.]]></summary></entry><entry><title type="html">What is bcrypt gem?</title><link href="http://localhost:4000/2024/07/05/what-is-bcrypt-gem.html" rel="alternate" type="text/html" title="What is bcrypt gem?" /><published>2024-07-05T23:33:00+09:00</published><updated>2024-07-05T23:33:00+09:00</updated><id>http://localhost:4000/2024/07/05/what-is-bcrypt-gem</id><content type="html" xml:base="http://localhost:4000/2024/07/05/what-is-bcrypt-gem.html"><![CDATA[<p>When a Ruby on Rails application is created by <code>rails new</code> command, we typically see bcrypt gem in <code>Gemfile</code>.</p>
 
 <pre><code class="language-ruby"># Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~&gt; [VERSION]"
@@ -3243,615 +3548,4 @@ So, let’s try without the token in the HTTP header to see it will fail.</p>
 <h3 id="code">Code</h3>
 
 <p>The example Rails app code is on the GitHub repo.
-Please see <a href="https://github.com/yokolet/mini-blog">https://github.com/yokolet/mini-blog</a>.</p>]]></content><author><name>Yoko Harada</name></author><summary type="html"><![CDATA[These days, attacks on a web application becomes more and more common. Every web application should be protected to get rid of such attacks. Ruby on Rails provides ways to make it secure out of the box. Additionally, well-used gems in Rails world, such as Devise (https://github.com/heartcombo/devise), give us convenient ways to protect the Rails app.]]></summary></entry><entry><title type="html">Getting Started GraphQL Using Ruby on Rails</title><link href="http://localhost:4000/2023/03/12/getting-started-graphql-using-ruby-on-rails.html" rel="alternate" type="text/html" title="Getting Started GraphQL Using Ruby on Rails" /><published>2023-03-12T01:13:00+09:00</published><updated>2023-03-12T01:13:00+09:00</updated><id>http://localhost:4000/2023/03/12/getting-started-graphql-using-ruby-on-rails</id><content type="html" xml:base="http://localhost:4000/2023/03/12/getting-started-graphql-using-ruby-on-rails.html"><![CDATA[<p>GraphQL is an API standard to provide resources on the server-side to various types of clients.
-GraphQL itself is a specification and doesn’t provide an implementation.
-For Ruby on Rails, GraphQL Ruby <a href="https://graphql-ruby.org/">https://graphql-ruby.org/</a> is the most popular library.</p>
-
-<p>Not like REST API, GraphQL has only one endpoint.
-While REST API uses different endpoints (paths or URL) to access multiple types of resources,
-GraphQL uses schema based queries.
-The REST API clients receives all fields server returned.
-However, GraphQL clients can specify what fields they want to receive from the API server.</p>
-
-<p>For REST API, the swagger UI <a href="https://swagger.io/tools/swagger-ui/">https://swagger.io/tools/swagger-ui/</a> is often
-used as a documentation and testing tool.
-In general, the swagger UI is provided by the REST API server.</p>
-
-<p>In contract, the GraphQL server doesn’t provide such UI tool.
-Instead, GraphQL desktop apps are out there, which provides UI based documentation and testing tools.
-The blog post “<a href="https://testfully.io/blog/graphql-clients/">Top 10 GraphQL clients</a>” lists desktop apps with some explanations.
-Such apps have ability to pull the schema from GraphQL server and show that on UI.
-Also, those have features to write GraphQL queries, send those and receive results.</p>
-
-<p>Since Ruby on Rails is designed for REST API, we need additional steps to use Rails as a GraphQL server.
-This is a memo how to get started GraphQL using Ruby on Rails.</p>
-
-<h3 id="setting-up">Setting Up</h3>
-
-<h4 id="create-rails-app">Create Rails App</h4>
-
-<p>This memo focuses on creating GraphQL API server.
-The App will be the API only and have a smaller stack with sqlite3 as a database.
-Ruby and Rails versions are:</p>
-<ul>
-  <li>Ruby: 3.2.1</li>
-  <li>Rails: 7.0.4.2</li>
-</ul>
-
-<p>Create <code>.railsrc</code> file with the content below:</p>
-<pre><code class="language-bash">--api
---skip-action-mailer
---skip-action-mailbox
---skip-action-cable
---skip-action-text
---skip-active-job
---skip-active-storage
--T
-</code></pre>
-
-<p>The default location of <code>.railsrc</code> is a home directory just like <code>.zshrc</code> or <code>.bashrc</code>.
-If it is created in another directory and/or another filename, use <code>--rc=RC</code> option to specify the file.</p>
-
-<p>Create the Rails app named “mini-blog”, for example:</p>
-
-<pre><code class="language-bash">$ rails new mini-blog --rc=./.railsrc
-</code></pre>
-
-<p>Test the app is created correctly:</p>
-
-<pre><code class="language-bash">$ cd mini-blog
-$ rails s
-</code></pre>
-
-<p>Then, hit http://localhost:3000/ on a web browser.
-If you see Rails logo and Ruby/Rails versions, the server could start successfully.</p>
-
-<h4 id="install-graphql-ruby-gem">Install GraphQL Ruby gem</h4>
-
-<p>Once the Rails app is created, the next step is to install GraphQL Ruby (<a href="https://graphql-ruby.org/">https://graphql-ruby.org/</a>) gem.
-Run two commands below:</p>
-<pre><code class="language-bash">$ bundle add graphql
-$ rails g graphql:install
-</code></pre>
-
-<p>The second command generates GraphQL basic types, default query/mutation types, and a default schema.
-The schema name is <code>[APP_NAME]_schema.rb</code>.
-All are located under <code>app/graphql</code> directory.
-Also, the command adds a route to <code>/graphql</code>. Have a look at <code>config/route.rb</code>, which looks like:</p>
-<pre><code class="language-ruby"># config/routes.rb
-Rails.application.routes.draw do
-  post "/graphql", to: "graphql#execute"
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Defines the root path route ("/")
-  # root "articles#index"
-end
-</code></pre>
-
-<p>Lastly, the second command generates a default GraphQL controller, <code>app/controllers/graphql_controller.rb</code>.</p>
-
-<p>Now, <code>app</code> directory looks like:</p>
-<pre><code>app
-├── controllers
-│   ├── application_controller.rb
-│   ├── concerns
-│   └── graphql_controller.rb
-├── graphql
-│   ├── mini_blog_schema.rb
-│   ├── mutations
-│   │   └── base_mutation.rb
-│   └── types
-│       ├── base_argument.rb
-│       ├── base_connection.rb
-│       ├── base_edge.rb
-│       ├── base_enum.rb
-│       ├── base_field.rb
-│       ├── base_input_object.rb
-│       ├── base_interface.rb
-│       ├── base_object.rb
-│       ├── base_scalar.rb
-│       ├── base_union.rb
-│       ├── mutation_type.rb
-│       ├── node_type.rb
-│       └── query_type.rb
-└── models
-    ├── application_record.rb
-    └── concerns
-</code></pre>
-
-<h4 id="try-how-graphql-looks-like">Try How GraphQL Looks Like</h4>
-
-<p>For now, GraphQL has started working with the minimal setting.
-The GraphQL gem’s generator already created a very simple API.
-We can test that.</p>
-
-<p>To test GraphQL, we need a GraphQL client.
-Previously, Graphiql gem (notice, the name has “i” before ql) was often installed along with GraphQL Ruby gem.
-However, once the Rails 7 app is configured as API only server, adding UI became not easy.
-Besides, many free-to-use GraphQL clients are out there as mentioned at the beginning.</p>
-
-<p>Among those desktop apps, below might be the choice.</p>
-<ul>
-  <li>GraphiQL <a href="https://github.com/skevy/graphiql-app">https://github.com/skevy/graphiql-app</a></li>
-  <li>Altair <a href="https://altairgraphql.dev/">https://altairgraphql.dev/</a></li>
-  <li>Insomnia <a href="https://insomnia.rest/">https://insomnia.rest/</a></li>
-</ul>
-
-<p>This memo is going to use GraphiQL desktop app.
-If you are on MacOS and have brew, try below to install the app.</p>
-<pre><code class="language-bash">$ brew install --cask graphiql
-</code></pre>
-
-<p>If you have other OS, you can install the desktop app by npm command as well.
-Additional installations are on the GitHub repo.</p>
-
-<p>When the GraphiQL window is firstly opened, it should look like this:</p>
-
-<p><img src="/assets/img/graphiql-default.jpeg" alt="default graphiql window" /></p>
-
-<p>Input http://localhost:3000/graphql in the GraphQL Endpoint field, which is defined in <code>config/routes.rb</code>
-Also, check the Method choice. It is defined in <code>config/routes.rb</code> as POST.
-Then, GraphiQL app connects to Rails and pulls the schema defined in the <code>app/graphql/types/query_type.rb</code>
-and <code>app/graphql/types/mutation_type.rb</code>.
-Those schemas show up when “&lt; DOCS” button on the right upper area of GraphiQL window is clicked.</p>
-
-<p><img src="/assets/img/graphiql-docs.jpeg" alt="default graphiql window" /></p>
-
-<p>Both Query and Mutation schemas are displayed when the links get clicked.</p>
-
-<p>Let’s make a query to testField.
-On the leftmost pane, input GraphQL query.</p>
-<pre><code>{
-  testField
-}
-</code></pre>
-
-<p>Hit the right arrow button above the query input pane.
-The result is on the center pane.
-The message of “Hello World!” is from <code>app/graphql/types/query_type.rb</code> file.</p>
-
-<p><img src="/assets/img/graphiql-query.jpeg" alt="default graphiql window" /></p>
-
-<p>The mutation query can be sent, however, nothing changes since all are static just a test implementation.</p>
-
-<h3 id="create-models-and-graphql-types">Create Models and GraphQL Types</h3>
-
-<p>GraphQL itself is independent from the active record world.
-However, API connects to a database to retrieve or update resources almost always.
-On Ruby on Rails, creating an active record model is the way to connect to the database.</p>
-
-<p>Well, a GraphQL type is the first? Or, an active record model should come before the GraphQL type?
-The GraphQL generator can create a type without a model definition.
-But, certainly, the type definition is almost empty.
-When the active record model exists already, GraphQL generator looks at the database schema and generates the type.
-By this, we will get a usable GraphQL type definition.</p>
-
-<h4 id="define-models">Define Models</h4>
-
-<p>Let’s imagine we will create a blog site.
-The minimum models would be users and posts whose relation is: a user has multiple posts.
-The user’s email should be unique so that the same email user won’t be created more than once.</p>
-
-<p>The first thing is to generate user and post models as in below:</p>
-
-<pre><code class="language-bash">$ rails g model User email:string:uniq first_name:string last_name:string
-$ rails g model Post user:references title:string{50} content:text
-</code></pre>
-
-<p>We want to add some more constraints to models.
-The user model’s email is implicitly non-null since it is an indexed unique value.
-However, for the graphql generator, it’s better to have non-null constraint explicitly.
-Additionally, we want post model’s title and content to be non-null fields also.
-No need to say, we need migrations.</p>
-
-<pre><code class="language-bash">$ rails g migration ChangeEmailNullOnUsers
-$ rails g migration ChangeTitleContentNullOnPosts
-</code></pre>
-
-<p>Then, edit migration files:</p>
-<pre><code class="language-ruby">#  db/migrate/[DATE TIME]_change_email_null_on_users.rb
-class ChangeEmailNullOnUsers &lt; ActiveRecord::Migration[7.0]
-  def change
-    change_column_null :users, :email, false
-  end
-end
-
-#  db/migrate/[DATE TIME]_change_title_content_null_on_posts.rb
-class ChangeTitleContentNullOnPosts &lt; ActiveRecord::Migration[7.0]
-  def change
-    change_column_null :posts, :title, false
-    change_column_null :posts, :content, false
-  end
-end
-</code></pre>
-
-<p>Create tables on the sqlite3 database.</p>
-
-<pre><code class="language-bash">$ rails db:create db:migrate
-</code></pre>
-
-<p>We should update models as well.</p>
-
-<p>Edit <code>app/models/user.rb</code> to add a has_many association and uniqueness validation.</p>
-
-<pre><code class="language-ruby"># app/models/user.rb
-class User &lt; ApplicationRecord
-  has_many :posts, dependent: :destroy
-
-  validates :email, uniqueness: true
-end
-</code></pre>
-
-<p>Edit <code>app/models/post.rb</code> to add presence validations.</p>
-
-<pre><code class="language-ruby"># app/models/post.rb
-class Post &lt; ApplicationRecord
-  belongs_to :user
-
-  validates :title, presence: true
-  validates :content, presence: true
-end
-</code></pre>
-
-<p>The model definitions are ready. It’s time to add some seed data, so that we can see some results.</p>
-
-<pre><code class="language-ruby"># db/seeds.rb
-user1 = User.create(
-  email: "john.doe@example.com",
-  first_name: "John",
-  last_name: "Doe"
-)
-
-user2 = User.create(
-  email: "jane.smith@example.com",
-  first_name: "Jane",
-  last_name: "Smith"
-)
-
-Post.create(
-  [{
-     user: user1,
-     title: "Accidentally, I created a Rails app!",
-     content: "My days are this, that and blah. Wait! I accidentally created a Rails app!!"
-   },
-   {
-     user: user2,
-     title: "Blogging",
-     content: "I like blogging. It's fun. One day, I started writing a blog post..."
-   },
-   {
-     user: user2,
-     title: "Spring!",
-     content: "It's not about a web framework here. I'm talking about a season. Yes, Spring!"
-   }
-  ]
-)
-</code></pre>
-
-<p>Run the command below to add seed data to the database.</p>
-
-<pre><code class="language-bash">$ rails db:seed
-</code></pre>
-
-<p>To check above worked correctly, Rails console is one of ways to test it.</p>
-<pre><code class="language-bash">$ rails c
-Loading development environment (Rails 7.0.4.2)
-irb(main):001:0&gt; User.all
-...(user query result here)...
-irb(main):002:0&gt; Post.all
-...(post query result here)...
-...
-</code></pre>
-
-<h4 id="generate-graphql-types">Generate GraphQL Types</h4>
-
-<p>For now, active record models are ready.
-The next step is to generate GraphQL types.
-Run the command below.</p>
-
-<pre><code class="language-bash">$ rails g graphql:object user
-$ rails g graphql:object post
-</code></pre>
-
-<p>The generator captures the database schema definition in db/schema.rb to create user and post types.
-Mostly, we can use generated types as those are.</p>
-
-<p>The generated user_type.rb and post_type.rb look like this:</p>
-<pre><code class="language-ruby"># app/graphql/types/user_type.rb
-module Types
-  class UserType &lt; Types::BaseObject
-    field :id, ID, null: false
-    field :email, String, null: false
-    field :first_name, String, null: true
-    field :last_name, String, null: true
-    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
-    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
-  end
-end
-</code></pre>
-
-<pre><code class="language-ruby"># app/graphql/types/post_type.rb
-module Types
-  class PostType &lt; Types::BaseObject
-    field :id, ID, null: false
-    field :user_id, Integer, null: false
-    field :title, String, null: false
-    field :content, String, null: false
-    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
-    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
-  end
-end
-</code></pre>
-
-<h3 id="make-graphql-queries">Make GraphQL Queries</h3>
-
-<p>So far, we have some seed data in the database.
-The next step is to make GraphQL queries.</p>
-
-<p>GraphQL query schema is defined in <code>app/graphql/types/query_type.rb</code>, which has been generated when GraphQL Ruby gem was installed.
-As we see “testField” in the above section, all query definitions should be in the query_type.rb.</p>
-
-<p>GraphQL examples out there often write every query implementation in the query_type.rb.
-It’s OK if the API is as simple as examples.
-However, that might end up in adding bunch of methods in a single file in an actual application.
-A concern is, the code will have poor readability and/or maintainability.
-As far as I searched online, it looks no decisive solution exists for this.
-What I found is a GraphQL Ruby’s Resolver (<a href="https://graphql-ruby.org/fields/resolvers.html">https://graphql-ruby.org/fields/resolvers.html</a>).
-Although GraphQL Ruby team wants people to avoid Resolver, it is a good way to decouple each type’s query implementation.
-For that reason, the Resolver is used here.</p>
-
-<h4 id="define-resolvers">Define Resolvers</h4>
-
-<p>Queries to be implemented are:</p>
-<ul>
-  <li>a single user query, parameter: user id</li>
-  <li>all users query, parameter: none</li>
-  <li>multiple posts query, parameter: none – all posts, user id – one user’s all posts</li>
-</ul>
-
-<p>The implementations of resolvers for those queries are defined:</p>
-
-<pre><code class="language-ruby"># app/graphql/resolvers/user_resolver.rb
-module Resolvers
-  class UserResolver &lt; GraphQL::Schema::Resolver
-    type Types::UserType, null: false
-
-    argument :id, Int, required: true
-
-    def resolve(id:)
-      User.find(id)
-    end
-  end
-end
-</code></pre>
-
-<pre><code class="language-ruby"># app/graphql/resolvers/user_collection_resolver.rb
-module Resolvers
-  class UserCollectionResolver &lt; GraphQL::Schema::Resolver
-    type [Types::UserType], null: false
-
-    def resolve(**kwargs)
-      User.all
-    end
-  end
-end
-</code></pre>
-
-<pre><code class="language-ruby"># app/graphql/resolvers/post_collection_resolver.rb
-module Resolvers
-  class PostCollectionResolver &lt; GraphQL::Schema::Resolver
-    type [Types::PostType], null: false
-
-    argument :user_id, Int, required: false
-
-    def resolve(**kwargs)
-      if kwargs[:user_id]
-        Post.where(user: kwargs[:user_id]).all
-      else
-        Post.all
-      end
-    end
-  end
-end
-</code></pre>
-
-<p>Above three resolvers should be referenced in the query_type.rb.
-Now query_type.rb becomes below:</p>
-<pre><code class="language-ruby"># app/graphql/types/query_type.rb
-module Types
-  class QueryType &lt; Types::BaseObject
-    # Add `node(id: ID!) and `nodes(ids: [ID!]!)`
-    include GraphQL::Types::Relay::HasNodeField
-    include GraphQL::Types::Relay::HasNodesField
-
-    # Add root-level fields here.
-    # They will be entry points for queries on your schema.
-    field :user, resolver: Resolvers::UserResolver
-    field :users, resolver: Resolvers::UserCollectionResolver
-    field :posts, resolver: Resolvers::PostCollectionResolver
-  end
-end
-</code></pre>
-
-<h4 id="queries-on-graphiql">Queries on GraphiQL</h4>
-
-<p>We are ready to test newly defined queries.
-On GraphiQL desktop app, Command + w will delete the tab and initialize UI.
-Input http://localhost:3000/graphql in the Endpoint text field and hit the return key.
-The updated schema is pulled, which is displayed in the Docs pane.</p>
-
-<p>To get all users, the query is simple.</p>
-<pre><code class="language-graphql">{
-	users {
-    id
-    email
-    firstName
-    lastName
-  }
-}
-</code></pre>
-<p><img src="/assets/img/graphiql-users-query.jpeg" alt="graphiql users query" /></p>
-
-<p>To get one user using user’s id, the query needs a parameter.
-The simple form is to write id in the query.</p>
-<pre><code class="language-graphql">{
-  user(id: 1) {
-    id
-    email
-  }
-}
-</code></pre>
-
-<p>Another form is to use a query variable. In this case, the query needs additional info about the variable.</p>
-<pre><code class="language-graphql">query user($uid: Int!) {
-  user(id: $uid) {
-    id
-    email
-  }
-}
-</code></pre>
-<p>Then, pass the variable in the query variables pane.</p>
-<pre><code class="language-graphql">{
-  "uid": 1
-}
-</code></pre>
-<p><img src="/assets/img/graphiql-user-with-id-query.jpeg" alt="graphiql user with id query" /></p>
-
-<p>For post queries, with/without user id are defined.
-If the user id is not provided, the query gets all posts.</p>
-
-<pre><code class="language-graphql">{
-  posts {
-    id
-    userId
-    title
-    content
-  }
-}
-</code></pre>
-
-<p>If the user id is given, the query retrieves the specified user’s all posts.</p>
-
-<pre><code class="language-graphql">query posts($uid: Int) {
-  posts(userId: $uid) {
-    id
-    userId
-    title
-    content
-  }
-}
-</code></pre>
-
-<pre><code class="language-grapql">{
-  "uid": 2
-}
-</code></pre>
-<p><img src="/assets/img/graphiql-posts-query.jpeg" alt="graphiql posts query" /></p>
-
-<h3 id="create-a-new-resource-by-mutation">Create a New Resource by Mutation</h3>
-
-<p>GraphQL calls “mutation” to create/update/delete operations over resources.
-Like queries, mutations need a definition for each types.</p>
-
-<h4 id="user-and-post-mutations">User and Post Mutations</h4>
-
-<p>GraphQL Ruby provides a mutation generator. It still needs to edit, however, the generator cuts down the amount of coding.
-Run the command below to create user and post mutation definitions:</p>
-<pre><code class="language-bash">$ rails g graphql:mutation_create user
-$ rails g graphql:mutation_create post
-</code></pre>
-
-<p>After editing two mutations, those look like below:</p>
-<pre><code class="language-ruby"># app/graphql/mutations/user_create.rb
-module Mutations
-  class UserCreate &lt; BaseMutation
-    description "Creates a new user"
-
-    field :user, Types::UserType, null: false
-
-    argument :email, String, required: true
-    argument :first_name, String, required: false
-    argument :last_name, String, required: false
-
-    def resolve(**kwargs)
-      user = ::User.new(**kwargs)
-      raise GraphQL::ExecutionError.new "Error creating user", extensions: user.errors.to_hash unless user.save
-
-      { user: user }
-    end
-  end
-end
-</code></pre>
-
-<pre><code class="language-ruby"># app/graphql/mutations/post_create.rb
-module Mutations
-  class PostCreate &lt; BaseMutation
-    description "Creates a new post"
-
-    field :post, Types::PostType, null: false
-
-    argument :user_id, Integer, required: true
-    argument :title, String, required: true
-    argument :content, String, required: true
-
-    def resolve(**kwargs)
-      post = ::Post.new(**kwargs)
-      raise GraphQL::ExecutionError.new "Error creating post", extensions: post.errors.to_hash unless post.save
-
-      { post: post }
-    end
-  end
-end
-</code></pre>
-
-<p>GraphQL Ruby generator has already updated <code>app/graphql/types/mutation_type.rb</code>, so we don’t need to edit this file.
-For now, mutation type definition is like this:</p>
-
-<pre><code class="language-ruby"># app/graphql/types/mutation_type.rb
-module Types
-  class MutationType &lt; Types::BaseObject
-    field :post_create, mutation: Mutations::PostCreate
-    field :user_create, mutation: Mutations::UserCreate
-  end
-end
-</code></pre>
-
-<h4 id="mutations-on-graphiql">Mutations on GraphiQL</h4>
-
-<p>Everything is ready.
-It’s time to create a user and post.
-The mutations look like below:</p>
-
-<pre><code class="language-graphql">mutation {
-  userCreate(input: {
-    email: "alice.jones@example.com",
-    firstName: "Alice",
-    lastName: "Jones"
-  }) {
-    user {
-      id
-      email
-    }
-  }
-}
-</code></pre>
-
-<pre><code class="language-graphql">mutation {
-  postCreate(input: {
-    userId: 3,
-    title: "Hello World!",
-    content: "Hey, I made it to this world!"
-  }) {
-    post {
-      id
-      userId
-      title
-      content
-    }
-  }
-}
-</code></pre>
-
-<p>After executing create user and post mutations, check the result by GraphQL queries we tried above.
-A new user, posts should be created.
-The Rails console is another way to test newly added user and post.</p>]]></content><author><name>Yoko Harada</name></author><summary type="html"><![CDATA[GraphQL is an API standard to provide resources on the server-side to various types of clients. GraphQL itself is a specification and doesn’t provide an implementation. For Ruby on Rails, GraphQL Ruby https://graphql-ruby.org/ is the most popular library.]]></summary></entry></feed>
+Please see <a href="https://github.com/yokolet/mini-blog">https://github.com/yokolet/mini-blog</a>.</p>]]></content><author><name>Yoko Harada</name></author><summary type="html"><![CDATA[These days, attacks on a web application becomes more and more common. Every web application should be protected to get rid of such attacks. Ruby on Rails provides ways to make it secure out of the box. Additionally, well-used gems in Rails world, such as Devise (https://github.com/heartcombo/devise), give us convenient ways to protect the Rails app.]]></summary></entry></feed>

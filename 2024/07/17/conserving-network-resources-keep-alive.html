@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <meta http-equiv='cache-control' content='no-cache'>
+    <meta http-equiv='expires' content='0'>
+    <meta http-equiv='pragma' content='no-cache'>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/accordion.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Conserving Network Resources – Keep-Alive | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.5" />
+<meta property="og:title" content="Conserving Network Resources – Keep-Alive" />
+<meta name="author" content="Yoko Harada" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="“When you type a URL in your browser, what will happen?” If you are a web developer, you might have answered this sort of interview question once or twice. It would be a popular question to test the knowledge how the Internet works. As it is famous, you will find many answers here and there online." />
+<meta property="og:description" content="“When you type a URL in your browser, what will happen?” If you are a web developer, you might have answered this sort of interview question once or twice. It would be a popular question to test the knowledge how the Internet works. As it is famous, you will find many answers here and there online." />
+<link rel="canonical" href="http://localhost:4000/2024/07/17/conserving-network-resources-keep-alive.html" />
+<meta property="og:url" content="http://localhost:4000/2024/07/17/conserving-network-resources-keep-alive.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-07-17T21:05:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Conserving Network Resources – Keep-Alive" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Yoko Harada"},"dateModified":"2024-07-17T21:05:00+09:00","datePublished":"2024-07-17T21:05:00+09:00","description":"“When you type a URL in your browser, what will happen?” If you are a web developer, you might have answered this sort of interview question once or twice. It would be a popular question to test the knowledge how the Internet works. As it is famous, you will find many answers here and there online.","headline":"Conserving Network Resources – Keep-Alive","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2024/07/17/conserving-network-resources-keep-alive.html"},"url":"http://localhost:4000/2024/07/17/conserving-network-resources-keep-alive.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WWDGEJ9Y9L"></script>
+<script>
+  window['ga-disable-G-WWDGEJ9Y9L'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-WWDGEJ9Y9L');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Conserving Network Resources -- Keep-Alive</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-8">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Jul 17, 2024</p>
+
+    <div class="tags">
+        
+    </div>
+
+    
+
+    <p>“When you type a URL in your browser, what will happen?”
+If you are a web developer, you might have answered this sort of interview question once or twice.
+It would be a popular question to test the knowledge how the Internet works.
+As it is famous, you will find many answers here and there online.</p>
+
+<p>A common answer includes steps below:</p>
+<ol>
+  <li>DNS Resolution</li>
+  <li>TCP Three-Way Handshake</li>
+  <li>HTTPS Upgrade (SSL/TLS Handshake)</li>
+  <li>HTTP Request/Response</li>
+  <li>Browser Rendering</li>
+</ol>
+
+<p>This blog post focuses on the first three steps: DNS, TCP, and TLS, to think how the technology conserves the network
+resources.</p>
+
+<h3 id="dns-resolution">DNS Resolution</h3>
+
+<p>To get website contents, devices send a TCP packet. The essential components of TCP packet are a
+destination IP address and destination port. However it is not convenient to type 142.250.207.14, 17.253.144.10, or
+54.239.28.85 in the URL box to go to Google, Apple or Amazon websites.
+Sure, people type google.com, apple.com or amazon.com instead of IP addresses.</p>
+
+<p>The first step is to find an IP address based on a given URL string. This is done by Domain Name Service (or DNS).
+DNS provides a domain name to IP address mapping service and is basically a huge distributed database.
+As you may know, DNS servers form a hierarchical structure.
+On the top layer, 13 root servers are there:</p>
+<ul>
+  <li>a: Verisign, Los Angels CA</li>
+  <li>b: USC-ISI, Marina del Rey, CA</li>
+  <li>c: Cogent, Herndon, VA</li>
+  <li>d: U Maryland, College Park, MD</li>
+  <li>e: NASA, Mt. View, CA</li>
+  <li>f: Internet Software C., Palo Alto, CA</li>
+  <li>g: US DoD, Columbus, OH</li>
+  <li>h: ARL, Aberdeen, MD</li>
+  <li>i: Netnod, Stockholm</li>
+  <li>j: Verisign, Dulles, VA</li>
+  <li>k: RIPE, London</li>
+  <li>l: ICANN, Los Angels, CA</li>
+  <li>m: WIDE, Tokyo</li>
+</ul>
+
+<p>The next is a layer of Top-level domain (TLD) servers. These servers handle top-level domains such as .com, .org, .net, .edu
+and .gov and all of the country top-level domains such as .uk, .fr, .ca, and .jp. The third layer is Authoritative DNS
+servers. Many organizations run authoritative DNS servers. Among them, Cloudflare, Google and some more
+provides publicly accessible DNS servers.</p>
+
+<p>To get the IP address from URL string, browsers/devices make queries to a local DNS server.
+It might be an Internet Service Provider (or ISP) DNS server and often called DNS resolver.
+The local DNS server asks to the root DNS server and get a referral – what TLD DNS server likely knows the domain.
+Then, the local DNS server asks to the specified TLD DNS server.
+Again, the local DNS server get the referral from the TLD DNS server.
+Lastly, the local DNS server goes to the specified authoritative DNS server to get the IP address.</p>
+
+<p>It is a long way to finally get the IP address, however, domain name and IP address mappings are cached in certain points.
+A browser and OS have a cache. The local DNS server has a cache as well.
+If the mapping is in the cache, it is a much shorter way.</p>
+
+<p><img width="1000px" src="/assets/img/DNS_query.jpg" alt="img: DNS query" /></p>
+
+<h3 id="tcp-three-way-handshake">TCP Three-Way Handshake</h3>
+
+<p>The second step is the TCP three-way handshake.
+TCP (Transmission Control Protocol) is frequently compared to UDP (User Datagram Protocol).
+While TCP is described as connection-oriented, UDP is connectionless.
+TCP establishes the connection before data transfer begins. This phase is called the three-way handshake.</p>
+
+<p>As the name expresses, the three-way handshake consists of 3 phases.</p>
+<ul>
+  <li>Phase 1: A client sends a SYN segment, which contains SYN bit 1 and randomly chosen client initial sequence number.</li>
+  <li>Phase 2: A server receives the SYN segment and grants it. The server sends back a SYNACK segment, which contains
+  SYN bit 1, client initial sequence number + 1, and randomly chosen server initial sequence number.</li>
+  <li>Phase 3: The client receives SYNACK segment and acknowledges it. The client sends back the acknowledgement, which
+  contains SYN bit 0, client initial sequence number + 1 and server initial sequence number + 1.</li>
+</ul>
+
+<p>After above three phases are completed, data can be sent over TCP.</p>
+
+<p><img width="1000px" src="/assets/img/TCP-3Way-Handshake.jpg" alt="img: TCP 3 Way Handshake" /></p>
+
+<h3 id="https-upgrade-ssltls-handshake">HTTPS Upgrade (SSL/TLS Handshake)</h3>
+
+<p>The third step is TLS handshake. This handshake is much more complicated compared to TCP handshake.
+TLS handshake goes like this:</p>
+
+<ol>
+  <li>ClientHello: The client initiates the handshake by sending a message containing its supported protocols,
+ cipher suites, and random session ID.</li>
+  <li>ServerHello: The server responds with its chosen protocol, cipher suite, and session ID.</li>
+  <li>Certificate: The server sends its digital certificate, which contains its public key and identity information.</li>
+  <li>Key Exchange: The client and server use asymmetric encryption to exchange cryptographic keys,
+ ensuring secure communication.</li>
+  <li>Change Cipher Spec: Both parties send a “change cipher spec” message to indicate they are switching to
+ the new symmetric encryption key.</li>
+  <li>Finished: The client and server exchange “finished” messages to verify the integrity of the handshake and ensure
+ both parties agree on the session parameters.</li>
+</ol>
+
+<p>Finally, web contents are ready to be downloaded to the browsers or devices.</p>
+
+<h3 id="numbers-of-three-steps">Numbers of three steps</h3>
+
+<p>At this point, we learn gory details of DNS lookup, TCP and TLS handshakes.
+Well, let’s look at numbers related to the 3 steps above.</p>
+
+<h4 id="number-of-dns-lookups">Number of DNS lookups</h4>
+
+<p>It is said that DNS traffic is extremely busy.
+<a href="https://news.ycombinator.com/item?id=36984419">This Hacker News post</a> says
+“1.1.1.1 is now handling more than 1.3T requests per day.”
+The 1.1.1.1 is a Cloudflare DNS server. Only one authoritative DNS server has to deal with 1.3T requests per day!
+The post is 11 months ago from middle of July 2024, so data was taken around June 2023.
+Here is another a bit old data.
+A Reddit post from 2018 says, only one Pi-Hole DNS server processed around 18,000 DNS queries per day.
+If we think of the number of public authoritative DNS servers, global DNS lookups may go up to 10 trillion
+or more per day these days.</p>
+
+<p>To conclude, DNS traffic is really extremely busy.</p>
+
+<h4 id="time-needed-for-dns-lookup-tcptls-handshakes">Time needed for DNS lookup, TCP/TLS handshakes</h4>
+
+<p>The number is from an AI assisted answer popped up by online search. So, the numbers are just an estimation.</p>
+
+<ul>
+  <li>DNS lookup: 10-100 milliseconds <br />
+  varies depending on the complexity of the domain name, DNS server performance, and network latency.</li>
+  <li>TCP handshake: 10-30 milliseconds</li>
+  <li>TLS handshake: 200-1000 milliseconds <br />
+  varies depending on the TLS version, the complexity of the certificate, and network latency.</li>
+</ul>
+
+<p>As the unit is milliseconds, overall performance looks not so bad. However, when the sequence repeats many times,
+combined performance might not be negligible.</p>
+
+<h3 id="here-comes-the-keep-alive">Here Comes the Keep-Alive</h3>
+
+<p>If you are a web developer, you are sure to know that HTTP protocol is stateless.
+The connection is closed once a request/response sequence is completed.
+When someone type the URL on the browser, a DNS look up runs followed by a TCP handshake and TLS handshake.
+Finally, web contents are shown up on the browser. At this point, the connection is closed.
+When the same person clicks a button in the web page just shown up, again gory stuff explained above repeats.
+The DNS lookup runs followed by the TCP handshake and TLS handshake.
+The same person might click another button in the same web page. The previous connection is already closed.
+So, DNS lookup, TCP handshake, and TLS handshake are performed, then finally, the web contents show up.</p>
+
+<p>We are like: Oh, it’s a prime day. Let’s go to Amazon and click, click, click …….
+Wow, what if every click triggers DNS lookup, TCP handshake, and TLS handshake?
+How many people on earth do click, click, click ……?
+The Internet world must be really extremely busy.</p>
+
+<p>But, smart people are out there. They have invented a way to avoid repeating three steps.
+Yes, it is the keep-alive.
+The keep-alive is a mechanism to let the connection open. The consecutive HTTP request/response sequences can
+skip DNS lookup, TCP handshake and TLS handshake. Using the keep-alive improves overall web performance
+as well as conserves network resources.
+Apparently, the number of DNS look ups is cut down.</p>
+
+<p>During the era of HTTP/1.0, a client or server should explicitly specify the keep-alive in the HTTP header
+like below:</p>
+
+<pre><code>Connection: Keep-Alive
+Keep-Alive: timeout=5, max=1000
+</code></pre>
+
+<p>The timeout is the time in seconds that the host will allow an idle connection to remain open.
+The max is the maximum number of requests that can be sent on this connection.</p>
+
+<p>Now, HTTP/1.1 is out. The keep-alive becomes a default behavior. Below is an excerpt from RFC2616 section 8.1.2</p>
+<blockquote>
+  <p>A significant difference between HTTP/1.1 and earlier versions of
+HTTP is that persistent connections are the default behavior of any
+HTTP connection. That is, unless otherwise indicated, the client
+SHOULD assume that the server will maintain a persistent connection,
+even after error responses from the server.</p>
+</blockquote>
+
+<h3 id="test-keep-alive">Test Keep-Alive</h3>
+
+<p>Well, we know Rails 7 supports HTTP/1.1, so does the keep-alive.
+The keep-alive should be available and working.
+But, is there any way to test the keep-alive is working?
+It is very simple. Use curl command and request twice.</p>
+
+<p>Let’s try some. The first test is to make sure the keep-alive is working.</p>
+<pre><code class="language-bash">$ curl -Iv http://localhost:3000  -o /dev/null http://localhost:3000
+* Host localhost:3000 was resolved.
+* IPv6: ::1
+* IPv4: 127.0.0.1
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying [::1]:3000...
+* Connected to localhost (::1) port 3000
+&gt; HEAD / HTTP/1.1
+&gt; Host: localhost:3000
+&gt; User-Agent: curl/8.6.0
+&gt; Accept: */*
+&gt;
+&lt; HTTP/1.1 200 OK
+&lt; x-frame-options: SAMEORIGIN
+&lt; x-xss-protection: 0
+&lt; x-content-type-options: nosniff
+#...(snip snip snip)...
+&lt; Content-Length: 0
+&lt;
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+* Connection #0 to host localhost left intact
+* Found bundle for host: 0x600002e64480 [serially]
+* Can not multiplex, even if we wanted to
+* Re-using existing connection with host localhost
+&gt; HEAD / HTTP/1.1
+&gt; Host: localhost:3000
+&gt; User-Agent: curl/8.6.0
+&gt; Accept: */*
+&gt;
+&lt; HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+&lt; x-frame-options: SAMEORIGIN
+x-frame-options: SAMEORIGIN
+&lt; x-xss-protection: 0
+x-xss-protection: 0
+&lt; x-content-type-options: nosniff
+x-content-type-options: nosniff
+#...(snip snip snip)...
+&lt; Content-Length: 0
+Content-Length: 0
+
+&lt;
+* Connection #0 to host localhost left intact
+</code></pre>
+
+<p>Focus on the lines <code>* Connection #0 to host localhost left intact</code> and
+<code>* Re-using existing connection with host localhost</code>.  Those are the evidence that the keep-alive is working.</p>
+
+<p>For a comparison, let’s add <code>Connection: close</code> to the request header to test the keep-alive disabled.</p>
+
+<pre><code class="language-bash">$ curl -Iv http://localhost:3000  -o /dev/null http://localhost:3000  -H "Connection: close"
+* Host localhost:3000 was resolved.
+* IPv6: ::1
+* IPv4: 127.0.0.1
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying [::1]:3000...
+* Connected to localhost (::1) port 3000
+&gt; HEAD / HTTP/1.1
+&gt; Host: localhost:3000
+&gt; User-Agent: curl/8.6.0
+&gt; Accept: */*
+&gt; Connection: close
+&gt;
+&lt; HTTP/1.1 200 OK
+&lt; x-frame-options: SAMEORIGIN
+&lt; x-xss-protection: 0
+&lt; x-content-type-options: nosniff
+#...(snip snip snip)...
+&lt; Connection: close
+&lt; Content-Length: 0
+&lt;
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+* Closing connection
+* Hostname localhost was found in DNS cache
+*   Trying [::1]:3000...
+* Connected to localhost (::1) port 3000
+&gt; HEAD / HTTP/1.1
+&gt; Host: localhost:3000
+&gt; User-Agent: curl/8.6.0
+&gt; Accept: */*
+&gt; Connection: close
+&gt;
+&lt; HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+&lt; x-frame-options: SAMEORIGIN
+x-frame-options: SAMEORIGIN
+&lt; x-xss-protection: 0
+x-xss-protection: 0
+&lt; x-content-type-options: nosniff
+x-content-type-options: nosniff
+#...(snip snip snip)...
+&lt; Connection: close
+Connection: close
+&lt; Content-Length: 0
+Content-Length: 0
+
+&lt;
+* Closing connection
+</code></pre>
+
+<p>We see the line <code>* Closing connection</code>, so we know the keep-alive becomes off.</p>
+
+<p>Additionally, the second connection says <code>* Hostname localhost was found in DNS cache</code>, which means
+the second DNS look up hits the cache.</p>
+
+<p>“When you type a URL in your browser, what will happen?” is the interesting question.
+We can learn how the Internet works as well as the network resource conservation and web performance.</p>
+
+<h3 id="references">References</h3>
+<ul>
+  <li>Optimizing HTTP: Keep-alive and Pipelining: <a href="https://www.igvita.com/2011/10/04/optimizing-http-keep-alive-and-pipelining/">https://www.igvita.com/2011/10/04/optimizing-http-keep-alive-and-pipelining/</a></li>
+  <li><a href="https://medium.com/@roopa.kushtagi/mastering-dns-a-comprehensive-overview-of-internet-address-translation-73793d0598ba">Mastering DNS: A Comprehensive Overview of Internet Address Translation</a></li>
+  <li><a href="https://circleid.com/posts/20230316-analysis-of-7.5-trillion-dns-queries-reveals-public-resolvers-dominate-the-internet">Analysis of 7.5 Trillion DNS Queries Reveals Public Resolvers Dominate the Internet</a></li>
+  <li>“1.1.1.1 is now handling more than 1.3T requests per day”: <a href="https://news.ycombinator.com/item?id=36984419">https://news.ycombinator.com/item?id=36984419</a></li>
+  <li>Hypertext Transfer Protocol – HTTP/1.1: <a href="https://www.rfc-editor.org/rfc/rfc2616">https://www.rfc-editor.org/rfc/rfc2616</a></li>
+  <li>The Transport Layer Security (TLS) Protocol Version 1.2 <a href="https://www.ietf.org/rfc/rfc5246.txt">https://www.ietf.org/rfc/rfc5246.txt</a></li>
+  <li>Keep Alive: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Keep-Alive">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Keep-Alive</a></li>
+</ul>
+
+</div>
+
+
+
+
+                </div>
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    <p class="title is-4">Latest Posts</p>
+
+<div class="columns is-multiline">
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2024/07/17/conserving-network-resources-keep-alive.html">Conserving Network Resources -- Keep-Alive</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>“When you type a URL in your browser, what will happen?”
+If you are a web developer, you might have answered this sort of interview question once or twice.
+It would be a popular question to test the knowledge how the Internet works.
+As it is famous, you will find many answers here and there online.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2024/07/17/conserving-network-resources-keep-alive.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Jul 17, 2024</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2024/07/05/what-is-bcrypt-gem.html">What is bcrypt gem?</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>When a Ruby on Rails application is created by <code>rails new</code> command, we typically see bcrypt gem in <code>Gemfile</code>.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2024/07/05/what-is-bcrypt-gem.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Jul 5, 2024</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2024/03/05/vite-vue-bun-on-rails.html">Vite + Vue + Bun on Rails</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p><a href="https://vuejs.org/">Vue.js</a> is one of frontend frameworks gaining popularity among rapidly emerging JavaScript technologies.
+The combination of Vue.js and Rails is becoming more popular as well,
+however, Vue.js development on Rails is not so straightforward.
+The reason would be that Vue.js relies on <a href="https://vitejs.dev/">Vite</a> for a development environment
+such as HMR (Hot Module Replacement) and bundling.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2024/03/05/vite-vue-bun-on-rails.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Mar 5, 2024</p>
+    </footer>
+</div>
+    </div>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="/assets/js/accordion.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>
