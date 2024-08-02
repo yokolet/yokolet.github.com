@@ -161,6 +161,10 @@
 <lastmod>2024-07-17T21:05:00+09:00</lastmod>
 </url>
 <url>
+<loc>http://localhost:4000/2024/08/03/websocket-on-rails-by-activecable.html</loc>
+<lastmod>2024-08-03T00:10:00+09:00</lastmod>
+</url>
+<url>
 <loc>http://localhost:4000/algo/minimize_maximum/2022-07-22-minimize-maximum-divide-chocolate.html</loc>
 </url>
 <url>
@@ -834,6 +838,9 @@
 </url>
 <url>
 <loc>http://localhost:4000/blog/page8/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/blog/page9/</loc>
 </url>
 <url>
 <loc>http://localhost:4000/assets/pdf/YokoHaradaResume.pdf</loc>
