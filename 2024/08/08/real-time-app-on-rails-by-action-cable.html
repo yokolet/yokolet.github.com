@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <meta http-equiv='cache-control' content='no-cache'>
+    <meta http-equiv='expires' content='0'>
+    <meta http-equiv='pragma' content='no-cache'>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/accordion.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Real-time App on Rails by Action Cable | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.5" />
+<meta property="og:title" content="Real-time App on Rails by Action Cable" />
+<meta name="author" content="Yoko Harada" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="The previous blog post, WebSocket on Rails by Action Cable, focused on WebSocket as a protocol. As in the previous post, by default, Rails app responds to WebSocket connection requests without any hassle. However, other than connecting and sending ping frames, it doesn’t do anything. This blog post focuses on an application side and explains how we can create a full-duplex, bidirectional app." />
+<meta property="og:description" content="The previous blog post, WebSocket on Rails by Action Cable, focused on WebSocket as a protocol. As in the previous post, by default, Rails app responds to WebSocket connection requests without any hassle. However, other than connecting and sending ping frames, it doesn’t do anything. This blog post focuses on an application side and explains how we can create a full-duplex, bidirectional app." />
+<link rel="canonical" href="http://localhost:4000/2024/08/08/real-time-app-on-rails-by-action-cable.html" />
+<meta property="og:url" content="http://localhost:4000/2024/08/08/real-time-app-on-rails-by-action-cable.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-08-08T23:27:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Real-time App on Rails by Action Cable" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Yoko Harada"},"dateModified":"2024-08-08T23:27:00+09:00","datePublished":"2024-08-08T23:27:00+09:00","description":"The previous blog post, WebSocket on Rails by Action Cable, focused on WebSocket as a protocol. As in the previous post, by default, Rails app responds to WebSocket connection requests without any hassle. However, other than connecting and sending ping frames, it doesn’t do anything. This blog post focuses on an application side and explains how we can create a full-duplex, bidirectional app.","headline":"Real-time App on Rails by Action Cable","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2024/08/08/real-time-app-on-rails-by-action-cable.html"},"url":"http://localhost:4000/2024/08/08/real-time-app-on-rails-by-action-cable.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WWDGEJ9Y9L"></script>
+<script>
+  window['ga-disable-G-WWDGEJ9Y9L'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-WWDGEJ9Y9L');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Real-time App on Rails by Action Cable</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-8">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Aug 8, 2024</p>
+
+    <div class="tags">
+        
+    </div>
+
+    
+
+    <p>The previous blog post, <a href="/2024/08/03/websocket-on-rails-by-activecable.html">WebSocket on Rails by Action Cable</a>,
+focused on WebSocket as a protocol. As in the previous post, by default, Rails app responds to WebSocket connection
+requests without any hassle. However, other than connecting and sending ping frames, it doesn’t do anything.
+This blog post focuses on an application side and explains how we can create a full-duplex, bidirectional app.</p>
+
+<h3 id="publishsubscribe-pubsub-architecture">Publish/Subscribe (Pub/Sub) architecture</h3>
+
+<p>WebSocket itself is the protocol, so it is independent from an application architecture or framework.
+In Rails, ActionCable::Connection::Base is an abstraction of WebSocket connection.</p>
+
+<p>As an application framework on the full-duplex, bidirectional connection, Rails adapts Pub/Sub
+(Publish/Subscribe) architecture. The Pub/Sub architecture is a general event-driven, asynchronous model for a
+distributed system. The Pub/Sub architecture is independent from protocols, so it is not only for WebSocket.
+If we name the Pub/Sub frameworks, <a href="https://kafka.apache.org/">Apache Kafka</a>, <a href="https://akka.io/">Akka</a>,
+<a href="https://www.rabbitmq.com/">RabbitMQ</a>, and many more are out there.</p>
+
+<p>In general, the Pub/Sub framework consists of publishers, a broker with topics (or channels), and subscribers.
+The subscriber subscribes to a topic or topics to get updates.
+When the publisher send a message to a broker, the broker sends the message to the related topic.
+Then, the message will be distributed to subscribers who subscribed to the topic previously.</p>
+
+<p><img width="1200px" src="/assets/img/GeneralPubSub.jpg" alt="img: Pub/Sub architecture in general" /></p>
+
+<p>Rails provides a bit simplified version of Pub/Sub architecture.
+For Rails, both publishers and subscribers are a web application client.
+The idea of consumer is introduced as an abstraction of publishers and subscribers.
+Using JavaScript library, a consumer is created tied to the specific channel.
+The publisher sends a message through the consumer.
+When the publisher wants to send the message to a specific method, it performs the corresponding action with the message.
+Once the message arrives to the channel, the message will be broadcast to subscribers.
+In the end, the broadcast message is received by the subscriber through the consumer.</p>
+
+<p><img width="1200px" src="/assets/img/RailsPubSub.jpg" alt="img: Rails Pub/Sub architecture" /></p>
+
+<h3 id="chat-simple-real-time-application">Chat: Simple Real-time Application</h3>
+
+<p>It’s time to create a Rails app. The application here is a very simple chat app.
+The application needs a JavaScript library which has an ability to behave reactively when the broadcast message comes in.
+Here, the app uses Vue.js version 3 with composition API.</p>
+
+<h4 id="create-rails-app">Create Rails app</h4>
+
+<p>As always, the first step is to create a Rails app. The application doesn’t need some libraries, so it uses the rc file
+below to skip those.</p>
+
+<pre><code class="language-bash">--skip-action-mailer
+--skip-action-mailbox
+--skip-action-text
+--skip-active-job
+--skip-active-storage
+-J
+-T
+</code></pre>
+
+<p>Save above to <code>.railsrc</code> file, or whatever the file name you like.</p>
+
+<pre><code class="language-bash">$ rails new action-cable-chat --rc=./.railsrc
+</code></pre>
+
+<h4 id="create-a-vue-app-mount-point">Create a Vue app mount point</h4>
+
+<p>So that the root path shows Vue.js page, create a mount point.</p>
+
+<pre><code class="language-bash">$ bin/rails g controller home index
+</code></pre>
+
+<p>Edit <code>app/views/home/index.html.erb</code> to create a mount point, <code>#app</code>.</p>
+
+<pre><code class="language-erbruby">&lt;%= content_tag(:div, "", id:"app") %&gt;
+</code></pre>
+
+<p>Additionally, update <code>config/routes.rb</code>.</p>
+
+<pre><code class="language-ruby">Rails.application.routes.draw do
+  root 'home#index'
+  # ...
+  # ...
+end
+</code></pre>
+
+<h4 id="install-and-setup-vite_rails">Install and setup vite_rails</h4>
+
+<p>Since the app uses Vue.js on the frontend side, <code>vite_rails</code> gem should be installed and setup.
+Try below:</p>
+
+<pre><code class="language-bash">$ cd action-cable-chat
+$ bundle add vite_rails
+$ bundle exec vite install
+</code></pre>
+
+<h4 id="install-vuejs">Install Vue.js</h4>
+
+<p>At this point, <code>package.json</code> and <code>package-lock.json</code> are created.
+Since we use <code>yarn</code> instead of <code>npm</code>, remove <code>package-lock.json</code> and run <code>yarn install</code>.</p>
+
+<pre><code class="language-bash">$ rm package-lock.json
+$ yarn install
+</code></pre>
+
+<p>For now, we are ready to install Vue.js. Run blow to add two packages:</p>
+
+<pre><code class="language-bash">$ yarn add vue @vitejs/plugin-vue
+</code></pre>
+
+<p>Then, edit <code>vite.config.ts</code> to add Vue plugin.</p>
+
+<pre><code class="language-javascript">// vite.config.ts
+import { defineConfig } from 'vite'
+import RubyPlugin from 'vite-plugin-ruby'
+import vue from '@vitejs/plugin-vue' // added
+
+export default defineConfig({
+    plugins: [
+        RubyPlugin(),
+        vue(),  // added
+    ],
+})
+</code></pre>
+
+<h4 id="create-a-starter-script">Create a starter script</h4>
+
+<p>When vite was installed, Profile.dev was updated as well to start two servers: one for backend, another for frontend.
+To avoid typing <code>foreman start -f Procfile.dev</code> everytime, create a <code>bin/dev</code> file with the content below:</p>
+
+<pre><code class="language-bash">#!/usr/bin/env sh
+
+if gem list --no-installed --exact --silent foreman; then
+  echo "Installing foreman..."
+  gem install foreman
+fi
+
+# Default to port 3000 if not specified
+export PORT="${PORT:-3000}"
+
+exec foreman start -f Procfile.dev "$@"
+</code></pre>
+
+<p>Change the file permission to executable by <code>chmod 755 bin/dev</code>.</p>
+
+<h4 id="create-a-pubsub-channel">Create a Pub/Sub channel</h4>
+
+<p>So far, all settings were completed.
+Now, it’s time to write code for a chat app.</p>
+
+<p>We start from creating a channel for Pub/Sub.
+Rails provides a generator to create a channel, so type below:</p>
+
+<pre><code class="language-bash">$ bin/rails g channel chat speak
+</code></pre>
+
+<p>Above command creates <code>app/channels/chat_channel.rb</code> file with a minimal implementation.
+Update <code>subscribe</code> and <code>speak</code> method as in below:</p>
+
+<pre><code class="language-ruby"># app/channels/chat_channel.rb
+class ChatChannel &lt; ApplicationCable::Channel
+  def subscribed
+    stream_from "chat_channel"
+  end
+
+  def unsubscribed
+    # Any cleanup needed when channel is unsubscribed
+  end
+
+  def speak(data)
+    ActionCable.server.broadcast("chat_channel", data)
+  end
+end
+</code></pre>
+
+<p>The method, <code>subscribed</code>, defines the channel whose name is chat_channel.
+The method, <code>speak</code>, broadcast message to clients who subscribed to the chat_channel.
+That’s all for the server side.</p>
+
+<h4 id="install-railsactioncable-package">Install @rails/actioncable package</h4>
+
+<p>Since WebSocket is a protocol, we may use any libraries for WebSocket, for example, <a href="https://socket.io/">Socket.IO</a>.
+However, it’s much better to use Rails provided package to connect to the backend seamlessly.
+Run below to install <code>@rails/actioncable</code> package.</p>
+
+<pre><code class="language-bash">$ yarn add @rails/actioncable 
+</code></pre>
+
+<h4 id="write-frontend-code">Write frontend code</h4>
+
+<p>The last piece is a Vue.js app.
+Create a Vue component, <code>app/frontend/App.vue</code>, with the content below:</p>
+
+<pre><code class="language-javascript">&lt;script setup&gt;
+import { ref } from 'vue';
+const message = ref("");
+const messages = ref([]);
+import { createConsumer } from '@rails/actioncable';
+
+const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+const consumer = createConsumer(`${protocol}://${window.location.host}/cable`);
+const channel = consumer.subscriptions.create({ channel: 'ChatChannel' }, {
+  received(data) {
+    messages.value.push(data['message']);
+  }
+});
+
+const addNewMessage = () =&gt; {
+  channel.perform('speak', { message: message.value });
+}
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;div id="app"&gt;
+    &lt;h2&gt;Action Cable Example&lt;/h2&gt;
+    &lt;div class="info"&gt;Type something in the box below and hit enter&lt;/div&gt;
+    &lt;form @submit.prevent="addNewMessage"&gt;
+      &lt;input
+          type="text"
+          placeholder="say something"
+          minlength="1"
+          maxlength="50"
+          v-model.trim="message" /&gt;
+    &lt;/form&gt;
+    &lt;div class="messages"&gt;
+      &lt;ul class="message"&gt;
+        &lt;li v-for="message in messages"&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+</code></pre>
+
+<p>Everything of frontend is here. The above Vue component does:</p>
+<ul>
+  <li>Creates a consumer using <code>createConsumer</code> function provided by Rails’ actioncable package. <br />
+By default, WebSocket is mounted on <code>/cable</code>, so the URL to WebSocket is used to an argument of <code>createConsumer</code>.</li>
+  <li>Creates a channel by subscribing to the channel, <code>ChatChannel</code>. <br />
+The channel name on Rails side is a snake case of <code>chat_channel</code>, while a camel case of <code>ChatChannel</code> on JavaScript side.</li>
+  <li>At the same time, implements <code>received</code> function to update the <code>messages</code> value when a new message comes in.</li>
+  <li>Calls <code>addNewMessage</code> function when something is typed in the input box and hit enter. <br />
+The function hits channel’s perform function to send the message to <code>speak</code> method defined in ChatChannel class on the server side.</li>
+</ul>
+
+<p>To make the Vue component work, we need a small additional work.
+Edit <code>app/frontend/entrypoints/application.js</code> to add below:</p>
+
+<pre><code class="language-javascript">import { createApp } from 'vue';
+import App from '~/App.vue';
+import '~/styles.css'
+
+createApp(App).mount('#app');
+</code></pre>
+
+<p>The mount point <code>#app</code> was already created on the backend side.
+To look better, the Vue component uses the <code>style.css</code> below.</p>
+
+<pre><code class="language-css">* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+#app {
+  margin: 3rem auto;
+  border-radius: 10px;
+  padding: 1rem;
+  width: 90%;
+  max-width: 40rem;
+}
+
+#app h2 {
+  font-size: 1.5rem;
+  border-bottom: 2px solid #ccc;
+  color: #af463d;
+  margin: 0 0 1rem 0;
+}
+
+#app .info {
+  font-size: 1rem;
+  color: #544f4f;
+  margin: 0 0 1rem 0;
+}
+
+#app .messages {
+  font-size: 1rem;
+  color: #544f4f;
+  margin: 1rem 0 1rem 0;
+}
+
+#app .message {
+  font-size: 1rem;
+  color: #4d4848;
+  margin: 0 0 1rem 0;
+}
+
+#app input {
+  font: inherit;
+  border: 1px solid #aaa;
+  background-color: #eee;
+}
+
+#app input:focus {
+  outline: none;
+  border-color: #754340;
+  background-color: #fff;
+}
+</code></pre>
+
+<h4 id="run-the-app-and-try-real-time-chat">Run the app and try real-time chat</h4>
+
+<p>We have already created <code>bin/dev</code> starter command. Type it and start servers.</p>
+
+<pre><code class="language-bash">$ bin/dev
+</code></pre>
+
+<p>Open <code>http://localhost:3000</code> on multiple different browsers or private windows.
+Type something in the input box and hit enter.
+The message appears on all browsers immediately.
+Below are the result on Safari, FireFox and Chrome.</p>
+
+<p><img width="600px" src="/assets/img/action-cable-chat-safari.jpeg" alt="img: Chat on Safari" /> <br />
+<img width="600px" src="/assets/img/action-cable-chat-firefox.jpeg" alt="img: Chat on FireFox" /> <br />
+<img width="600px" src="/assets/img/action-cable-chat-chrome.jpeg" alt="img: Chat on Chrome" /></p>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>WebSocket and Action Cable are not easy ideas to understand.
+However, once we do, an implementation using Rails Action Cable is not difficult.
+We can create more interesting real-time applications by Action Cable.</p>
+
+<h3 id="references">references</h3>
+<ul>
+  <li>GitHub Repo: <a href="https://github.com/yokolet/action-cable-chat">https://github.com/yokolet/action-cable-chat</a></li>
+  <li>Publisher-Subscriber Model: <a href="https://www.baeldung.com/cs/publisher-subscriber-model">https://www.baeldung.com/cs/publisher-subscriber-model</a></li>
+  <li>Akka: <a href="https://akka.io/">https://akka.io/</a></li>
+  <li>Apache Kafka: <a href="https://kafka.apache.org/">https://kafka.apache.org/</a></li>
+  <li>Redis Pub/Sub: <a href="https://redis.io/docs/latest/develop/interact/pubsub/">https://redis.io/docs/latest/develop/interact/pubsub/</a></li>
+  <li>Rails Guides, Action Cable Overview: <a href="https://guides.rubyonrails.org/action_cable_overview.html">https://guides.rubyonrails.org/action_cable_overview.html</a></li>
+  <li>Action Cable Hello World With Rails 7: <a href="https://blog.dennisokeeffe.com/blog/2022-02-28-action-cable-hello-world-with-rails-7">https://blog.dennisokeeffe.com/blog/2022-02-28-action-cable-hello-world-with-rails-7</a></li>
+  <li>Creating a Chat Using Rails’ Action Cable: <a href="https://www.pluralsight.com/resources/blog/guides/creating-a-chat-using-rails-action-cable">https://www.pluralsight.com/resources/blog/guides/creating-a-chat-using-rails-action-cable</a></li>
+  <li>Getting more comfortable with Action Cable: <a href="https://medium.com/craft-academy/getting-more-comfortable-with-action-cable-2b4bc758c57f">https://medium.com/craft-academy/getting-more-comfortable-with-action-cable-2b4bc758c57f</a></li>
+</ul>
+
+
+</div>
+
+
+
+
+                </div>
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    <p class="title is-4">Latest Posts</p>
+
+<div class="columns is-multiline">
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2024/08/08/real-time-app-on-rails-by-action-cable.html">Real-time App on Rails by Action Cable</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>The previous blog post, <a href="/2024/08/03/websocket-on-rails-by-activecable.html">WebSocket on Rails by Action Cable</a>,
+focused on WebSocket as a protocol. As in the previous post, by default, Rails app responds to WebSocket connection
+requests without any hassle. However, other than connecting and sending ping frames, it doesn’t do anything.
+This blog post focuses on an application side and explains how we can create a full-duplex, bidirectional app.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2024/08/08/real-time-app-on-rails-by-action-cable.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Aug 8, 2024</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2024/08/03/websocket-on-rails-by-activecable.html">WebSocket on Rails by Active Cable</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>In the web application domain, we hear some protocol names.
+Absolutely, HTTP or HTTPS is the most famous protocol that all web developers know.
+Although there’s a mechanism of <a href="/2024/07/17/conserving-network-resources-keep-alive.html">Keep-Alive</a>,
+a single request/response sequence with a single client/server is all done by HTTP.
+The client initiates the HTTP request to the server. Once the client receives the HTTP response from the server,
+communication finishes. As far as HTTP is used, the server just waits and waits. Only when the request comes in, the
+server can send back some data to the client. This communication style is surprisingly capable of doing many things,
+so most web applications are satisfied with HTTP.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2024/08/03/websocket-on-rails-by-activecable.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Aug 3, 2024</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2024/07/17/conserving-network-resources-keep-alive.html">Conserving Network Resources -- Keep-Alive</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>“When you type a URL in your browser, what will happen?”
+If you are a web developer, you might have answered this sort of interview question once or twice.
+It would be a popular question to test the knowledge how the Internet works.
+As it is famous, you will find many answers here and there online.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2024/07/17/conserving-network-resources-keep-alive.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Jul 17, 2024</p>
+    </footer>
+</div>
+    </div>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="/assets/js/accordion.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>
