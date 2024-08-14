@@ -126,7 +126,7 @@
 
     
 
-    <p>The previous blog post, <a href="/2024/08/03/websocket-on-rails-by-activecable.html">WebSocket on Rails by Action Cable</a>,
+    <p>The previous blog post, <a href="/2024/08/03/websocket-on-rails-by-action-cable.html">WebSocket on Rails by Action Cable</a>,
 focused on WebSocket as a protocol. As in the previous post, by default, Rails app responds to WebSocket connection
 requests without any hassle. However, other than connecting and sending ping frames, it doesn’t do anything.
 This blog post focuses on an application side and explains how we can create a full-duplex, bidirectional app.</p>
@@ -189,7 +189,8 @@ below to skip those.</p>
 
 <p>So that the root path shows Vue.js page, create a mount point.</p>
 
-<pre><code class="language-bash">$ bin/rails g controller home index
+<pre><code class="language-bash">$ cd action-cable-chat
+$ bin/rails g controller home index
 </code></pre>
 
 <p>Edit <code>app/views/home/index.html.erb</code> to create a mount point, <code>#app</code>.</p>
@@ -211,8 +212,7 @@ end
 <p>Since the app uses Vue.js on the frontend side, <code>vite_rails</code> gem should be installed and setup.
 Try below:</p>
 
-<pre><code class="language-bash">$ cd action-cable-chat
-$ bundle add vite_rails
+<pre><code class="language-bash">$ bundle add vite_rails
 $ bundle exec vite install
 </code></pre>
 
@@ -358,7 +358,7 @@ const addNewMessage = () =&gt; {
   <li>Creates a consumer using <code>createConsumer</code> function provided by Rails’ actioncable package. <br />
 By default, WebSocket is mounted on <code>/cable</code>, so the URL to WebSocket is used to an argument of <code>createConsumer</code>.</li>
   <li>Creates a channel by subscribing to the channel, <code>ChatChannel</code>. <br />
-The channel name on Rails side is a snake case of <code>chat_channel</code>, while a camel case of <code>ChatChannel</code> on JavaScript side.</li>
+The channel name is a channel class name on Rails side, so it is a camel case of ChatChannel.</li>
   <li>At the same time, implements <code>received</code> function to update the <code>messages</code> value when a new message comes in.</li>
   <li>Calls <code>addNewMessage</code> function when something is typed in the input box and hit enter. <br />
 The function hits channel’s perform function to send the message to <code>speak</code> method defined in ChatChannel class on the server side.</li>
@@ -468,8 +468,8 @@ We can create more interesting real-time applications by Action Cable.</p>
   <li>Action Cable Hello World With Rails 7: <a href="https://blog.dennisokeeffe.com/blog/2022-02-28-action-cable-hello-world-with-rails-7">https://blog.dennisokeeffe.com/blog/2022-02-28-action-cable-hello-world-with-rails-7</a></li>
   <li>Creating a Chat Using Rails’ Action Cable: <a href="https://www.pluralsight.com/resources/blog/guides/creating-a-chat-using-rails-action-cable">https://www.pluralsight.com/resources/blog/guides/creating-a-chat-using-rails-action-cable</a></li>
   <li>Getting more comfortable with Action Cable: <a href="https://medium.com/craft-academy/getting-more-comfortable-with-action-cable-2b4bc758c57f">https://medium.com/craft-academy/getting-more-comfortable-with-action-cable-2b4bc758c57f</a></li>
+  <li>Deconstructing Action Cable: <a href="https://stanko.io/deconstructing-action-cable-DC7F33OsjGmK">https://stanko.io/deconstructing-action-cable-DC7F33OsjGmK</a></li>
 </ul>
-
 
 </div>
 
@@ -494,7 +494,7 @@ We can create more interesting real-time applications by Action Cable.</p>
         <div class="content">
             
             
-                <p><p>The previous blog post, <a href="/2024/08/03/websocket-on-rails-by-activecable.html">WebSocket on Rails by Action Cable</a>,
+                <p><p>The previous blog post, <a href="/2024/08/03/websocket-on-rails-by-action-cable.html">WebSocket on Rails by Action Cable</a>,
 focused on WebSocket as a protocol. As in the previous post, by default, Rails app responds to WebSocket connection
 requests without any hassle. However, other than connecting and sending ping frames, it doesn’t do anything.
 This blog post focuses on an application side and explains how we can create a full-duplex, bidirectional app.</p>
