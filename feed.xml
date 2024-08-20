@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-08-17T19:09:47+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Blog site mostly for programming topics.</subtitle><entry><title type="html">Real-time App on Rails by Action Cable</title><link href="http://localhost:4000/2024/08/08/real-time-app-on-rails-by-action-cable.html" rel="alternate" type="text/html" title="Real-time App on Rails by Action Cable" /><published>2024-08-08T23:27:00+09:00</published><updated>2024-08-08T23:27:00+09:00</updated><id>http://localhost:4000/2024/08/08/real-time-app-on-rails-by-action-cable</id><content type="html" xml:base="http://localhost:4000/2024/08/08/real-time-app-on-rails-by-action-cable.html"><![CDATA[<p>The previous blog post, <a href="/2024/08/03/websocket-on-rails-by-action-cable.html">WebSocket on Rails by Action Cable</a>,
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-08-20T14:52:23+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Blog site mostly for programming topics.</subtitle><entry><title type="html">Real-time App on Rails by Action Cable</title><link href="http://localhost:4000/2024/08/08/real-time-app-on-rails-by-action-cable.html" rel="alternate" type="text/html" title="Real-time App on Rails by Action Cable" /><published>2024-08-08T23:27:00+09:00</published><updated>2024-08-08T23:27:00+09:00</updated><id>http://localhost:4000/2024/08/08/real-time-app-on-rails-by-action-cable</id><content type="html" xml:base="http://localhost:4000/2024/08/08/real-time-app-on-rails-by-action-cable.html"><![CDATA[<p>The previous blog post, <a href="/2024/08/02/websocket-on-rails-by-action-cable.html">WebSocket on Rails by Action Cable</a>,
 focused on WebSocket as a protocol. As in the previous post, by default, Rails app responds to WebSocket connection
 requests without any hassle. However, other than connecting and sending ping frames, it doesn’t do anything.
 This blog post focuses on an application side and explains how we can create a full-duplex, bidirectional app.</p>
@@ -329,7 +329,11 @@ Below are the result on Safari, FireFox and Chrome.</p>
 However, once we do, an implementation using Rails Action Cable is not difficult.
 We can create more interesting real-time applications by Action Cable.</p>
 
-<h3 id="references">references</h3>
+<h3 id="comments-and-discussions">Comments and Discussions</h3>
+
+<p>GitHub Discussions: <a href="https://github.com/yokolet/new-note/discussions/9">Real-time App on Rails by Action Cable #9</a></p>
+
+<h3 id="references">References</h3>
 <ul>
   <li>GitHub Repo: <a href="https://github.com/yokolet/action-cable-chat">https://github.com/yokolet/action-cable-chat</a></li>
   <li>Publisher-Subscriber Model: <a href="https://www.baeldung.com/cs/publisher-subscriber-model">https://www.baeldung.com/cs/publisher-subscriber-model</a></li>
@@ -510,6 +514,10 @@ The ping frame is light weight, and the WebSocket connection can’t do anything
 The risk of data breach or session hijacking would be almost zero, however, DoS (DDoS) type attack might be possible.</p>
 
 <p>It’s a good practice to specify –skip-action-cable option if the app doesn’t need WebSocket.</p>
+
+<h3 id="comments-and-discussions">Comments and Discussions</h3>
+
+<p>GitHub Discussions: <a href="https://github.com/yokolet/new-note/discussions/10">WebSocket on Rails by Action Cable #10</a></p>
 
 <h3 id="references">References</h3>
 
