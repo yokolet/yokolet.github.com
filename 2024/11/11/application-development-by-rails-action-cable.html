@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <meta http-equiv='cache-control' content='no-cache'>
+    <meta http-equiv='expires' content='0'>
+    <meta http-equiv='pragma' content='no-cache'>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/accordion.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Application Development by Rails Action Cable | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.5" />
+<meta property="og:title" content="Application Development by Rails Action Cable" />
+<meta name="author" content="Yoko Harada" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="The previous two blog posts introduced WebSocket and how to implement a WebSocket application on Ruby on Rails. This blog post digs deeper. It is a memo on creating a more realistic application by Action Cable." />
+<meta property="og:description" content="The previous two blog posts introduced WebSocket and how to implement a WebSocket application on Ruby on Rails. This blog post digs deeper. It is a memo on creating a more realistic application by Action Cable." />
+<link rel="canonical" href="http://localhost:4000/2024/11/11/application-development-by-rails-action-cable.html" />
+<meta property="og:url" content="http://localhost:4000/2024/11/11/application-development-by-rails-action-cable.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-11-11T22:32:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Application Development by Rails Action Cable" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Yoko Harada"},"dateModified":"2024-11-11T22:32:00+09:00","datePublished":"2024-11-11T22:32:00+09:00","description":"The previous two blog posts introduced WebSocket and how to implement a WebSocket application on Ruby on Rails. This blog post digs deeper. It is a memo on creating a more realistic application by Action Cable.","headline":"Application Development by Rails Action Cable","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2024/11/11/application-development-by-rails-action-cable.html"},"url":"http://localhost:4000/2024/11/11/application-development-by-rails-action-cable.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WWDGEJ9Y9L"></script>
+<script>
+  window['ga-disable-G-WWDGEJ9Y9L'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-WWDGEJ9Y9L');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Application Development by Rails Action Cable</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-8">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Nov 11, 2024</p>
+
+    <div class="tags">
+        
+    </div>
+
+    
+
+    <p>The previous two blog posts introduced WebSocket and how to implement a WebSocket application on Ruby on Rails.
+This blog post digs deeper. It is a memo on creating a more realistic application by Action Cable.</p>
+
+<h3 id="real-time-application">Real-time application</h3>
+
+<p>As a real-time application, this post picks up a classic Tic-Tac-Toe game.
+The game here adopts a multi-player and multi-board design.
+Multiple players can join the game.
+A single player can create or join multiple game boards.
+The player can play multiple games in parallel.</p>
+
+<p>When a player registers a player name, the name appears on all players’ panels in real-time.
+When a new board is created, its name appears on all players’ panels in real-time as well.
+Of course, the game progress is updated in real-time.</p>
+
+<p>When a player clicks an unregister button or closes a window/tab,
+the player’s name disappears from all players’ panels.</p>
+
+<h4 id="code-and-game-details">Code and Game Details</h4>
+
+<ul>
+  <li>GitLab: <a href="https://gitlab.com/yokolet/action-cable-tictactoe">https://gitlab.com/yokolet/action-cable-tictactoe</a></li>
+  <li>GitHub: <a href="https://github.com/yokolet/action-cable-tictactoe">https://github.com/yokolet/action-cable-tictactoe</a></li>
+</ul>
+
+<h3 id="rails-side">Rails Side</h3>
+
+<p>On the Rails side, a connection and channels are main components for the application.
+It depends on the application whether the connection should be implemented or used as is.
+On the other hand, a channel need to be implemented to provide a specific service.</p>
+
+<h4 id="connection">Connection</h4>
+
+<p>As the <a href="https://guides.rubyonrails.org/v8.0/action_cable_overview.html#server-side-components-connections">Rails Guide</a>
+explains, the main purpose of the connection (ApplicationCable::Connection) is an authentication and authorization.
+However, ApplicationCable::Connection itself doesn’t authenticate a user.
+Its usage is to verify the already authenticated/authorized user so that channels can identify an individual user.</p>
+
+<p>In the Tic-Tac-Toe application, an encrypted cookie is created when the application is requested for the first time.</p>
+<ul>
+  <li><a href="https://gitlab.com/yokolet/action-cable-tictactoe/-/blob/main/app/controllers/home_controller.rb?ref_type=heads">app/controllers/home_controller.rb</a></li>
+</ul>
+
+<p>The encrypted cookie is verified in the WebSocket connection as a player id.
+After successful verification, the user is identified by <code>current_player_id</code>.</p>
+<ul>
+  <li><a href="https://gitlab.com/yokolet/action-cable-tictactoe/-/blob/main/app/channels/application_cable/connection.rb?ref_type=heads">app/channels/application_cable/connection.rb</a></li>
+</ul>
+
+<p>The key word, <code>identified_by</code> is provided by Rails, so we can use it without doing anything extra.</p>
+
+<h4 id="channel">Channel</h4>
+
+<p>Application’s main logic is implemented in a channel. The API document shows what methods are defined in
+<a href="https://api.rubyonrails.org/classes/ActionCable/Connection/Base.html">ActionCable::Channel::Base</a> class.
+Among those, the application mostly implement a subscribe, unsubscribe, send or other methods to perform actions.</p>
+
+<ul>
+  <li><code>subscribe</code>: when a JavaScript client creates a channel, the subscribe method is called.</li>
+  <li><code>unsubscribe</code>: when a WebSocket connection is closed, the unsubscribe method is called.</li>
+  <li><code>perform action</code>: when a JavaScript client sends a payload, {action: “some_method”, …}, “some_method” is called to
+perform the logic.</li>
+</ul>
+
+<p>After performing the logic in the channel,
+broadcast and transmit methods are used to send the result back from the Rails side to JavaScript client.</p>
+
+<ul>
+  <li>broadcast: pushes the result to all subscribed JavaScript clients</li>
+  <li>transmit: sends the result back to the only one JavaScript client who sends payload to the channel.</li>
+</ul>
+
+<p>The Tic-Tac-Toe application uses 3 types of channels. The PlayerChannel would be a good example since it is simple.</p>
+<ul>
+  <li><a href="https://gitlab.com/yokolet/action-cable-tictactoe/-/blob/main/app/channels/player_channel.rb?ref_type=heads">app/channels/player_channel.rb</a></li>
+</ul>
+
+<p>The PlayerChannel has a subscribe, unsubscribe, register, unregister, and heads_up methods.</p>
+<ul>
+  <li><code>subscribe</code>: using <code>stream_from</code> method, adds the client to the player_channel, then sends back the payload to the
+client who tries to subscribe</li>
+  <li><code>unsubscribe</code>: after removing the player name of this connection, broadcasts the updated player list to all subscribed clients</li>
+  <li>[perform action] <code>register</code>: adds a new player name to the player list and sends back the payload to the client
+who tries to register. In this application, “subscribe” doesn’t mean “register”. Without registering the player name,
+clients can receive the broadcast player list.</li>
+  <li>[perform action] <code>unregister</code>: JavaScript client explicitly removes its player name from the list.
+The result is sent back to the client who tries to unregister</li>
+  <li>[perform action] <code>heads_up</code>: broadcasts the updated player list. The method is called by the JavaScript client
+when the client wants to broadcast the updated player list.</li>
+</ul>
+
+<h4 id="transmit-or-broadcast">transmit or broadcast</h4>
+
+<p>The PlayerChannel of this application uses <code>transmit</code> for subscribe, register and unregister methods, which means
+the results are not broadcast.
+To broadcast, the client calls <code>heads_up</code> action after receiving the payload from <code>transmit</code>. It takes double paths.
+At a glance, such architecture looks an excess. What if successful register broadcast the updated player list?
+Unfortunately, that confuses the client application.
+For example, upon a successful registration process, the client app wants to close registration form.
+If the successful registration is broadcast, the client needs to figure out
+the message is about its own or someone else’s successful registration.
+So that the client application can act reactively, transmitting the result payload to the only client
+who tries it works well.</p>
+
+<h3 id="rspec">RSpec</h3>
+
+<p>When it comes to a realistic application, testing is important. Testing Action Cable using RSpec is explained at
+<a href="https://github.com/palkan/action-cable-testing">https://github.com/palkan/action-cable-testing</a>.
+It is a gem called action-cable-testing. But, as far as using recent versions of Rails and RSpec,
+we don’t need to install the gem. It is merged in Rails 6 and RSpec 4.</p>
+
+<h4 id="connection-specs">Connection specs</h4>
+
+<p>The testing framework provides <code>connect</code> method, which simulates the connection.
+Once the <code>connect</code> method is called, we can use <code>connection</code> instance to test <code>identified_by</code> value.
+The <code>cookies</code> is available to use in the spec, so we can add a cookie to test the connection.</p>
+
+<p>The connection spec of this application:</p>
+<ul>
+  <li><a href="https://gitlab.com/yokolet/action-cable-tictactoe/-/blob/main/spec/channels/connection_spec.rb?ref_type=heads">spec/channels/connection_spec.rb</a></li>
+</ul>
+
+<p>The spec here tests whether <code>current_player_id</code> is set correctly.</p>
+
+<h4 id="channel-specs">Channel specs</h4>
+
+<p>The testing framework provides <code>stub_connection</code> and <code>subsscribe</code> utility methods.</p>
+
+<ul>
+  <li><code>stub_connection</code>: gives a connection stub. The identifier can be given as a parameter.</li>
+  <li><code>subscribe</code>: subscribes to the channel.</li>
+</ul>
+
+<p>The specs for PlayerChannel:</p>
+<ul>
+  <li><a href="https://gitlab.com/yokolet/action-cable-tictactoe/-/blob/main/spec/channels/player_channel_spec.rb?ref_type=heads">spec/channels/player_channel_spec.rb</a></li>
+</ul>
+
+<p>The spec calls <code>stub_connection(current_player_id: uid)</code> in the before block.
+By this, the <code>current_player_id</code> value is available to use in the channel methods.
+In each spec, <code>subscribe</code> is called with a parameter. This simulate the the subscription has done.</p>
+
+<p>To test subscription, we can do:</p>
+<pre><code class="language-ruby">expect(subscription).to be_confirmed
+expect(subscription).to have_stream_from('player_channel')
+</code></pre>
+
+<p>To test transmitted payload, <code>expect(transmissions.last).to eq({...})</code> does the job.</p>
+<pre><code class="language-ruby">expect(transmissions.last).to eq({key: value})
+</code></pre>
+
+<p>As for testing a broadcast, <code>have_broadcasted_to</code> matcher does the job.</p>
+<pre><code class="language-ruby">expect {
+  perform :heads_up, {key1: value1}
+}.to have_broadcasted_to("player_channel").with({key2: value2})
+</code></pre>
+
+<h3 id="javascript-side">JavaScript Side</h3>
+
+<p>To connect to Rails’ WebSocket, <a href="https://www.npmjs.com/package/@rails/actioncable">@rails/actioncable</a>
+JavaScript package would be the best library.
+The package provides seamless interaction with WebSocket by Rails Action Cable.</p>
+
+<p>Of course, @rails/actioncable is not the only one choice.
+Since WebSocket is a protocol, it’s possible to write a connection library from scratch.
+In the JavaScript world, well-known WebSocket libraries are out there also.
+However, an ease of use, examples to learn about, and more reasons say @rails/actioncable is the best.</p>
+
+<h4 id="basics-of-client-side">Basics of Client Side</h4>
+
+<p>With @rails/actioncable library, a basic usage is below:</p>
+<pre><code class="language-javascript">const channel = createConsumer()
+    .subscriptions
+    .create({ channel: 'CHANNEL_CLASS', key: value }, {
+        received(data) {
+            // do something
+        }
+    }
+</code></pre>
+
+<p>Above establishes WebSocket connection and calls channel’s subscribe method.
+The channel to subscribe is a parameter to <code>create</code> method.
+The callback function, <code>receieved</code> receives everything the channel sends back
+such as the payload from channel’s transmit and broadcast methods.
+The client side application should handle all of those.</p>
+
+<p>To call perform action methods, use <code>channel.perform</code> function.</p>
+<pre><code class="language-javascript">channel.perform("CHANNEL_METHOD", {key: value})
+</code></pre>
+
+<p>This Tic-Tac-Toe application uses Vue.js and Pinia (something like React + Redux).
+The client implementation to use <code>PlayerChannel</code> is a Pinia store, <code>player.ts</code>.</p>
+<ul>
+  <li><a href="https://gitlab.com/yokolet/action-cable-tictactoe/-/blob/main/app/frontend/stores/player.ts?ref_type=heads">app/frontend/stores/player.ts</a></li>
+</ul>
+
+<p>In this application, the payload data is a Hash and has an action key always.
+The action is a key to handle received data through WebSocket.
+Depending on the action type, received data is processed and set to reactive variables.
+The changes of reactive variables are taken care of by a JavaScript framework, in this application, Vue.js.</p>
+
+<p>The client side implementation really varies.
+Vue.js, React, Stimulus and many other JavaScript frameworks handles reactive data in their ways.
+The basics here is to reflect the updated data to UI by own way.</p>
+
+<h3 id="live-application">Live Application</h3>
+
+<p>The multi-player, multi-board Tic-Tac-Toe application is live at:</p>
+<ul>
+  <li><a href="https://action-cable-tictactoe-2fbbd874419e.herokuapp.com/">https://action-cable-tictactoe-2fbbd874419e.herokuapp.com/</a></li>
+</ul>
+
+<h3 id="consideration">Consideration</h3>
+
+<p>Creating a real-time application by Rails Action Cable is relatively easy.
+The framework provides an easy to use API for both back-end and front-end.
+The downside would be lack of up-to-date rich information.
+Rails Guide gives enough info and examples, but those are fragments.
+Google search often hit old Rails 6 examples and blog posts. 
+It took a while to figure out how to code and test on Rails 7.
+However, once those became clear, the development accelerated.</p>
+
+<p>Try and have fun by creating a real-time application.</p>
+
+</div>
+
+
+
+
+                </div>
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    <p class="title is-4">Latest Posts</p>
+
+<div class="columns is-multiline">
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2024/11/11/application-development-by-rails-action-cable.html">Application Development by Rails Action Cable</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>The previous two blog posts introduced WebSocket and how to implement a WebSocket application on Ruby on Rails.
+This blog post digs deeper. It is a memo on creating a more realistic application by Action Cable.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2024/11/11/application-development-by-rails-action-cable.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Nov 11, 2024</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2024/08/08/real-time-app-on-rails-by-action-cable.html">Real-time App on Rails by Action Cable</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>The previous blog post, <a href="/2024/08/02/websocket-on-rails-by-action-cable.html">WebSocket on Rails by Action Cable</a>,
+focused on WebSocket as a protocol. As in the previous post, by default, Rails app responds to WebSocket connection
+requests without any hassle. However, other than connecting and sending ping frames, it doesn’t do anything.
+This blog post focuses on an application side and explains how we can create a full-duplex, bidirectional app.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2024/08/08/real-time-app-on-rails-by-action-cable.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Aug 8, 2024</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2024/08/03/websocket-on-rails-by-action-cable.html">WebSocket on Rails by Action Cable</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>In the web application domain, we hear some protocol names.
+Absolutely, HTTP or HTTPS is the most famous protocol that all web developers know.
+Although there’s a mechanism of <a href="/2024/07/17/conserving-network-resources-keep-alive.html">Keep-Alive</a>,
+a single request/response sequence with a single client/server is all done by HTTP.
+The client initiates the HTTP request to the server. Once the client receives the HTTP response from the server,
+communication finishes. As far as HTTP is used, the server just waits and waits. Only when the request comes in, the
+server can send back some data to the client. This communication style is surprisingly capable of doing many things,
+so most web applications are satisfied with HTTP.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2024/08/03/websocket-on-rails-by-action-cable.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Aug 3, 2024</p>
+    </footer>
+</div>
+    </div>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="/assets/js/accordion.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>
