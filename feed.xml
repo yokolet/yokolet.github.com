@@ -1,4 +1,248 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2025-02-24T22:50:02+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Blog site mostly for programming topics.</subtitle><entry><title type="html">Application Development by Rails Action Cable</title><link href="http://localhost:4000/2024/11/11/application-development-by-rails-action-cable.html" rel="alternate" type="text/html" title="Application Development by Rails Action Cable" /><published>2024-11-11T22:32:00+09:00</published><updated>2024-11-11T22:32:00+09:00</updated><id>http://localhost:4000/2024/11/11/application-development-by-rails-action-cable</id><content type="html" xml:base="http://localhost:4000/2024/11/11/application-development-by-rails-action-cable.html"><![CDATA[<p>The previous two blog posts introduced WebSocket and how to implement a WebSocket application on Ruby on Rails.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2025-03-05T23:00:24+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">yokolet’s notelets</title><subtitle>Blog site mostly for programming topics.</subtitle><entry><title type="html">Ruby on Rails Low Level Cache Programming</title><link href="http://localhost:4000/2025/03/05/rails-cache-programming.html" rel="alternate" type="text/html" title="Ruby on Rails Low Level Cache Programming" /><published>2025-03-05T22:57:00+09:00</published><updated>2025-03-05T22:57:00+09:00</updated><id>http://localhost:4000/2025/03/05/rails-cache-programming</id><content type="html" xml:base="http://localhost:4000/2025/03/05/rails-cache-programming.html"><![CDATA[<p>Ruby on Rails is known to offer really various features which are useful to create a web application.
+Among those, little known API might be the low level caching API.</p>
+
+<p>Basically, people don’t code to manipulate cached values. When the caching is on, Rails caches
+view fragments, database query result or some values automatically. As you know the caching is used to
+improve performance in general.</p>
+
+<p>However, we can use Rails cache like a key-value store.
+The API allows us to read/write values tied to keys, which is called a low level caching.</p>
+
+<p>This blog post focuses on such Rails low level cache programming.</p>
+
+<h3 id="configuration">Configuration</h3>
+
+<p>Rails supports multiple types of cache stores. The type should be specified by <code>config_cache_store</code> in
+<code>config/environments/[development|test|production].rb</code> files.</p>
+
+<h4 id="types-of-stores">types of stores</h4>
+<ul>
+  <li>Memory Store
+    <ul>
+      <li>example: <code>config.cache_store = :memory_store, { size: 64.megabytes }</code></li>
+      <li>In-memory data store which can be used within a single process.</li>
+      <li>Popular type for a development environment.</li>
+    </ul>
+  </li>
+  <li>File Store
+    <ul>
+      <li>example: <code>config.cache_store = :file_store, "/path/to/cache/directory"</code></li>
+      <li>File system data store which can be shared among multiple processes.</li>
+    </ul>
+  </li>
+  <li>MemCache Store
+    <ul>
+      <li>example: <code>config.cache_store = :mem_cache_store, "cache-1.example.com", "cache-2.example.com"</code></li>
+      <li>Data store by memcached server (<a href="https://memcached.org/">https://memcached.org/</a>).</li>
+      <li>Popular type for a production environment.</li>
+    </ul>
+  </li>
+  <li>Redis Store
+    <ul>
+      <li>example: <code>config.cache_store = :redis_cache_store, { url: ENV["REDIS_URL"] }</code></li>
+      <li>Data store by Redis (<a href="https://redis.io/">https://redis.io/</a>).</li>
+    </ul>
+  </li>
+  <li>Solid Cache Store
+    <ul>
+      <li>example: see production section of <code>config/database.yml</code></li>
+      <li>Data store by RDBMS which is the same as Rails database.</li>
+      <li>Introduced in Rails 8.</li>
+    </ul>
+  </li>
+  <li>Null Store
+    <ul>
+      <li>example: <code>config.cache_store = :null_store</code></li>
+      <li>Data store whose scope is each web request.</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="difference-between-rails-7-and-rails-8">Difference between Rails 7 and Rails 8</h4>
+
+<p>The production/test environment configurations stay the same on both Rails 7 and 8.
+However, the development configuration has changed.
+Let’s look at the differences. The first one is Rails 7, and the second is Rail 8.</p>
+
+<pre><code class="language-ruby"># Rails 7 config/environments/development.rb
+
+# Enable/disable caching. By default caching is disabled.
+# Run rails dev:cache to toggle caching.
+if Rails.root.join("tmp/caching-dev.txt").exist?
+  config.cache_store = :memory_store
+  config.public_file_server.headers = {
+    "Cache-Control" =&gt; "public, max-age=#{2.days.to_i}"
+  }
+else
+  config.action_controller.perform_caching = false
+
+  config.cache_store = :null_store
+end
+</code></pre>
+
+<pre><code class="language-ruby"># Rails 8 config/environments/development.rb
+
+# Enable/disable Action Controller caching. By default Action Controller caching is disabled.
+# Run rails dev:cache to toggle Action Controller caching.
+if Rails.root.join("tmp/caching-dev.txt").exist?
+  config.action_controller.perform_caching = true
+  config.action_controller.enable_fragment_cache_logging = true
+  config.public_file_server.headers = { "cache-control" =&gt; "public, max-age=#{2.days.to_i}" }
+else
+  config.action_controller.perform_caching = false
+end
+
+# Change to :null_store to avoid any caching.
+config.cache_store = :memory_store
+</code></pre>
+
+<p>On Rails 7, we should hit the command, <code>bin/rails dev:cache</code>, to use the cache.
+The command creates an empty file, <code>tmp/caching-dev.txt</code>, so that <code>config.cache_store = :memory_store</code> works.
+However, on Rails 8, <code>config.cache_store = :memory_store</code> is located on the outside of if-block.
+We don’t need to use the command, <code>bin/rails dev:cache</code> anymore, if we don’t need anything in the block.</p>
+
+<p>While using the low-level caching API, setting the cache store is enough.
+That being said, the caching API is available out of the box on Rail 8.</p>
+
+<h3 id="cache-api">Cache API</h3>
+
+<h4 id="keys-and-values">Keys and Values</h4>
+
+<p>Rails cache is a key-value store. A key is, internally, a string always.
+However, if a Ruby object can be converted to a string, such object can be a key, for example, a symbol or Array.
+API document says, if the object reacts to <code>to_param</code> method and returns a value,
+the object can be a key. Also, if the object implements <code>cache_key</code> method, the object can be a key.</p>
+
+<p>The key-value store’s values are any Ruby object if the object is serializable and deserializable.
+For example, a string, Array, or Hash can be a value, but Proc object is not.
+If it really needs, we can define own serializer and set to the Rails cache.</p>
+
+<h4 id="basic-methods">Basic Methods</h4>
+
+<p>Supported methods on all types of stores are <code>fetch</code>, <code>write</code>, <code>read</code>, <code>exist?</code> and <code>delete</code>.
+The cache API has more methods such as <code>increment</code> or <code>cleanup</code>, but depending on the store types,
+some methods may not be supported.</p>
+
+<h5 id="fetch">fetch</h5>
+<p>The <code>fetch</code> would be the most frequently used method. It covers both read and write.
+The fetch method considers a cache miss, so it takes a block to return a value for the cache miss.
+When the value from the block is returned, the value is saved as well.
+However, the method doesn’t simply update the value. To make the fetch method to update the value
+even though it hits the cached value, the method takes <code>force</code> option.</p>
+
+<pre><code class="language-bash">$ bin/rails c
+example(dev)&gt; Rails.cache
+=&gt; #&lt;ActiveSupport::Cache::MemoryStore entries=0, size=0, options={compress: false, compress_threshold: 1024}&gt;
+example(dev)&gt; Rails.cache.fetch(:my_value)
+=&gt; nil
+example(dev)&gt; Rails.cache.fetch(:my_value) { "Ruby" }
+=&gt; "Ruby"
+example(dev)&gt; Rails.cache.fetch(:my_value)
+=&gt; "Ruby"
+example(dev)&gt; Rails.cache.fetch(:my_value) { "JavaScript" }
+=&gt; "Ruby"
+example(dev)&gt; Rails.cache.fetch(:my_value, force: true) { "JavaScript" }
+=&gt; "JavaScript"
+example(dev)&gt; Rails.cache.fetch(:my_value)
+=&gt; "JavaScript"
+</code></pre>
+
+<p>The fetch method takes an expiry option to remove a value from cache automatically.</p>
+
+<pre><code class="language-bash">example(dev)&gt; Rails.cache.fetch(:my_value, force: true, expires_in: 5.seconds) { "Bash" }
+=&gt; "Bash"
+example(dev)&gt; Rails.cache.fetch(:my_value)
+=&gt; "Bash"
+# after 5 seconds
+example(dev)&gt; Rails.cache.fetch(:my_value)
+=&gt; nil
+</code></pre>
+
+<p>Aside of <code>expires_in</code>, <code>expires_at</code> is also available.
+This is a handy feature when we want to save the value just temporarily.</p>
+
+<h5 id="write">write</h5>
+
+<p>The <code>write</code> method works the same as <code>Rails.cache.fetch(:my_value, force: true) { "JavaScript" }</code>.</p>
+
+<pre><code class="language-bash">example(dev)&gt; Rails.cache.write(:your_value, "YAML")
+=&gt; true
+example(dev)&gt; Rails.cache.fetch(:your_value)
+=&gt; "YAML"
+</code></pre>
+
+<p>The method takes <code>expires_in</code>, <code>expires_at</code> options.</p>
+
+<h5 id="read">read</h5>
+
+<p>The <code>read</code> method works the same as <code>fetch</code> without block. The method just looks up a value by key.</p>
+
+<pre><code class="language-bash">example(dev)&gt; Rails.cache.write(:her_value, "SQL")
+=&gt; true
+example(dev)&gt; Rails.cache.read(:her_value)
+=&gt; "SQL"
+</code></pre>
+
+<h5 id="exist">exist?</h5>
+
+<p>The <code>exist?</code> method is useful to find that the value is nil or key doesn’t exist.
+Rails cache allows to save nil as a value.
+When the fetch or read method returns nil, we don’t know it is a value or not.</p>
+
+<pre><code class="language-bash">example(dev)&gt; Rails.cache.fetch(:his_value, force: true, expires_in: 10.seconds) { nil }
+=&gt; nil
+example(dev)&gt; Rails.cache.read(:his_value)
+=&gt; nil
+example(dev)&gt; Rails.cache.exist?(:his_value)
+=&gt; true
+# after 10 seconds
+example(dev)&gt; Rails.cache.exist?(:his_value)
+=&gt; false
+</code></pre>
+
+<h5 id="delete">delete</h5>
+
+<p>The <code>delete</code> method deletes a key-value pair from the cache.</p>
+
+<pre><code class="language-bash">example(dev)&gt; Rails.cache.write(:their_value, "JSON")
+=&gt; true
+example(dev)&gt; Rails.cache.read(:their_value)
+=&gt; "JSON"
+example(dev)&gt; Rails.cache.delete(:their_value)
+=&gt; true
+example(dev)&gt; Rails.cache.read(:their_value)
+=&gt; nil
+example(dev)&gt; Rails.cache.exist?(:their_value)
+=&gt; false
+</code></pre>
+
+<h3 id="low-level-cache-programming-for-what">Low Level Cache Programming for What</h3>
+
+<p>So far, we have looked at the low level cache API. Well, the question would be, “what is it for?”
+To save and read values, we can use database or ActiveRecord. The value saved in the database can be used
+in almost everywhere. So, why or when we should use the low level cache programming?</p>
+
+<p>I have used the low level cache API in a couple of applications.
+It is good to save a short-lived small data.
+The Rails cache is a simple key-value store. To save the value, we don’t create a migration.
+Without explicit deleting, the values expire and disappear.</p>
+
+<p>The sessions might be another option for a key-value store.
+However, the sessions are not a mighty store.
+For example, WebSocket or ActionCable is unable to use the sessions.
+Another example would be a controller method used as a callback function of OAuth, payment gateway or such.
+The sessions are established between Rails server and a web browser.
+When the controller method gets hit by somewhere else, the sessions don’t work nicely.</p>
+
+<p>Typical Rails applications can do without the low level cache programming.
+However, it is very useful in some cases.</p>
+
+<h3 id="references">References</h3>
+<ul>
+  <li><a href="https://www.honeybadger.io/blog/rails-low-level-caching/">Mastering Low Level Caching in Rails</a></li>
+  <li><a href="https://guides.rubyonrails.org/caching_with_rails.html#low-level-caching-using-rails-cache">Ruby on Rails Guides: Caching: 2.4 Low-Level Caching using Rails.cache</a></li>
+  <li><a href="https://api.rubyonrails.org/classes/ActiveSupport/Cache/Store.html">Ruby on Rail API: Active Support Cache Store</a></li>
+</ul>]]></content><author><name>Yoko Harada</name></author><summary type="html"><![CDATA[Ruby on Rails is known to offer really various features which are useful to create a web application. Among those, little known API might be the low level caching API.]]></summary></entry><entry><title type="html">Application Development by Rails Action Cable</title><link href="http://localhost:4000/2024/11/11/application-development-by-rails-action-cable.html" rel="alternate" type="text/html" title="Application Development by Rails Action Cable" /><published>2024-11-11T22:32:00+09:00</published><updated>2024-11-11T22:32:00+09:00</updated><id>http://localhost:4000/2024/11/11/application-development-by-rails-action-cable</id><content type="html" xml:base="http://localhost:4000/2024/11/11/application-development-by-rails-action-cable.html"><![CDATA[<p>The previous two blog posts introduced WebSocket and how to implement a WebSocket application on Ruby on Rails.
 This blog post digs deeper. It is a memo on creating a more realistic application by Action Cable.</p>
 
 <h3 id="real-time-application">Real-time application</h3>
@@ -2867,271 +3111,4 @@ Authorization endpoint.</p>
   <li><a href="https://dev.to/reinforz/implementing-authentication-with-twitter-oauth-20-using-typescript-node-js-express-js-and-next-js-in-a-full-stack-application-353d">Implementing Authentication with Twitter OAuth 2.0 using Typescript, Express.js and Next.js</a></li>
   <li><a href="https://medium.com/swlh/create-a-react-app-with-typescript-redux-and-oauth-2-0-7f62d57890df">Create a React App with TS, Redux and OAuth 2.0 - Spotify login example</a></li>
   <li><a href="https://dev.to/sbelzile/stop-using-dotenv-in-your-front-end-427p">Stop using Dotenv in your front-end</a></li>
-</ul>]]></content><author><name>Yoko Harada</name></author><summary type="html"><![CDATA[Logging in to a web site is what users do quite a lot. Suppose it is a blog site. Once a user completes a log-in process, the user is allowed to create a new post, update contents and delete a post. The blog site might have a feature to leave comments by logged in users.]]></summary></entry><entry><title type="html">Rails 7 React/Redux Development with esbuild</title><link href="http://localhost:4000/2023/05/23/rails-7-react-redux-development-with-esbuild.html" rel="alternate" type="text/html" title="Rails 7 React/Redux Development with esbuild" /><published>2023-05-23T21:47:00+09:00</published><updated>2023-05-23T21:47:00+09:00</updated><id>http://localhost:4000/2023/05/23/rails-7-react-redux-development-with-esbuild</id><content type="html" xml:base="http://localhost:4000/2023/05/23/rails-7-react-redux-development-with-esbuild.html"><![CDATA[<p>Rails 7 provides a couple of approaches to bundle a rich JavaScript application such as SPA.
-To create the JavaScript application, we should specify <code>j|--javascript</code> option with
-importmap (default), webpack, esbuild or rollup when <code>rails new</code> command gets run.
-Although webpack is still among the choices, it has been retired as describe in the
-<a href="https://github.com/rails/webpacker/blob/master/README.md">https://github.com/rails/webpacker/blob/master/README.md</a>.
-The choice here is <a href="https://esbuild.github.io/">esbuild</a> since it is friendly to JavaScript development,
-for example, starting from <code>yarn create react-app ...</code>.
-The esbuild is gaining popularity and known to run very fast with its Go-lang implementation.</p>
-
-<p>This blog post creates React/Redux application on top of Rails 7.
-The application is a sample counter app which comes from what <code>yarn create react-app [app name] --template redux-typescript</code>
-command creates.</p>
-
-<h3 id="create-a-rails-app-with-esbuild-option">Create a Rails App with esbuild Option</h3>
-
-<p>The command to create an app is something like:</p>
-
-<pre><code class="language-bash">% rails new [APP NAME] -j esbuild -T
-</code></pre>
-
-<p>The <code>-j esbuild</code> option installs frontend development packages/tools.
-Additionally, the command, <code>./bin/rails javascript:install:esbuild</code>, gets run during the app creation.
-The package.json, Procfile.dev and couple other files for JavaScript development are also created.</p>
-
-<h3 id="create-an-entry-point-for-reactjs-app">Create an Entry Point for ReactJS App</h3>
-
-<p>The next step is to create and entry point for ReactJS app.
-All incoming HTTP requests are received by controllers on Rails.
-Following such Rails style, the entry point to ReactJS app is also a controller.
-However, instead of <code>rails g controller ...</code>, stimulus generator is used for this.
-The generated controller is a JavaScript class, which is a subclass of stimulus Controller.</p>
-
-<pre><code class="language-bash">% rails g stimulus react
-</code></pre>
-
-<p>Above generates <code>app/javascript/controllers/react_controller.js</code> and updates <code>app/javascript/controllers/index.js</code>.
-The generated controller class is equivalent to ReactJS app’s index.tsx(jsx).
-What we write in index.tsx should go to a connect method in the generated controller class.</p>
-
-<h3 id="create-a-view-to-mount-reactjs-app">Create a View to Mount ReactJS App</h3>
-
-<p>If the ReactJS app is created by <code>yarn create react-app ...</code> or npm, npx command,
-the app has a mount point in <code>public/index.html</code>, something like: <code>&lt;div id="root"&gt;&lt;/div&gt;</code>.
-It is Rails, so we should create a controller.</p>
-
-<pre><code class="language-bash">% rails g controller pages home
-</code></pre>
-
-<p>Above creates a couple of files as we know.
-Edit <code>app/views/pages/home.html.erb</code> and add the mount point.</p>
-
-<pre><code class="language-erbruby">&lt;%# app/views/pages/home.html.erb %&gt;
-
-&lt;h1&gt;Pages#home&lt;/h1&gt;
-&lt;p&gt;Find me in app/views/pages/home.html.erb&lt;/p&gt;
-&lt;%= content_tag(:div, "", id:"root", data:{ controller: "react" }) %&gt;
-</code></pre>
-
-<p>Also, edit <code>config/routes.rb</code> to add a path to pages#home.</p>
-
-<pre><code class="language-ruby"># config/routes.rb
-
-Rails.application.routes.draw do
-  root 'pages#home'
-end
-</code></pre>
-
-<h3 id="setup-basic-react-typescript-app">Setup Basic React TypeScript App</h3>
-
-<p>At this moment, the Rails side is ready.
-However, the JavaScript side has a package.json file only, which is like right after <code>yarn --init</code> ran.
-Since it is a React TypeScript app, install basic packages.</p>
-
-<pre><code class="language-bash">% yarn add react react-dom @types/react @types/react-dom typescript
-</code></pre>
-
-<p>Also, TypeScript initialization should be done.</p>
-
-<pre><code class="language-bash">% tsc --init --project tsconfig.json --noEmit --jsx react-jsx
-</code></pre>
-
-<h3 id="redux-toolkit-counter-example">Redux Toolkit Counter Example</h3>
-
-<p>When the redux-typescript template is used to create a ReactJS App, the counter example comes with it.
-For examples, <code>yarn create react-app my-app --template redux-typescript</code> command creates files below
-(excludes node_modules directory):</p>
-<pre><code>.
-├── README.md
-├── package.json
-├── public
-│   ├── favicon.ico
-│   ├── index.html
-│   ├── logo192.png
-│   ├── logo512.png
-│   ├── manifest.json
-│   └── robots.txt
-├── src
-│   ├── App.css
-│   ├── App.test.tsx
-│   ├── App.tsx
-│   ├── app
-│   │   ├── hooks.ts
-│   │   └── store.ts
-│   ├── features
-│   │   └── counter
-│   │       ├── Counter.module.css
-│   │       ├── Counter.tsx
-│   │       ├── counterAPI.ts
-│   │       ├── counterSlice.spec.ts
-│   │       └── counterSlice.ts
-│   ├── index.css
-│   ├── index.tsx
-│   ├── logo.svg
-│   ├── react-app-env.d.ts
-│   ├── reportWebVitals.ts
-│   └── setupTests.ts
-├── tsconfig.json
-└── yarn.lock
-</code></pre>
-
-<p>We want files under src directory.
-How to map those files under <code>app/javascript</code> might be controversy.
-Some might create a components directory.
-However, as for Redux Toolkit, features and/or app directories are more common.</p>
-
-<p>The app here is created by copying files under <code>src</code> to <code>app/javascript</code> almost as those are.</p>
-
-<pre><code class="language-bash">app/javascript
-├── App.tsx
-├── app
-│   ├── hooks.ts
-│   └── store.ts
-├── application.js
-├── controllers
-│   ├── application.js
-│   ├── hello_controller.js
-│   ├── index.js
-│   └── react_controller.js
-├── features
-│   └── counter
-│       ├── Counter.module.css
-│       ├── Counter.tsx
-│       ├── counterAPI.ts
-│       ├── counterSlice.spec.ts
-│       └── counterSlice.ts
-└── logo.svg
-</code></pre>
-
-<p>Handling of .css files will be mentioned later since that needs a bit of fix.</p>
-
-<p>To run the counter app, Redux Toolkit and react binding packages should be installed.</p>
-<pre><code class="language-bash">% yarn add @reduxjs/toolkit react-redux
-</code></pre>
-
-<h3 id="update-react_controllerjs">Update react_controller.js</h3>
-
-<p>Previously mentioned, <code>app/javascript/controllers/react_controller.js</code> is equivalent to ReactJS app’s index.tsx.</p>
-
-<p>The file looks like below to run the counter app.</p>
-
-<pre><code class="language-tsx">// app/javascript/controllers/react_controller.js
-
-import { Controller } from "@hotwired/stimulus"
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import { Provider } from "react-redux";
-import App from '../App';
-import { store } from '../app/store';
-
-// Connects to data-controller="react"
-export default class extends Controller {
-  connect() {
-    const container = document.getElementById('root');
-    const root = createRoot(container);
-
-    root.render(
-      &lt;React.StrictMode&gt;
-        &lt;Provider store={store}&gt;
-          &lt;App /&gt;
-        &lt;/Provider&gt;
-      &lt;/React.StrictMode&gt;
-    );
-  }
-}
-</code></pre>
-
-<h3 id="update-packagejson-scripts-section">Update package.json scripts section</h3>
-
-<p>When the Rails app is created, package.json’s scripts section looks like below.</p>
-
-<pre><code>"scripts": {
-  "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --public-path=assets"
-}
-</code></pre>
-
-<p>As in the above directory tree, the counter app has .tsx and .svg files under app/javascript.
-So that esbuild can load those, two loaders should be added to the esbuild option.</p>
-
-<p>Additionally, the script section should have TypeScript check.</p>
-
-<p>After the update, the script section looks like below:</p>
-<pre><code>"scripts": {
-  "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --public-path=assets --loader:.js=jsx --loader:.svg=file",
-  "check-types": "tsc --project tsconfig.json --noEmit --watch --preserveWatchOutput"
-}
-</code></pre>
-
-<h3 id="avoid-sprocketsdoublelinkerror-applicationcss-error">Avoid Sprockets::DoubleLinkError application.css Error</h3>
-
-<p>If esbuild is used in a Rails app, .css files need extra caution.
-We might end up in having two application.css files generated by esbuild and originally created by <code>rails new</code> command.
-If that happens, the conflict raises the Sprockets::DoubleLinkError application.css error.</p>
-
-<p>When a .tsx(.jsx) file imports CSS, esbuild generates app/assets/builds/application.css.
-Whereas we have app/assets/stylesheets/application.css generated by rails new command.
-These two application.css files have the same name but different contents.</p>
-
-<p>A couple to few ways would be there to avoid the error.
-Probably, below two are easy ones.</p>
-
-<ol>
-  <li>Never ever import css files in .tsx(.jsx).
-Instead, write all styles in <code>app/assets/stylesheets/application.css</code> or take a traditional Rails way.</li>
-  <li>Rename <code>app/assets/stylesheets/application.css</code>.</li>
-</ol>
-
-<p>The app here mainly took the second approach, but partially the first approach.
-The <code>app/assets/stylesheets/application.css</code> was renamed to <code>app/assets/stylesheets/application-rails.css</code>.
-The <code>app/views/layouts/application.html.erb</code> file got one more stylesheet_link_tag shown below:</p>
-
-<pre><code class="language-erbruby">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-  &lt;head&gt;
-    &lt;title&gt;React/Redux App&lt;/title&gt;
-    &lt;meta name="viewport" content="width=device-width,initial-scale=1"&gt;
-    &lt;%= favicon_link_tag 'favicon.ico' %&gt;
-    &lt;%= csrf_meta_tags %&gt;
-    &lt;%= csp_meta_tag %&gt;
-
-    &lt;%= stylesheet_link_tag "application", "data-turbo-track": "reload" %&gt;
-    &lt;%= stylesheet_link_tag "application-rails", "data-turbo-track": "reload" %&gt;
-    &lt;%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %&gt;
-  &lt;/head&gt;
-
-  &lt;body&gt;
-    &lt;%= yield %&gt;
-  &lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-
-<p>All styles in <code>index.css</code> and <code>App.css</code> are moved to <code>app/assets/stylesheets/application-rails.css</code>.
-The css import was removed from <code>App.tsx</code> and <code>app/javascript/controllers/react_controller.js</code>.
-However, <code>app/javascript/features/counter/Counter.module.css</code> is there, which is imported in
-<code>app/javascript/features/counter/Counter.tsx</code>.</p>
-
-<h3 id="use-bindev-not-rails-s">Use bin/dev, not rails s</h3>
-
-<p>To run the Rails app, use <code>bin/dev</code>.
-As defined in <code>Procfile.dev</code>, we need Rails server and esbuild with watch option.
-The <code>bin/dev</code> command does that.
-If everything goes well, the counter app below shows up at http://localhost:3000/ .</p>
-
-<p><img src="/assets/img/react-redux-counter-app.jpeg" alt="img: react redux counter app" /></p>
-
-<h3 id="code">Code</h3>
-
-<p>The example Rails app code is on the GitHub repo.
-Please see <a href="https://github.com/yokolet/rails7-typescript-redux-counter-example">https://github.com/yokolet/rails7-typescript-redux-counter-example</a></p>]]></content><author><name>Yoko Harada</name></author><summary type="html"><![CDATA[Rails 7 provides a couple of approaches to bundle a rich JavaScript application such as SPA. To create the JavaScript application, we should specify j|--javascript option with importmap (default), webpack, esbuild or rollup when rails new command gets run. Although webpack is still among the choices, it has been retired as describe in the https://github.com/rails/webpacker/blob/master/README.md. The choice here is esbuild since it is friendly to JavaScript development, for example, starting from yarn create react-app .... The esbuild is gaining popularity and known to run very fast with its Go-lang implementation.]]></summary></entry></feed>
+</ul>]]></content><author><name>Yoko Harada</name></author><summary type="html"><![CDATA[Logging in to a web site is what users do quite a lot. Suppose it is a blog site. Once a user completes a log-in process, the user is allowed to create a new post, update contents and delete a post. The blog site might have a feature to leave comments by logged in users.]]></summary></entry></feed>

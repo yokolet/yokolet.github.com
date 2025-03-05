@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+
+
+
+
+<html
+ dir="ltr"
+ lang="en"
+ class="has-navbar-fixed-top">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content=#ffffff>
+    <meta http-equiv='cache-control' content='no-cache'>
+    <meta http-equiv='expires' content='0'>
+    <meta http-equiv='pragma' content='no-cache'>
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/accordion.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="shortcut icon" type="image/png"
+           href="/assets/img/favicon.png" 
+    />
+    <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Ruby on Rails Low Level Cache Programming | yokolet’s notelets</title>
+<meta name="generator" content="Jekyll v3.9.5" />
+<meta property="og:title" content="Ruby on Rails Low Level Cache Programming" />
+<meta name="author" content="Yoko Harada" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Ruby on Rails is known to offer really various features which are useful to create a web application. Among those, little known API might be the low level caching API." />
+<meta property="og:description" content="Ruby on Rails is known to offer really various features which are useful to create a web application. Among those, little known API might be the low level caching API." />
+<link rel="canonical" href="http://localhost:4000/2025/03/05/rails-cache-programming.html" />
+<meta property="og:url" content="http://localhost:4000/2025/03/05/rails-cache-programming.html" />
+<meta property="og:site_name" content="yokolet’s notelets" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-03-05T22:57:00+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Ruby on Rails Low Level Cache Programming" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Yoko Harada"},"dateModified":"2025-03-05T22:57:00+09:00","datePublished":"2025-03-05T22:57:00+09:00","description":"Ruby on Rails is known to offer really various features which are useful to create a web application. Among those, little known API might be the low level caching API.","headline":"Ruby on Rails Low Level Cache Programming","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2025/03/05/rails-cache-programming.html"},"url":"http://localhost:4000/2025/03/05/rails-cache-programming.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WWDGEJ9Y9L"></script>
+<script>
+  window['ga-disable-G-WWDGEJ9Y9L'] = window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-WWDGEJ9Y9L');
+</script><!-- head scripts --></head>
+
+  <body>
+    <nav class="navbar is-primary  is-fixed-top " x-data="{ openNav: false }">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item">
+                yokolet's notelets
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu" :class="{ 'is-active': openNav }" x-on:click="openNav = !openNav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu" :class="{ 'is-active': openNav }">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                    
+                    <a href="/blog/" class="navbar-item ">Blog</a>
+                    
+                
+                    
+                    <a href="/algo/" class="navbar-item ">Algo</a>
+                    
+                
+                    
+                    <a href="/about/" class="navbar-item ">About</a>
+                    
+                
+                
+            </div>
+
+            <div class="navbar-end">
+                
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    
+        <section class="hero  is-small  is-bold is-primary" >
+    <div class="hero-body ">
+        <div class="container">
+            <h1 class="title is-2">Ruby on Rails Low Level Cache Programming</h1>
+            <p class="subtitle is-3"></p>
+            
+        </div>
+    </div>
+</section>
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                
+                <div class="column is-8">
+                    
+                    
+                    
+                    
+                    <div class="content">
+
+    <p>Published: Mar 5, 2025</p>
+
+    <div class="tags">
+        
+    </div>
+
+    
+
+    <p>Ruby on Rails is known to offer really various features which are useful to create a web application.
+Among those, little known API might be the low level caching API.</p>
+
+<p>Basically, people don’t code to manipulate cached values. When the caching is on, Rails caches
+view fragments, database query result or some values automatically. As you know the caching is used to
+improve performance in general.</p>
+
+<p>However, we can use Rails cache like a key-value store.
+The API allows us to read/write values tied to keys, which is called a low level caching.</p>
+
+<p>This blog post focuses on such Rails low level cache programming.</p>
+
+<h3 id="configuration">Configuration</h3>
+
+<p>Rails supports multiple types of cache stores. The type should be specified by <code>config_cache_store</code> in
+<code>config/environments/[development|test|production].rb</code> files.</p>
+
+<h4 id="types-of-stores">types of stores</h4>
+<ul>
+  <li>Memory Store
+    <ul>
+      <li>example: <code>config.cache_store = :memory_store, { size: 64.megabytes }</code></li>
+      <li>In-memory data store which can be used within a single process.</li>
+      <li>Popular type for a development environment.</li>
+    </ul>
+  </li>
+  <li>File Store
+    <ul>
+      <li>example: <code>config.cache_store = :file_store, "/path/to/cache/directory"</code></li>
+      <li>File system data store which can be shared among multiple processes.</li>
+    </ul>
+  </li>
+  <li>MemCache Store
+    <ul>
+      <li>example: <code>config.cache_store = :mem_cache_store, "cache-1.example.com", "cache-2.example.com"</code></li>
+      <li>Data store by memcached server (<a href="https://memcached.org/">https://memcached.org/</a>).</li>
+      <li>Popular type for a production environment.</li>
+    </ul>
+  </li>
+  <li>Redis Store
+    <ul>
+      <li>example: <code>config.cache_store = :redis_cache_store, { url: ENV["REDIS_URL"] }</code></li>
+      <li>Data store by Redis (<a href="https://redis.io/">https://redis.io/</a>).</li>
+    </ul>
+  </li>
+  <li>Solid Cache Store
+    <ul>
+      <li>example: see production section of <code>config/database.yml</code></li>
+      <li>Data store by RDBMS which is the same as Rails database.</li>
+      <li>Introduced in Rails 8.</li>
+    </ul>
+  </li>
+  <li>Null Store
+    <ul>
+      <li>example: <code>config.cache_store = :null_store</code></li>
+      <li>Data store whose scope is each web request.</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="difference-between-rails-7-and-rails-8">Difference between Rails 7 and Rails 8</h4>
+
+<p>The production/test environment configurations stay the same on both Rails 7 and 8.
+However, the development configuration has changed.
+Let’s look at the differences. The first one is Rails 7, and the second is Rail 8.</p>
+
+<pre><code class="language-ruby"># Rails 7 config/environments/development.rb
+
+# Enable/disable caching. By default caching is disabled.
+# Run rails dev:cache to toggle caching.
+if Rails.root.join("tmp/caching-dev.txt").exist?
+  config.cache_store = :memory_store
+  config.public_file_server.headers = {
+    "Cache-Control" =&gt; "public, max-age=#{2.days.to_i}"
+  }
+else
+  config.action_controller.perform_caching = false
+
+  config.cache_store = :null_store
+end
+</code></pre>
+
+<pre><code class="language-ruby"># Rails 8 config/environments/development.rb
+
+# Enable/disable Action Controller caching. By default Action Controller caching is disabled.
+# Run rails dev:cache to toggle Action Controller caching.
+if Rails.root.join("tmp/caching-dev.txt").exist?
+  config.action_controller.perform_caching = true
+  config.action_controller.enable_fragment_cache_logging = true
+  config.public_file_server.headers = { "cache-control" =&gt; "public, max-age=#{2.days.to_i}" }
+else
+  config.action_controller.perform_caching = false
+end
+
+# Change to :null_store to avoid any caching.
+config.cache_store = :memory_store
+</code></pre>
+
+<p>On Rails 7, we should hit the command, <code>bin/rails dev:cache</code>, to use the cache.
+The command creates an empty file, <code>tmp/caching-dev.txt</code>, so that <code>config.cache_store = :memory_store</code> works.
+However, on Rails 8, <code>config.cache_store = :memory_store</code> is located on the outside of if-block.
+We don’t need to use the command, <code>bin/rails dev:cache</code> anymore, if we don’t need anything in the block.</p>
+
+<p>While using the low-level caching API, setting the cache store is enough.
+That being said, the caching API is available out of the box on Rail 8.</p>
+
+<h3 id="cache-api">Cache API</h3>
+
+<h4 id="keys-and-values">Keys and Values</h4>
+
+<p>Rails cache is a key-value store. A key is, internally, a string always.
+However, if a Ruby object can be converted to a string, such object can be a key, for example, a symbol or Array.
+API document says, if the object reacts to <code>to_param</code> method and returns a value,
+the object can be a key. Also, if the object implements <code>cache_key</code> method, the object can be a key.</p>
+
+<p>The key-value store’s values are any Ruby object if the object is serializable and deserializable.
+For example, a string, Array, or Hash can be a value, but Proc object is not.
+If it really needs, we can define own serializer and set to the Rails cache.</p>
+
+<h4 id="basic-methods">Basic Methods</h4>
+
+<p>Supported methods on all types of stores are <code>fetch</code>, <code>write</code>, <code>read</code>, <code>exist?</code> and <code>delete</code>.
+The cache API has more methods such as <code>increment</code> or <code>cleanup</code>, but depending on the store types,
+some methods may not be supported.</p>
+
+<h5 id="fetch">fetch</h5>
+<p>The <code>fetch</code> would be the most frequently used method. It covers both read and write.
+The fetch method considers a cache miss, so it takes a block to return a value for the cache miss.
+When the value from the block is returned, the value is saved as well.
+However, the method doesn’t simply update the value. To make the fetch method to update the value
+even though it hits the cached value, the method takes <code>force</code> option.</p>
+
+<pre><code class="language-bash">$ bin/rails c
+example(dev)&gt; Rails.cache
+=&gt; #&lt;ActiveSupport::Cache::MemoryStore entries=0, size=0, options={compress: false, compress_threshold: 1024}&gt;
+example(dev)&gt; Rails.cache.fetch(:my_value)
+=&gt; nil
+example(dev)&gt; Rails.cache.fetch(:my_value) { "Ruby" }
+=&gt; "Ruby"
+example(dev)&gt; Rails.cache.fetch(:my_value)
+=&gt; "Ruby"
+example(dev)&gt; Rails.cache.fetch(:my_value) { "JavaScript" }
+=&gt; "Ruby"
+example(dev)&gt; Rails.cache.fetch(:my_value, force: true) { "JavaScript" }
+=&gt; "JavaScript"
+example(dev)&gt; Rails.cache.fetch(:my_value)
+=&gt; "JavaScript"
+</code></pre>
+
+<p>The fetch method takes an expiry option to remove a value from cache automatically.</p>
+
+<pre><code class="language-bash">example(dev)&gt; Rails.cache.fetch(:my_value, force: true, expires_in: 5.seconds) { "Bash" }
+=&gt; "Bash"
+example(dev)&gt; Rails.cache.fetch(:my_value)
+=&gt; "Bash"
+# after 5 seconds
+example(dev)&gt; Rails.cache.fetch(:my_value)
+=&gt; nil
+</code></pre>
+
+<p>Aside of <code>expires_in</code>, <code>expires_at</code> is also available.
+This is a handy feature when we want to save the value just temporarily.</p>
+
+<h5 id="write">write</h5>
+
+<p>The <code>write</code> method works the same as <code>Rails.cache.fetch(:my_value, force: true) { "JavaScript" }</code>.</p>
+
+<pre><code class="language-bash">example(dev)&gt; Rails.cache.write(:your_value, "YAML")
+=&gt; true
+example(dev)&gt; Rails.cache.fetch(:your_value)
+=&gt; "YAML"
+</code></pre>
+
+<p>The method takes <code>expires_in</code>, <code>expires_at</code> options.</p>
+
+<h5 id="read">read</h5>
+
+<p>The <code>read</code> method works the same as <code>fetch</code> without block. The method just looks up a value by key.</p>
+
+<pre><code class="language-bash">example(dev)&gt; Rails.cache.write(:her_value, "SQL")
+=&gt; true
+example(dev)&gt; Rails.cache.read(:her_value)
+=&gt; "SQL"
+</code></pre>
+
+<h5 id="exist">exist?</h5>
+
+<p>The <code>exist?</code> method is useful to find that the value is nil or key doesn’t exist.
+Rails cache allows to save nil as a value.
+When the fetch or read method returns nil, we don’t know it is a value or not.</p>
+
+<pre><code class="language-bash">example(dev)&gt; Rails.cache.fetch(:his_value, force: true, expires_in: 10.seconds) { nil }
+=&gt; nil
+example(dev)&gt; Rails.cache.read(:his_value)
+=&gt; nil
+example(dev)&gt; Rails.cache.exist?(:his_value)
+=&gt; true
+# after 10 seconds
+example(dev)&gt; Rails.cache.exist?(:his_value)
+=&gt; false
+</code></pre>
+
+<h5 id="delete">delete</h5>
+
+<p>The <code>delete</code> method deletes a key-value pair from the cache.</p>
+
+<pre><code class="language-bash">example(dev)&gt; Rails.cache.write(:their_value, "JSON")
+=&gt; true
+example(dev)&gt; Rails.cache.read(:their_value)
+=&gt; "JSON"
+example(dev)&gt; Rails.cache.delete(:their_value)
+=&gt; true
+example(dev)&gt; Rails.cache.read(:their_value)
+=&gt; nil
+example(dev)&gt; Rails.cache.exist?(:their_value)
+=&gt; false
+</code></pre>
+
+<h3 id="low-level-cache-programming-for-what">Low Level Cache Programming for What</h3>
+
+<p>So far, we have looked at the low level cache API. Well, the question would be, “what is it for?”
+To save and read values, we can use database or ActiveRecord. The value saved in the database can be used
+in almost everywhere. So, why or when we should use the low level cache programming?</p>
+
+<p>I have used the low level cache API in a couple of applications.
+It is good to save a short-lived small data.
+The Rails cache is a simple key-value store. To save the value, we don’t create a migration.
+Without explicit deleting, the values expire and disappear.</p>
+
+<p>The sessions might be another option for a key-value store.
+However, the sessions are not a mighty store.
+For example, WebSocket or ActionCable is unable to use the sessions.
+Another example would be a controller method used as a callback function of OAuth, payment gateway or such.
+The sessions are established between Rails server and a web browser.
+When the controller method gets hit by somewhere else, the sessions don’t work nicely.</p>
+
+<p>Typical Rails applications can do without the low level cache programming.
+However, it is very useful in some cases.</p>
+
+<h3 id="references">References</h3>
+<ul>
+  <li><a href="https://www.honeybadger.io/blog/rails-low-level-caching/">Mastering Low Level Caching in Rails</a></li>
+  <li><a href="https://guides.rubyonrails.org/caching_with_rails.html#low-level-caching-using-rails-cache">Ruby on Rails Guides: Caching: 2.4 Low-Level Caching using Rails.cache</a></li>
+  <li><a href="https://api.rubyonrails.org/classes/ActiveSupport/Cache/Store.html">Ruby on Rail API: Active Support Cache Store</a></li>
+</ul>
+
+</div>
+
+
+
+
+                </div>
+                
+                <div class="column is-4-desktop is-4-tablet">
+                    <p class="title is-4">Latest Posts</p>
+
+<div class="columns is-multiline">
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2025/03/05/rails-cache-programming.html">Ruby on Rails Low Level Cache Programming</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>Ruby on Rails is known to offer really various features which are useful to create a web application.
+Among those, little known API might be the low level caching API.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2025/03/05/rails-cache-programming.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Mar 5, 2025</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2024/11/11/application-development-by-rails-action-cable.html">Application Development by Rails Action Cable</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>The previous two blog posts introduced WebSocket and how to implement a WebSocket application on Ruby on Rails.
+This blog post digs deeper. It is a memo on creating a more realistic application by Action Cable.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2024/11/11/application-development-by-rails-action-cable.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Nov 11, 2024</p>
+    </footer>
+</div>
+    </div>
+    
+    <div class="column is-12">
+        <div class="card">
+    
+    <header class="card-header">
+        <a class="card-header-title" href="/2024/08/08/real-time-app-on-rails-by-action-cable.html">Real-time App on Rails by Action Cable</a>
+    </header>
+    
+    <div class="card-content">
+        <div class="content">
+            
+            
+                <p><p>The previous blog post, <a href="/2024/08/02/websocket-on-rails-by-action-cable.html">WebSocket on Rails by Action Cable</a>,
+focused on WebSocket as a protocol. As in the previous post, by default, Rails app responds to WebSocket connection
+requests without any hassle. However, other than connecting and sending ping frames, it doesn’t do anything.
+This blog post focuses on an application side and explains how we can create a full-duplex, bidirectional app.</p>
+
+</p>
+            
+        </div>
+        <div class="has-text-centered">
+            <a href="/2024/08/08/real-time-app-on-rails-by-action-cable.html" class="button is-primary">Read more</a>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Aug 8, 2024</p>
+    </footer>
+</div>
+    </div>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+        <footer class="footer">
+    <div class="container">
+
+        
+
+        <div class="content is-small has-text-centered">
+            <p class="">Theme built by <a href="https://www.csrhymes.com">C.S. Rhymes</a></p>
+            <p class=""> Copyright &copy; Yoko Harada</p>
+        </div>
+    </div>
+</footer>
+    
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts -->
+<script src="/assets/js/prism.js" type="text/javascript"></script>
+<script src="/assets/js/tabs.js" type="text/javascript"></script>
+<script src="/assets/js/accordion.js" type="text/javascript"></script>
+<script src="https://kit.fontawesome.com/62ce2f5610.js" crossorigin="anonymous"></script>
+</body>
+</html>
