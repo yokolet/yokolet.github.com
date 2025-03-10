@@ -1551,14 +1551,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This problem might look like a simple math, and a greedy approach works.
-However, creating a graph works better.
-The path, a to b’s edge has a weight v, while b to a’s edge has a weight 1 / v.
-While visiting edges, it’s weight will be multiplied.
-The graph traversal can do by either of BFS or DFS.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>You are given an array of variable pairs <code>equations</code> and an array of real numbers <code>values</code>, where
 <code>equations[i] = [A[i], B[i]]</code> and <code>values[i]</code> represent the equation <code>A[i] / B[i] = values[i]</code>. Each <code>A[i]</code>
@@ -1584,8 +1577,6 @@ that there is no contradiction.</p>
     <li><code>1 &lt;= C[j].length, D[j].length &lt;= 5</code></li>
     <li><code>A[i], B[i], C[j], D[j]</code> consist of lower case English letters and digits.</li>
   </ul>
-
-  <p><a href="https://leetcode.com/problems/evaluate-division/">https://leetcode.com/problems/evaluate-division/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
@@ -1608,18 +1599,71 @@ Input: equations = [["a","b"]], values = [0.5], queries = [["a","b"],["b","a"],[
 Output: [0.50000,2.00000,-1.00000,-1.00000]
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>The first step is to build a graph.
+<h2 id="how-to-solve">How to Solve</h2>
+<p>This problem might look like a simple math, and a greedy approach problem.
+However, creating a graph works better.
+The path, a to b’s edge has a weight v, while b to a’s edge has a weight 1 / v.
+While visiting edges, it’s weight will be multiplied.
+The graph traversal can do by either of BFS or DFS.</p>
+
+<p>The solution here starts from building a graph.
 The adjacency list has a neighbor of itself to handle the [“a”, “a”] query.
 The neighbor list is a tuple of node and edge value.</p>
 
 <p>The second step is a search.
-Except edge value calculation, it is nothing special.
+Except the edge value calculation, it is nothing special.
 When a popped out node is the destination, the path is found along with the edge value.
 If not, add the neighbor node with updated edge value.
 If queue becomes empty without finding the destination, the path doesn’t exist.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class EvaluateDivision:
     def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -&gt; List[float]:
         graph = {}
@@ -1652,6 +1696,63 @@ If queue becomes empty without finding the destination, the path doesn’t exist
         buildGraph()
         return [search(s, d) for s, d in queries]
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby">require 'set'
+
+# @param {String[][]} equations
+# @param {Float[]} values
+# @param {String[][]} queries
+# @return {Float[]}
+def build_graph(equations, values)
+  graph = {}
+  # build graph
+  equations.zip(values).each do |(s, d), value|
+    graph[s] = [[s, 1]] if !graph.has_key?(s)
+    graph[d] = [[d, 1]] if !graph.has_key?(d)
+    graph[s] &lt;&lt; [d, value.to_f]
+    graph[d] &lt;&lt; [s, 1 / value.to_f]
+  end
+  graph
+end
+
+def search(graph, src, dest)
+  queue = [[src, 1]]
+  seen = Set.new([src])
+  while !queue.empty?
+    cur_n, cur_v = queue.shift
+    graph[cur_n].each do |(next_n, next_v)|
+      if next_n == dest
+        return cur_v * next_v
+      elsif !seen.include?(next_n)
+        seen &lt;&lt; next_n
+        queue &lt;&lt; [next_n, cur_v * next_v]
+      end
+    end
+  end
+  -1
+end
+
+def make_queries(graph, queries)
+  queries.map do |s, d|
+    if !graph.has_key?(s) || !graph.has_key?(d)
+      -1.0
+    else
+      search(graph, s, d)
+    end
+  end
+end
+
+def calc_equation(equations, values, queries)
+  graph = build_graph(equations, values)
+  make_queries(graph, queries)
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
