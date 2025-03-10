@@ -1570,8 +1570,6 @@ without changing the order of the remaining characters.</p>
     <li><code>1 &lt;= s.length, t.length &lt;= 10**5</code></li>
     <li><code>s</code> and <code>t</code> consist only of lowercase English letters.</li>
   </ul>
-
-  <p><a href="https://leetcode.com/problems/append-characters-to-string-to-make-subsequence/">https://leetcode.com/problems/append-characters-to-string-to-make-subsequence/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
@@ -1671,7 +1669,19 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-4">
-<pre><code class="language-ruby">
+<pre><code class="language-ruby"># @param {String} s
+# @param {String} t
+# @return {Integer}
+def append_characters(s, t)
+    m, n, i, j = s.length, t.length, 0, 0
+    while i &lt; m &amp;&amp; j &lt; n
+      if s[i] == t[j]
+        j += 1
+      end
+      i += 1
+    end
+    n - j
+end
 </code></pre>
 </div>
     
