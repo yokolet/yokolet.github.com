@@ -1579,8 +1579,6 @@ infinite supply of all of them.</p>
     <li>All the values of <code>recipes</code> and <code>supplies</code> combined are unique.</li>
     <li>Each <code>ingredients[i]</code> does not contain any duplicate values.</li>
   </ul>
-
-  <p><a href="https://leetcode.com/problems/find-all-possible-recipes-from-given-supplies/">https://leetcode.com/problems/find-all-possible-recipes-from-given-supplies/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
@@ -1724,7 +1722,48 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-4">
-<pre><code class="language-ruby">
+<pre><code class="language-ruby"># @param {String[]} recipes
+# @param {String[][]} ingredients
+# @param {String[]} supplies
+# @return {String[]}
+def find_all_recipes(recipes, ingredients, supplies)
+  graph, indegrees = build_graph(recipes, ingredients)
+  indegrees = search(graph, indegrees, supplies)
+  indegrees.filter {|child, v| recipes.include?(child) &amp;&amp; v == 0}.keys
+end
+
+def build_graph(recipes, ingredients)
+  graph, indegrees = {}, {}
+  recipes.zip(ingredients).each do |child, parents|
+    indegrees[child] ||= 0
+    parents.each do |parent|
+      graph[parent] ||= Set.new
+      graph[parent] &lt;&lt; child
+      indegrees[child] += 1
+    end
+  end
+  [graph, indegrees]
+end
+
+def search(graph, indegrees, supplies)
+  queue = []
+  supplies.each do |supply|
+    if indegrees[supply] == nil
+      queue &lt;&lt; supply
+      indegrees[supply] ||= 0
+      graph[supply] ||= Set.new
+    end
+  end
+  while queue.any?
+    cur = queue.shift
+    next if !graph.has_key?(cur)
+    graph[cur].each do |child|
+      indegrees[child] -= 1
+      queue &lt;&lt; child if indegrees[child] == 0
+    end
+  end
+  indegrees
+end
 </code></pre>
 </div>
     
