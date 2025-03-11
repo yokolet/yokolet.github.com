@@ -1551,13 +1551,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This is a sort of anagram problem.
-A hash table is a good data structure to solve this problem.
-Two types of hash tables are necessary: one for the given chars, another for the each word.
-If we compare these two hash tables, it’s not difficult to find the answer.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>You are given an array of strings <code>words</code> and a string <code>chars</code>.
 A string is good if it can be formed by characters from chars (each character can only be used once).</p>
@@ -1570,8 +1564,6 @@ A string is good if it can be formed by characters from chars (each character ca
     <li><code>1 &lt;= words[i].length, chars.length &lt;= 100</code></li>
     <li><code>words[i]</code> and <code>chars</code> consist of lowercase English letters.</li>
   </ul>
-
-  <p><a href="https://leetcode.com/problems/find-words-that-can-be-formed-by-characters/">https://leetcode.com/problems/find-words-that-can-be-formed-by-characters/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
@@ -1588,12 +1580,69 @@ Explanation: The strings that can be formed are "hello" and "world" so the answe
 </code></pre>
 
 <h2 id="analysis">Analysis</h2>
+<p>This is a kind of anagram problem.
+A hash table is a good data structure to solve this problem.
+Two types of hash tables are necessary: one for the given chars, another for each word.
+If we compare these two hash tables, it’s not difficult to find the answer.</p>
+
 <p>The first step is to create a character frequency table for <code>chars</code>.
 To check each word in the word list, create another frequency table for the word.
-All characters in the word table exist in the first frequency table, also the count is greater than or equal to,
-then add the word length to the result.</p>
+The condition to add up the word length is:</p>
+<ul>
+  <li>all characters in the word frequency table exist in the given chars’ frequency table</li>
+  <li>the given chars’ character count is greater than or equal to the word’s character</li>
+</ul>
+
+<p>If two conditions meet, the word length is added to the result.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class FindWordsThatCanBeFormedByCharacters:
     def countCharacters(self, words: List[str], chars: str) -&gt; int:
         counter = collections.Counter(chars)
@@ -1611,6 +1660,31 @@ then add the word length to the result.</p>
                 result += len(word)
         return result
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {String[]} words
+# @param {String} chars
+# @return {Integer}
+def count_characters(words, chars)
+    freq = chars.chars.tally
+    words.map {|word| good_length(freq, word)}.sum
+end
+
+def good_length(freq, word)
+  cur_freq = word.chars.tally
+  cur_freq.each_pair do |char, count|
+    if !freq.has_key?(char) || freq[char] &lt; count
+      return 0
+    end
+  end
+   word.length
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
