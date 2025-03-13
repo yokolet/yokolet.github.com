@@ -1547,13 +1547,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-
-<p>A couple of approaches exist to solve this problem such as two pointers or divide and conquer.
-The monotonically increasing stack is another solution.
-Using stack, this problem can be solved by <code>O(n)</code> performance.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>Given an array of integers <code>heights</code> representing the histogram’s bar height
 where the width of each bar is 1, return the area of the largest rectangle in the histogram.</p>
@@ -1563,8 +1557,6 @@ where the width of each bar is 1, return the area of the largest rectangle in th
     <li><code>1 &lt;= heights.length &lt;= 10**5</code></li>
     <li><code>0 &lt;= heights[i] &lt;= 10**4</code></li>
   </ul>
-
-  <p><a href="https://leetcode.com/problems/largest-rectangle-in-histogram/">https://leetcode.com/problems/largest-rectangle-in-histogram/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
@@ -1602,13 +1594,63 @@ Explanation: one of below.
 
 <h2 id="analysis">Analysis</h2>
 
-<p>The monotonically increasing stack is a good data structure here.
-The stack will save indices.
+<p>A couple of approaches exist to solve this problem such as two pointers or divide and conquer.
+The monotonically increasing stack is another approach.
+Using stack, this problem can be solved by <code>O(n)</code> performance.</p>
+
+<p>The monotonic stack saves indices.
 If a smaller height comes in, indices of taller heights are popped out.
-While popping out, calculate the area and update max area.
+While popping out, calculate the area and update the max area.
 At the end, process remaining indices in the stack.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class LargestRectangleInHistogram:
     def largestRectangleArea(self, heights: List[int]) -&gt; int:
         if not heights: return 0
@@ -1625,6 +1667,33 @@ At the end, process remaining indices in the stack.</p>
             max_area = max(max_area, w * h)
         return max_area
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {Integer[]} heights
+# @return {Integer}
+def largest_rectangle_area(heights)
+  max_area, stack, n = 0, [], heights.size
+  n.times do |i|
+    while stack.any? &amp;&amp; heights[stack[-1]] &gt; heights[i]
+      h = heights[stack.pop]
+      w = stack.size == 0 ? i : i - stack[-1] -1
+      max_area = [max_area, w * h].max
+    end
+    stack.append(i)
+  end
+  while stack.any?
+    h = heights[stack.pop]
+    w = stack.empty? ? n : n - stack[-1] - 1
+    max_area = [max_area, w * h].max
+  end
+  max_area
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
