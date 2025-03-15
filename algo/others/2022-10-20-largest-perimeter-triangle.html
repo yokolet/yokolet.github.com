@@ -1555,12 +1555,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This problem requires a bit of trigonometry knowledge.
-To form a triangle, 3 sides a, b, c should have the length, a + b &gt; c, where c is the longest side.
-Sort the given array, then find 3 largest values which satisfy the condition.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>Given an integer array <code>nums</code>, return the largest perimeter of a triangle with a non-zero area, formed from three of
 these lengths. If it is impossible to form any triangle of a non-zero area, return 0.</p>
@@ -1570,8 +1565,6 @@ these lengths. If it is impossible to form any triangle of a non-zero area, retu
     <li><code>3 &lt;= nums.length &lt;= 10**4</code></li>
     <li><code>1 &lt;= nums[i] &lt;= 10**6</code></li>
   </ul>
-
-  <p><a href="https://leetcode.com/problems/largest-perimeter-triangle/">https://leetcode.com/problems/largest-perimeter-triangle/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
@@ -1581,20 +1574,67 @@ Output: 5
 </code></pre>
 
 <pre><code>Example 2
-Input: nums = [1,2,1]
+Input: nums = [1,2,1,10]
 Output: 0
 </code></pre>
 
 <h2 id="analysis">Analysis</h2>
-<p>The first step is to sort the given array.
-The examples show an array of just 3 elements, but as in the constraints, the array is much longer.
-To find 3 sides, shift 3 values one by one.
-This is because <code>a + b &gt; c</code> is a condition.
-If the current longest doesn’t satisfy the condition, the longest should be switched to the next longest.
-Without changing the longest c, changing a or b might work.
-However, a + b + c must be the largest. So, shifting values one by one gives us the answer.</p>
+
+<p>This problem requires trigonometry knowledge.
+To form a triangle, 3 sides a, b, c should have the length, a + b &gt; c, where c is the longest side.
+The first step is to sort the given array, and test three elements from the biggest ones as <code>c</code>, <code>b</code>, <code>a</code>.
+If the condition, <code>a + b &gt; c</code>, satisfies, the perimeter is <code>a + b + c</code>.
+If not, shift the values to take the next biggest ones since the biggest value is too big to form a triangle.
+After repeating this, we’ll get the answer.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class LargestPerimeterTriangle:
     def largestPerimeter(self, nums: List[int]) -&gt; int:
         nums.sort()
@@ -1603,6 +1643,25 @@ However, a + b + c must be the largest. So, shifting values one by one gives us 
                 return nums[i] + nums[i + 1] + nums[i + 2]
         return 0
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {Integer[]} nums
+# @return {Integer}
+def largest_perimeter(nums)
+  nums.sort!
+  (nums.length-3).downto(0) do |i|
+    if nums[i] + nums[i+1] &gt; nums[i+2]
+      return [nums[i], nums[i+1], nums[i+2]].sum
+    end
+  end
+  0
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
