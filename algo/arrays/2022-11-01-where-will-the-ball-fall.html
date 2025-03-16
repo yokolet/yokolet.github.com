@@ -1555,16 +1555,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>At a glance, this problem looks weird.
-However, it is relatively simple problem solved by the depth-first search.
-When two adjacent cell has the same value (same direction of slanted boards), the ball goes through.
-Otherwise, the ball gets stuck.
-From row to row, the ball goes left and right by the value of the cell.
-When the value is negative, the ball goes to left. If it is positive, the ball goes to right.
-When the row comes to the bottom, return the column where the ball is located.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>You have a 2-D grid of size <code>m x n</code> representing a box, and you have <code>n</code> balls. The box is open on the top and
 bottom sides. Each cell in the box has a diagonal board spanning two corners of the cell that can redirect a ball to
@@ -1590,8 +1581,6 @@ dropping the ball from the ith column at the top, or -1 if the ball gets stuck i
     <li><code>1 &lt;= m, n &lt;= 100</code></li>
     <li><code>grid[i][j]</code> is 1 or -1.</li>
   </ul>
-
-  <p><a href="https://leetcode.com/problems/where-will-the-ball-fall/">https://leetcode.com/problems/where-will-the-ball-fall/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
@@ -1618,16 +1607,63 @@ Output: [0,1,2,3,4,-1]
 </code></pre>
 
 <h2 id="analysis">Analysis</h2>
-<p>To make the ball to go through all rows, the grid needs 2 columns at least.
-So, if the grid column size is 1, return an array of -1.
-In the dfs function, the base case is the current row becomes the grid size.
-Return column when it hits the base case.
-If not, get the new column value by simply adding the grid value.
-Conveniently, the grid values are defined like that.
-If the new column goes outside of the grid or adjacent grid values are not the same, return -1.
-If all are ok, go deeper with the next row and new column.</p>
+
+<p>At a glance, this problem looks weird.
+However, it is a relatively simple problem solved by the depth-first search.
+When two adjacent cells have the same value (same direction of slanted boards), the ball goes through.
+Otherwise, the ball gets stuck. Also, if the grid column size is 1, the ball gets stuck.
+From row to row, the ball goes left and right by the value of the cell.
+When the value is negative, the ball goes to left. If it is positive, the ball goes to right.
+When the row comes to the bottom, return the column where the ball is located as a result of DFS.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class WhereWillTheBallFall:
     def findBall(self, grid: List[List[int]]) -&gt; List[int]:
         m, n = len(grid), len(grid[0])
@@ -1645,6 +1681,34 @@ If all are ok, go deeper with the next row and new column.</p>
             result.append(dfs(0, i))
         return result
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {Integer[][]} grid
+# @return {Integer[]}
+def find_ball(grid)
+  rows, cols = grid.size, grid[0].size
+  return [-1] if cols == 1
+  result = []
+  cols.times.each do |col|
+    result &lt;&lt; dfs(grid, rows, cols, 0, col)
+  end
+  result
+end
+
+def dfs(grid, rows, cols, row, col)
+  return col if row == rows
+  new_col = col + grid[row][col]
+  if new_col &lt; 0 || new_col &gt;= cols || grid[row][col] != grid[row][new_col]
+    return -1
+  end
+  return dfs(grid, rows, cols, row + 1, new_col)
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
