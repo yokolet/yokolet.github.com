@@ -1570,8 +1570,6 @@ an attendance award. The answer may be very large, so return it modulo 10**9 + 7
   <ul>
     <li><code>1 &lt;= n &lt;= 10**5</code></li>
   </ul>
-
-  <p><a href="https://leetcode.com/problems/student-attendance-record-ii/">https://leetcode.com/problems/student-attendance-record-ii/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
@@ -1709,7 +1707,22 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-4">
-<pre><code class="language-ruby">
+<pre><code class="language-ruby">MOD = 10 ** 9 + 7
+
+# @param {Integer} n
+# @return {Integer}
+def check_record(n)
+  a_no_l, a_1_l, a_2_l, no_a_no_l, no_a_1_l, no_a_2_l = 1, 0, 0, 1, 1, 0
+  (1...n).each do |i|
+    tmp = [a_no_l, a_1_l, a_2_l, no_a_no_l, no_a_1_l, no_a_2_l].sum % MOD
+    a_1_l, a_2_l = a_no_l, a_1_l
+    a_no_l = tmp
+    tmp = [no_a_no_l, no_a_1_l, no_a_2_l].sum % MOD
+    no_a_1_l, no_a_2_l = no_a_no_l, no_a_1_l
+    no_a_no_l = tmp
+  end
+  [a_no_l, a_1_l, a_2_l, no_a_no_l, no_a_1_l, no_a_2_l].sum % MOD
+end
 </code></pre>
 </div>
     
