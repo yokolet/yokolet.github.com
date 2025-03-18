@@ -1570,8 +1570,6 @@ horizontally or vertically neighboring. The same letter cell may not be used mor
     <li><code>1 &lt;= word.length &lt;= 15</code></li>
     <li><code>board</code> and <code>word</code> consists of only lowercase and uppercase English letters.</li>
   </ul>
-
-  <p><a href="https://leetcode.com/problems/word-search/">https://leetcode.com/problems/word-search/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
@@ -1601,13 +1599,12 @@ Output: false
 <h2 id="how-to-solve">How to Solve</h2>
 <p>This is a typical backtracking problem. Normally, a depth-first search works well.
 For the backtracking problem, how to get the state back to previous one is important.
-The solution here uses a special character as visited status and set it back when the process goes back.</p>
+The solution here uses a special character “#” as visited status and set it back when the process goes back.</p>
 
-<p>Since it is a backtracking problem, the depth-first approach is used here.
-As a visited state management, a special character ‘#’ is used. 
-Save the current character on the board to make it back later.
-Set the special character to the cell and go deeper recursion with the suffix of the given word.
-When the suffix becomes empty, all character in the give word is found.</p>
+<p>The loop goes the given word one by one. When the process reaches the last character of the given word, the loop finishes.</p>
+
+<p>Ruby solution has two tweaks since the same Ruby solution as C++ or Python gets TLE.
+Especially, the character frequency based word reversing preprocess works well to cut down DFS loops.</p>
 
 <h2 id="solution">Solution</h2>
 
@@ -1713,7 +1710,51 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-4">
-<pre><code class="language-ruby">
+<pre><code class="language-ruby"># @param {Character[][]} board
+# @param {String} word
+# @return {Boolean}
+def exist(board, word)
+  return false unless word.chars.all? { |char| board.flatten.include?(char) }
+  word = preprocess(board, word)
+  return false if word.nil?
+  m, n, l = board.size, board[0].size, word.size
+  board.size.times do |row|
+    board[0].size.times do |col|
+      return true if dfs(board, m, n, l, word, row, col, 0)
+    end
+  end
+  false
+end
+
+def preprocess(board, word)
+  board_freq = Hash.new(0)
+  board.each do |row|
+    row.each do |c|
+      board_freq[c] += 1
+    end
+  end
+  word_freq = word.chars.tally
+  word_freq.each do |c, count|
+    return nil if board_freq[c] &lt; count
+  end
+  board_freq[word[0]] &gt; board_freq[word[-1]] ? word.reverse : word
+end
+
+def dfs(board, m, n, l, word, row, col, idx)
+  return true if idx == l
+  return false if row &lt; 0 || col &lt; 0 || row &gt;= m || col &gt;= n || board[row][col] != word[idx]
+
+  cur = board[row][col]
+  board[row][col] = "#"
+
+  up = dfs(board, m, n, l, word, row - 1, col, idx + 1)
+  left = dfs(board, m, n, l, word, row, col - 1, idx + 1)
+  right = dfs(board, m, n, l, word, row, col + 1, idx + 1)
+  down = dfs(board, m, n, l, word, row + 1, col, idx + 1)
+
+  board[row][col] = cur
+  up || left || right || down
+end
 </code></pre>
 </div>
     
