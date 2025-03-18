@@ -1573,8 +1573,6 @@ Return the number of valid ways to select 3 buildings.</li>
     <li><code>3 &lt;= s.length &lt;= 10**5</code></li>
     <li><code>s[i]</code> is either <code>'0'</code> or <code>'1'</code>.</li>
   </ul>
-
-  <p><a href="https://leetcode.com/problems/number-of-ways-to-select-buildings/">https://leetcode.com/problems/number-of-ways-to-select-buildings/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
@@ -1706,7 +1704,23 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-4">
-<pre><code class="language-ruby">
+<pre><code class="language-ruby"># @param {String} s
+# @return {Integer}
+def number_of_ways(s)
+  n0, n1, n01, n10, total = 0, 0, 0, 0, 0
+  s.each_char do |c|
+    if c == "1"
+      n1 += 1
+      n01 += n0
+      total += n10
+    else
+      n0 += 1
+      n10 += n1
+      total += n01
+    end
+  end
+  total
+end
 </code></pre>
 </div>
     
