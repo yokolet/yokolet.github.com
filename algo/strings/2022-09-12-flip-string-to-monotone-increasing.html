@@ -1551,11 +1551,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>The string related problems often need much consideration to figure out how to solve.
-Once it becomes clear, the solution might be very simple.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>A binary string is monotone increasing if it consists of some number of 0’s (possibly none),
 followed by some number of 1’s (also possibly none).</p>
@@ -1568,8 +1564,6 @@ Return the minimum number of flips to make s monotone increasing.</p>
     <li><code>1 &lt;= s.length &lt;= 10**5</code></li>
     <li><code>s[i]</code> is either ‘0’ or ‘1’</li>
   </ul>
-
-  <p><a href="https://leetcode.com/problems/flip-string-to-monotone-increasing/">https://leetcode.com/problems/flip-string-to-monotone-increasing/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
@@ -1592,6 +1586,9 @@ Explanation: We flip to get 00000000.
 </code></pre>
 
 <h2 id="analysis">Analysis</h2>
+<p>The string related problems often need much consideration to figure out how to solve.
+Once it becomes clear, the solution might be very simple.</p>
+
 <p>Let’s start from a length 2. Valid patters are:</p>
 <pre><code>2: 00, 01, 11
 3: 000, 001, 011, 111
@@ -1599,11 +1596,73 @@ Explanation: We flip to get 00000000.
 ...
 </code></pre>
 <p>How many ones are there – this is a key to solve the problem.
-While going over the string one by one, count up ones if the character is ‘1’.
+While going over the string one by one, count up ones.
 Count up flips and count down ones if the character is ‘0’ and ones are not 0.
 That’s all to find the answer.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {string} s
+ * @return {number}
+ */
+var minFlipsMonoIncr = function(s) {
+    let flips = 0, ones = 0
+    for (const c of s) {
+        if (c === "1") {
+            ones++
+        } else if (ones &gt; 0) {
+            flips++
+            ones--
+        }
+    }
+    return flips
+}
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class FlipStringToMonotoneIncreasing:
     def minFlipsMonoIncr(self, s: str) -&gt; int:
         flips = 0
@@ -1616,6 +1675,28 @@ That’s all to find the answer.</p>
                 ones -= 1
         return flips
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {String} s
+# @return {Integer}
+def min_flips_mono_incr(s)
+  flips, ones = 0, 0
+  s.each_char do |c|
+    if c == "1"
+      ones += 1
+    elsif ones &gt; 0
+      flips += 1
+      ones -= 1
+    end
+  end
+  flips
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
