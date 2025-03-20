@@ -1576,8 +1576,6 @@ are present in forbidden.</p>
     <li><code>1 &lt;= forbidden[i].length &lt;= 10</code></li>
     <li><code>forbidden[i]</code> consists only of lowercase English letters.</li>
   </ul>
-
-  <p><a href="https://leetcode.com/problems/length-of-the-longest-valid-substring/">https://leetcode.com/problems/length-of-the-longest-valid-substring/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
@@ -1637,7 +1635,7 @@ Also, it limits the loop by <code>min(i + 9, right)</code> to avoid the time lim
   <div class="container box">
     
       <div class="is-active tab-content" data-content="solution-0">
-<pre><code class="language-cpp">class LengthOfLongestValidSubstring {
+<pre><code class="language-cpp">class LengthOfTheLongestValidSubstring {
 public:
     int longestValidSubstring(string word, vector&lt;string&gt;&amp; forbidden) {
         unordered_set&lt;string&gt; seen(forbidden.begin(), forbidden.end());
@@ -1665,7 +1663,27 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-2">
-<pre><code class="language-js">
+<pre><code class="language-js">/**
+ * @param {string} word
+ * @param {string[]} forbidden
+ * @return {number}
+ */
+var longestValidSubstring = function(word, forbidden) {
+    const seen = new Set(forbidden)
+    let maxLen = 0
+    let right = word.length
+    for (let i = word.length - 1; i &gt;= 0; --i) {
+        for (let j = i; j &lt;= Math.min(i + 9, right); ++j) {
+            let cur = word.substring(i, j + 1)
+            if (seen.has(cur)) {
+                right = j
+                break
+            }
+        }
+        maxLen = Math.max(maxLen, right - i)
+    }
+    return maxLen
+}
 </code></pre>
 </div>
     
@@ -1675,7 +1693,25 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-4">
-<pre><code class="language-ruby">
+<pre><code class="language-ruby"># @param {String} word
+# @param {String[]} forbidden
+# @return {Integer}
+def longest_valid_substring(word, forbidden)
+  seen = Set.new(forbidden)
+  max_len = 0
+  right = word.length
+  (word.length - 1).downto(0) do |idx|
+    idx.upto([idx + 9, right].min) do |j|
+      cur = word.slice(idx, j - idx + 1)
+      if seen.include?(cur)
+        right = j
+        break
+      end
+    end
+    max_len = [max_len, right - idx].max
+  end
+  max_len
+end
 </code></pre>
 </div>
     
