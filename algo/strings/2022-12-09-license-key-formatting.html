@@ -1564,8 +1564,6 @@ inserted between two groups, and you should convert all lowercase letters to upp
     <li><code>s</code> consists of English letters, digits, and dashes ‘-‘.</li>
     <li><code>1 &lt;= k &lt;= 10**4</code></li>
   </ul>
-
-  <p><a href="https://leetcode.com/problems/license-key-formatting/">https://leetcode.com/problems/license-key-formatting/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
@@ -1654,7 +1652,25 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-2">
-<pre><code class="language-js">
+<pre><code class="language-js">/**
+ * @param {string} s
+ * @param {number} k
+ * @return {string}
+ */
+var licenseKeyFormatting = function(s, k) {
+    const chars = s.replaceAll("-", "")
+    let result = ""
+    let count = 0
+    for (let i = chars.length - 1; i &gt;= 0; --i) {
+        result = chars[i].toUpperCase() + result
+        count++
+        if (count == k) {
+            result = "-" + result
+            count = 0
+        }
+    }
+    return result[0] === "-" ? result.slice(1) : result
+}
 </code></pre>
 </div>
     
@@ -1676,7 +1692,24 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-4">
-<pre><code class="language-ruby">
+<pre><code class="language-ruby"># @param {String} s
+# @param {Integer} k
+# @return {String}
+def license_key_formatting(s, k)
+  result = ""
+  count = 0
+  (s.length - 1).downto(0) do |i|
+    if s[i] != "-"
+      result = s[i].upcase + result
+      count += 1
+    end
+    if count == k
+      result = "-" + result
+      count = 0
+    end
+  end
+  result[0] == "-" ? result[1..-1] : result
+end
 </code></pre>
 </div>
     
