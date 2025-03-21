@@ -1551,12 +1551,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This problem might look like dynamic programming.
-However, the input array’s order does not  matter.
-Sorting and greedy approach works.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>You are assigned to put some amount of boxes onto one truck.
 You are given a 2D array <code>boxTypes</code>, where <code>boxTypes[i] = [numberOfBoxes(i), numberOfUnitsPerBox(i)]</code>:</p>
@@ -1575,8 +1570,6 @@ Return the maximum total number of units that can be put on the truck.</p>
     <li><code>1 &lt;= numberOfBoxes(i), numberOfUnitsPerBox(i) &lt;= 1000</code></li>
     <li><code>1 &lt;= truckSize &lt;= 10**6</code></li>
   </ul>
-
-  <p><a href="https://leetcode.com/problems/maximum-units-on-a-truck/">https://leetcode.com/problems/maximum-units-on-a-truck/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
@@ -1597,13 +1590,79 @@ Output: 91
 </code></pre>
 
 <h2 id="analysis">Analysis</h2>
-<p>For the first step, sort <code>boxTypes</code> array by units.
-The second step is to go over the sorted <code>boxTypes</code> array.
+<p>This problem might look like dynamic programming.
+However, the input array’s order does not  matter.
+Sorting and greedy approach works.</p>
+
+<p>For the first step, sort box types array by units.
+The second step is to go over the sorted box types array.
 Possible number of boxes to put on the truck is minimum of boxes and current truckSize.
 Add up possible number of boxes times current units.
 If the truckSize becomes zero, a loop is over.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {number[][]} boxTypes
+ * @param {number} truckSize
+ * @return {number}
+ */
+var maximumUnits = function(boxTypes, truckSize) {
+  const bt = boxTypes.sort((a, b) =&gt;  a[1] === b[1] ? b[0] - a[0] : b[1] - a[1])
+  let result = 0
+  bt.forEach(([b, u]) =&gt; {
+    let cur = Math.min(b, truckSize)
+    result += cur * u
+    truckSize -= cur
+    if (truckSize === 0) return
+  })
+  return result
+}
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class MaximumUnitsOnATruck:
     def maximumUnits(self, boxTypes: List[List[int]], truckSize: int) -&gt; int:
         boxTypes.sort(key=lambda x: x[1], reverse=True)
@@ -1614,8 +1673,32 @@ If the truckSize becomes zero, a loop is over.</p>
             truckSize -= cur
             if truckSize == 0:
                 break
-        return amount
+        return amou
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {Integer[][]} box_types
+# @param {Integer} truck_size
+# @return {Integer}
+def maximum_units(box_types, truck_size)
+  box_types.sort_by! {|(a, b)| -b}
+  result = 0
+  box_types.each do |(b, u)|
+    cur = [b, truck_size].min
+    result += cur * u
+    truck_size -= cur
+    if truck_size == 0
+      break
+    end
+  end
+  result
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
