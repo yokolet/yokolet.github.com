@@ -1551,11 +1551,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>Some of problems asks “swaps to make something.”
-This problem has only two kinds of letters, so greedy approach would work.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>Given a binary string <code>s</code>, return the minimum number of character swaps to make it alternating,
 or -1 if it is impossible.</p>
@@ -1570,8 +1566,6 @@ For example, the strings “010” and “1010” are alternating, while the str
     <li><code>1 &lt;= s.length &lt;= 1000</code></li>
     <li><code>s[i]</code> is either ‘0’ or ‘1’</li>
   </ul>
-
-  <p><a href="https://leetcode.com/problems/minimum-number-of-swaps-to-make-the-binary-string-alternating/">https://leetcode.com/problems/minimum-number-of-swaps-to-make-the-binary-string-alternating/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
@@ -1594,14 +1588,91 @@ Output: -1
 </code></pre>
 
 <h2 id="analysis">Analysis</h2>
-<p>At first, count zeros and ones.
+
+<p>This problem has only two kinds of letters, so greedy approach would work.
+At first, count zeros and ones.
 The difference should be 0 or 1 to make an alternating string.
 Next step is which one would be the first character.
 Assuming, the first character is the one of more count,
-if the current character is not the one supposed to be, count up invalid.
+if the current character is not the one supposed to be. In such a case, count up invalid.
 The <code>swap</code> function counts doubly, so it returns the value divided by 2.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {string} s
+ * @return {number}
+ */
+var minSwaps = function(s) {
+    const counter = [...s].reduce((acc, val) =&gt; {
+        acc[val] = (acc[val] || 0) + 1
+        return acc
+    }, {})
+    const zeros = counter["0"] || 0
+    const ones = counter["1"] || 0
+    if (Math.abs(zeros - ones) &gt; 1) return -1
+    if (zeros &gt; ones) {
+        return countSwaps(s, "0")
+    } else if (ones &gt; zeros) {
+        return countSwaps(s, "1")
+    } else {
+        return Math.min(countSwaps(s, "0"), countSwaps(s, "1"))
+    }
+}
+
+const countSwaps = (s, first) =&gt; {
+    let invalid = 0
+    for (let i = 0; i &lt; s.length; ++i) {
+        if (i % 2 == 0 &amp;&amp; s[i] !== first) invalid++
+        if (i % 2 == 1 &amp;&amp; s[i] === first) invalid++
+    }
+    return Math.floor(invalid / 2)
+}
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class MinimumNumberOfSwapsToMakeTheBinaryStringAlternating:
     def minSwaps(self, s: str) -&gt; int:
         def swap(first):
@@ -1624,6 +1695,41 @@ The <code>swap</code> function counts doubly, so it returns the value divided by
         else:
             return min(swap('0'), swap('1'))
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {String} s
+# @return {Integer}
+def min_swaps(s)
+  counter = s.chars.tally
+  zeros = counter["0"] || 0
+  ones = counter["1"] || 0
+  return -1 if (zeros - ones).abs &gt; 1
+  if zeros &gt; ones
+    return swap(s, "0")
+  elsif ones &gt; zeros
+    return swap(s, "1")
+  else
+    return [swap(s, "0"), swap(s, "1")].min
+  end
+end
+
+def swap(s, first)
+  invalid = 0
+  s.chars.each_with_index do |c, i|
+    if i.even? &amp;&amp; c != first
+      invalid += 1
+    elsif i.odd? &amp;&amp; c == first
+      invalid += 1
+    end
+  end
+  invalid / 2
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
