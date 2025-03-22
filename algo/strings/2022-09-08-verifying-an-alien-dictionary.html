@@ -1555,14 +1555,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>The given dictionary letters’ order matters.
-Hash table is a good data structure to save the letter order.
-However, in case of Python, string’s index or find method can do the same,
-so Python doesn’t need Hash table.
-Other than that, this problem is a simple string traversal of a pair.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>In an alien language, surprisingly, they also use English lowercase letters,
 but possibly in a different <code>order</code>.
@@ -1578,8 +1571,6 @@ return true if and only if the given words are sorted lexicographically in this 
     <li><code>order.length == 26</code></li>
     <li>All characters in <code>words[i]</code> and <code>order</code> are English lowercase letters.</li>
   </ul>
-
-  <p><a href="https://leetcode.com/problems/verifying-an-alien-dictionary/">https://leetcode.com/problems/verifying-an-alien-dictionary/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
@@ -1599,14 +1590,91 @@ Output: false
 </code></pre>
 
 <h2 id="analysis">Analysis</h2>
-<p>Take two words pair one by one.
+<p>This problem is a simple string traversal of a pair.
+Take two words pair one by one.
 Find the index of the first mismatch characters.
-The previous word’s mismatch character index should be smaller if the string is valid.
-We should consider one more case.
-If one is a substring of another, the previous word’s length should be shorter.
-If the conditions don’t meet, given word list is invalid.</p>
+The given character order matters.
+The previous word’s mismatch character index should be smaller in the given order string to be valid.
+The edge case is: one is a substring of another.
+In this case, the previous word’s length should be shorter.</p>
+
+<p>If all conditions meet, the dictionary is valid.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {string[]} words
+ * @param {string} order
+ * @return {boolean}
+ */
+var isAlienSorted = function(words, order) {
+    let prev = words.shift()
+    for (let i = 0; i &lt; words.length; ++i) {
+        cur = words[i]
+        if (compareTwoWords(prev, cur, order) &lt; 0) return false
+        prev = cur
+    }
+    return true
+};
+
+const compareTwoWords = (prev, cur, order) =&gt; {
+    let idx = 0
+    while (idx &lt; Math.min(prev.length, cur.length)) {
+        if (prev.charAt(idx) !== cur.charAt(idx)) {
+            break
+        }
+        if (idx === Math.min(prev.length, cur.length) - 1) {
+            return cur.length - prev.length
+        }
+        idx++
+    }
+    return order.indexOf(cur[idx]) - order.indexOf(prev[idx])
+}
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class VerifyingAnAlianDictionary:
     def isAlienSorted(self, words: List[str], order: str) -&gt; bool:
         def helper(prev, cur):
@@ -1623,6 +1691,39 @@ If the conditions don’t meet, given word list is invalid.</p>
             prev = cur
         return True
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {String[]} words
+# @param {String} order
+# @return {Boolean}
+def is_alien_sorted(words, order)
+  prev = words.shift
+  words.each do |cur|
+    if compare_two_words(prev, cur, order) &lt; 0
+      return false
+    end
+    prev = cur
+  end
+  true
+end
+
+def compare_two_words(prev, cur, order)
+  idx = 0
+  while idx &lt; [prev.size, cur.size].min
+    break if prev[idx] != cur[idx]
+    if idx == [prev.size, cur.size].min - 1
+      return cur.size - prev.size
+    end
+    idx += 1
+  end
+  order.index(cur[idx]) - order.index(prev[idx])
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
