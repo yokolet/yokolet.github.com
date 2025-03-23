@@ -1555,17 +1555,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>As the title says, this is a sliding window problem.
-What makes this problem difficult is, the result substring is not just an anagram of the given pattern.
-There might be extra characters between necessary characters.
-The result substring length might be much longer than the pattern string.
-The solution here uses Hash table to check exactly what characters are in the substring.
-Also, the missing number of characters to form the pattern.
-When the window slides to the right, make it increment for the leftmost character of the window.
-At the same time, start and end indices are updated.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>Given two strings <code>s</code> and <code>t</code> of lengths <code>m</code> and <code>n</code> respectively, return the minimum window substring of <code>s</code>
 such that every character in <code>t</code> (including duplicates) is included in the window. If there is no such substring,
@@ -1582,8 +1572,6 @@ return the empty string “”.</p>
     <li><code>1 &lt;= m, n &lt;= 10**5</code></li>
     <li><code>s</code> and <code>t</code> consist of uppercase and lowercase English letters.</li>
   </ul>
-
-  <p><a href="https://leetcode.com/problems/minimum-window-substring/">https://leetcode.com/problems/minimum-window-substring/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
@@ -1606,22 +1594,109 @@ Explanation: Both 'a's from t must be included in the window.
 Since the largest window of s only has one 'a', return empty string.
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>The solution starts from counting the pattern character and save it to the hash table.
-While sliding the window, if the pattern table has enough characters of the current character,
+<h2 id="how-to-solve">How to Solve</h2>
+
+<p>As the title says, this is a sliding window problem.
+What makes this problem difficult is, the result substring is not just an anagram of the given pattern.
+There might be extra characters between pattern characters.
+Because of that, the result substring length might be much longer than the pattern.
+The solution here uses a Hash table to save character counts of the given pattern, and a
+missing number of characters to form the pattern.</p>
+
+<p>While sliding the window, if the pattern table has enough characters of the current character,
 missing count is decremented.
-At this point, here’s a tweak – decrement the character in the hash table.
-Python’s collections.Counter is behave like collections.defaultdict(int).
-If the character doesn’t exist in the table, still it can be decremented.
-When the missing becomes zero, all necessary characters are found.
+At this point, a tweak is added – decrement the character in the hash table.
+The character count table might have a negative count.</p>
+
+<p>When the missing becomes zero, all necessary characters are found.
 It’s time to find the start index.
 For this purpose, negative counts in the table is used.
-While the counts in the table is negative, the start index can be shift to the right.
+While the counts in the table is negative, the start index is shift to the right.
 Again, the counts are incremented as the pointer shifts.
 When the start index is found, update the start and end indicies.
 The answer is the substring from start to end indicies.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {string} s
+ * @param {string} t
+ * @return {string}
+ */
+var minWindow = function(s, t) {
+    const counts = [...t].reduce((acc, c) =&gt; {
+        acc[c] = (acc[c] || 0) + 1
+        return acc
+    }, {})
+    let missing = t.length
+    let left = 0, right = 0
+    let k = 0
+    for (let i = 0; i &lt; s.length; ++i) {
+        let c = s[i]
+        let j = i + 1
+        counts[c] |= 0
+        if (counts[c] &gt; 0) missing--
+        counts[c]--
+        if (missing === 0) {
+            while (k &lt; j &amp;&amp; (counts[s[k]] || 0) &lt; 0) {
+                counts[s[k]]++
+                k++
+            }
+            counts[s[k]]++
+            missing++
+            if (right == 0 || right -left &gt; j - k) {
+                [left, right] = [k, j]
+            }
+            k++
+        }
+    }
+    return s.substring(left, right)
+};
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class MinimumWindowSubstring:
     def minWindow(self, s: str, t: str) -&gt; str:
         needs, missing = collections.Counter(t), len(t)
@@ -1642,6 +1717,42 @@ The answer is the substring from start to end indicies.</p>
                 i += 1
         return s[start:end]
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {String} s
+# @param {String} t
+# @return {String}
+def min_window(s, t)
+  counts = t.chars.tally
+  missing = t.length
+  left, right = 0, 0
+  i = 0
+  s.each_char.each_with_index do |c, idx|
+    counts[c] ||= 0
+    missing -= 1 if counts[c] &gt; 0
+    counts[c] -= 1
+    if missing == 0
+      j = idx + 1
+      while i &lt; j &amp;&amp; (counts[s[i]] || 0) &lt; 0
+        counts[s[i]] += 1
+        i += 1
+      end
+      counts[s[i]] += 1
+      missing += 1
+      if right == 0 || right - left &gt; j - i
+        left, right = i, j
+      end
+      i += 1
+    end
+  end
+  s[left...right]
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
