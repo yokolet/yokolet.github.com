@@ -1551,13 +1551,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>This problem might look like monotonic stack or dynamic programming.
-Both work, however, two pointers approach also works well.
-The trapped water is bounded by a lower height of left and right.
-Keep tracking the lower height is a key to solve this problem</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>Given <code>n</code> non-negative integers representing an elevation map where the width of each bar is 1,
 compute how much water it can trap after raining.</p>
@@ -1568,8 +1562,6 @@ compute how much water it can trap after raining.</p>
     <li><code>1 &lt;= n &lt;= 2 * 10**4</code></li>
     <li><code>0 &lt;= height[i] &lt;= 10**5</code></li>
   </ul>
-
-  <p><a href="https://leetcode.com/problems/trapping-rain-water/">https://leetcode.com/problems/trapping-rain-water/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
@@ -1584,16 +1576,87 @@ Input: height = [4,2,0,3,2,5]
 Output: 9
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<h2 id="how-to-solve">How to Solve</h2>
 
-<p>Here, two pointers approach is taken.
-The pointers start from leftmost and rightmost indicies.
+<p>This problem might look like monotonic stack or dynamic programming.
+Both work, however, two pointers approach also works well.
+The trapped water is bounded by a lower height of left and right.
+Keep tracking the lower height is a key to solve this problem</p>
+
+<p>The pointers start from leftmost and rightmost indicies.
 Set initial max heights for both left and right with the value of leftmost and rightmost indices.
-The total trapped water is bounded by the lower height,
-so take (the lower side max height - bar height at lower side height) and add it up to the total.
-Then increment the pointer and maintain the max heights.</p>
+To keep tracking the lower height,
+take (the lower side max height - bar height at lower side height) and add it up to the total.
+Then, increment the pointer and maintain the max heights.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {number[]} height
+ * @return {number}
+ */
+var trap = function(height) {
+    if (height.length &lt; 3) return 0
+    let left = 0, right = height.length - 1, result = 0
+    let left_max = height[left], right_max = height[right]
+    while (left &lt; right) {
+        if (left_max &lt;= right_max) {
+            result += left_max - height[left]
+            left++
+            left_max = Math.max(left_max, height[left])
+        } else {
+            result += right_max - height[right]
+            right--
+            right_max = Math.max(right_max, height[right])
+        }
+    }
+    return result
+}
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class TrappingRainWater:
     def trap(self, height: List[int]) -&gt; int:
         n  = len(height)
@@ -1612,6 +1675,33 @@ Then increment the pointer and maintain the max heights.</p>
                 right_max = max(right_max, height[right])
         return total
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {Integer[]} height
+# @return {Integer}
+def trap(height)
+  return 0 if height.length &lt; 3
+  left, right, result = 0, height.length - 1, 0
+  left_max, right_max = height[left], height[right]
+  while left &lt; right
+    if left_max &lt;= right_max
+      result += left_max - height[left]
+      left += 1
+      left_max = [left_max, height[left]].max
+    else
+      result += right_max - height[right]
+      right -= 1
+      right_max = [right_max, height[right]].max
+    end
+  end
+  result
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
