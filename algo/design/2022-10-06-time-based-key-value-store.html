@@ -1684,7 +1684,51 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-2">
-<pre><code class="language-js">
+<pre><code class="language-js">var TimeMap = function() {
+    this.values = {}
+    this.timestamps = {}
+}
+
+/**
+ * @param {string} key
+ * @param {string} value
+ * @param {number} timestamp
+ * @return {void}
+ */
+TimeMap.prototype.set = function(key, value, timestamp) {
+    if (!this.values[key]) this.values[key] = []
+    this.values[key].push(value)
+    if (!this.timestamps[key]) this.timestamps[key] = []
+    this.timestamps[key].push(timestamp)
+}
+
+/**
+ * @param {string} key
+ * @param {number} timestamp
+ * @return {string}
+ */
+TimeMap.prototype.get = function(key, timestamp) {
+    const search = (ary, value) =&gt; {
+        let left = 0, right = ary.length - 1
+        while (left &lt;= right) {
+            let mid = Math.floor((left + right) / 2)
+            if (ary[mid] &gt; value) {
+                right = mid - 1
+            } else if (ary[mid] &lt; value) {
+                left = mid + 1
+            } else {
+                return mid + 1
+            }
+        }
+        return left
+    }
+
+    if (!(key in this.values)) return ""
+    const ts = this.timestamps[key]
+    if (!ts || timestamp &lt; ts[0]) return ""
+    const idx = search(ts, timestamp)
+    return idx &lt; 1 ? "" : this.values[key][idx - 1]
+}
 </code></pre>
 </div>
     
@@ -1713,7 +1757,56 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-4">
-<pre><code class="language-ruby">
+<pre><code class="language-ruby">class TimeMap
+    def initialize()
+        @values = {}
+        @timestamps = {}
+    end
+
+
+=begin
+    :type key: String
+    :type value: String
+    :type timestamp: Integer
+    :rtype: Void
+=end
+    def set(key, value, timestamp)
+        @values[key] ||= []
+        @values[key] &lt;&lt; value
+        @timestamps[key] ||= []
+        @timestamps[key] &lt;&lt; timestamp
+        nil
+    end
+
+
+=begin
+    :type key: String
+    :type timestamp: Integer
+    :rtype: String
+=end
+    def get(key, timestamp)
+        return "" if !@timestamps.include?(key)
+        ts = @timestamps[key]
+        return "" if ts.nil? || timestamp &lt; ts[0]
+        idx = search(ts, timestamp)
+        idx &lt; 1 ? "" : @values[key][idx - 1]
+    end
+
+    def search(ary, value)
+        left, right = 0, ary.length - 1
+        while left &lt;= right
+            mid = (left + right) / 2
+            if ary[mid] &gt; value
+                right = mid - 1
+            elsif ary[mid] &lt; value
+                left = mid + 1
+            else
+                return mid + 1
+            end
+        end
+        left
+    end
+end
 </code></pre>
 </div>
     
