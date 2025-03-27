@@ -1742,13 +1742,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>As the title shows, this is a counting problem.
-The hash table is a good data structure to save subdomain name and count pairs.
-While counting, the given domain name should be divided first, then concatenate next in reverse order.
-How to concatenate might need a bit of consideration.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>A website domain <code>"discuss.leetcode.com"</code> consists of various subdomains.
 At the top level, we have <code>"com"</code>, at the next level, we have <code>"leetcode.com"</code> and
@@ -1774,8 +1768,6 @@ You may return the answer in any order.</p>
     <li><code>rep[i]</code> is an integer in the range <code>[1, 104]</code>.</li>
     <li><code>d1[i], d2[i], and d3[i]</code> consist of lowercase English letters.</li>
   </ul>
-
-  <p><a href="https://leetcode.com/problems/subdomain-visit-count/">https://leetcode.com/problems/subdomain-visit-count/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
@@ -1789,13 +1781,83 @@ Input: cpdomains = ["900 google.mail.com", "50 yahoo.com", "1 intel.mail.com", "
 Output: ["901 mail.com","50 yahoo.com","900 google.mail.com","5 wiki.org","5 org","1 intel.mail.com","951 com"]
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
-<p>Each string should be divided by a space, then dot.
-The subdomain fragments will be concatenated in reverse order: com, leetcode.com, discuss.leetcode.com.
+<h2 id="how-to-solve">How to Solve</h2>
+
+<p>As the title shows, this is a counting problem.
+The hash table is a good data structure to save subdomain name and count pairs.</p>
+
+<p>The first step is to divide each string by a space, which gives us a count and domain name.
+While counting, each domain should be divided by a dot, then iterate in reverse order:
+<code>com, leetcode.com, discuss.leetcode.com</code>.
 Add count in all of concatenated subdomains.
 Finally, hash table key-value pairs should be converted to strings.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {string[]} cpdomains
+ * @return {string[]}
+ */
+var subdomainVisits = function(cpdomains) {
+    const domains = {}
+    cpdomains.forEach((cpdomain) =&gt; {
+        [cnt, domain] = cpdomain.split(" ")
+        cnt = parseInt(cnt)
+        const names = domain.split(".").reverse()
+        let prev = names[0]
+        for (let i = 1; i &lt; names.length; ++i) {
+            domains[prev] = (domains[prev] || 0) + cnt
+            prev = [names[i], prev].join(".")
+        }
+        domains[prev] = (domains[prev] || 0) + cnt
+    })
+    return Object.keys(domains).map((k) =&gt; `${domains[k]} ${k}`)
+}
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class SubdomainVisitCount:
     def subdomainVisits(self, cpdomains: List[str]) -&gt; List[str]:
         domains = collections.defaultdict(int)
@@ -1810,6 +1872,31 @@ Finally, hash table key-value pairs should be converted to strings.</p>
             domains[ns] += cnt
         return ['%s %s' % (v, k) for k, v in domains.items()]
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {String[]} cpdomains
+# @return {String[]}
+def subdomain_visits(cpdomains)
+  domains = Hash.new(0)
+  cpdomains.each do |cpdomain|
+    cnt, domain = cpdomain.split(" ")
+    cnt = cnt.to_i
+    names = domain.split(".").reverse
+    prev = names.shift
+    names.each do |part|
+      domains[prev] += cnt
+      prev = [part, prev].join(".")
+    end
+    domains[prev] += cnt
+  end
+  domains.map {|k, v| "#{v} #{k}"}
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
