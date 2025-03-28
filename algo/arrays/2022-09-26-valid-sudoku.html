@@ -1731,12 +1731,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>The idea to solve this problem is not difficult.
-Going over each horizontal, vertical and box to check values are all.
-The improvement would be how to eliminate loops and run faster.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>Determine if a <code>9 x 9</code> Sudoku board is valid.
 Only the filled cells need to be validated according to the following rules:</p>
@@ -1758,8 +1753,6 @@ Only the filled cells need to be validated according to the following rules:</p>
     <li><code>board[i].length == 9</code></li>
     <li><code>board[i][j]</code> is a digit 1-9 or ‘.’.</li>
   </ul>
-
-  <p><a href="https://leetcode.com/problems/valid-sudoku/">https://leetcode.com/problems/valid-sudoku/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
@@ -1791,7 +1784,11 @@ Input: board =
 Output: false
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<h2 id="how-to-solve">How to Solve</h2>
+
+<p>The idea to solve this problem is not difficult.
+Going over each horizontal, vertical and box while check values are all.</p>
+
 <p>Prepare two arrays of set for verticals and boxes, and a set for horizontal.
 The horizontal check is easy. Clear the horizontal set every time row increments.
 The vertical check is easy as well.
@@ -1805,6 +1802,78 @@ if duplicates are found return False immediately.
 When all could be checked, the board is valid.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {character[][]} board
+ * @return {boolean}
+ */
+var isValidSudoku = function(board) {
+    const vertical = Array.from({ length: 9}).map((_) =&gt; new Set())
+    const horizontal = new Set()
+    const boxes = Array.from({ length: 9}).map((_) =&gt; new Set())
+    let box_row = -1
+    for (let i = 0; i &lt; 9; ++i) {
+        horizontal.clear()
+        if (i % 3 === 0) box_row++
+        for (let j = 0; j &lt; 9; ++j) {
+            let c = board[i][j]
+            if (c === ".") continue
+            if (horizontal.has(c)) return false
+            horizontal.add(c)
+            if (vertical[j].has(c)) return false
+            vertical[j].add(c)
+            box_idx = box_row * 3 + Math.floor(j / 3)
+            if (boxes[box_idx].has(c)) return false
+            boxes[box_idx].add(c)
+        }
+    }
+    return true
+}
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class ValidSudoku:
     def isValidSudoku(self, board: List[List[str]]) -&gt; bool:
         vertical = [set() for _ in range(9)]
@@ -1830,6 +1899,37 @@ When all could be checked, the board is valid.</p>
                 boxes[idx_box].add(c)
         return True
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {Character[][]} board
+# @return {Boolean}
+def is_valid_sudoku(board)
+  vertical = Array.new(9).map {|_| Set.new }
+  horizontal = Set.new
+  boxes, box_row = Array.new(9).map {|_| Set.new }, -1
+  9.times do |i|
+    horizontal.clear
+    box_row += 1 if i % 3 == 0
+    9.times do |j|
+      c = board[i][j]
+      next if c == "."
+      return false if horizontal.include?(c)
+      horizontal &lt;&lt; c
+      return false if vertical[j].include?(c)
+      vertical[j] &lt;&lt; c
+      box_idx = box_row * 3 + j / 3
+      return false if boxes[box_idx].include?(c)
+      boxes[box_idx] &lt;&lt; c
+    end
+  end
+  true
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
