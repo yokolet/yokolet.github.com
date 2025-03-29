@@ -1763,8 +1763,6 @@ another passenger.</p>
     <li>Each element in buses is unique.</li>
     <li>Each element in passengers is unique.</li>
   </ul>
-
-  <p><a href="https://leetcode.com/problems/the-latest-time-to-catch-a-bus/">https://leetcode.com/problems/the-latest-time-to-catch-a-bus/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
@@ -1791,7 +1789,7 @@ Notice if you had arrived any later, then the 6th passenger would have taken you
 <h2 id="how-to-solve">How to Solve</h2>
 <p>The combination of two pointers and greedy approach is used here.
 As the problem mentions, the given arrays are not always sorted.
-The solution starts from sorting both buses and passengers arrays in an ascending order.
+The solution starts from sorting both buses and passengers arrays in the ascending order.
 Then, use one pointer for a bus and another pointer for a passenger.
 A number of passengers can be incremented as far as the count is less than the given capacity.
 The counting stops whether the passenger time becomes greater than the current bus time or the count exceeds the capacity.
@@ -1802,6 +1800,10 @@ It might be duplicated time to the existing passenger, but it will be checked an
 Repeat counting and setting the tentative result for all buses and passengers.
 Once all are checked, test the current result time is not the duplicated to the passengers.
 When the result time becomes unique, we find the answer.</p>
+
+<p>For C++ and Python, searching a value in the array function runs fast enough.
+However, Ruby and JavaScript get Time Limit Exceeded (TLE) error.
+To avoid TLE, those use a binary search.</p>
 
 <h2 id="solution">Solution</h2>
 
@@ -1865,7 +1867,44 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-2">
-<pre><code class="language-js">
+<pre><code class="language-js">/**
+ * @param {number[]} buses
+ * @param {number[]} passengers
+ * @param {number} capacity
+ * @return {number}
+ */
+var latestTimeCatchTheBus = function(buses, passengers, capacity) {
+    const search = (ary, value) =&gt; {
+        let left = 0, right = ary.length - 1
+        while (left &lt;= right) {
+            let mid = Math.floor((left + right) / 2)
+            if (ary[mid] &gt; value) {
+                right = mid - 1
+            } else if (ary[mid] &lt; value) {
+                left = mid + 1
+            } else {
+                return true
+            }
+        }
+        return false
+    }
+
+    buses.sort((a, b) =&gt; a - b)
+    passengers.sort((a, b) =&gt; a - b)
+    let result = 0, idx = 0
+    for (const bus of buses) {
+        let count = 0
+        while (idx &lt; passengers.length &amp;&amp; passengers[idx] &lt;= bus &amp;&amp; count &lt; capacity) {
+            idx++
+            count++
+        }
+        result = count &lt; capacity ? bus : passengers[idx - 1] - 1
+    }
+    while (search(passengers, result)) {
+        result--
+    }
+    return result
+}
 </code></pre>
 </div>
     
@@ -1888,7 +1927,41 @@ public:
 </div>
     
       <div class="tab-content" data-content="solution-4">
-<pre><code class="language-ruby">
+<pre><code class="language-ruby"># @param {Integer[]} buses
+# @param {Integer[]} passengers
+# @param {Integer} capacity
+# @return {Integer}
+def latest_time_catch_the_bus(buses, passengers, capacity)
+    passengers.sort!
+    result, idx = 0, 0
+    buses.sort.each do |bus|
+      count = 0
+      while idx &lt; passengers.size &amp;&amp; passengers[idx] &lt;= bus &amp;&amp; count &lt; capacity
+        idx += 1
+        count += 1
+      end
+      result = count &lt; capacity ? bus : passengers[idx - 1] - 1
+    end
+    while search(passengers, result)
+      result -= 1
+    end
+    result
+end
+
+def search(ary, value)
+  left, right = 0, ary.length - 1
+  while left &lt;= right
+    mid = (left + right) / 2
+    if ary[mid] &gt; value
+      right = mid - 1
+    elsif ary[mid] &lt; value
+      left = mid + 1
+    else
+      return true
+    end
+  end
+  false
+end
 </code></pre>
 </div>
     
