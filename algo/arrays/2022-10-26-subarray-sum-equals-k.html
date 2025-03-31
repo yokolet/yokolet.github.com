@@ -1735,15 +1735,7 @@
 
     
 
-    <h2 id="introduction">Introduction</h2>
-<p>The problem gives us an array and asks about sum which is k.
-This signals the prefix sum and hash table.
-It is a kind of 2-sum problem.
-That’s why the hash table works.
-The keys of the hash table are accumulated sums.
-While going over the given array, if accumulated sum minus k exists in the table, the sum equals to k is found.</p>
-
-<h2 id="problem-description">Problem Description</h2>
+    <h2 id="problem-description">Problem Description</h2>
 <blockquote>
   <p>Given an array of integers <code>nums</code> and an integer <code>k</code>, return the total number of subarrays whose sum equals to <code>k</code>.</p>
 
@@ -1755,8 +1747,6 @@ While going over the given array, if accumulated sum minus k exists in the table
     <li><code>-1000 &lt;= nums[i] &lt;= 1000</code></li>
     <li><code>-10**7 &lt;= k &lt;= 10**7</code></li>
   </ul>
-
-  <p><a href="https://leetcode.com/problems/subarray-sum-equals-k/">https://leetcode.com/problems/subarray-sum-equals-k/</a></p>
 </blockquote>
 
 <h2 id="examples">Examples</h2>
@@ -1770,7 +1760,15 @@ Input: nums = [1,2,3], k = 3
 Output: 2
 </code></pre>
 
-<h2 id="analysis">Analysis</h2>
+<h2 id="how-to-solve">How to Solve</h2>
+
+<p>The problem gives us an array and asks about sum which is k.
+This signals the prefix sum and hash table.
+It is a kind of 2-sum problem.
+That’s why the hash table works.
+The keys of the hash table are accumulated sums.
+While going over the given array, if accumulated sum minus k exists in the table, the sum equals to k is found.</p>
+
 <p>The solution here starts from initializing the accumulated value and hash table.
 The value of the hash table is a number of times the accumulated value appeared.
 So, the initial value is sum 0 and count 1.
@@ -1779,6 +1777,72 @@ Like 2-sum problem, the accumulated sum minus k exists in the hash table, add up
 Then, count up at the current accumulated sum.</p>
 
 <h2 id="solution">Solution</h2>
+
+<div class="tabs is-boxed " id="solution">
+  <div class="container">
+    <ul>
+      
+        <li class="is-active" data-tab="solution-0">
+          <a><span>C++ </span></a>
+        </li>
+      
+        <li data-tab="solution-1">
+          <a><span>Java </span></a>
+        </li>
+      
+        <li data-tab="solution-2">
+          <a><span>JavaScript </span></a>
+        </li>
+      
+        <li data-tab="solution-3">
+          <a><span>Python </span></a>
+        </li>
+      
+        <li data-tab="solution-4">
+          <a><span>Ruby </span></a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+<div id="solution-content">
+  <div class="container box">
+    
+      <div class="is-active tab-content" data-content="solution-0">
+<pre><code class="language-cpp">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-1">
+<pre><code class="language-java">
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-2">
+<pre><code class="language-js">/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number}
+ */
+var subarraySum = function(nums, k) {
+    const memo = {0: 1}
+    let acc = 0, count = 0
+    nums.forEach((v) =&gt; {
+        acc += v
+        let diff = acc - k
+        if (diff in memo) count += memo[diff]
+        if (acc in memo) {
+            memo[acc] += 1
+        } else {
+            memo[acc] = 1
+        }
+    })
+    return count
+}
+</code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-3">
 <pre><code class="language-python">class SubarraySumEqualsK:
     def subarraySum(self, nums: List[int], k: int) -&gt; int:
         acc, memo = 0, {0: 1}
@@ -1794,6 +1858,34 @@ Then, count up at the current accumulated sum.</p>
                 memo[acc] = 1
         return count
 </code></pre>
+</div>
+    
+      <div class="tab-content" data-content="solution-4">
+<pre><code class="language-ruby"># @param {Integer[]} nums
+# @param {Integer} k
+# @return {Integer}
+def subarray_sum(nums, k)
+  acc, memo = 0, {0 =&gt; 1}
+  count = 0
+  nums.each do |v|
+    acc += v
+    diff = acc - k
+    if memo.include?(diff)
+      count += memo[diff]
+    end
+    if memo.include?(acc)
+      memo[acc] += 1
+    else
+      memo[acc] = 1
+    end
+  end
+  count
+end
+</code></pre>
+</div>
+    
+  </div>
+</div>
 
 <h2 id="complexities">Complexities</h2>
 <ul>
