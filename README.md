@@ -1,5 +1,11 @@
 # yokole's notelets
 
+__RETIRED__
+
+[yokolet.com](https://yokolet.com/) is now moved to [https://github.com/yokolet/frosted-pebble](https://github.com/yokolet/frosted-pebble).
+
+---
+
 This a blog site for __yokolet's notelets__ hosted at [yokolet.com](https://yokolet.com/).
 The site was written by [jekyll](jekyllrb.com) with the bulma clean theme.
 
